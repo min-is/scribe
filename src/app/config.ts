@@ -84,9 +84,9 @@ export const BASE_URL =
   ) ? SITE_DOMAIN
     : VERCEL_ENV === 'preview'
       ? VERCEL_BRANCH_URL || VERCEL_DEPLOYMENT_URL
-      : 'http://localhost:3000')?.toLocaleLowerCase();
+      : 'http://localhost:3000')?.toLocaleLowerCase() || undefined;
 export const BASE_URL_SHARE =
-  makeUrlAbsolute(SITE_DOMAIN_SHARE)?.toLocaleLowerCase();
+  makeUrlAbsolute(SITE_DOMAIN_SHARE)?.toLocaleLowerCase() || undefined;
 
 export const getBaseUrl = (share?: boolean) =>
   (share && BASE_URL_SHARE) ? BASE_URL_SHARE : BASE_URL;

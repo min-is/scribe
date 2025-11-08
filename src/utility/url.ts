@@ -13,7 +13,7 @@ export const removeUrlProtocol = (url?: string) => url
   : undefined;
 
 // Add protocol to url and remove trailing slash
-export const makeUrlAbsolute = (url?: string) => url !== undefined
+export const makeUrlAbsolute = (url?: string) => url !== undefined && url !== ''
   ? (!url.startsWith('http') ? `https://${url}` : url)
     .replace(/\/$/, '')
   : undefined;
