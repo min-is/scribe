@@ -1,4 +1,4 @@
-import { AnnotatedTag } from '@/photo/form';
+import { AnnotatedTag } from './form-types';
 import { convertStringToArray, parameterize } from '@/utility/string';
 import { clsx } from 'clsx/lite';
 import {
@@ -73,9 +73,9 @@ export default function TagInput({
     !selectedOptions.includes(inputTextFormatted);
 
   const optionsFiltered = useMemo<AnnotatedTag[]>(() => hasReachedLimit
-    ? [{ value: limitValidationMessage ?? `Tag limit reached (${limit})` }]
+    ? [{ value: limitValidationMessage ?? `Tag limit reached (${limit})`, label: limitValidationMessage ?? `Tag limit reached (${limit})` }]
     : (isInputTextUnique
-      ? [{ value: `${CREATE_LABEL} "${inputTextFormatted}"` }]
+      ? [{ value: `${CREATE_LABEL} "${inputTextFormatted}"`, label: `${CREATE_LABEL} "${inputTextFormatted}"` }]
       : []
     ).concat(options
       .filter(({ value }) =>

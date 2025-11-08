@@ -1,8 +1,8 @@
 'use client';
 
 /* eslint-disable jsx-a11y/alt-text */
-import { BLUR_ENABLED } from '@/app/config';
-import { useAppState } from '@/state/AppState';
+// Enable image blur by default
+const BLUR_ENABLED = true;
 import { clsx}  from 'clsx/lite';
 import Image, { ImageProps } from 'next/image';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -18,7 +18,8 @@ export default function ImageWithFallback({
   blurCompatibilityLevel?: 'none' | 'low' | 'high'
   classNameImage?: string
 }) {
-  const { shouldDebugImageFallbacks } = useAppState();
+  // Debug mode disabled
+  const shouldDebugImageFallbacks = false;
 
   const [wasCached, setWasCached] = useState(true);
   const [isLoading, setIsLoading] = useState(true);

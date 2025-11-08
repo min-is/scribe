@@ -4,7 +4,7 @@ import { InputHTMLAttributes, useRef, RefObject, ReactNode } from 'react';
 import { useFormStatus } from 'react-dom';
 import Spinner from './Spinner';
 import { clsx } from 'clsx/lite';
-import { FieldSetType, AnnotatedTag } from '@/photo/form';
+import { FieldSetType, AnnotatedTag } from './form-types';
 import TagInput from './TagInput';
 import { FiChevronDown } from 'react-icons/fi';
 import { parameterize } from '@/utility/string';

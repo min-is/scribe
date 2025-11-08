@@ -6,74 +6,21 @@ import { testOpenAiConnection } from '@/platforms/openai';
 import { testDatabaseConnection } from '@/platforms/postgres';
 import { testStorageConnection } from '@/platforms/storage';
 import { APP_CONFIGURATION } from '@/app/config';
-import { getStorageUploadUrlsNoStore } from '@/platforms/storage/cache';
-import {
-  getPhotosMeta,
-  getUniqueTags,
-  getUniqueRecipes,
-  getPhotosInNeedOfSyncCount,
-} from '@/photo/db/query';
-import {
-  getGitHubMetaForCurrentApp,
-  indicatorStatusForSignificantInsights,
-} from './insights';
 
 export type AdminData = Awaited<ReturnType<typeof getAdminDataAction>>;
 
 export const getAdminDataAction = async () =>
   runAuthenticatedAdminServerAction(async () => {
-    const [
-      photosCount,
-      photosCountHidden,
-      photosCountNeedSync,
-      codeMeta,
-      uploadsCount,
-      tagsCount,
-      recipesCount,
-    ] = await Promise.all([
-      getPhotosMeta()
-        .then(({ count }) => count)
-        .catch(() => 0),
-      getPhotosMeta({ hidden: 'only' })
-        .then(({ count }) => count)
-        .catch(() => 0),
-      getPhotosInNeedOfSyncCount(),
-      getGitHubMetaForCurrentApp(),
-      getStorageUploadUrlsNoStore()
-        .then(urls => urls.length)
-        .catch(e => {
-          console.error(`Error getting blob upload urls: ${e}`);
-          return 0;
-        }),
-      getUniqueTags()
-        .then(tags => tags.length)
-        .catch(() => 0),
-      getUniqueRecipes()
-        .then(recipes => recipes.length)
-        .catch(() => 0),
-    ]);
-
-    const insightsIndicatorStatus = indicatorStatusForSignificantInsights({
-      codeMeta,
-      photosCountNeedSync,
-    });
-
-    const photosCountTotal = (
-      photosCount !== undefined &&
-      photosCountHidden !== undefined
-    )
-      ? photosCount + photosCountHidden
-      : undefined;
-
+    // Minimal admin data - photography features removed
     return {
-      photosCount,
-      photosCountHidden,
-      photosCountNeedSync,
-      photosCountTotal,
-      uploadsCount,
-      tagsCount,
-      recipesCount,
-      insightsIndicatorStatus,
+      photosCount: 0,
+      photosCountHidden: 0,
+      photosCountNeedSync: 0,
+      photosCountTotal: 0,
+      uploadsCount: 0,
+      tagsCount: 0,
+      recipesCount: 0,
+      insightsIndicatorStatus: undefined,
     } as const;
   });
 
@@ -98,20 +45,20 @@ export const testConnectionsAction = async () =>
 
     const [
       databaseError,
-      storageError,
       redisError,
-      aiError,
+      storageError,
+      openAiError,
     ] = await Promise.all([
       scanForError(hasDatabase, testDatabaseConnection),
-      scanForError(hasStorageProvider, testStorageConnection),
       scanForError(hasRedisStorage, testRedisConnection),
+      scanForError(hasStorageProvider, testStorageConnection),
       scanForError(isAiTextGenerationEnabled, testOpenAiConnection),
     ]);
 
     return {
       databaseError,
-      storageError,
       redisError,
-      aiError,
-    };
+      storageError,
+      openAiError,
+    } as const;
   });

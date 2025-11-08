@@ -47,17 +47,11 @@ function AnimateItems({
 }: Props) {
   const {
     hasLoaded,
-    nextPhotoAnimation,
-    getNextPhotoAnimationId,
-    clearNextPhotoAnimation,
   } = useAppState();
 
-  const nextPhotoAnimationId = useRef<string>(undefined);
-
   const prefersReducedMotion = usePrefersReducedMotion();
-  
+
   const hasLoadedInitial = useRef(hasLoaded);
-  const nextPhotoAnimationInitial = useRef(nextPhotoAnimation);
 
   const shouldAnimate = type !== 'none' &&
     !prefersReducedMotion &&
@@ -65,13 +59,8 @@ function AnimateItems({
   const shouldStagger =
     !(staggerOnFirstLoadOnly && hasLoadedInitial.current);
 
-  const typeResolved = animateFromAppState
-    ? (nextPhotoAnimationInitial.current?.type ?? type)
-    : type;
-
-  const durationResolved = animateFromAppState
-    ? (nextPhotoAnimationInitial.current?.duration ?? duration)
-    : duration;
+  const typeResolved = type;
+  const durationResolved = duration;
 
   const getInitialVariant = (): Variant => {
     switch (typeResolved) {
@@ -107,13 +96,7 @@ function AnimateItems({
             },
           },
         } : undefined}
-      onAnimationStart={() => {
-        nextPhotoAnimationId.current = getNextPhotoAnimationId?.();
-      }}
       onAnimationComplete={() => {
-        if (animateFromAppState) {
-          clearNextPhotoAnimation?.(nextPhotoAnimationId.current);
-        }
         onAnimationComplete?.();
       }}
     >
@@ -130,7 +113,7 @@ function AnimateItems({
           }}
           transition={{
             duration: durationResolved,
-            easing: 'easeOut',
+            ease: 'easeOut',
           }}
         >
           {item}
