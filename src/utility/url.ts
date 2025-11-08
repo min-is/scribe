@@ -18,7 +18,8 @@ export const makeUrlAbsolute = (url?: string) => url !== undefined && url !== ''
     .replace(/\/$/, '')
   : undefined;
 
-export const removeParamsFromUrl = (urlString = '', params: string[]) => {
+export const removeParamsFromUrl = (urlString?: string, params: string[] = []) => {
+  if (!urlString) return undefined;
   const url = new URL(urlString);
   for (const param of params) {
     url.searchParams.delete(param);
