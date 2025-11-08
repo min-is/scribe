@@ -5,7 +5,6 @@ import AnimateItems from './AnimateItems';
 import { ReactNode, useState } from 'react';
 import LoaderButton from './primitives/LoaderButton';
 import { IoChevronDownOutline, IoChevronUpOutline } from 'react-icons/io5';
-import { COLLAPSE_SIDEBAR_CATEGORIES } from '@/app/config';
 
 export default function HeaderList({
   title,
@@ -22,8 +21,8 @@ export default function HeaderList({
 }) {
   const [isExpanded, setIsExpanded] = useState(false);
 
+  // Enable sidebar collapsing by default
   const hasItemsToExpand =
-    COLLAPSE_SIDEBAR_CATEGORIES &&
     // Don't show expand button if it only reveals 1 item
     items.length > (maxItems + 1);
 

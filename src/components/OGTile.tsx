@@ -5,8 +5,14 @@ import { clsx } from 'clsx/lite';
 import Link from 'next/link';
 import { BiError } from 'react-icons/bi';
 import Spinner from '@/components/Spinner';
-import { IMAGE_OG_DIMENSION } from '../image-response';
 import useVisible from '@/utility/useVisible';
+
+// OG image dimensions - standard for Open Graph
+const IMAGE_OG_DIMENSION = {
+  width: 1200,
+  height: 630,
+  aspectRatio: 1200 / 630,
+};
 
 export type OGLoadingState = 'unloaded' | 'loading' | 'loaded' | 'failed';
 

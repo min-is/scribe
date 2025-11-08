@@ -1,23 +1,17 @@
 'use client';
 
-import { useAppState } from '@/state/AppState';
-import { clsx } from 'clsx/lite';
 import { HTMLAttributes } from 'react';
 
+// Simplified debug component - baseline grid functionality removed
 export default function DivDebugBaselineGrid({
   children,
   className,
   ...props
 }: HTMLAttributes<HTMLDivElement>) {
-  const { shouldShowBaselineGrid } = useAppState();
-
   return (
     <div
       {...props}
-      className={clsx(
-        shouldShowBaselineGrid && 'bg-baseline-grid',
-        className,
-      )}
+      className={className}
     >
       {children}
     </div>

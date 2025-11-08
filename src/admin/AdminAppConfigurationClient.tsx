@@ -28,8 +28,11 @@ import { CgDebug } from 'react-icons/cg';
 import EnvVar from '@/components/EnvVar';
 import AdminLink from './AdminLink';
 import ScoreCardContainer from '@/components/ScoreCardContainer';
-import { DEFAULT_CATEGORY_KEYS, getHiddenCategories } from '@/category';
-import { AI_AUTO_GENERATED_FIELDS_ALL } from '@/photo/ai';
+
+// Stub values - photography features removed
+const DEFAULT_CATEGORY_KEYS: string[] = [];
+const getHiddenCategories = (visibility: string[]) => [];
+const AI_AUTO_GENERATED_FIELDS_ALL: string[] = [];
 
 export default function AdminAppConfigurationClient({
   // Storage
@@ -108,7 +111,7 @@ export default function AdminAppConfigurationClient({
   databaseError,
   storageError,
   redisError,
-  aiError,
+  openAiError,
   // Component props
   simplifiedView,
   isAnalyzingConfiguration,
@@ -376,8 +379,8 @@ export default function AdminAppConfigurationClient({
             isPending={isAiTextGenerationEnabled && isAnalyzingConfiguration}
             optional
           >
-            {aiError && renderError({
-              connection: { provider: 'OpenAI', error: aiError},
+            {openAiError && renderError({
+              connection: { provider: 'OpenAI', error: openAiError},
             })}
             Store your OpenAI secret key in order to enable AI-generated
             text descriptions and optionally leverage an invisible field

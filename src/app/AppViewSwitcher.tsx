@@ -25,7 +25,6 @@ export default function AppViewSwitcher({
   const {
     isUserSignedIn,
     isUserSignedInEager,
-    setIsCommandKOpen,
   } = useAppState();
 
   const [isAdminMenuOpen, setIsAdminMenuOpen] = useState(false);
@@ -57,7 +56,7 @@ export default function AppViewSwitcher({
       <Switcher type="borderless">
         <SwitcherItem
           icon={<IconSearch includeTitle={false} />}
-          onClick={() => setIsCommandKOpen?.(true)}
+          onClick={() => {/* Search functionality - to be implemented */}}
           tooltip={{...SHOW_KEYBOARD_SHORTCUT_TOOLTIPS && {
             content: appText.nav.search,
           }}}

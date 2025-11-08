@@ -1,6 +1,8 @@
-import { IMAGE_QUALITY } from '@/app/config';
 import { IMAGE_WIDTH_LARGE, CustomImageProps } from '.';
 import ImageWithFallback from './ImageWithFallback';
+
+// Default image quality for web optimization
+const IMAGE_QUALITY = 85;
 
 export default function ImageLarge(props: CustomImageProps) {
   const {
