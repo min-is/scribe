@@ -1,49 +1,27 @@
 import { auth } from '@/auth/server';
-import { revalidateAdminPaths, revalidatePhotosKey } from '@/photo/cache';
-import {
-  ACCEPTED_PHOTO_FILE_TYPES,
-  MAX_PHOTO_UPLOAD_SIZE_IN_BYTES,
-} from '@/photo';
-import { isUploadPathnameValid } from '@/platforms/storage';
-import { handleUpload, type HandleUploadBody } from '@vercel/blob/client';
+// import { revalidateAdminPaths, revalidatePhotosKey } from '@/photo/cache';
+// import {
+//   ACCEPTED_PHOTO_FILE_TYPES,
+//   MAX_PHOTO_UPLOAD_SIZE_IN_BYTES,
+// } from '@/photo';
+// import { isUploadPathnameValid } from '@/platforms/storage';
+// import { handleUpload, type HandleUploadBody } from '@vercel/blob/client';
 import { NextResponse } from 'next/server';
 
 export async function POST(request: Request): Promise<NextResponse> {
-  const body: HandleUploadBody = await request.json();
+  const session = await auth();
 
-  try {
-    const jsonResponse = await handleUpload({
-      body,
-      request,
-      onBeforeGenerateToken: async (pathname) => {
-        const session = await auth();
-        if (session?.user) {
-          if (isUploadPathnameValid(pathname)) {
-            return {
-              maximumSizeInBytes: MAX_PHOTO_UPLOAD_SIZE_IN_BYTES,
-              allowedContentTypes: ACCEPTED_PHOTO_FILE_TYPES,
-              addRandomSuffix: true,
-            };
-          } else {
-            throw new Error('Invalid upload');
-          }
-        } else {
-          throw new Error('Unauthenticated upload');
-        }
-      },
-      // This argument is required, but doesn't seem to fire
-      onUploadCompleted: async () => {
-        revalidatePhotosKey();
-        revalidateAdminPaths();
-      },
-    });
-    revalidatePhotosKey();
-    revalidateAdminPaths();
-    return NextResponse.json(jsonResponse);
-  } catch (error) {
+  if (!session?.user) {
     return NextResponse.json(
-      { error: (error as Error).message },
-      { status: 400 },
+      { error: 'Unauthenticated upload' },
+      { status: 401 },
     );
   }
+
+  // TODO: Implement Vercel Blob upload
+  // Requires @vercel/blob package
+  return NextResponse.json(
+    { error: 'Vercel Blob upload not implemented' },
+    { status: 501 },
+  );
 }

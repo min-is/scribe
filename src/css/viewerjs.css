@@ -1,4 +1,5 @@
-@import 'viewerjs/dist/viewer.css';
+/* @import 'viewerjs/dist/viewer.css'; */
+/* Commented out - viewerjs package not installed */
 
 .viewer-canvas {
   background-color: black;
