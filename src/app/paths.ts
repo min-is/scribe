@@ -12,6 +12,14 @@ export const PATH_ADMIN_CONFIGURATION   = `${PATH_ADMIN}/configuration`;
 export const PATH_ADMIN_INSIGHTS        = `${PATH_ADMIN}/insights`;
 export const PATH_ADMIN_BASELINE        = `${PATH_ADMIN}/baseline`;
 export const PATH_ADMIN_COMPONENTS      = `${PATH_ADMIN}/components`;
+export const PATH_ADMIN_PHOTOS          = `${PATH_ADMIN}/photos`;
+export const PATH_ADMIN_PHOTOS_UPDATES  = `${PATH_ADMIN}/photos/updates`;
+export const PATH_ADMIN_UPLOADS         = `${PATH_ADMIN}/uploads`;
+export const PATH_ADMIN_RECIPES         = `${PATH_ADMIN}/recipes`;
+
+// View paths
+export const PATH_GRID_INFERRED         = '/grid';
+export const PATH_FEED_INFERRED         = '/feed';
 
 // API paths
 export const PATH_API_STORAGE = `${PATH_API}/storage`;
@@ -67,9 +75,42 @@ export const isPathAdminInfo = (pathname?: string) =>
 export const isPathProtected = (pathname?: string) =>
   checkPathPrefix(pathname, PATH_ADMIN);
 
+export const isPathGrid = (pathname?: string) =>
+  checkPathPrefix(pathname, PATH_GRID_INFERRED);
+
+export const isPathFeed = (pathname?: string) =>
+  checkPathPrefix(pathname, PATH_FEED_INFERRED);
+
 export const getEscapePath = (pathname?: string) => {
   if (isPathAdmin(pathname) && !isPathTopLevelAdmin(pathname)) {
     return PATH_ADMIN;
   }
   return PATH_ROOT;
 };
+
+export const getPathComponents = (pathname?: string) => {
+  const parts = pathname?.split('/').filter(Boolean) || [];
+  return {
+    tag: parts[0] === 'tag' ? parts[1] : undefined,
+    camera: parts[0] === 'camera' ? parts[1] : undefined,
+    film: parts[0] === 'film' ? parts[1] : undefined,
+  };
+};
+
+export const absolutePathForTag = (tag: string) =>
+  `${getBaseUrl()}/tag/${tag}`;
+
+export const absolutePathForTagImage = (tag: string) =>
+  `${getBaseUrl()}/tag/${tag}/image`;
+
+export const pathForTag = (tag: string) =>
+  `/tag/${tag}`;
+
+export const pathForCamera = (camera: string) =>
+  `/camera/${camera}`;
+
+export const pathForFilm = (film: string) =>
+  `/film/${film}`;
+
+export const pathForFocalLength = (focal: string) =>
+  `/focal/${focal}`;

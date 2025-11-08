@@ -184,6 +184,17 @@ export const ADMIN_SQL_DEBUG_ENABLED =
   process.env.ADMIN_SQL_DEBUG === '1' &&
   !IS_BUILDING;
 
+// Additional config exports
+export const CATEGORY_VISIBILITY = process.env.NEXT_PUBLIC_CATEGORY_VISIBILITY || '';
+export const MATTE_PHOTOS = process.env.NEXT_PUBLIC_MATTE_PHOTOS === '1';
+export const MATTE_COLOR = process.env.NEXT_PUBLIC_MATTE_COLOR;
+export const MATTE_COLOR_DARK = process.env.NEXT_PUBLIC_MATTE_COLOR_DARK;
+export const GRID_HOMEPAGE_ENABLED = process.env.NEXT_PUBLIC_GRID_HOMEPAGE === '1';
+export const HAS_STATIC_OPTIMIZATION = process.env.NEXT_PUBLIC_STATICALLY_OPTIMIZE_PHOTOS === '1';
+export const CURRENT_STORAGE = (process.env.NEXT_PUBLIC_STORAGE || 'vercel-blob') as 'vercel-blob' | 'cloudflare-r2' | 'aws-s3';
+export const HIGH_DENSITY_GRID = process.env.NEXT_PUBLIC_SHOW_LARGE_THUMBNAILS !== '1';
+export const SHOW_ZOOM_CONTROLS = process.env.NEXT_PUBLIC_HIDE_ZOOM_CONTROLS !== '1';
+
 export const APP_CONFIGURATION = {
   // Storage
   hasDatabase: HAS_DATABASE,
