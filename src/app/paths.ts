@@ -114,3 +114,15 @@ export const pathForFilm = (film: string) =>
 
 export const pathForFocalLength = (focal: string) =>
   `/focal/${focal}`;
+
+export const pathForPhoto = (photoId: string) =>
+  `/p/${photoId}`;
+
+export const pathForLens = (lens: string) =>
+  `/lens/${lens}`;
+
+export const pathForRecipe = (recipe: string) =>
+  `/recipe/${recipe}`;
+
+export const absolutePathForPhoto = (photoId: string) =>
+  `${getBaseUrl()}/p/${photoId}`;

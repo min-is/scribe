@@ -22,3 +22,8 @@ export const isUploadPathnameValid = (pathname: string): boolean => {
   // Stub implementation
   return pathname.length > 0;
 };
+
+export async function testStorageConnection(): Promise<{ success: boolean, error?: string }> {
+  // Stub implementation
+  return { success: true };
+};

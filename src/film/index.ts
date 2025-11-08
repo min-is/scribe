@@ -16,3 +16,9 @@ export const getFilmFromPhoto = (photo: { filmSimulation?: string }): Film | und
     film: photo.filmSimulation,
   };
 };
+
+export const labelForFilm = (film?: Film | string): string => {
+  if (!film) return '';
+  if (typeof film === 'string') return film;
+  return film.film || '';
+};

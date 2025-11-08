@@ -28,3 +28,18 @@ export async function getPhotosMetaCached(options?: { tag?: string } | string): 
   // Stub implementation
   return { count: 0 };
 }
+
+export async function getUniqueTagsCached(): Promise<{ tag: string, count: number }[]> {
+  // Stub implementation
+  return [];
+}
+
+export async function getUniqueRecipesCached(): Promise<{ recipe: string, count: number }[]> {
+  // Stub implementation
+  return [];
+}
+
+export async function getPhotosMostRecentUpdateCached(): Promise<Date | undefined> {
+  // Stub implementation
+  return undefined;
+}

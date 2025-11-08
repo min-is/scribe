@@ -27,3 +27,38 @@ export async function getUniqueTags(): Promise<{ tag: string, count: number }[]>
   // Stub implementation
   return [];
 }
+
+export async function getPhotosMeta(): Promise<{ count: number, dateRange?: { start: Date, end: Date } }> {
+  // Stub implementation
+  return { count: 0 };
+}
+
+export async function getPhotosInNeedOfSyncCount(): Promise<number> {
+  // Stub implementation
+  return 0;
+}
+
+export async function getUniqueRecipes(): Promise<{ recipe: string, count: number }[]> {
+  // Stub implementation
+  return [];
+}
+
+export async function getUniqueCameras(): Promise<{ make: string, model: string, count: number }[]> {
+  // Stub implementation
+  return [];
+}
+
+export async function getUniqueLenses(): Promise<{ lens: string, count: number }[]> {
+  // Stub implementation
+  return [];
+}
+
+export async function getUniqueFilms(): Promise<{ film: string, count: number }[]> {
+  // Stub implementation
+  return [];
+}
+
+export async function getUniqueFocalLengths(): Promise<{ focal: number, count: number }[]> {
+  // Stub implementation
+  return [];
+}

@@ -16,3 +16,9 @@ export const getLensFromPhoto = (photo: { lensModel?: string }): Lens | undefine
     lens: photo.lensModel,
   };
 };
+
+export const formatLensText = (lens?: Lens | string): string => {
+  if (!lens) return '';
+  if (typeof lens === 'string') return lens;
+  return lens.lens || '';
+};

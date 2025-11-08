@@ -57,3 +57,7 @@ export const dateRangeForPhotos = (_photos: Photo[]): PhotoDateRange | undefined
   // Stub implementation
   return undefined;
 };
+
+export const photoLabelForCount = (count: number): string => {
+  return `${count} ${count === 1 ? 'photo' : 'photos'}`;
+};

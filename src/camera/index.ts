@@ -25,3 +25,8 @@ export const getCameraFromPhoto = (photo: { make?: string, model?: string }): Ca
     model: photo.model || '',
   };
 };
+
+export const formatCameraText = (camera?: Camera): string => {
+  if (!camera) return '';
+  return formatCameraModel(camera.make, camera.model);
+};

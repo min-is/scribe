@@ -8,3 +8,8 @@ export const revalidateStorageCache = () => {
 export const clearStorageCache = () => {
   console.log('clearStorageCache called (stub)');
 };
+
+export async function getStorageUploadUrlsNoStore(): Promise<{ url: string, uploadUrl: string }> {
+  // Stub implementation
+  return { url: '', uploadUrl: '' };
+};

@@ -194,6 +194,7 @@ export const HAS_STATIC_OPTIMIZATION = process.env.NEXT_PUBLIC_STATICALLY_OPTIMI
 export const CURRENT_STORAGE = (process.env.NEXT_PUBLIC_STORAGE || 'vercel-blob') as 'vercel-blob' | 'cloudflare-r2' | 'aws-s3';
 export const HIGH_DENSITY_GRID = process.env.NEXT_PUBLIC_SHOW_LARGE_THUMBNAILS !== '1';
 export const SHOW_ZOOM_CONTROLS = process.env.NEXT_PUBLIC_HIDE_ZOOM_CONTROLS !== '1';
+export const PRESERVE_ORIGINAL_UPLOADS = process.env.NEXT_PUBLIC_PRESERVE_ORIGINAL_UPLOADS === '1';
 
 export const APP_CONFIGURATION = {
   // Storage

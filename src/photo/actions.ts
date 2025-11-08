@@ -42,3 +42,9 @@ export async function searchPhotosAction(_query: string): Promise<Photo[]> {
   console.log('searchPhotosAction called (stub)');
   return [];
 }
+
+export async function deletePhotoTagGloballyAction(_tag: string): Promise<void> {
+  // Stub implementation
+  console.log('deletePhotoTagGloballyAction called (stub)');
+  return Promise.resolve();
+}
