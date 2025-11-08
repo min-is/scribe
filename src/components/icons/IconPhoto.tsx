@@ -1,6 +1,12 @@
-import { IconBaseProps } from 'react-icons';
-import { TbPhoto } from 'react-icons/tb';
+// Stub icon component
+import { IoImageOutline } from 'react-icons/io5';
 
-export default function IconPhoto(props: IconBaseProps) {
-  return <TbPhoto {...props} />;
+export default function IconPhoto({
+  size = 16,
+  className,
+}: {
+  size?: number
+  className?: string
+}) {
+  return <IoImageOutline size={size} className={className} />;
 }

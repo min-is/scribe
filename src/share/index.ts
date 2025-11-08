@@ -1,7 +1,7 @@
-// Stub module for recipe types
+// Stub module for share types
 // TODO: Remove when photography state is cleaned up
 
-export type RecipeProps = {
-  recipe?: string;
+export type ShareModalProps = {
+  type?: string;
   [key: string]: unknown;
 };

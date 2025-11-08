@@ -8,14 +8,11 @@ import AppViewSwitcher, { SwitcherSelection } from '@/app/AppViewSwitcher';
 import {
   PATH_ROOT,
   isPathAdmin,
-  isPathFeed,
-  isPathGrid,
   isPathProtected,
   isPathSignIn,
 } from '@/app/paths';
 import AnimateItems from '../components/AnimateItems';
 import {
-  GRID_HOMEPAGE_ENABLED,
   NAV_CAPTION,
 } from './config';
 import { useRef } from 'react';
@@ -49,15 +46,10 @@ export default function Nav({
       : <button onClick={linkOrAction}>{text}</button>;
 
   const switcherSelectionForPath = (): SwitcherSelection | undefined => {
-    if (pathname === PATH_ROOT) {
-      return GRID_HOMEPAGE_ENABLED ? 'grid' : 'feed';
-    } else if (isPathGrid(pathname)) {
-      return 'grid';
-    } else if (isPathFeed(pathname)) {
-      return 'feed';
-    } else if (isPathProtected(pathname)) {
+    if (isPathProtected(pathname)) {
       return 'admin';
     }
+    return undefined;
   };
 
   return (

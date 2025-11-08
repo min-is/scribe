@@ -1,30 +1,22 @@
-// Stub module for photo cache functionality
-// TODO: Implement full photo cache
+// Stub module for photo cache functions
+// TODO: Remove when admin navigation is cleaned up
 
-import { Photo } from '@/photo';
-
-export const revalidatePhotosKey = () => {
-  console.log('revalidatePhotosKey called (stub)');
-};
-
-export const revalidatePhotoKey = (_photoId: string) => {
-  console.log('revalidatePhotoKey called (stub)');
-};
-
-export const revalidateAllKeys = () => {
-  console.log('revalidateAllKeys called (stub)');
-};
-
-export const revalidateAdminPaths = () => {
-  console.log('revalidateAdminPaths called (stub)');
-};
-
-export async function getPhotosCached(options?: { tag?: string, limit?: number }): Promise<Photo[]> {
-  // Stub implementation
+export async function getPhotosCached(): Promise<any[]> {
   return [];
 }
 
-export async function getPhotosMetaCached(options?: { tag?: string } | string): Promise<{ count: number }> {
-  // Stub implementation
+export async function getPhotosMetaCached(options?: { hidden?: 'include' | 'only' | 'exclude' }): Promise<{ count: number, dateRange?: { start: Date, end: Date } }> {
   return { count: 0 };
+}
+
+export async function getUniqueTagsCached(): Promise<{ tag: string, count: number }[]> {
+  return [];
+}
+
+export async function getUniqueRecipesCached(): Promise<{ recipe: string, count: number }[]> {
+  return [];
+}
+
+export async function getPhotosMostRecentUpdateCached(): Promise<Date | undefined> {
+  return undefined;
 }

@@ -4,25 +4,17 @@ import { clsx } from 'clsx/lite';
 import {
   BASE_URL,
   DEFAULT_THEME,
-  PRESERVE_ORIGINAL_UPLOADS,
   META_DESCRIPTION,
   NAV_TITLE_OR_DOMAIN,
   META_TITLE,
 } from '@/app/config';
 import AppStateProvider from '@/state/AppStateProvider';
 import ToasterWithThemes from '@/toast/ToasterWithThemes';
-import PhotoEscapeHandler from '@/photo/PhotoEscapeHandler';
 import { Metadata } from 'next/types';
 import { ThemeProvider } from 'next-themes';
 import Nav from '@/app/Nav';
 import Footer from '@/app/Footer';
-import CommandK from '@/cmdk/CommandK';
 import SwrConfigClient from '@/state/SwrConfigClient';
-import AdminBatchEditPanel from '@/admin/AdminBatchEditPanel';
-import ShareModals from '@/share/ShareModals';
-import AdminUploadPanel from '@/admin/upload/AdminUploadPanel';
-import { revalidatePath } from 'next/cache';
-import RecipeModal from '@/recipe/RecipeModal';
 import ThemeColors from '@/app/ThemeColors';
 import AppTextProvider from '@/i18n/state/AppTextProvider';
 
@@ -91,32 +83,19 @@ export default function RootLayout({
                 )}>
                   <Nav navTitleOrDomain={NAV_TITLE_OR_DOMAIN} />
                   <main>
-                    <ShareModals />
-                    <RecipeModal />
                     <div className={clsx(
                       'min-h-[16rem] sm:min-h-[30rem]',
                       'mb-12',
                       'space-y-5',
                     )}>
-                      <AdminUploadPanel
-                        shouldResize={!PRESERVE_ORIGINAL_UPLOADS}
-                        onLastUpload={async () => {
-                          'use server';
-                          // Update upload count in admin nav
-                          revalidatePath('/admin', 'layout');
-                        }}
-                      />
-                      <AdminBatchEditPanel />
                       {children}
                     </div>
                   </main>
                   <Footer />
                 </div>
-                <CommandK />
               </SwrConfigClient>
               <Analytics debug={false} />
               <SpeedInsights debug={false}  />
-              <PhotoEscapeHandler />
               <ToasterWithThemes />
             </ThemeProvider>
           </AppTextProvider>

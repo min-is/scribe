@@ -1,9 +1,9 @@
-// Stub module for storage platform utilities
-// TODO: Implement full storage module
+// Stub module for storage platform
+// TODO: Remove when admin actions are cleaned up
 
 export type StorageType = 'vercel-blob' | 'cloudflare-r2' | 'aws-s3' | 'local';
 
-export const labelForStorage = (storage?: StorageType): string => {
+export function labelForStorage(storage?: StorageType): string {
   switch (storage) {
     case 'vercel-blob':
       return 'Vercel Blob';
@@ -16,9 +16,8 @@ export const labelForStorage = (storage?: StorageType): string => {
     default:
       return 'Unknown Storage';
   }
-};
+}
 
-export const isUploadPathnameValid = (pathname: string): boolean => {
-  // Stub implementation
-  return pathname.length > 0;
-};
+export async function testStorageConnection(): Promise<{ success: boolean, error?: string }> {
+  return { success: true };
+}
