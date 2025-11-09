@@ -225,6 +225,18 @@ export function TypingTrainer() {
     if (isCurrent) {
       return (
         <span key={wordIndex} className="relative inline-block transition-all duration-200">
+          {/* Caret positioned at the current character */}
+          {isTestActive && inputFocused && (
+            <span
+              className="absolute w-0.5 h-7 rounded-full animate-pulse transition-all duration-100 z-10"
+              style={{
+                backgroundColor: 'var(--typing-caret)',
+                left: `${currentInput.length * 0.6}em`,
+                top: '0.1em',
+                boxShadow: `0 0 8px var(--typing-caret)`
+              }}
+            />
+          )}
           {word.split('').map((char, charIndex) => {
             const typedChar = currentInput[charIndex];
             let className = '';
@@ -454,8 +466,12 @@ export function TypingTrainer() {
               onClick={handleFocusClick}
             >
               {!inputFocused && (
-                <div className="absolute inset-0 flex items-center justify-center backdrop-blur-[2px] transition-all duration-300 cursor-pointer z-10"
-                  style={{ backgroundColor: 'rgba(0,0,0,0.3)' }}
+                <div
+                  className="absolute inset-0 flex items-center justify-center backdrop-blur-[3px] transition-all duration-300 cursor-pointer z-10"
+                  style={{
+                    backgroundColor: 'var(--typing-bg)',
+                    opacity: 0.85
+                  }}
                 >
                   <div className="text-2xl font-light tracking-wide" style={{ color: 'var(--typing-text)' }}>
                     {!isTestActive ? 'Click to start typing' : 'Click to focus'}
@@ -464,25 +480,12 @@ export function TypingTrainer() {
               )}
 
               {testWords.length > 0 && (
-                <div className="relative">
-                  {/* Caret */}
-                  {isTestActive && inputFocused && (
-                    <div
-                      className="absolute w-0.5 h-8 rounded-full animate-pulse transition-all duration-100"
-                      style={{
-                        backgroundColor: 'var(--typing-caret)',
-                        left: `${currentInput.length * 0.6}em`,
-                        top: '50%',
-                        transform: 'translateY(-50%)',
-                        boxShadow: `0 0 8px var(--typing-caret)`
-                      }}
-                    />
-                  )}
-
-                  <div className="text-center text-3xl leading-relaxed tracking-wide select-none">
+                <div className="relative max-w-4xl">
+                  <div className="text-justify text-3xl leading-relaxed tracking-wide select-none">
                     {testWords.slice(currentWordIndex, currentWordIndex + 20).map((word, index) => (
-                      <span key={currentWordIndex + index} className="inline-block mx-2">
+                      <span key={currentWordIndex + index}>
                         {renderWord(word, currentWordIndex + index)}
+                        {index < 19 && ' '}
                       </span>
                     ))}
                   </div>
