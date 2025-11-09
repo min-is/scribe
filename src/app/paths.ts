@@ -15,6 +15,9 @@ export const PATH_ADMIN_PHOTOS_UPDATES  = `${PATH_ADMIN}/photos/updates`;
 export const PATH_ADMIN_TAGS            = `${PATH_ADMIN}/tags`;
 export const PATH_ADMIN_RECIPES         = `${PATH_ADMIN}/recipes`;
 
+// Practice paths
+export const PATH_PRACTICE_TYPING       = '/practice/typing';
+
 // View paths (photography - to be removed)
 export const PATH_GRID_INFERRED         = '/grid';
 export const PATH_FEED_INFERRED         = '/feed';
