@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { medicalTerms } from './medical-terms';
+import { VscDebugRestart } from 'react-icons/vsc';
 
 interface TypingStats {
   wpm: number;
@@ -13,32 +14,36 @@ interface TypingStats {
 
 interface TestSettings {
   mode: 'time' | 'words';
-  duration: number; // seconds for time mode, word count for words mode
+  duration: number;
 }
 
 export function TypingTrainer() {
   const [testWords, setTestWords] = useState<string[]>([]);
   const [currentWordIndex, setCurrentWordIndex] = useState(0);
   const [currentInput, setCurrentInput] = useState('');
-  const [typedWords, setTypedWords] = useState<{ word: string; correct: boolean }[]>([]);
+  const [typedWords, setTypedWords] = useState<string[]>([]);
   const [isTestActive, setIsTestActive] = useState(false);
   const [isTestComplete, setIsTestComplete] = useState(false);
   const [startTime, setStartTime] = useState<number | null>(null);
   const [timeRemaining, setTimeRemaining] = useState<number | null>(null);
   const [stats, setStats] = useState<TypingStats | null>(null);
-  const [settings, setSettings] = useState<TestSettings>({ mode: 'time', duration: 30 });
+  const [settings, setSettings] = useState<TestSettings>({
+    mode: 'time',
+    duration: 30
+  });
+  const [caretPosition, setCaretPosition] = useState(0);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Generate random words for the test
+  // Generate random words
   const generateTestWords = useCallback((count: number = 50) => {
     const shuffled = [...medicalTerms].sort(() => Math.random() - 0.5);
     return shuffled.slice(0, count).map(t => t.word);
   }, []);
 
-  // Initialize test
+  // Start test
   const startTest = useCallback(() => {
-    const wordCount = settings.mode === 'words' ? settings.duration : 100;
+    const wordCount = settings.mode === 'words' ? settings.duration : 200;
     setTestWords(generateTestWords(wordCount));
     setCurrentWordIndex(0);
     setCurrentInput('');
@@ -47,6 +52,7 @@ export function TypingTrainer() {
     setIsTestComplete(false);
     setStartTime(Date.now());
     setStats(null);
+    setCaretPosition(0);
 
     if (settings.mode === 'time') {
       setTimeRemaining(settings.duration);
@@ -65,20 +71,18 @@ export function TypingTrainer() {
     setCurrentInput('');
     setTypedWords([]);
     setStats(null);
+    setCaretPosition(0);
   }, []);
 
-  // Timer countdown for time-based mode
+  // Timer countdown
   useEffect(() => {
     if (settings.mode === 'time' && isTestActive && timeRemaining !== null && timeRemaining > 0) {
       const timer = setInterval(() => {
         setTimeRemaining(prev => {
-          if (prev === null || prev <= 1) {
-            return 0;
-          }
+          if (prev === null || prev <= 1) return 0;
           return prev - 1;
         });
       }, 1000);
-
       return () => clearInterval(timer);
     }
   }, [settings.mode, isTestActive, timeRemaining]);
@@ -95,19 +99,18 @@ export function TypingTrainer() {
 
     typedWords.forEach((typed, index) => {
       const expected = testWords[index];
-      if (typed.word === expected) {
-        correctChars += typed.word.length + 1; // +1 for space
+      if (typed === expected) {
+        correctChars += typed.length + 1;
       } else {
-        const minLength = Math.min(typed.word.length, expected.length);
+        const minLength = Math.min(typed.length, expected.length);
         for (let i = 0; i < minLength; i++) {
-          if (typed.word[i] === expected[i]) {
+          if (typed[i] === expected[i]) {
             correctChars++;
           } else {
             incorrectChars++;
           }
         }
-        incorrectChars += Math.abs(typed.word.length - expected.length);
-        incorrectChars++; // for space
+        incorrectChars += Math.abs(typed.length - expected.length) + 1;
       }
     });
 
@@ -115,13 +118,7 @@ export function TypingTrainer() {
     const accuracy = totalChars > 0 ? (correctChars / totalChars) * 100 : 0;
     const wpm = Math.round((correctChars / 5) / timeElapsedMinutes);
 
-    setStats({
-      wpm,
-      accuracy: Math.round(accuracy),
-      correctChars,
-      incorrectChars,
-      totalChars,
-    });
+    setStats({ wpm, accuracy: Math.round(accuracy), correctChars, incorrectChars, totalChars });
   }, [startTime, typedWords, testWords]);
 
   // End test
@@ -134,7 +131,6 @@ export function TypingTrainer() {
   // Check if test should end
   useEffect(() => {
     if (!isTestActive) return;
-
     if (settings.mode === 'time' && timeRemaining === 0) {
       endTest();
     } else if (settings.mode === 'words' && currentWordIndex >= settings.duration) {
@@ -145,201 +141,256 @@ export function TypingTrainer() {
   // Handle input change
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-
-    // Don't allow spaces at the beginning
     if (value.startsWith(' ')) return;
-
     setCurrentInput(value);
+    setCaretPosition(value.length);
   };
 
-  // Handle word completion (space or enter)
+  // Handle word completion
   const handleWordComplete = useCallback(() => {
     if (currentInput.trim() === '') return;
-
-    const expectedWord = testWords[currentWordIndex];
-    const isCorrect = currentInput.trim() === expectedWord;
-
-    setTypedWords(prev => [...prev, { word: currentInput.trim(), correct: isCorrect }]);
+    setTypedWords(prev => [...prev, currentInput.trim()]);
     setCurrentWordIndex(prev => prev + 1);
     setCurrentInput('');
-  }, [currentInput, testWords, currentWordIndex]);
+    setCaretPosition(0);
+  }, [currentInput]);
 
   // Handle key press
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === ' ' || e.key === 'Enter') {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === ' ') {
       e.preventDefault();
       handleWordComplete();
+    } else if (e.key === 'Tab') {
+      e.preventDefault();
+      resetTest();
+    }
+  };
+
+  // Auto-focus on click
+  const handleClick = () => {
+    if (isTestActive) {
+      inputRef.current?.focus();
+    }
+  };
+
+  // Render word with character coloring
+  const renderWord = (word: string, wordIndex: number) => {
+    const typedWord = typedWords[wordIndex];
+    const isCurrent = wordIndex === currentWordIndex;
+    const isPast = wordIndex < currentWordIndex;
+
+    if (isCurrent) {
+      return (
+        <span key={wordIndex} className="relative inline-block">
+          {/* Caret */}
+          {isTestActive && (
+            <span
+              className="absolute h-[1.5em] w-[2px] bg-yellow-400 animate-pulse"
+              style={{
+                left: `${caretPosition * 0.6}em`,
+                top: '0.05em'
+              }}
+            />
+          )}
+          {word.split('').map((char, charIndex) => {
+            const typedChar = currentInput[charIndex];
+            let className = 'text-gray-500 dark:text-gray-600';
+
+            if (typedChar !== undefined) {
+              className = typedChar === char
+                ? 'text-white dark:text-gray-100'
+                : 'text-red-500 dark:text-red-400';
+            }
+
+            return (
+              <span key={charIndex} className={className}>
+                {char}
+              </span>
+            );
+          })}
+          {currentInput.length > word.length && (
+            <span className="text-red-500 dark:text-red-400 border-b-2 border-red-500">
+              {currentInput.slice(word.length)}
+            </span>
+          )}
+        </span>
+      );
+    } else if (isPast && typedWord) {
+      const isCorrect = typedWord === word;
+      return (
+        <span
+          key={wordIndex}
+          className={isCorrect ? 'text-gray-400 dark:text-gray-500' : 'text-red-500/70 dark:text-red-400/70'}
+        >
+          {word}
+        </span>
+      );
+    } else {
+      return (
+        <span key={wordIndex} className="text-gray-500 dark:text-gray-600">
+          {word}
+        </span>
+      );
     }
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto p-6 space-y-6">
-      <div className="text-center">
-        <h2 className="text-3xl font-bold mb-2">Medical Typing Trainer</h2>
-        <p className="text-gray-600 dark:text-gray-400">
-          Practice typing medical terminology to improve your scribe documentation speed
-        </p>
-      </div>
-
-      {/* Test Settings */}
+    <div className="w-full max-w-4xl mx-auto px-4 py-8 font-mono" onClick={handleClick}>
+      {/* Settings Bar */}
       {!isTestActive && !isTestComplete && (
-        <div className="bg-white dark:bg-gray-800 rounded-lg p-6 space-y-4">
-          <h3 className="text-lg font-semibold">Test Settings</h3>
-
-          <div className="flex gap-4 items-center">
-            <label className="font-medium">Mode:</label>
+        <div className="mb-12 flex flex-wrap gap-6 items-center justify-center text-sm">
+          {/* Mode selector */}
+          <div className="flex gap-2 items-center">
             <button
               onClick={() => setSettings({ mode: 'time', duration: 30 })}
-              className={`px-4 py-2 rounded ${settings.mode === 'time' ? 'bg-blue-500 text-white' : 'bg-gray-200 dark:bg-gray-700'}`}
+              className={`px-3 py-1 rounded transition-colors ${
+                settings.mode === 'time'
+                  ? 'text-yellow-400 bg-yellow-400/10'
+                  : 'text-gray-500 hover:text-gray-300'
+              }`}
             >
-              Time
+              time
             </button>
             <button
               onClick={() => setSettings({ mode: 'words', duration: 25 })}
-              className={`px-4 py-2 rounded ${settings.mode === 'words' ? 'bg-blue-500 text-white' : 'bg-gray-200 dark:bg-gray-700'}`}
+              className={`px-3 py-1 rounded transition-colors ${
+                settings.mode === 'words'
+                  ? 'text-yellow-400 bg-yellow-400/10'
+                  : 'text-gray-500 hover:text-gray-300'
+              }`}
             >
-              Words
+              words
             </button>
           </div>
 
-          {settings.mode === 'time' && (
-            <div className="flex gap-2">
-              <label className="font-medium">Duration:</label>
-              {[15, 30, 60, 120].map(duration => (
-                <button
-                  key={duration}
-                  onClick={() => setSettings({ ...settings, duration })}
-                  className={`px-3 py-1 rounded ${settings.duration === duration ? 'bg-blue-500 text-white' : 'bg-gray-200 dark:bg-gray-700'}`}
-                >
-                  {duration}s
-                </button>
-              ))}
-            </div>
-          )}
+          {/* Duration selector */}
+          <div className="flex gap-2">
+            {settings.mode === 'time' ? (
+              <>
+                {[15, 30, 60, 120].map(duration => (
+                  <button
+                    key={duration}
+                    onClick={() => setSettings({ ...settings, duration })}
+                    className={`px-3 py-1 rounded transition-colors ${
+                      settings.duration === duration
+                        ? 'text-yellow-400 bg-yellow-400/10'
+                        : 'text-gray-500 hover:text-gray-300'
+                    }`}
+                  >
+                    {duration}
+                  </button>
+                ))}
+              </>
+            ) : (
+              <>
+                {[10, 25, 50, 100].map(count => (
+                  <button
+                    key={count}
+                    onClick={() => setSettings({ ...settings, duration: count })}
+                    className={`px-3 py-1 rounded transition-colors ${
+                      settings.duration === count
+                        ? 'text-yellow-400 bg-yellow-400/10'
+                        : 'text-gray-500 hover:text-gray-300'
+                    }`}
+                  >
+                    {count}
+                  </button>
+                ))}
+              </>
+            )}
+          </div>
+        </div>
+      )}
 
-          {settings.mode === 'words' && (
-            <div className="flex gap-2">
-              <label className="font-medium">Word Count:</label>
-              {[10, 25, 50, 100].map(count => (
-                <button
-                  key={count}
-                  onClick={() => setSettings({ ...settings, duration: count })}
-                  className={`px-3 py-1 rounded ${settings.duration === count ? 'bg-blue-500 text-white' : 'bg-gray-200 dark:bg-gray-700'}`}
-                >
-                  {count}
-                </button>
-              ))}
-            </div>
-          )}
-
+      {/* Progress indicator */}
+      {isTestActive && (
+        <div className="mb-6 flex justify-between items-center text-yellow-400 text-sm">
+          <div className="flex gap-4">
+            {settings.mode === 'time' && timeRemaining !== null && (
+              <span>{timeRemaining}s</span>
+            )}
+            {settings.mode === 'words' && (
+              <span>{currentWordIndex}/{settings.duration}</span>
+            )}
+          </div>
           <button
-            onClick={startTest}
-            className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-lg"
+            onClick={resetTest}
+            className="text-gray-500 hover:text-gray-300 transition-colors"
+            title="Reset (Tab)"
           >
-            Start Test
+            <VscDebugRestart size={20} />
           </button>
         </div>
       )}
 
-      {/* Active Test */}
-      {isTestActive && (
-        <div className="space-y-4">
-          {/* Progress Bar */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-4">
-            <div className="flex justify-between mb-2">
-              <span className="font-medium">
-                {settings.mode === 'time'
-                  ? `Time: ${timeRemaining}s`
-                  : `Words: ${currentWordIndex}/${settings.duration}`}
-              </span>
+      {/* Main typing area */}
+      {!isTestComplete ? (
+        <div className="relative">
+          {!isTestActive && (
+            <div className="text-center mb-8">
               <button
-                onClick={resetTest}
-                className="text-red-500 hover:text-red-700 font-medium"
+                onClick={startTest}
+                className="px-6 py-3 bg-yellow-400/10 text-yellow-400 rounded-lg hover:bg-yellow-400/20 transition-colors font-medium"
               >
-                Reset
+                Click here or start typing
               </button>
             </div>
-            <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-              <div
-                className="bg-blue-500 h-2 rounded-full transition-all"
-                style={{
-                  width: settings.mode === 'time'
-                    ? `${((settings.duration - (timeRemaining || 0)) / settings.duration) * 100}%`
-                    : `${(currentWordIndex / settings.duration) * 100}%`
-                }}
+          )}
+
+          {testWords.length > 0 && (
+            <>
+              <div className="text-2xl leading-relaxed flex flex-wrap gap-x-3 gap-y-2 mb-6 select-none">
+                {testWords.slice(0, Math.min(currentWordIndex + 15, testWords.length)).map((word, index) =>
+                  renderWord(word, index)
+                )}
+              </div>
+
+              {/* Hidden input */}
+              <input
+                ref={inputRef}
+                type="text"
+                value={currentInput}
+                onChange={handleInputChange}
+                onKeyDown={handleKeyDown}
+                onBlur={() => isTestActive && inputRef.current?.focus()}
+                className="absolute opacity-0 pointer-events-none"
+                autoFocus={isTestActive}
               />
-            </div>
-          </div>
-
-          {/* Word Display */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-8">
-            <div className="flex flex-wrap gap-3 mb-6 min-h-[100px]">
-              {testWords.slice(0, currentWordIndex + 10).map((word, index) => (
-                <span
-                  key={index}
-                  className={`text-xl ${
-                    index < currentWordIndex
-                      ? typedWords[index]?.correct
-                        ? 'text-green-500'
-                        : 'text-red-500 line-through'
-                      : index === currentWordIndex
-                      ? 'text-blue-500 font-bold underline'
-                      : 'text-gray-400'
-                  }`}
-                >
-                  {word}
-                </span>
-              ))}
-            </div>
-
-            <input
-              ref={inputRef}
-              type="text"
-              value={currentInput}
-              onChange={handleInputChange}
-              onKeyDown={handleKeyPress}
-              className="w-full px-4 py-3 text-xl border-2 border-gray-300 dark:border-gray-600 rounded-lg focus:border-blue-500 focus:outline-none bg-white dark:bg-gray-900"
-              placeholder="Type the highlighted word..."
-              autoFocus
-            />
-          </div>
+            </>
+          )}
         </div>
-      )}
-
-      {/* Results */}
-      {isTestComplete && stats && (
-        <div className="bg-white dark:bg-gray-800 rounded-lg p-8 space-y-6">
-          <h3 className="text-2xl font-bold text-center">Test Complete!</h3>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div className="text-center p-6 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-              <div className="text-5xl font-bold text-blue-500">{stats.wpm}</div>
-              <div className="text-gray-600 dark:text-gray-400 mt-2">WPM</div>
+      ) : (
+        /* Results */
+        <div className="space-y-8">
+          <div className="grid grid-cols-2 gap-6">
+            <div className="text-center">
+              <div className="text-6xl font-bold text-yellow-400 mb-2">{stats?.wpm}</div>
+              <div className="text-gray-500 text-sm uppercase tracking-wider">wpm</div>
             </div>
-            <div className="text-center p-6 bg-green-50 dark:bg-green-900/20 rounded-lg">
-              <div className="text-5xl font-bold text-green-500">{stats.accuracy}%</div>
-              <div className="text-gray-600 dark:text-gray-400 mt-2">Accuracy</div>
+            <div className="text-center">
+              <div className="text-6xl font-bold text-yellow-400 mb-2">{stats?.accuracy}%</div>
+              <div className="text-gray-500 text-sm uppercase tracking-wider">accuracy</div>
             </div>
           </div>
 
-          <div className="text-center text-gray-600 dark:text-gray-400">
-            <p>Correct Characters: {stats.correctChars}</p>
-            <p>Incorrect Characters: {stats.incorrectChars}</p>
-            <p>Total Words Typed: {typedWords.length}</p>
+          <div className="text-center text-gray-500 space-y-1 text-sm">
+            <p>Correct characters: {stats?.correctChars}</p>
+            <p>Incorrect characters: {stats?.incorrectChars}</p>
+            <p>Words typed: {typedWords.length}</p>
           </div>
 
-          <div className="flex gap-4">
+          <div className="flex justify-center gap-4">
             <button
               onClick={resetTest}
-              className="flex-1 bg-gray-500 hover:bg-gray-600 text-white font-bold py-3 rounded-lg"
+              className="px-6 py-2 text-gray-500 hover:text-gray-300 transition-colors"
             >
-              Change Settings
+              change settings
             </button>
             <button
               onClick={startTest}
-              className="flex-1 bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-lg"
+              className="px-6 py-2 bg-yellow-400/10 text-yellow-400 rounded hover:bg-yellow-400/20 transition-colors"
             >
-              Try Again
+              try again
             </button>
           </div>
         </div>
