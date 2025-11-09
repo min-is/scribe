@@ -224,7 +224,7 @@ export function TypingTrainer() {
 
     if (isCurrent) {
       return (
-        <span key={wordIndex} className="relative inline-block transition-all duration-200">
+        <span key={wordIndex} className="relative inline-block transition-all duration-200 animate-fade-in">
           {/* Caret positioned at the current character */}
           {isTestActive && inputFocused && (
             <span
@@ -267,22 +267,27 @@ export function TypingTrainer() {
       return (
         <span
           key={wordIndex}
-          className={`transition-all duration-300 ${
-            isCorrect ? 'text-[var(--typing-subtext)] opacity-60' : 'text-[var(--typing-error)] opacity-60'
+          className={`transition-all duration-500 ease-out ${
+            isCorrect
+              ? 'text-[var(--typing-subtext)] opacity-0 scale-95'
+              : 'text-[var(--typing-error)] opacity-0 scale-95'
           }`}
+          style={{
+            animation: 'fadeOut 0.5s ease-out forwards'
+          }}
         >
           {word}
         </span>
       );
     } else if (isNext) {
       return (
-        <span key={wordIndex} className="text-[var(--typing-text)] opacity-50">
+        <span key={wordIndex} className="text-[var(--typing-text)] opacity-50 transition-all duration-300">
           {word}
         </span>
       );
     } else {
       return (
-        <span key={wordIndex} className="text-[var(--typing-text)]">
+        <span key={wordIndex} className="text-[var(--typing-text)] transition-all duration-300">
           {word}
         </span>
       );
@@ -467,10 +472,9 @@ export function TypingTrainer() {
             >
               {!inputFocused && (
                 <div
-                  className="absolute inset-0 flex items-center justify-center backdrop-blur-[3px] transition-all duration-300 cursor-pointer z-10"
+                  className="absolute inset-0 flex items-center justify-center backdrop-blur-[4px] transition-all duration-300 cursor-pointer z-10"
                   style={{
-                    backgroundColor: 'var(--typing-bg)',
-                    opacity: 0.85
+                    backgroundColor: 'var(--typing-bg)'
                   }}
                 >
                   <div className="text-2xl font-light tracking-wide" style={{ color: 'var(--typing-text)' }}>
@@ -480,12 +484,12 @@ export function TypingTrainer() {
               )}
 
               {testWords.length > 0 && (
-                <div className="relative max-w-4xl">
-                  <div className="text-justify text-3xl leading-relaxed tracking-wide select-none">
-                    {testWords.slice(currentWordIndex, currentWordIndex + 20).map((word, index) => (
+                <div className="relative max-w-4xl overflow-hidden" style={{ height: '10rem' }}>
+                  <div className="text-justify text-3xl leading-relaxed tracking-wide select-none transition-transform duration-300 ease-out">
+                    {testWords.slice(currentWordIndex, currentWordIndex + 30).map((word, index) => (
                       <span key={currentWordIndex + index}>
                         {renderWord(word, currentWordIndex + index)}
-                        {index < 19 && ' '}
+                        {index < 29 && ' '}
                       </span>
                     ))}
                   </div>
@@ -584,6 +588,32 @@ export function TypingTrainer() {
           100% {
             opacity: 1;
             transform: scale(1);
+          }
+        }
+
+        @keyframes fadeOut {
+          0% {
+            opacity: 0.6;
+            transform: scale(1);
+          }
+          100% {
+            opacity: 0;
+            transform: scale(0.95);
+          }
+        }
+
+        .animate-fade-in {
+          animation: fadeIn 0.2s ease-out;
+        }
+
+        @keyframes fadeIn {
+          0% {
+            opacity: 0;
+            transform: translateY(-5px);
+          }
+          100% {
+            opacity: 1;
+            transform: translateY(0);
           }
         }
       `}</style>
