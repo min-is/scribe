@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap");
 
 @import 'tailwindcss';
 
@@ -92,6 +93,24 @@
     80% { transform: rotate(-2.5deg) }
     100% { transform: rotate(0deg) }
   }
+
+  /* Typing Trainer Theme Colors */
+  --color-typing-primary: #444444;
+  --color-typing-secondary: #ffffff;
+  --color-typing-tertiary: #ff0000;
+  --color-typing-accent: #e2b714;
+
+  /* Typing Trainer Custom Sizes */
+  --text-typing-xl: 1.7rem;
+  --text-typing-xl--line-height: 2.5rem;
+  --width-typing-sm: 16rem;
+  --width-typing-xs: 20rem;
+  --width-typing-md: 31.25rem;
+  --width-typing-lg: 37.5rem;
+  --width-typing-xl: 50rem;
+  --width-typing-2xl: 62.5rem;
+  --height-typing-container: 7.5rem;
+  --width-caret: 0.12rem;
 }
 
 /* Text Primitives */
@@ -207,6 +226,26 @@
     md:bg-[repeating-linear-gradient(to_bottom,#eee,#eee_1px,transparent_1px,transparent_1.25rem)]
     dark:bg-[repeating-linear-gradient(to_bottom,#222,#222_1px,transparent_1px,transparent_1.1875rem)]
     dark:md:bg-[repeating-linear-gradient(to_bottom,#222,#222_1px,transparent_1px,transparent_1.25rem)]
+}
+
+/* Typing Trainer Utilities */
+@utility text-typing-primary {
+  color: var(--color-typing-primary);
+}
+@utility text-typing-secondary {
+  color: var(--color-typing-secondary);
+}
+@utility text-typing-tertiary {
+  color: var(--color-typing-tertiary);
+}
+@utility text-typing-accent {
+  color: var(--color-typing-accent);
+}
+@utility bg-typing-secondary {
+  background-color: var(--color-typing-secondary);
+}
+@utility font-typing {
+  font-family: "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
 }
 
 @layer base {
