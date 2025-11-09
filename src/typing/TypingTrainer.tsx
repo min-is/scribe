@@ -472,9 +472,9 @@ export function TypingTrainer() {
             >
               {!inputFocused && (
                 <div
-                  className="absolute inset-0 flex items-center justify-center backdrop-blur-[8px] transition-all duration-300 cursor-pointer z-10"
+                  className="absolute inset-0 flex items-center justify-center backdrop-blur-[6px] transition-all duration-300 cursor-pointer z-10"
                   style={{
-                    backgroundColor: `color-mix(in srgb, var(--typing-bg) 40%, transparent)`
+                    background: `radial-gradient(ellipse at center, color-mix(in srgb, var(--typing-bg) 20%, transparent) 0%, color-mix(in srgb, var(--typing-bg) 50%, transparent) 100%)`
                   }}
                 >
                   <div className="text-2xl font-light tracking-wide" style={{ color: 'var(--typing-text)' }}>
