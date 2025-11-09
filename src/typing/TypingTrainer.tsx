@@ -247,7 +247,7 @@ export function TypingTrainer() {
       {/* Settings Bar - MonkeyType Style */}
       {!isTestActive && !isTestComplete && (
         <div className="mb-12 flex justify-center">
-          <div className="inline-flex items-center rounded-lg bg-gray-800 text-gray-400 px-4 py-2 text-sm space-x-1">
+          <div className="inline-flex items-center rounded-lg bg-slate-800 text-gray-400 px-4 py-2 text-sm space-x-1">
             {/* Mode selector */}
             <button
               onClick={() => setSettings({ mode: 'time', duration: 30 })}
@@ -273,7 +273,7 @@ export function TypingTrainer() {
             </button>
 
             {/* Vertical divider */}
-            <div className="w-[2px] h-5 bg-gray-900 rounded-lg mx-2" />
+            <div className="w-[2px] h-5 bg-slate-900 rounded-lg mx-2" />
 
             {/* Duration selector */}
             {settings.mode === 'time' ? (
@@ -404,7 +404,7 @@ export function TypingTrainer() {
             </button>
             <button
               onClick={startTest}
-              className="px-6 py-2 bg-gray-800 text-yellow-400 rounded hover:bg-gray-700 transition-colors"
+              className="px-6 py-2 bg-slate-800 text-yellow-400 rounded hover:bg-slate-700 transition-colors"
             >
               try again
             </button>
