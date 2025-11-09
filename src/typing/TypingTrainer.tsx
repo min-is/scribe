@@ -472,8 +472,12 @@ export function TypingTrainer() {
             >
               {!inputFocused && (
                 <div
-                  className="absolute inset-0 flex items-center justify-center backdrop-blur-[6px] transition-all duration-300 cursor-pointer z-10"
+                  className="absolute backdrop-blur-[6px] transition-all duration-300 cursor-pointer z-10"
                   style={{
+                    inset: '-8rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
                     background: `radial-gradient(ellipse at center, color-mix(in srgb, var(--typing-bg) 20%, transparent) 0%, color-mix(in srgb, var(--typing-bg) 50%, transparent) 100%)`
                   }}
                 >
