@@ -112,7 +112,7 @@ export function TypingTrainer() {
 
   // Timer countdown
   useEffect(() => {
-    if (settings.mode === 'time' && isTestActive && timeRemaining !== null && timeRemaining > 0) {
+    if (settings.mode === 'time' && isTestActive && inputFocused && timeRemaining !== null && timeRemaining > 0) {
       const timer = setInterval(() => {
         setTimeRemaining(prev => {
           if (prev === null || prev <= 1) return 0;
@@ -121,7 +121,7 @@ export function TypingTrainer() {
       }, 1000);
       return () => clearInterval(timer);
     }
-  }, [settings.mode, isTestActive, timeRemaining]);
+  }, [settings.mode, isTestActive, inputFocused, timeRemaining]);
 
   // Calculate statistics
   const calculateStats = useCallback(() => {
@@ -224,7 +224,7 @@ export function TypingTrainer() {
 
     if (isCurrent) {
       return (
-        <span key={wordIndex} className="relative inline-block transition-all duration-200 animate-fade-in">
+        <span key={wordIndex} className="relative inline-block transition-all duration-200">
           {/* Caret positioned at the current character */}
           {isTestActive && inputFocused && (
             <span
@@ -472,9 +472,9 @@ export function TypingTrainer() {
             >
               {!inputFocused && (
                 <div
-                  className="absolute inset-0 flex items-center justify-center backdrop-blur-[4px] transition-all duration-300 cursor-pointer z-10"
+                  className="absolute inset-0 flex items-center justify-center backdrop-blur-[8px] transition-all duration-300 cursor-pointer z-10"
                   style={{
-                    backgroundColor: 'var(--typing-bg)'
+                    backgroundColor: `color-mix(in srgb, var(--typing-bg) 40%, transparent)`
                   }}
                 >
                   <div className="text-2xl font-light tracking-wide" style={{ color: 'var(--typing-text)' }}>
@@ -515,7 +515,7 @@ export function TypingTrainer() {
               <div className="mt-12 flex justify-center">
                 <button
                   onClick={resetTest}
-                  className="p-4 rounded-full transition-all duration-200 hover:scale-110 opacity-40 hover:opacity-100"
+                  className="p-4 rounded-full transition-all duration-200 hover:scale-110 opacity-40 hover:opacity-100 border-0 outline-none focus:outline-none"
                   style={{ color: 'var(--typing-subtext)' }}
                   title="Restart (Tab)"
                 >
