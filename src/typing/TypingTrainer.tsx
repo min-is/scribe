@@ -478,7 +478,7 @@ export function TypingTrainer() {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    background: `radial-gradient(ellipse at center, color-mix(in srgb, var(--typing-bg) 20%, transparent) 0%, color-mix(in srgb, var(--typing-bg) 50%, transparent) 100%)`
+                    backgroundColor: `color-mix(in srgb, var(--typing-bg) 30%, transparent)`
                   }}
                 >
                   <div className="text-2xl font-light tracking-wide" style={{ color: 'var(--typing-text)' }}>
