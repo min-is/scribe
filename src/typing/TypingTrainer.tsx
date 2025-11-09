@@ -210,8 +210,8 @@ export function TypingTrainer() {
     if (!isTestActive && !isTestComplete) {
       startTest();
     } else {
-      inputRef.current?.focus();
       setInputFocused(true);
+      inputRef.current?.focus();
     }
   };
 
