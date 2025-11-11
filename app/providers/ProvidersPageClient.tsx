@@ -67,10 +67,10 @@ export default function ProvidersPageClient({
                 <button
                   className="w-full mt-3 px-3 py-1.5 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 transition-all text-xs font-medium border border-gray-300 dark:border-gray-600 group"
                   style={{
-                    textShadow: '0 0 8px rgba(59, 130, 246, 0.3)',
+                    textShadow: '0 0 16px rgba(249, 115, 22, 0.6), 0 0 8px rgba(249, 115, 22, 0.4)',
                   }}
                 >
-                  <span className="group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors" style={{ textShadow: 'inherit' }}>
+                  <span className="group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors" style={{ textShadow: 'inherit' }}>
                     View Profile
                   </span>
                 </button>
