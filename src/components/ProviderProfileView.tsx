@@ -152,11 +152,11 @@ export default function ProviderProfileView() {
                 />
               </div>
 
-              {/* Note Template */}
+              {/* Preferences (Note Template) */}
               {provider.noteTemplate && (
                 <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
                   <h4 className="text-lg font-medium text-main mb-2">
-                    Note Template
+                    Preferences
                   </h4>
                   <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
                     <pre className="text-sm text-main whitespace-pre-wrap font-mono">
@@ -166,7 +166,30 @@ export default function ProviderProfileView() {
                 </div>
               )}
 
-              {/* Preferences */}
+              {/* Note SmartPhrase */}
+              {provider.noteSmartPhrase ? (
+                <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
+                  <h4 className="text-lg font-medium text-main mb-2">
+                    Note SmartPhrase
+                  </h4>
+                  <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
+                    <pre className="text-sm text-main whitespace-pre-wrap font-mono">
+                      {provider.noteSmartPhrase}
+                    </pre>
+                  </div>
+                </div>
+              ) : (
+                <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
+                  <h4 className="text-lg font-medium text-main mb-2">
+                    Note SmartPhrase
+                  </h4>
+                  <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
+                    <p className="text-sm text-dim">No note smartphrases</p>
+                  </div>
+                </div>
+              )}
+
+              {/* Additional Preferences (JSON) */}
               {provider.preferences && (
                 <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
                   <h4 className="text-lg font-medium text-main mb-2">

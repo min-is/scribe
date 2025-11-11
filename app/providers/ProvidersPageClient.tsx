@@ -64,7 +64,7 @@ export default function ProvidersPageClient({
                 </div>
 
                 {/* View Profile Button */}
-                <button className="w-full mt-3 px-3 py-1.5 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors text-xs font-medium">
+                <button className="w-full mt-3 px-3 py-1.5 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-xs font-medium border border-gray-300 dark:border-gray-600">
                   View Profile
                 </button>
               </div>

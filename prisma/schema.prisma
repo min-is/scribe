@@ -24,6 +24,7 @@ model Provider {
 
   // Preferences
   noteTemplate String?
+  noteSmartPhrase String?
   preferences  Json?
 
   // Analytics
