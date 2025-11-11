@@ -210,7 +210,7 @@ export default function PhysiciansClient({
                 />
                 <p className="text-xs text-dim mt-1">
                   This template will be used as the default for this
-                  physician's notes
+                  physician&apos;s notes
                 </p>
               </div>
 
@@ -244,7 +244,7 @@ export default function PhysiciansClient({
             <div className="p-8 text-center text-dim">
               <p>No physicians added yet.</p>
               <p className="text-sm mt-1">
-                Click "Add Physician" to get started.
+                Click &quot;Add Physician&quot; to get started.
               </p>
             </div>
           ) : (
