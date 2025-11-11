@@ -30,11 +30,11 @@ import {
   pathForPhoto,
   pathForRecipe,
   pathForTag,
-} from '../app/paths';
-import Modal from '../components/Modal';
+} from '@/app/paths';
+import Modal from '@/components/Modal';
 import { clsx } from 'clsx/lite';
 import { useDebounce } from 'use-debounce';
-import Spinner from '../components/Spinner';
+import Spinner from '@/components/Spinner';
 import { usePathname, useRouter } from 'next/navigation';
 import { useTheme } from 'next-themes';
 import { BiDesktop, BiLockAlt, BiMoon, BiSun } from 'react-icons/bi';
@@ -63,17 +63,17 @@ import { PhotoSetCategories } from '@/category';
 import { formatCameraText } from '@/camera';
 import { formatFocalLength } from '@/focal';
 import { formatRecipe } from '@/recipe';
-import IconLens from '../components/icons/IconLens';
+import IconLens from '@/components/icons/IconLens';
 import { formatLensText } from '@/lens';
-import IconTag from '../components/icons/IconTag';
-import IconCamera from '../components/icons/IconCamera';
-import IconPhoto from '../components/icons/IconPhoto';
-import IconRecipe from '../components/icons/IconRecipe';
-import IconFocalLength from '../components/icons/IconFocalLength';
-import IconFilm from '../components/icons/IconFilm';
-import IconLock from '../components/icons/IconLock';
+import IconTag from '@/components/icons/IconTag';
+import IconCamera from '@/components/icons/IconCamera';
+import IconPhoto from '@/components/icons/IconPhoto';
+import IconRecipe from '@/components/icons/IconRecipe';
+import IconFocalLength from '@/components/icons/IconFocalLength';
+import IconFilm from '@/components/icons/IconFilm';
+import IconLock from '@/components/icons/IconLock';
 import useVisualViewportHeight from '@/utility/useVisualViewport';
-import useMaskedScroll from '../components/useMaskedScroll';
+import useMaskedScroll from '@/components/useMaskedScroll';
 import { labelForFilm } from '@/film';
 import IconFavs from '@/components/icons/IconFavs';
 import IconHidden from '@/components/icons/IconHidden';

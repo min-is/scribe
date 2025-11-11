@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { clsx } from 'clsx/lite';
 import useClickInsideOutside from '@/utility/useClickInsideOutside';
 import { useRouter } from 'next/navigation';
-import AnimateItems from './AnimateItems';
+import AnimateItems from '@/components/AnimateItems';
 import { PATH_ROOT } from '@/app/paths';
 import usePrefersReducedMotion from '@/utility/usePrefersReducedMotion';
 import useEscapeHandler from '@/utility/useEscapeHandler';
@@ -83,7 +83,7 @@ export default function Modal({
       animate={{ backgroundColor: resolvedTheme === 'dark'
         ? 'rgba(0, 0, 0, 0.80)'
         : 'rgba(255, 255, 255, 0.80)' }}
-      transition={{ duration: 0.3, easing: 'easeOut' }}
+      transition={{ duration: 0.3, ease: 'easeOut' }}
     >
       <AnimateItems
         duration={fast ? 0.1 : 0.3}

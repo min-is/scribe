@@ -6,12 +6,12 @@ import {
   PATH_FEED_INFERRED,
   PATH_GRID_INFERRED,
 } from '@/app/paths';
-import IconSearch from '../components/icons/IconSearch';
+import IconSearch from '@/components/icons/IconSearch';
 import { useAppState } from '@/state/AppState';
 import {
   GRID_HOMEPAGE_ENABLED,
   SHOW_KEYBOARD_SHORTCUT_TOOLTIPS,
-} from './config';
+} from '@/app/config';
 import AdminAppMenu from '@/admin/AdminAppMenu';
 import Spinner from '@/components/Spinner';
 import clsx from 'clsx/lite';
@@ -132,8 +132,6 @@ export default function AppViewSwitcher({
           onClick={() => setIsCommandKOpen?.(true)}
           tooltip={{...SHOW_KEYBOARD_SHORTCUT_TOOLTIPS && {
             content: appText.nav.search,
-            keyCommandModifier: KEY_COMMANDS.search[0],
-            keyCommand: KEY_COMMANDS.search[1],
           }}}
         />
       </Switcher>
