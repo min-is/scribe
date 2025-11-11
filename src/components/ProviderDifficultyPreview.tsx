@@ -4,7 +4,7 @@ import { DifficultyDial } from './DifficultyDial';
 
 interface ProviderDifficultyPreviewProps {
   generalDifficulty?: number | null;
-  size?: 'small' | 'medium' | 'large';
+  size?: 'xs' | 'small' | 'medium' | 'large';
   showLabel?: boolean;
 }
 
