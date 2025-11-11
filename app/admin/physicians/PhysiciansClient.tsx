@@ -148,7 +148,7 @@ export default function PhysiciansClient({
                     defaultValue={editingPhysician?.slug || ''}
                     className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="physician-smith"
-                    pattern="[a-z0-9-]+"
+                    pattern="[a-z0-9\-]+"
                     title="Only lowercase letters, numbers, and hyphens"
                   />
                   <p className="text-xs text-dim mt-1">
