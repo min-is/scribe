@@ -64,8 +64,15 @@ export default function ProvidersPageClient({
                 </div>
 
                 {/* View Profile Button */}
-                <button className="w-full mt-3 px-3 py-1.5 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-xs font-medium border border-gray-300 dark:border-gray-600">
-                  View Profile
+                <button
+                  className="w-full mt-3 px-3 py-1.5 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 transition-all text-xs font-medium border border-gray-300 dark:border-gray-600 group"
+                  style={{
+                    textShadow: '0 0 8px rgba(59, 130, 246, 0.3)',
+                  }}
+                >
+                  <span className="group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors" style={{ textShadow: 'inherit' }}>
+                    View Profile
+                  </span>
                 </button>
               </div>
             ))}

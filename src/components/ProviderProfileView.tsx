@@ -87,13 +87,14 @@ export default function ProviderProfileView() {
             : 'scale-100 opacity-100 animate-in zoom-in-95'
         }`}
         onClick={(e) => e.stopPropagation()}
+        style={{ fontFamily: 'Calibri, "Segoe UI", Tahoma, sans-serif' }}
       >
-        {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
-          <h2 className="text-2xl font-bold text-main">Provider Profile</h2>
+        {/* Content */}
+        <div className="p-6 space-y-6 relative">
+          {/* Close Button - Clean X with no background */}
           <button
             onClick={handleClose}
-            className="text-dim hover:text-main transition-colors"
+            className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors"
             aria-label="Close"
           >
             <svg
@@ -110,10 +111,7 @@ export default function ProviderProfileView() {
               />
             </svg>
           </button>
-        </div>
 
-        {/* Content */}
-        <div className="p-6 space-y-6">
           {isLoading && (
             <div className="text-center py-8">
               <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-gray-300 border-t-blue-600"></div>
@@ -129,13 +127,13 @@ export default function ProviderProfileView() {
 
           {provider && (
             <div className="space-y-6">
-              {/* Basic Info */}
-              <div>
-                <h3 className="text-2xl font-semibold text-main">
+              {/* Provider Name as Main Header */}
+              <div className="pr-10">
+                <h2 className="text-3xl font-bold text-main mb-1">
                   {provider.name}
-                </h3>
+                </h2>
                 {provider.credentials && (
-                  <p className="text-dim mt-1 text-lg">{provider.credentials}</p>
+                  <p className="text-dim text-lg">{provider.credentials}</p>
                 )}
               </div>
 
