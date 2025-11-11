@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 interface DifficultyDialProps {
   value?: number | null; // 1-10 scale
   label?: string;
-  size?: 'small' | 'medium' | 'large';
+  size?: 'xs' | 'small' | 'medium' | 'large';
   showValue?: boolean;
 }
 
@@ -19,6 +19,7 @@ export function DifficultyDial({
 
   // Size configurations
   const sizeConfig = {
+    xs: { width: 60, height: 40, strokeWidth: 6, fontSize: 14 },
     small: { width: 80, height: 50, strokeWidth: 8, fontSize: 16 },
     medium: { width: 120, height: 75, strokeWidth: 12, fontSize: 20 },
     large: { width: 160, height: 100, strokeWidth: 16, fontSize: 24 },

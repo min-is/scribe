@@ -48,8 +48,8 @@ export default function ProvidersPageClient({
                   transition: 'all 0.3s ease',
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.boxShadow = '0 0 20px rgba(249, 115, 22, 0.3), 0 0 40px rgba(236, 72, 153, 0.2), 0 0 60px rgba(168, 85, 247, 0.1)';
-                  e.currentTarget.style.borderColor = 'rgba(249, 115, 22, 0.5)';
+                  e.currentTarget.style.boxShadow = '0 0 20px rgba(255, 255, 255, 0.3), 0 0 40px rgba(255, 255, 255, 0.2), 0 0 60px rgba(255, 255, 255, 0.1)';
+                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.4)';
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.boxShadow = '0 0 0 0 transparent';
@@ -58,7 +58,7 @@ export default function ProvidersPageClient({
               >
                 {/* Provider Info */}
                 <div className="mb-3">
-                  <h3 className="text-base font-semibold text-main mb-0.5 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors line-clamp-2">
+                  <h3 className="text-base font-semibold text-main mb-0.5 group-hover:text-gray-100 dark:group-hover:text-white transition-colors line-clamp-2">
                     {provider.name}
                   </h3>
                   {provider.credentials && (
@@ -70,22 +70,10 @@ export default function ProvidersPageClient({
                 <div className="flex justify-center py-2">
                   <ProviderDifficultyPreview
                     generalDifficulty={provider.generalDifficulty}
-                    size="small"
+                    size="xs"
                     showLabel={true}
                   />
                 </div>
-
-                {/* View Profile Button */}
-                <button
-                  className="w-full mt-3 px-3 py-1.5 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 transition-all text-xs font-medium border border-gray-300 dark:border-gray-600 group"
-                  style={{
-                    textShadow: '0 0 16px rgba(249, 115, 22, 0.6), 0 0 8px rgba(249, 115, 22, 0.4)',
-                  }}
-                >
-                  <span className="group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors" style={{ textShadow: 'inherit' }}>
-                    View Profile
-                  </span>
-                </button>
               </div>
             ))}
           </div>
