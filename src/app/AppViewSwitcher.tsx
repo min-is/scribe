@@ -7,7 +7,6 @@ import {
 } from './config';
 import AdminAppMenu from '@/admin/AdminAppMenu';
 import Spinner from '@/components/Spinner';
-import SearchModal from '@/components/SearchModal';
 import clsx from 'clsx/lite';
 import { useEffect, useState } from 'react';
 import { useAppText } from '@/i18n/state/client';
@@ -26,23 +25,23 @@ export default function AppViewSwitcher({
   const {
     isUserSignedIn,
     isUserSignedInEager,
+    setIsCommandKOpen,
   } = useAppState();
 
   const [isAdminMenuOpen, setIsAdminMenuOpen] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   // Keyboard shortcut for search (Cmd/Ctrl + K)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
-        setIsSearchOpen(prev => !prev);
+        setIsCommandKOpen?.(prev => !prev);
       }
     };
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, []);
+  }, [setIsCommandKOpen]);
 
   return (
     <div
@@ -71,15 +70,12 @@ export default function AppViewSwitcher({
       <Switcher type="borderless">
         <SwitcherItem
           icon={<IconSearch includeTitle={false} />}
-          onClick={() => setIsSearchOpen(true)}
+          onClick={() => setIsCommandKOpen?.(true)}
           tooltip={{...SHOW_KEYBOARD_SHORTCUT_TOOLTIPS && {
             content: appText.nav.search,
           }}}
         />
       </Switcher>
-
-      {/* Search Modal */}
-      <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     </div>
   );
 }

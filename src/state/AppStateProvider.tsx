@@ -33,6 +33,7 @@ export default function AppStateProvider({
   const [swrTimestamp, setSwrTimestamp] = useState(Date.now());
   const [shouldRespondToKeyboardCommands, setShouldRespondToKeyboardCommands] =
     useState(true);
+  const [isCommandKOpen, setIsCommandKOpen] = useState(false);
 
   // AUTH
   const [userEmail, setUserEmail] = useState<string>();
@@ -120,6 +121,8 @@ export default function AppStateProvider({
         invalidateSwr,
         shouldRespondToKeyboardCommands,
         setShouldRespondToKeyboardCommands,
+        isCommandKOpen,
+        setIsCommandKOpen,
         // AUTH
         isCheckingAuth,
         userEmail,
