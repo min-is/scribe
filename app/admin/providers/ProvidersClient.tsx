@@ -1,56 +1,74 @@
 'use client';
 
 import { useState } from 'react';
-import { Physician } from '@prisma/client';
+import { Provider } from '@prisma/client';
 import {
-  createPhysician,
-  updatePhysician,
-  deletePhysician,
-  PhysicianFormData,
-} from '@/physician';
+  createProvider,
+  updateProvider,
+  deleteProvider,
+  ProviderFormData,
+} from '@/provider/actions';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
+import { DifficultyDialInput } from '@/components/DifficultyDialInput';
+import { ProviderDifficultyPreview } from '@/components/ProviderDifficultyPreview';
 
-type PhysiciansClientProps = {
-  physicians: Physician[];
+type ProvidersClientProps = {
+  providers: Provider[];
 };
 
-export default function PhysiciansClient({
-  physicians: initialPhysicians,
-}: PhysiciansClientProps) {
+export default function ProvidersClient({
+  providers: initialProviders,
+}: ProvidersClientProps) {
   const router = useRouter();
   const [showForm, setShowForm] = useState(false);
-  const [editingPhysician, setEditingPhysician] = useState<Physician | null>(
-    null,
-  );
+  const [editingProvider, setEditingProvider] = useState<Provider | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Form state for difficulty metrics
+  const [generalDifficulty, setGeneralDifficulty] = useState<
+    number | undefined
+  >(undefined);
+  const [speedDifficulty, setSpeedDifficulty] = useState<number | undefined>(
+    undefined,
+  );
+  const [terminologyDifficulty, setTerminologyDifficulty] = useState<
+    number | undefined
+  >(undefined);
+  const [noteDifficulty, setNoteDifficulty] = useState<number | undefined>(
+    undefined,
+  );
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
 
     const formData = new FormData(e.currentTarget);
-    const data: PhysicianFormData = {
+    const data: ProviderFormData = {
       name: formData.get('name') as string,
       slug: formData.get('slug') as string,
-      specialty: formData.get('specialty') as string,
       credentials: formData.get('credentials') as string,
       noteTemplate: formData.get('noteTemplate') as string,
+      generalDifficulty,
+      speedDifficulty,
+      terminologyDifficulty,
+      noteDifficulty,
     };
 
     try {
-      const result = editingPhysician
-        ? await updatePhysician(editingPhysician.id, data)
-        : await createPhysician(data);
+      const result = editingProvider
+        ? await updateProvider(editingProvider.id, data)
+        : await createProvider(data);
 
       if (result.success) {
         toast.success(
-          editingPhysician
-            ? 'Physician updated successfully'
-            : 'Physician created successfully',
+          editingProvider
+            ? 'Provider updated successfully'
+            : 'Provider created successfully',
         );
         setShowForm(false);
-        setEditingPhysician(null);
+        setEditingProvider(null);
+        resetDifficultyFields();
         router.refresh();
       } else {
         toast.error(result.error || 'An error occurred');
@@ -68,24 +86,36 @@ export default function PhysiciansClient({
       return;
     }
 
-    const result = await deletePhysician(id);
+    const result = await deleteProvider(id);
 
     if (result.success) {
-      toast.success('Physician deleted successfully');
+      toast.success('Provider deleted successfully');
       router.refresh();
     } else {
-      toast.error(result.error || 'Failed to delete physician');
+      toast.error(result.error || 'Failed to delete provider');
     }
   };
 
-  const handleEdit = (physician: Physician) => {
-    setEditingPhysician(physician);
+  const handleEdit = (provider: Provider) => {
+    setEditingProvider(provider);
+    setGeneralDifficulty(provider.generalDifficulty ?? undefined);
+    setSpeedDifficulty(provider.speedDifficulty ?? undefined);
+    setTerminologyDifficulty(provider.terminologyDifficulty ?? undefined);
+    setNoteDifficulty(provider.noteDifficulty ?? undefined);
     setShowForm(true);
   };
 
   const handleCancel = () => {
     setShowForm(false);
-    setEditingPhysician(null);
+    setEditingProvider(null);
+    resetDifficultyFields();
+  };
+
+  const resetDifficultyFields = () => {
+    setGeneralDifficulty(undefined);
+    setSpeedDifficulty(undefined);
+    setTerminologyDifficulty(undefined);
+    setNoteDifficulty(undefined);
   };
 
   return (
@@ -93,9 +123,9 @@ export default function PhysiciansClient({
       <div className="max-w-6xl mx-auto space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-main">Manage Physicians</h1>
+            <h1 className="text-3xl font-bold text-main">Manage Providers</h1>
             <p className="text-dim mt-1">
-              Add and manage physician profiles and preferences
+              Add and manage provider profiles and preferences
             </p>
           </div>
           {!showForm && (
@@ -103,7 +133,7 @@ export default function PhysiciansClient({
               onClick={() => setShowForm(true)}
               className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
             >
-              Add Physician
+              Add Provider
             </button>
           )}
         </div>
@@ -111,7 +141,7 @@ export default function PhysiciansClient({
         {showForm && (
           <div className="bg-medium border border-main rounded-lg p-6">
             <h2 className="text-xl font-semibold text-main mb-4">
-              {editingPhysician ? 'Edit Physician' : 'Add New Physician'}
+              {editingProvider ? 'Edit Provider' : 'Add New Provider'}
             </h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -127,7 +157,7 @@ export default function PhysiciansClient({
                     id="name"
                     name="name"
                     required
-                    defaultValue={editingPhysician?.name || ''}
+                    defaultValue={editingProvider?.name || ''}
                     className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="Dr. John Smith"
                   />
@@ -145,50 +175,67 @@ export default function PhysiciansClient({
                     id="slug"
                     name="slug"
                     required
-                    defaultValue={editingPhysician?.slug || ''}
+                    defaultValue={editingProvider?.slug || ''}
                     className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="physician-smith"
+                    placeholder="provider-smith"
                     pattern="[a-z0-9\-]+"
                     title="Only lowercase letters, numbers, and hyphens"
                   />
                   <p className="text-xs text-dim mt-1">
-                    Used in URL: #physician-smith
+                    Used in URL: #provider-smith
                   </p>
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label
-                    htmlFor="specialty"
-                    className="block text-sm font-medium text-main mb-1"
-                  >
-                    Specialty
-                  </label>
-                  <input
-                    type="text"
-                    id="specialty"
-                    name="specialty"
-                    defaultValue={editingPhysician?.specialty || ''}
-                    className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Internal Medicine"
-                  />
-                </div>
+              <div>
+                <label
+                  htmlFor="credentials"
+                  className="block text-sm font-medium text-main mb-1"
+                >
+                  Credentials
+                </label>
+                <input
+                  type="text"
+                  id="credentials"
+                  name="credentials"
+                  defaultValue={editingProvider?.credentials || ''}
+                  className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="MD, FACEM"
+                />
+              </div>
 
-                <div>
-                  <label
-                    htmlFor="credentials"
-                    className="block text-sm font-medium text-main mb-1"
-                  >
-                    Credentials
-                  </label>
-                  <input
-                    type="text"
-                    id="credentials"
-                    name="credentials"
-                    defaultValue={editingPhysician?.credentials || ''}
-                    className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="MD, FACP"
+              {/* Difficulty Metrics */}
+              <div className="border-t border-gray-200 dark:border-gray-700 pt-4 mt-4">
+                <h3 className="text-lg font-medium text-main mb-4">
+                  Difficulty Metrics (1-10 scale)
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <DifficultyDialInput
+                    label="General Difficulty"
+                    value={generalDifficulty}
+                    onChange={setGeneralDifficulty}
+                    helperText="Overall difficulty level for new scribes"
+                  />
+
+                  <DifficultyDialInput
+                    label="Speed Expectations"
+                    value={speedDifficulty}
+                    onChange={setSpeedDifficulty}
+                    helperText="How fast this provider works"
+                  />
+
+                  <DifficultyDialInput
+                    label="Terminology Level"
+                    value={terminologyDifficulty}
+                    onChange={setTerminologyDifficulty}
+                    helperText="Medical terminology expectations"
+                  />
+
+                  <DifficultyDialInput
+                    label="Note Complexity"
+                    value={noteDifficulty}
+                    onChange={setNoteDifficulty}
+                    helperText="Complexity of note requirements"
                   />
                 </div>
               </div>
@@ -204,13 +251,13 @@ export default function PhysiciansClient({
                   id="noteTemplate"
                   name="noteTemplate"
                   rows={6}
-                  defaultValue={editingPhysician?.noteTemplate || ''}
+                  defaultValue={editingProvider?.noteTemplate || ''}
                   className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Default note template for this physician..."
+                  placeholder="Default note template for this provider..."
                 />
                 <p className="text-xs text-dim mt-1">
                   This template will be used as the default for this
-                  physician&apos;s notes
+                  provider&apos;s notes
                 </p>
               </div>
 
@@ -222,9 +269,9 @@ export default function PhysiciansClient({
                 >
                   {isSubmitting
                     ? 'Saving...'
-                    : editingPhysician
-                      ? 'Update Physician'
-                      : 'Create Physician'}
+                    : editingProvider
+                      ? 'Update Provider'
+                      : 'Create Provider'}
                 </button>
                 <button
                   type="button"
@@ -240,11 +287,11 @@ export default function PhysiciansClient({
         )}
 
         <div className="bg-medium border border-main rounded-lg overflow-hidden">
-          {initialPhysicians.length === 0 ? (
+          {initialProviders.length === 0 ? (
             <div className="p-8 text-center text-dim">
-              <p>No physicians added yet.</p>
+              <p>No providers added yet.</p>
               <p className="text-sm mt-1">
-                Click &quot;Add Physician&quot; to get started.
+                Click &quot;Add Provider&quot; to get started.
               </p>
             </div>
           ) : (
@@ -256,10 +303,10 @@ export default function PhysiciansClient({
                       Name
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-dim uppercase tracking-wider">
-                      Specialty
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-dim uppercase tracking-wider">
                       Credentials
+                    </th>
+                    <th className="px-6 py-3 text-center text-xs font-medium text-dim uppercase tracking-wider">
+                      Difficulty
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-dim uppercase tracking-wider">
                       URL Slug
@@ -270,33 +317,38 @@ export default function PhysiciansClient({
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                  {initialPhysicians.map((physician) => (
+                  {initialProviders.map((provider) => (
                     <tr
-                      key={physician.id}
+                      key={provider.id}
                       className="hover:bg-gray-50 dark:hover:bg-gray-800"
                     >
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-main">
-                        {physician.name}
+                        {provider.name}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-dim">
-                        {physician.specialty || '—'}
+                        {provider.credentials || '—'}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-dim">
-                        {physician.credentials || '—'}
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-center">
+                        <div className="flex justify-center">
+                          <ProviderDifficultyPreview
+                            generalDifficulty={provider.generalDifficulty}
+                            size="small"
+                          />
+                        </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-dim">
-                        #{physician.slug}
+                        #{provider.slug}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <button
-                          onClick={() => handleEdit(physician)}
+                          onClick={() => handleEdit(provider)}
                           className="text-blue-600 hover:text-blue-900 dark:hover:text-blue-400 mr-4"
                         >
                           Edit
                         </button>
                         <button
                           onClick={() =>
-                            handleDelete(physician.id, physician.name)
+                            handleDelete(provider.id, provider.name)
                           }
                           className="text-red-600 hover:text-red-900 dark:hover:text-red-400"
                         >

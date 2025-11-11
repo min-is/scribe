@@ -1,6 +1,5 @@
 import { Metadata } from 'next/types';
 import { META_TITLE, META_DESCRIPTION } from '@/app/config';
-import { getPhysicians } from '@/physician';
 import HomePageClient from './HomePageClient';
 
 export const dynamic = 'force-dynamic';
@@ -14,7 +13,5 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function HomePage() {
-  const physicians = await getPhysicians();
-
-  return <HomePageClient physicians={physicians} />;
+  return <HomePageClient />;
 }

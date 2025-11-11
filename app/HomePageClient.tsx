@@ -1,17 +1,12 @@
 'use client';
 
-import { Physician } from '@prisma/client';
-import PhysicianProfileView from '@/components/PhysicianProfileView';
+import ProviderProfileView from '@/components/ProviderProfileView';
 import Link from 'next/link';
 
-type HomePageClientProps = {
-  physicians: Physician[];
-};
-
-export default function HomePageClient({ physicians }: HomePageClientProps) {
+export default function HomePageClient() {
   return (
     <>
-      <PhysicianProfileView />
+      <ProviderProfileView />
       <div className="min-h-screen p-8">
         <div className="max-w-6xl mx-auto space-y-8">
           {/* Header */}
@@ -37,32 +32,35 @@ export default function HomePageClient({ physicians }: HomePageClientProps) {
               </div>
             </div>
 
-            {/* Physician Preferences */}
-            <div className="bg-medium border border-main rounded-lg p-6 space-y-4">
-              <h2 className="text-2xl font-semibold text-main">
-                Physician Preferences
+            {/* Provider Preferences */}
+            <Link
+              href="/providers"
+              className="bg-medium border border-main rounded-lg p-6 space-y-4 hover:border-blue-500 dark:hover:border-blue-400 transition-all hover:shadow-lg block group"
+            >
+              <h2 className="text-2xl font-semibold text-main group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                Provider Preferences
               </h2>
               <p className="text-dim">
-                Access physician-specific note preferences and requirements.
+                View all provider profiles, preferences, and difficulty ratings.
               </p>
-              <div className="pt-4 space-y-2">
-                {physicians.length > 0 ? (
-                  physicians.map((physician) => (
-                    <a
-                      key={physician.id}
-                      href={`#${physician.slug}`}
-                      className="block text-main hover:text-invert transition-colors"
-                    >
-                      {physician.name}
-                    </a>
-                  ))
-                ) : (
-                  <span className="text-sm text-medium">
-                    No physicians added yet
-                  </span>
-                )}
+              <div className="pt-4">
+                <div className="inline-flex items-center gap-2 text-blue-600 dark:text-blue-400 font-medium">
+                  Browse Providers
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </div>
               </div>
-            </div>
+            </Link>
 
             {/* EPIC Dot Phrases */}
             <div className="bg-medium border border-main rounded-lg p-6 space-y-4">

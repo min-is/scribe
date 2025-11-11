@@ -11,6 +11,8 @@ import { FaUserMd, FaHospital, FaFileAlt, FaKeyboard } from 'react-icons/fa';
 import { HiDocumentText } from 'react-icons/hi';
 import { RiToolsFill } from 'react-icons/ri';
 import Spinner from './Spinner';
+import { Provider } from '@prisma/client';
+import { incrementProviderSearchClick } from '@/provider/actions';
 
 type CommandKItem = {
   label: ReactNode
@@ -30,9 +32,11 @@ type CommandKSection = {
 export default function SearchModal({
   isOpen,
   onClose,
+  topProviders = [],
 }: {
   isOpen: boolean;
   onClose: () => void;
+  topProviders?: Provider[];
 }) {
   const [query, setQuery] = useState('');
   const router = useRouter();
@@ -40,27 +44,34 @@ export default function SearchModal({
   const heightMaximum = '18rem';
   const maxHeight = heightMaximum;
 
-  // Define medical dashboard sections
-  const physicianPreferencesSection: CommandKSection = useMemo(() => ({
-    heading: 'Physician Preferences',
-    accessory: <FaUserMd size={14} />,
-    items: [
-      {
-        label: 'Dr. Smith - Cardiology',
-        annotation: 'Detailed HPI',
-        keywords: ['smith', 'cardiology', 'heart', 'preferences'],
-        path: '#physician-smith',
-        accessory: <FaUserMd size={14} className="text-gray-500 dark:text-gray-400" />,
+  // Define provider preferences section (dynamic)
+  const providerPreferencesSection: CommandKSection = useMemo(() => {
+    const providerItems = topProviders.map(provider => ({
+      label: `${provider.name}${provider.credentials ? ` - ${provider.credentials}` : ''}`,
+      annotation: provider.generalDifficulty
+        ? `Difficulty: ${provider.generalDifficulty}/10`
+        : undefined,
+      keywords: [
+        provider.name.toLowerCase(),
+        ...(provider.credentials ? [provider.credentials.toLowerCase()] : []),
+        provider.slug,
+        'provider',
+        'preferences',
+      ],
+      path: `#provider-${provider.slug}`,
+      action: async () => {
+        // Track search click
+        await incrementProviderSearchClick(provider.slug);
       },
-      {
-        label: 'Dr. Johnson - Family Medicine',
-        annotation: 'Brief notes',
-        keywords: ['johnson', 'family', 'medicine', 'preferences'],
-        path: '#physician-johnson',
-        accessory: <FaUserMd size={14} className="text-gray-500 dark:text-gray-400" />,
-      },
-    ],
-  }), []);
+      accessory: <FaUserMd size={14} className="text-gray-500 dark:text-gray-400" />,
+    }));
+
+    return {
+      heading: 'Provider Preferences',
+      accessory: <FaUserMd size={14} />,
+      items: providerItems,
+    };
+  }, [topProviders]);
 
   const scenariosSection: CommandKSection = useMemo(() => ({
     heading: 'Scenarios',
@@ -140,11 +151,11 @@ export default function SearchModal({
   }), []);
 
   const categorySections: CommandKSection[] = useMemo(() => [
-    physicianPreferencesSection,
+    providerPreferencesSection,
     scenariosSection,
     epicDotPhrasesSection,
     miscellaneousSection,
-  ], [physicianPreferencesSection, scenariosSection, epicDotPhrasesSection, miscellaneousSection]);
+  ], [providerPreferencesSection, scenariosSection, epicDotPhrasesSection, miscellaneousSection]);
 
   // Filter sections based on query
   const filteredSections = useMemo(() => {
@@ -166,12 +177,17 @@ export default function SearchModal({
       .filter(section => section.items.length > 0);
   }, [query, categorySections]);
 
-  const handleSelect = (item: CommandKItem) => {
+  const handleSelect = async (item: CommandKItem) => {
+    // Execute action first (for tracking)
+    if (item.action) {
+      await item.action();
+    }
+
+    // Then navigate
     if (item.path) {
       router.push(item.path);
-    } else if (item.action) {
-      item.action();
     }
+
     onClose();
     setQuery('');
   };
