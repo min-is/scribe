@@ -1,13 +1,4 @@
-import { auth } from './src/auth/server';
-import { NextRequest, NextResponse } from 'next/server';
-import type { NextApiRequest, NextApiResponse } from 'next';
-
-export default function middleware(req: NextRequest, res:NextResponse) {
-  return auth(
-    req as unknown as NextApiRequest,
-    res as unknown as NextApiResponse,
-  );
-}
+export { auth as middleware } from './src/auth/server';
 
 export const config = {
   // Excludes:
