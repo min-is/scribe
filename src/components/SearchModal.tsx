@@ -1,45 +1,36 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Command } from 'cmdk';
+import { ReactNode, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useTheme } from 'next-themes';
+import { clsx } from 'clsx/lite';
 import { PATH_PRACTICE_TYPING, PATH_ADMIN, PATH_ADMIN_CONFIGURATION } from '@/app/paths';
-import IconKeyboard from './icons/IconKeyboard';
-import AdminAppInfoIcon from '@/admin/AdminAppInfoIcon';
-import { IoClose } from 'react-icons/io5';
+import Modal from './Modal';
+import CommandKItem from '@/cmdk/CommandKItem';
+import { FaUserMd, FaHospital, FaFileAlt, FaKeyboard } from 'react-icons/fa';
+import { HiDocumentText } from 'react-icons/hi';
+import { RiToolsFill } from 'react-icons/ri';
+import Spinner from './Spinner';
+import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
+import { DialogDescription, DialogTitle } from '@radix-ui/react-dialog';
 
-interface SearchItem {
-  title: string;
-  description: string;
-  path: string;
-  icon: React.ReactNode;
-  keywords: string[];
+const DIALOG_TITLE = 'Search Medical Scribe Dashboard';
+const DIALOG_DESCRIPTION = 'For searching features, settings, and resources';
+
+type CommandKItem = {
+  label: ReactNode
+  keywords?: string[]
+  accessory?: ReactNode
+  annotation?: ReactNode
+  path?: string
+  action?: () => void | Promise<void>
 }
 
-const SEARCH_ITEMS: SearchItem[] = [
-  {
-    title: 'Typing Practice',
-    description: 'Practice typing medical terminology',
-    path: PATH_PRACTICE_TYPING,
-    icon: <IconKeyboard size={20} />,
-    keywords: ['typing', 'practice', 'medical', 'terms', 'speed', 'wpm', 'trainer', 'keyboard'],
-  },
-  {
-    title: 'App Configuration',
-    description: 'Configure dashboard settings',
-    path: PATH_ADMIN_CONFIGURATION,
-    icon: <AdminAppInfoIcon size="small" />,
-    keywords: ['settings', 'config', 'configuration', 'admin', 'setup'],
-  },
-  {
-    title: 'Admin',
-    description: 'Admin dashboard',
-    path: PATH_ADMIN,
-    icon: <AdminAppInfoIcon size="small" />,
-    keywords: ['admin', 'dashboard', 'management'],
-  },
-];
+type CommandKSection = {
+  heading: string
+  accessory?: ReactNode
+  items: CommandKItem[]
+}
 
 export default function SearchModal({
   isOpen,
@@ -49,35 +40,151 @@ export default function SearchModal({
   onClose: () => void;
 }) {
   const [query, setQuery] = useState('');
-  const [filteredItems, setFilteredItems] = useState(SEARCH_ITEMS);
   const router = useRouter();
-  const { resolvedTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
 
-  // Handle theme mounting
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const heightMaximum = '18rem';
+  const maxHeight = heightMaximum;
 
-  useEffect(() => {
-    if (query.trim() === '') {
-      setFilteredItems(SEARCH_ITEMS);
-    } else {
-      const lowerQuery = query.toLowerCase();
-      const filtered = SEARCH_ITEMS.filter(item =>
-        item.title.toLowerCase().includes(lowerQuery) ||
-        item.description.toLowerCase().includes(lowerQuery) ||
-        item.keywords.some(keyword => keyword.toLowerCase().includes(lowerQuery))
-      );
-      setFilteredItems(filtered);
+  // Define medical dashboard sections
+  const physicianPreferencesSection: CommandKSection = useMemo(() => ({
+    heading: 'Physician Preferences',
+    accessory: <FaUserMd size={14} />,
+    items: [
+      {
+        label: 'Dr. Smith - Cardiology',
+        annotation: 'Detailed HPI',
+        keywords: ['smith', 'cardiology', 'heart', 'preferences'],
+        path: '#physician-smith',
+        accessory: <FaUserMd size={14} className="text-gray-500 dark:text-gray-400" />,
+      },
+      {
+        label: 'Dr. Johnson - Family Medicine',
+        annotation: 'Brief notes',
+        keywords: ['johnson', 'family', 'medicine', 'preferences'],
+        path: '#physician-johnson',
+        accessory: <FaUserMd size={14} className="text-gray-500 dark:text-gray-400" />,
+      },
+    ],
+  }), []);
+
+  const scenariosSection: CommandKSection = useMemo(() => ({
+    heading: 'Scenarios',
+    accessory: <FaHospital size={14} />,
+    items: [
+      {
+        label: 'Chest Pain Presentation',
+        annotation: 'Cardiac',
+        keywords: ['chest', 'pain', 'cardiac', 'heart', 'scenario'],
+        path: '#scenario-chest-pain',
+        accessory: <FaHospital size={14} className="text-gray-500 dark:text-gray-400" />,
+      },
+      {
+        label: 'Diabetic Follow-up',
+        annotation: 'Endocrine',
+        keywords: ['diabetes', 'follow', 'endocrine', 'scenario'],
+        path: '#scenario-diabetes',
+        accessory: <FaHospital size={14} className="text-gray-500 dark:text-gray-400" />,
+      },
+    ],
+  }), []);
+
+  const epicDotPhrasesSection: CommandKSection = useMemo(() => ({
+    heading: 'EPIC Dot Phrases',
+    accessory: <HiDocumentText size={14} />,
+    items: [
+      {
+        label: '.chestpain',
+        annotation: 'Chest pain template',
+        keywords: ['chest', 'pain', 'dot', 'phrase', 'epic', 'template'],
+        path: '#dotphrase-chestpain',
+        accessory: <HiDocumentText size={14} className="text-gray-500 dark:text-gray-400" />,
+      },
+      {
+        label: '.physicalexam',
+        annotation: 'Physical exam template',
+        keywords: ['physical', 'exam', 'dot', 'phrase', 'epic', 'template'],
+        path: '#dotphrase-physical',
+        accessory: <HiDocumentText size={14} className="text-gray-500 dark:text-gray-400" />,
+      },
+      {
+        label: '.rosgeneral',
+        annotation: 'Review of systems',
+        keywords: ['ros', 'review', 'systems', 'dot', 'phrase', 'epic'],
+        path: '#dotphrase-ros',
+        accessory: <HiDocumentText size={14} className="text-gray-500 dark:text-gray-400" />,
+      },
+    ],
+  }), []);
+
+  const miscellaneousSection: CommandKSection = useMemo(() => ({
+    heading: 'Miscellaneous',
+    accessory: <FaFileAlt size={14} />,
+    items: [
+      {
+        label: 'Typing Practice',
+        annotation: 'Improve your speed',
+        keywords: ['typing', 'practice', 'medical', 'terms', 'speed', 'wpm', 'trainer', 'keyboard'],
+        path: PATH_PRACTICE_TYPING,
+        accessory: <FaKeyboard size={14} className="text-gray-500 dark:text-gray-400" />,
+      },
+      {
+        label: 'App Configuration',
+        annotation: 'Dashboard settings',
+        keywords: ['settings', 'config', 'configuration', 'admin', 'setup'],
+        path: PATH_ADMIN_CONFIGURATION,
+        accessory: <RiToolsFill size={14} className="text-gray-500 dark:text-gray-400" />,
+      },
+      {
+        label: 'Admin Dashboard',
+        annotation: 'Management',
+        keywords: ['admin', 'dashboard', 'management'],
+        path: PATH_ADMIN,
+        accessory: <RiToolsFill size={14} className="text-gray-500 dark:text-gray-400" />,
+      },
+    ],
+  }), []);
+
+  const categorySections: CommandKSection[] = useMemo(() => [
+    physicianPreferencesSection,
+    scenariosSection,
+    epicDotPhrasesSection,
+    miscellaneousSection,
+  ], [physicianPreferencesSection, scenariosSection, epicDotPhrasesSection, miscellaneousSection]);
+
+  // Filter sections based on query
+  const filteredSections = useMemo(() => {
+    if (!query || query.trim() === '') {
+      return categorySections;
     }
-  }, [query]);
 
+    return categorySections
+      .map(section => ({
+        ...section,
+        items: section.items.filter(item => {
+          const searchString = [
+            typeof item.label === 'string' ? item.label : '',
+            ...(item.keywords || []),
+          ].join(' ').toLowerCase();
+          return searchString.includes(query.toLowerCase());
+        }),
+      }))
+      .filter(section => section.items.length > 0);
+  }, [query, categorySections]);
+
+  const handleSelect = (item: CommandKItem) => {
+    if (item.path) {
+      router.push(item.path);
+    } else if (item.action) {
+      item.action();
+    }
+    onClose();
+    setQuery('');
+  };
+
+  // Handle keyboard shortcut
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        onClose();
-      } else if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
+      if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
         onClose();
       }
@@ -89,98 +196,89 @@ export default function SearchModal({
     }
   }, [isOpen, onClose]);
 
-  const handleSelect = (path: string) => {
-    router.push(path);
-    onClose();
-    setQuery('');
-  };
-
-  // Get theme-aware colors for animation
-  const isDark = mounted && resolvedTheme === 'dark';
+  if (!isOpen) return null;
 
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <motion.div
-          className="fixed inset-0 z-50 flex items-start justify-center pt-4 sm:pt-24 px-4 bg-white dark:bg-black backdrop-blur-md"
-          initial={{
-            backgroundColor: isDark ? 'rgba(0, 0, 0, 0)' : 'rgba(255, 255, 255, 0)',
-          }}
-          animate={{
-            backgroundColor: isDark ? 'rgba(0, 0, 0, 0.80)' : 'rgba(255, 255, 255, 0.80)',
-          }}
-          exit={{
-            backgroundColor: isDark ? 'rgba(0, 0, 0, 0)' : 'rgba(255, 255, 255, 0)',
-          }}
-          transition={{ duration: 0.3, ease: 'easeOut' }}
-          onClick={onClose}
+    <Modal
+      onClose={onClose}
+      anchor="top"
+      fast
+      noPadding
+    >
+      <VisuallyHidden.Root>
+        <DialogTitle>{DIALOG_TITLE}</DialogTitle>
+        <DialogDescription>{DIALOG_DESCRIPTION}</DialogDescription>
+      </VisuallyHidden.Root>
+
+      <Command shouldFilter={false}>
+        {/* Search Input */}
+        <div className="px-3 md:px-4 pt-3 md:pt-4 relative">
+          <Command.Input
+            value={query}
+            onValueChange={setQuery}
+            placeholder="Search features, preferences, scenarios ..."
+            className={clsx(
+              'w-full min-w-0!',
+              'focus:ring-0',
+              'border-gray-200! dark:border-gray-800!',
+              'focus:border-gray-200 dark:focus:border-gray-800',
+              'placeholder:text-gray-400/80',
+              'dark:placeholder:text-gray-700',
+              'focus:outline-hidden',
+            )}
+            autoFocus
+          />
+          {false && (
+            <div className="absolute top-[9px] right-0 w-10 flex items-center justify-center">
+              <Spinner size={16} />
+            </div>
+          )}
+        </div>
+
+        {/* Results List */}
+        <Command.List
+          className="overflow-y-auto"
+          style={{ maxHeight }}
         >
-          <motion.div
-            className="bg-white dark:bg-black rounded-lg md:rounded-xl shadow-2xl/20 dark:shadow-2xl/100 max-w-2xl w-full overflow-hidden border border-gray-200 dark:border-gray-800"
-            initial={{ opacity: 0, scale: 0.95, y: -20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: -20 }}
-            transition={{ duration: 0.2, ease: 'easeOut' }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Search Input */}
-            <div className="flex items-center gap-3 p-4 border-b border-gray-200 dark:border-gray-800">
-              <input
-                type="text"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search features..."
-                className="flex-1 bg-transparent border-none outline-none text-lg text-gray-900 dark:text-gray-100 placeholder:text-gray-400 dark:placeholder:text-gray-600 focus:ring-0"
-                autoFocus
-              />
-              <button
-                onClick={onClose}
-                className="text-gray-400 dark:text-gray-600 hover:text-gray-600 dark:hover:text-gray-400 transition-colors"
-                aria-label="Close search"
+          <div className="pt-2 pb-3 px-3 flex flex-col gap-2">
+            <Command.Empty className="mt-1 pl-3 text-dim text-base pb-0.5">
+              No results found
+            </Command.Empty>
+
+            {/* Category Sections */}
+            {filteredSections.map((section) => (
+              <Command.Group
+                key={section.heading}
+                heading={
+                  <div
+                    className={clsx(
+                      'flex items-center',
+                      'px-2 py-1',
+                      'text-xs font-medium text-dim tracking-wider',
+                    )}
+                  >
+                    {section.accessory && <div className="w-5">{section.accessory}</div>}
+                    {section.heading}
+                  </div>
+                }
+                className="uppercase select-none"
               >
-                <IoClose size={24} />
-              </button>
-            </div>
-
-            {/* Results */}
-            <div className="max-h-[400px] overflow-y-auto">
-              {filteredItems.length > 0 ? (
-                <div className="py-2">
-                  {filteredItems.map((item) => (
-                    <button
-                      key={item.path}
-                      onClick={() => handleSelect(item.path)}
-                      className="w-full px-4 py-3 flex items-center gap-3 hover:bg-gray-100/60 dark:hover:bg-gray-900/75 transition-colors text-left"
-                    >
-                      <div className="text-gray-500 dark:text-gray-400">
-                        {item.icon}
-                      </div>
-                      <div className="flex-1">
-                        <div className="font-medium text-gray-900 dark:text-gray-100">
-                          {item.title}
-                        </div>
-                        <div className="text-sm text-gray-500 dark:text-gray-400">
-                          {item.description}
-                        </div>
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              ) : (
-                <div className="py-12 text-center text-gray-500 dark:text-gray-400">
-                  No results found for &quot;{query}&quot;
-                </div>
-              )}
-            </div>
-
-            {/* Footer */}
-            <div className="px-4 py-3 border-t border-gray-200 dark:border-gray-800 text-xs text-gray-500 dark:text-gray-400 flex justify-between">
-              <span>Press ESC to close</span>
-              <span>⌘K to toggle</span>
-            </div>
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+                {section.items.map((item, index) => (
+                  <CommandKItem
+                    key={`${section.heading}-${index}`}
+                    label={item.label}
+                    value={typeof item.label === 'string' ? item.label : `${section.heading}-${index}`}
+                    keywords={item.keywords}
+                    onSelect={() => handleSelect(item)}
+                    accessory={item.accessory}
+                    annotation={item.annotation}
+                  />
+                ))}
+              </Command.Group>
+            ))}
+          </div>
+        </Command.List>
+      </Command>
+    </Modal>
   );
 }
