@@ -49,6 +49,7 @@ export default function ProvidersClient({
       slug: formData.get('slug') as string,
       credentials: formData.get('credentials') as string,
       noteTemplate: formData.get('noteTemplate') as string,
+      noteSmartPhrase: formData.get('noteSmartPhrase') as string,
       generalDifficulty,
       speedDifficulty,
       terminologyDifficulty,
@@ -258,6 +259,26 @@ export default function ProvidersClient({
                 <p className="text-xs text-dim mt-1">
                   This template will be used as the default for this
                   provider&apos;s notes
+                </p>
+              </div>
+
+              <div>
+                <label
+                  htmlFor="noteSmartPhrase"
+                  className="block text-sm font-medium text-main mb-1"
+                >
+                  Note SmartPhrase
+                </label>
+                <textarea
+                  id="noteSmartPhrase"
+                  name="noteSmartPhrase"
+                  rows={4}
+                  defaultValue={editingProvider?.noteSmartPhrase || ''}
+                  className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="SmartPhrases for this provider..."
+                />
+                <p className="text-xs text-dim mt-1">
+                  Common SmartPhrases used with this provider
                 </p>
               </div>
 

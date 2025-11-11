@@ -13,6 +13,7 @@ export type ProviderFormData = {
   terminologyDifficulty?: number;
   noteDifficulty?: number;
   noteTemplate?: string;
+  noteSmartPhrase?: string;
   preferences?: Prisma.InputJsonValue;
 };
 
@@ -153,6 +154,7 @@ export async function createProvider(
         terminologyDifficulty: data.terminologyDifficulty || null,
         noteDifficulty: data.noteDifficulty || null,
         noteTemplate: data.noteTemplate || null,
+        noteSmartPhrase: data.noteSmartPhrase || null,
         ...(data.preferences && { preferences: data.preferences }),
       },
     });
@@ -215,6 +217,9 @@ export async function updateProvider(
         }),
         ...(data.noteTemplate !== undefined && {
           noteTemplate: data.noteTemplate,
+        }),
+        ...(data.noteSmartPhrase !== undefined && {
+          noteSmartPhrase: data.noteSmartPhrase,
         }),
         ...(data.preferences !== undefined && {
           preferences: data.preferences,

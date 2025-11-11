@@ -87,13 +87,14 @@ export default function ProviderProfileView() {
             : 'scale-100 opacity-100 animate-in zoom-in-95'
         }`}
         onClick={(e) => e.stopPropagation()}
+        style={{ fontFamily: 'Calibri, "Segoe UI", Tahoma, sans-serif' }}
       >
-        {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
-          <h2 className="text-2xl font-bold text-main">Provider Profile</h2>
+        {/* Content */}
+        <div className="p-6 space-y-6 relative">
+          {/* Close Button - Clean X with no background */}
           <button
             onClick={handleClose}
-            className="text-dim hover:text-main transition-colors"
+            className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors focus:outline-none focus:ring-0"
             aria-label="Close"
           >
             <svg
@@ -110,10 +111,7 @@ export default function ProviderProfileView() {
               />
             </svg>
           </button>
-        </div>
 
-        {/* Content */}
-        <div className="p-6 space-y-6">
           {isLoading && (
             <div className="text-center py-8">
               <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-gray-300 border-t-blue-600"></div>
@@ -129,13 +127,13 @@ export default function ProviderProfileView() {
 
           {provider && (
             <div className="space-y-6">
-              {/* Basic Info */}
-              <div>
-                <h3 className="text-2xl font-semibold text-main">
+              {/* Provider Name as Main Header */}
+              <div className="pr-10">
+                <h2 className="text-3xl font-bold text-main mb-1">
                   {provider.name}
-                </h3>
+                </h2>
                 {provider.credentials && (
-                  <p className="text-dim mt-1 text-lg">{provider.credentials}</p>
+                  <p className="text-dim text-lg">{provider.credentials}</p>
                 )}
               </div>
 
@@ -152,11 +150,11 @@ export default function ProviderProfileView() {
                 />
               </div>
 
-              {/* Note Template */}
+              {/* Preferences (Note Template) */}
               {provider.noteTemplate && (
                 <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
                   <h4 className="text-lg font-medium text-main mb-2">
-                    Note Template
+                    Preferences
                   </h4>
                   <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
                     <pre className="text-sm text-main whitespace-pre-wrap font-mono">
@@ -166,7 +164,30 @@ export default function ProviderProfileView() {
                 </div>
               )}
 
-              {/* Preferences */}
+              {/* Note SmartPhrase */}
+              {provider.noteSmartPhrase ? (
+                <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
+                  <h4 className="text-lg font-medium text-main mb-2">
+                    Note SmartPhrase
+                  </h4>
+                  <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
+                    <pre className="text-sm text-main whitespace-pre-wrap font-mono">
+                      {provider.noteSmartPhrase}
+                    </pre>
+                  </div>
+                </div>
+              ) : (
+                <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
+                  <h4 className="text-lg font-medium text-main mb-2">
+                    Note SmartPhrase
+                  </h4>
+                  <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
+                    <p className="text-sm text-dim">No note smartphrases</p>
+                  </div>
+                </div>
+              )}
+
+              {/* Additional Preferences (JSON) */}
               {provider.preferences && (
                 <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
                   <h4 className="text-lg font-medium text-main mb-2">
