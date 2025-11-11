@@ -42,11 +42,23 @@ export default function ProvidersPageClient({
               <div
                 key={provider.id}
                 onClick={() => handleProviderClick(provider.slug)}
-                className="bg-medium border border-main rounded-lg p-4 hover:shadow-lg transition-all cursor-pointer hover:border-blue-500 dark:hover:border-blue-400 group"
+                className="relative bg-medium border border-main rounded-lg p-4 hover:shadow-lg transition-all duration-300 cursor-pointer group overflow-hidden"
+                style={{
+                  boxShadow: '0 0 0 0 transparent',
+                  transition: 'all 0.3s ease',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.boxShadow = '0 0 20px rgba(249, 115, 22, 0.3), 0 0 40px rgba(236, 72, 153, 0.2), 0 0 60px rgba(168, 85, 247, 0.1)';
+                  e.currentTarget.style.borderColor = 'rgba(249, 115, 22, 0.5)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.boxShadow = '0 0 0 0 transparent';
+                  e.currentTarget.style.borderColor = '';
+                }}
               >
                 {/* Provider Info */}
                 <div className="mb-3">
-                  <h3 className="text-base font-semibold text-main mb-0.5 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors line-clamp-2">
+                  <h3 className="text-base font-semibold text-main mb-0.5 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors line-clamp-2">
                     {provider.name}
                   </h3>
                   {provider.credentials && (
