@@ -12,20 +12,22 @@ export default function ProviderProfileView() {
   const [provider, setProvider] = useState<Provider | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isVisible, setIsVisible] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
 
   useEffect(() => {
     const handleHashChange = async () => {
       const hash = window.location.hash;
 
       if (!hash || !hash.startsWith('#provider-')) {
-        setProvider(null);
-        setError(null);
+        handleCloseAnimation();
         return;
       }
 
       const slug = hash.substring(1); // Remove the #
       setIsLoading(true);
       setError(null);
+      setIsVisible(true);
 
       try {
         const data = await getProviderBySlug(slug);
@@ -52,23 +54,37 @@ export default function ProviderProfileView() {
     };
   }, []);
 
-  const handleClose = () => {
-    window.location.hash = '';
-    setProvider(null);
-    setError(null);
+  const handleCloseAnimation = () => {
+    setIsClosing(true);
+    setTimeout(() => {
+      setProvider(null);
+      setError(null);
+      setIsVisible(false);
+      setIsClosing(false);
+    }, 200); // Match animation duration
   };
 
-  if (!provider && !isLoading && !error) {
+  const handleClose = () => {
+    window.location.hash = '';
+  };
+
+  if (!isVisible && !provider && !isLoading && !error) {
     return null;
   }
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50"
+      className={`fixed inset-0 z-50 flex items-center justify-center transition-all duration-200 ${
+        isClosing ? 'bg-black/0' : 'bg-black/50'
+      } ${!isClosing && isVisible ? 'animate-in fade-in' : ''}`}
       onClick={handleClose}
     >
       <div
-        className="bg-white dark:bg-gray-900 rounded-lg shadow-xl max-w-3xl w-full mx-4 max-h-[90vh] overflow-y-auto"
+        className={`bg-white dark:bg-gray-900 rounded-lg shadow-xl max-w-3xl w-full mx-4 max-h-[90vh] overflow-y-auto transition-all duration-200 ${
+          isClosing
+            ? 'scale-95 opacity-0'
+            : 'scale-100 opacity-100 animate-in zoom-in-95'
+        }`}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
