@@ -83,7 +83,7 @@ export async function createPhysician(
         specialty: data.specialty || null,
         credentials: data.credentials || null,
         noteTemplate: data.noteTemplate || null,
-        preferences: data.preferences || undefined,
+        ...(data.preferences && { preferences: data.preferences }),
       },
     });
 
