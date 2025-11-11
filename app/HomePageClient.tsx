@@ -19,13 +19,27 @@ export default function HomePageClient() {
 
           {/* Dashboard Sections */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
-            {/* Physician Schedules */}
-            <div className="bg-medium border border-main rounded-lg p-6 space-y-4">
+            {/* Provider Schedules */}
+            <div
+              className="bg-medium border border-main rounded-lg p-6 space-y-4 transition-all duration-300 cursor-pointer overflow-hidden"
+              style={{
+                boxShadow: '0 0 0 0 transparent',
+                transition: 'all 0.3s ease',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.boxShadow = '0 0 20px rgba(255, 255, 255, 0.3), 0 0 40px rgba(255, 255, 255, 0.2), 0 0 60px rgba(255, 255, 255, 0.1)';
+                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.4)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.boxShadow = '0 0 0 0 transparent';
+                e.currentTarget.style.borderColor = '';
+              }}
+            >
               <h2 className="text-2xl font-semibold text-main">
-                Physician Schedules
+                Provider Schedules
               </h2>
               <p className="text-dim">
-                View and manage physician schedules and availability.
+                View and manage provider schedules and availability.
               </p>
               <div className="pt-4">
                 <span className="text-sm text-medium">Coming soon...</span>
@@ -35,16 +49,28 @@ export default function HomePageClient() {
             {/* Provider Preferences */}
             <Link
               href="/providers"
-              className="bg-medium border border-main rounded-lg p-6 space-y-4 hover:border-blue-500 dark:hover:border-blue-400 transition-all hover:shadow-lg block group"
+              className="bg-medium border border-main rounded-lg p-6 space-y-4 transition-all duration-300 block group overflow-hidden"
+              style={{
+                boxShadow: '0 0 0 0 transparent',
+                transition: 'all 0.3s ease',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.boxShadow = '0 0 20px rgba(255, 255, 255, 0.3), 0 0 40px rgba(255, 255, 255, 0.2), 0 0 60px rgba(255, 255, 255, 0.1)';
+                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.4)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.boxShadow = '0 0 0 0 transparent';
+                e.currentTarget.style.borderColor = '';
+              }}
             >
-              <h2 className="text-2xl font-semibold text-main group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+              <h2 className="text-2xl font-semibold text-main group-hover:text-gray-100 dark:group-hover:text-white transition-colors">
                 Provider Preferences
               </h2>
               <p className="text-dim">
                 View all provider profiles, preferences, and difficulty ratings.
               </p>
               <div className="pt-4">
-                <div className="inline-flex items-center gap-2 text-blue-600 dark:text-blue-400 font-medium">
+                <div className="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400 group-hover:text-white dark:group-hover:text-white font-medium transition-colors">
                   Browse Providers
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -62,13 +88,81 @@ export default function HomePageClient() {
               </div>
             </Link>
 
-            {/* EPIC Dot Phrases */}
-            <div className="bg-medium border border-main rounded-lg p-6 space-y-4">
+            {/* Smartphrase Library */}
+            <div
+              className="bg-medium border border-main rounded-lg p-6 space-y-4 transition-all duration-300 cursor-pointer overflow-hidden"
+              style={{
+                boxShadow: '0 0 0 0 transparent',
+                transition: 'all 0.3s ease',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.boxShadow = '0 0 20px rgba(255, 255, 255, 0.3), 0 0 40px rgba(255, 255, 255, 0.2), 0 0 60px rgba(255, 255, 255, 0.1)';
+                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.4)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.boxShadow = '0 0 0 0 transparent';
+                e.currentTarget.style.borderColor = '';
+              }}
+            >
               <h2 className="text-2xl font-semibold text-main">
-                EPIC Dot Phrases
+                Smartphrase Library
               </h2>
               <p className="text-dim">
-                Common dot phrases and templates for EPIC documentation.
+                Common smartphrases and templates for EPIC documentation.
+              </p>
+              <div className="pt-4">
+                <span className="text-sm text-medium">Coming soon...</span>
+              </div>
+            </div>
+
+            {/* Scenarios */}
+            <div
+              className="bg-medium border border-main rounded-lg p-6 space-y-4 transition-all duration-300 cursor-pointer overflow-hidden"
+              style={{
+                boxShadow: '0 0 0 0 transparent',
+                transition: 'all 0.3s ease',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.boxShadow = '0 0 20px rgba(255, 255, 255, 0.3), 0 0 40px rgba(255, 255, 255, 0.2), 0 0 60px rgba(255, 255, 255, 0.1)';
+                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.4)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.boxShadow = '0 0 0 0 transparent';
+                e.currentTarget.style.borderColor = '';
+              }}
+            >
+              <h2 className="text-2xl font-semibold text-main">
+                Scenarios
+              </h2>
+              <p className="text-dim">
+                Critical scenarios like code blue, full arrest, and stroke protocols.
+              </p>
+              <div className="pt-4">
+                <span className="text-sm text-medium">Coming soon...</span>
+              </div>
+            </div>
+
+            {/* Procedures */}
+            <div
+              className="bg-medium border border-main rounded-lg p-6 space-y-4 transition-all duration-300 cursor-pointer overflow-hidden"
+              style={{
+                boxShadow: '0 0 0 0 transparent',
+                transition: 'all 0.3s ease',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.boxShadow = '0 0 20px rgba(255, 255, 255, 0.3), 0 0 40px rgba(255, 255, 255, 0.2), 0 0 60px rgba(255, 255, 255, 0.1)';
+                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.4)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.boxShadow = '0 0 0 0 transparent';
+                e.currentTarget.style.borderColor = '';
+              }}
+            >
+              <h2 className="text-2xl font-semibold text-main">
+                Procedures
+              </h2>
+              <p className="text-dim">
+                Documentation guides for common procedures in EPIC.
               </p>
               <div className="pt-4">
                 <span className="text-sm text-medium">Coming soon...</span>
