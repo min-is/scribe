@@ -9,8 +9,15 @@ export const {
   auth,
 } = NextAuth({
   trustHost: true,
+  session: {
+    strategy: 'jwt',
+  },
   providers: [
     Credentials({
+      credentials: {
+        email: { label: 'Email', type: 'email' },
+        password: { label: 'Password', type: 'password' },
+      },
       async authorize({ email, password }) {
         if (
           process.env.ADMIN_EMAIL && process.env.ADMIN_EMAIL === email &&
