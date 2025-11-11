@@ -24,7 +24,8 @@ export default function ProviderProfileView() {
         return;
       }
 
-      const slug = hash.substring(1); // Remove the #
+      // Extract just the slug part (remove #provider- prefix)
+      const slug = hash.replace('#provider-', '');
       setIsLoading(true);
       setError(null);
       setIsVisible(true);
