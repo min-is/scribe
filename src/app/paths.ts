@@ -12,7 +12,7 @@ export const PATH_ADMIN_PHOTOS          = `${PATH_ADMIN}/photos`;
 export const PATH_ADMIN_PHOTOS_UPDATES  = `${PATH_ADMIN}/photos/updates`;
 export const PATH_ADMIN_TAGS            = `${PATH_ADMIN}/tags`;
 export const PATH_ADMIN_RECIPES         = `${PATH_ADMIN}/recipes`;
-export const PATH_ADMIN_PHYSICIANS      = `${PATH_ADMIN}/physicians`;
+export const PATH_ADMIN_PROVIDERS       = `${PATH_ADMIN}/providers`;
 
 // Practice paths
 export const PATH_PRACTICE_TYPING       = '/practice/typing';
@@ -24,7 +24,7 @@ export const PATH_FEED_INFERRED         = '/feed';
 export const PATHS_ADMIN = [
   PATH_ADMIN,
   PATH_ADMIN_CONFIGURATION,
-  PATH_ADMIN_PHYSICIANS,
+  PATH_ADMIN_PROVIDERS,
 ];
 
 export const PATHS_TO_CACHE = [
