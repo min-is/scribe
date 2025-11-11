@@ -2,7 +2,7 @@
 
 import { prisma } from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
-import { Physician } from '@prisma/client';
+import { Physician, Prisma } from '@prisma/client';
 
 export type PhysicianFormData = {
   name: string;
@@ -10,7 +10,7 @@ export type PhysicianFormData = {
   specialty?: string;
   credentials?: string;
   noteTemplate?: string;
-  preferences?: Record<string, unknown>;
+  preferences?: Prisma.InputJsonValue;
 };
 
 /**
