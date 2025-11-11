@@ -1,5 +1,3 @@
-import { getBaseUrl } from './config';
-
 // Core paths
 export const PATH_ROOT                  = '/';
 export const PATH_ADMIN                 = '/admin';
@@ -22,9 +20,6 @@ export const PATH_PRACTICE_TYPING       = '/practice/typing';
 // View paths (photography - to be removed)
 export const PATH_GRID_INFERRED         = '/grid';
 export const PATH_FEED_INFERRED         = '/feed';
-
-// Modifiers
-const EDIT  = 'edit';
 
 export const PATHS_ADMIN = [
   PATH_ADMIN,
