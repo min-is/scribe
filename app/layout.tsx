@@ -17,6 +17,7 @@ import Footer from '@/app/Footer';
 import SwrConfigClient from '@/state/SwrConfigClient';
 import ThemeColors from '@/app/ThemeColors';
 import AppTextProvider from '@/i18n/state/AppTextProvider';
+import CommandK from '@/components/CommandK';
 
 import '../tailwind.css';
 
@@ -97,6 +98,7 @@ export default function RootLayout({
               <Analytics debug={false} />
               <SpeedInsights debug={false}  />
               <ToasterWithThemes />
+              <CommandK />
             </ThemeProvider>
           </AppTextProvider>
         </AppStateProvider>

@@ -17,6 +17,8 @@ export type AppStateContextType = {
   invalidateSwr?: () => void
   shouldRespondToKeyboardCommands?: boolean
   setShouldRespondToKeyboardCommands?: Dispatch<SetStateAction<boolean>>
+  isCommandKOpen?: boolean
+  setIsCommandKOpen?: Dispatch<SetStateAction<boolean>>
   // AUTH
   userEmail?: string
   userEmailEager?: string
