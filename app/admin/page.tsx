@@ -19,6 +19,18 @@ export default function AdminPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <a
+            href="/admin/physicians"
+            className="bg-medium border border-main rounded-lg p-6 hover:bg-dim transition-colors"
+          >
+            <h2 className="text-xl font-semibold text-main mb-2">
+              Physicians
+            </h2>
+            <p className="text-dim">
+              Manage physician profiles and preferences
+            </p>
+          </a>
+
+          <a
             href="/admin/tags"
             className="bg-medium border border-main rounded-lg p-6 hover:bg-dim transition-colors"
           >
