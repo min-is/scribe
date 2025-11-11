@@ -1,6 +1,6 @@
 import Switcher from '@/components/Switcher';
 import SwitcherItem from '@/components/SwitcherItem';
-import IconSearch from '../components/icons/IconSearch';
+import IconSearch from '@/components/icons/IconSearch';
 import { useAppState } from '@/state/AppState';
 import {
   SHOW_KEYBOARD_SHORTCUT_TOOLTIPS,
