@@ -94,7 +94,8 @@ export default function ProviderProfileView() {
           {/* Close Button - Clean X with no background */}
           <button
             onClick={handleClose}
-            className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors focus:outline-none focus:ring-0"
+            className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors outline-none focus:outline-none focus-visible:outline-none ring-0 focus:ring-0 border-0"
+            style={{ outline: 'none', boxShadow: 'none' }}
             aria-label="Close"
           >
             <svg
