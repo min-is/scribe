@@ -11,11 +11,6 @@ import { FaUserMd, FaHospital, FaFileAlt, FaKeyboard } from 'react-icons/fa';
 import { HiDocumentText } from 'react-icons/hi';
 import { RiToolsFill } from 'react-icons/ri';
 import Spinner from './Spinner';
-import * as VisuallyHidden from '@radix-ui/react-visually-hidden';
-import { DialogDescription, DialogTitle } from '@radix-ui/react-dialog';
-
-const DIALOG_TITLE = 'Search Medical Scribe Dashboard';
-const DIALOG_DESCRIPTION = 'For searching features, settings, and resources';
 
 type CommandKItem = {
   label: ReactNode
@@ -190,11 +185,6 @@ export default function SearchModal({
       fast
       noPadding
     >
-      <VisuallyHidden.Root>
-        <DialogTitle>{DIALOG_TITLE}</DialogTitle>
-        <DialogDescription>{DIALOG_DESCRIPTION}</DialogDescription>
-      </VisuallyHidden.Root>
-
       <Command shouldFilter={false}>
         {/* Search Input */}
         <div className="px-3 md:px-4 pt-3 md:pt-4 relative">
