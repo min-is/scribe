@@ -71,10 +71,15 @@ export default function ProvidersClient({
       },
     };
 
+    // Helper to convert empty strings to undefined
+    const getStringOrUndefined = (value: string | null): string | undefined => {
+      return value && value.trim() !== '' ? value : undefined;
+    };
+
     const data: ProviderFormData = {
       name: formData.get('name') as string,
       slug: formData.get('slug') as string,
-      credentials: formData.get('credentials') as string,
+      credentials: getStringOrUndefined(formData.get('credentials') as string),
       noteSmartPhrase: JSON.stringify(noteSmartPhrase),
       wikiContent: updatedWikiContent as any,
       generalDifficulty,
@@ -82,6 +87,8 @@ export default function ProvidersClient({
       terminologyDifficulty,
       noteDifficulty,
     };
+
+    console.log('Submitting provider data:', data);
 
     try {
       const result = editingProvider
@@ -101,10 +108,11 @@ export default function ProvidersClient({
         router.refresh();
       } else {
         toast.error(result.error || 'An error occurred');
+        console.error('Server returned error:', result.error);
       }
     } catch (error) {
       toast.error('An unexpected error occurred');
-      console.error(error);
+      console.error('Submit error:', error);
     } finally {
       setIsSubmitting(false);
     }

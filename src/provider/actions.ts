@@ -157,6 +157,7 @@ export async function createProvider(
         noteTemplate: data.noteTemplate || null,
         noteSmartPhrase: data.noteSmartPhrase || null,
         ...(data.preferences && { preferences: data.preferences }),
+        ...(data.wikiContent && { wikiContent: data.wikiContent }),
       },
     });
 
@@ -167,7 +168,8 @@ export async function createProvider(
     return { success: true, provider };
   } catch (error) {
     console.error('Error creating provider:', error);
-    return { success: false, error: 'Failed to create provider' };
+    const errorMessage = error instanceof Error ? error.message : 'Failed to create provider';
+    return { success: false, error: `Failed to create provider: ${errorMessage}` };
   }
 }
 
@@ -238,7 +240,9 @@ export async function updateProvider(
     return { success: true, provider };
   } catch (error) {
     console.error('Error updating provider:', error);
-    return { success: false, error: 'Failed to update provider' };
+    // Return more specific error message if available
+    const errorMessage = error instanceof Error ? error.message : 'Failed to update provider';
+    return { success: false, error: `Failed to update provider: ${errorMessage}` };
   }
 }
 
