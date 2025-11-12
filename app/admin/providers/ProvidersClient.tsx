@@ -204,8 +204,9 @@ export default function ProvidersClient({
           </div>
           {!showForm && (
             <button
+              type="button"
               onClick={() => setShowForm(true)}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="font-admin px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
             >
               Add Provider
             </button>
@@ -344,7 +345,7 @@ export default function ProvidersClient({
                     <button
                       type="button"
                       onClick={() => setActiveWikiTab('sections')}
-                      className={`px-4 py-2 border-b-2 transition-colors ${
+                      className={`font-admin px-4 py-2 border-b-2 transition-colors ${
                         activeWikiTab === 'sections'
                           ? 'border-blue-600 text-blue-600 dark:text-blue-400 font-medium'
                           : 'border-transparent text-dim hover:text-main'
@@ -355,7 +356,7 @@ export default function ProvidersClient({
                     <button
                       type="button"
                       onClick={() => setActiveWikiTab('media')}
-                      className={`px-4 py-2 border-b-2 transition-colors ${
+                      className={`font-admin px-4 py-2 border-b-2 transition-colors ${
                         activeWikiTab === 'media'
                           ? 'border-blue-600 text-blue-600 dark:text-blue-400 font-medium'
                           : 'border-transparent text-dim hover:text-main'
@@ -413,7 +414,7 @@ export default function ProvidersClient({
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="font-admin px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isSubmitting
                     ? 'Saving...'
@@ -425,7 +426,7 @@ export default function ProvidersClient({
                   type="button"
                   onClick={handleCancel}
                   disabled={isSubmitting}
-                  className="px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="font-admin px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Cancel
                 </button>
