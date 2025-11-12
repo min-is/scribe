@@ -35,12 +35,12 @@ export function ProviderDifficultyFull({
   }
 
   return (
-    <div className="flex flex-row flex-wrap justify-center gap-4 py-4">
+    <div className="flex flex-row flex-wrap justify-center gap-8 py-4">
       <div className="flex justify-center">
         <DifficultyDial
           value={generalDifficulty}
           label="General Difficulty"
-          size="small"
+          size="medium"
           showValue={true}
         />
       </div>
@@ -49,7 +49,7 @@ export function ProviderDifficultyFull({
         <DifficultyDial
           value={speedDifficulty}
           label="Speed Expectations"
-          size="small"
+          size="medium"
           showValue={true}
         />
       </div>
@@ -58,7 +58,7 @@ export function ProviderDifficultyFull({
         <DifficultyDial
           value={terminologyDifficulty}
           label="Terminology Level"
-          size="small"
+          size="medium"
           showValue={true}
         />
       </div>
@@ -67,7 +67,7 @@ export function ProviderDifficultyFull({
         <DifficultyDial
           value={noteDifficulty}
           label="Note Complexity"
-          size="small"
+          size="medium"
           showValue={true}
         />
       </div>
