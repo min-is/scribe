@@ -95,7 +95,7 @@ export function RichTextEditor({
   }
 
   return (
-    <div className="border border-main rounded-lg overflow-hidden">
+    <div className="border border-main rounded-lg overflow-hidden bg-white dark:bg-gray-900">
       {editable && <EditorToolbar editor={editor} />}
       <EditorContent editor={editor} />
     </div>

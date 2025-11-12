@@ -116,6 +116,7 @@ export function SectionManager({ sections, onChange }: SectionManagerProps) {
       {/* Add Section Button */}
       <div className="relative">
         <button
+          type="button"
           onClick={() => setShowAddMenu(!showAddMenu)}
           className="w-full py-2 px-4 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg hover:border-gray-400 dark:hover:border-gray-500 transition-colors text-dim hover:text-main"
         >
@@ -127,6 +128,7 @@ export function SectionManager({ sections, onChange }: SectionManagerProps) {
             <div className="grid grid-cols-2 gap-2">
               {(Object.keys(SECTION_TEMPLATES) as SectionType[]).map((type) => (
                 <button
+                  type="button"
                   key={type}
                   onClick={() => addSection(type)}
                   className="text-left px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"

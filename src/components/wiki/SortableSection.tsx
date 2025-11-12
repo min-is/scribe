@@ -46,6 +46,7 @@ export function SortableSection({
     >
       {/* Drag Handle */}
       <button
+        type="button"
         {...attributes}
         {...listeners}
         className="cursor-grab active:cursor-grabbing p-1 text-dim hover:text-main"
@@ -65,6 +66,7 @@ export function SortableSection({
       {/* Actions */}
       <div className="flex gap-1">
         <button
+          type="button"
           onClick={onToggleVisibility}
           className="p-2 hover:bg-gray-300 dark:hover:bg-gray-600 rounded transition-colors"
           title={section.visible ? 'Hide section' : 'Show section'}
@@ -73,6 +75,7 @@ export function SortableSection({
         </button>
 
         <button
+          type="button"
           onClick={onEdit}
           className="p-2 hover:bg-gray-300 dark:hover:bg-gray-600 rounded transition-colors"
           title="Edit section"
@@ -81,6 +84,7 @@ export function SortableSection({
         </button>
 
         <button
+          type="button"
           onClick={onDelete}
           className="p-2 hover:bg-red-100 dark:hover:bg-red-900 rounded transition-colors"
           title="Delete section"
