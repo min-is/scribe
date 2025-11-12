@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Provider } from '@prisma/client';
+import { JSONContent } from '@tiptap/core';
 import {
   createProvider,
   updateProvider,
@@ -12,6 +13,7 @@ import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { DifficultyDialInput } from '@/components/DifficultyDialInput';
 import { ProviderDifficultyPreview } from '@/components/ProviderDifficultyPreview';
+import { RichTextEditor } from '@/components/editor/RichTextEditor';
 
 type ProvidersClientProps = {
   providers: Provider[];
@@ -39,6 +41,16 @@ export default function ProvidersClient({
     undefined,
   );
 
+  // Form state for rich text content
+  const [noteTemplate, setNoteTemplate] = useState<JSONContent>({
+    type: 'doc',
+    content: [{ type: 'paragraph' }],
+  });
+  const [noteSmartPhrase, setNoteSmartPhrase] = useState<JSONContent>({
+    type: 'doc',
+    content: [{ type: 'paragraph' }],
+  });
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -48,8 +60,8 @@ export default function ProvidersClient({
       name: formData.get('name') as string,
       slug: formData.get('slug') as string,
       credentials: formData.get('credentials') as string,
-      noteTemplate: formData.get('noteTemplate') as string,
-      noteSmartPhrase: formData.get('noteSmartPhrase') as string,
+      noteTemplate: JSON.stringify(noteTemplate),
+      noteSmartPhrase: JSON.stringify(noteSmartPhrase),
       generalDifficulty,
       speedDifficulty,
       terminologyDifficulty,
@@ -70,6 +82,7 @@ export default function ProvidersClient({
         setShowForm(false);
         setEditingProvider(null);
         resetDifficultyFields();
+        resetRichTextFields();
         router.refresh();
       } else {
         toast.error(result.error || 'An error occurred');
@@ -103,6 +116,38 @@ export default function ProvidersClient({
     setSpeedDifficulty(provider.speedDifficulty ?? undefined);
     setTerminologyDifficulty(provider.terminologyDifficulty ?? undefined);
     setNoteDifficulty(provider.noteDifficulty ?? undefined);
+
+    // Load rich text content
+    if (provider.noteTemplate) {
+      try {
+        const parsed = JSON.parse(provider.noteTemplate);
+        setNoteTemplate(parsed);
+      } catch {
+        // If not JSON, convert plain text to JSONContent
+        setNoteTemplate({
+          type: 'doc',
+          content: [{ type: 'paragraph', content: [{ type: 'text', text: provider.noteTemplate }] }],
+        });
+      }
+    } else {
+      setNoteTemplate({ type: 'doc', content: [{ type: 'paragraph' }] });
+    }
+
+    if (provider.noteSmartPhrase) {
+      try {
+        const parsed = JSON.parse(provider.noteSmartPhrase);
+        setNoteSmartPhrase(parsed);
+      } catch {
+        // If not JSON, convert plain text to JSONContent
+        setNoteSmartPhrase({
+          type: 'doc',
+          content: [{ type: 'paragraph', content: [{ type: 'text', text: provider.noteSmartPhrase }] }],
+        });
+      }
+    } else {
+      setNoteSmartPhrase({ type: 'doc', content: [{ type: 'paragraph' }] });
+    }
+
     setShowForm(true);
   };
 
@@ -110,6 +155,7 @@ export default function ProvidersClient({
     setShowForm(false);
     setEditingProvider(null);
     resetDifficultyFields();
+    resetRichTextFields();
   };
 
   const resetDifficultyFields = () => {
@@ -117,6 +163,11 @@ export default function ProvidersClient({
     setSpeedDifficulty(undefined);
     setTerminologyDifficulty(undefined);
     setNoteDifficulty(undefined);
+  };
+
+  const resetRichTextFields = () => {
+    setNoteTemplate({ type: 'doc', content: [{ type: 'paragraph' }] });
+    setNoteSmartPhrase({ type: 'doc', content: [{ type: 'paragraph' }] });
   };
 
   return (
@@ -246,19 +297,17 @@ export default function ProvidersClient({
                   htmlFor="noteTemplate"
                   className="block text-sm font-medium text-main mb-1"
                 >
-                  Note Template
+                  Provider Documentation
                 </label>
-                <textarea
-                  id="noteTemplate"
-                  name="noteTemplate"
-                  rows={6}
-                  defaultValue={editingProvider?.noteTemplate || ''}
-                  className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Default note template for this provider..."
-                />
+                <div className="border border-gray-300 dark:border-gray-700 rounded-md overflow-hidden">
+                  <RichTextEditor
+                    content={noteTemplate}
+                    onChange={setNoteTemplate}
+                    placeholder="Add clinical information, preferences, and documentation for this provider..."
+                  />
+                </div>
                 <p className="text-xs text-dim mt-1">
-                  This template will be used as the default for this
-                  provider&apos;s notes
+                  Rich text documentation including templates, preferences, and clinical notes
                 </p>
               </div>
 
@@ -269,16 +318,15 @@ export default function ProvidersClient({
                 >
                   Note SmartPhrase
                 </label>
-                <textarea
-                  id="noteSmartPhrase"
-                  name="noteSmartPhrase"
-                  rows={4}
-                  defaultValue={editingProvider?.noteSmartPhrase || ''}
-                  className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="SmartPhrases for this provider..."
-                />
+                <div className="border border-gray-300 dark:border-gray-700 rounded-md overflow-hidden">
+                  <RichTextEditor
+                    content={noteSmartPhrase}
+                    onChange={setNoteSmartPhrase}
+                    placeholder="Add SmartPhrases for this provider..."
+                  />
+                </div>
                 <p className="text-xs text-dim mt-1">
-                  Common SmartPhrases used with this provider
+                  Common SmartPhrases and quick text templates used with this provider
                 </p>
               </div>
 
