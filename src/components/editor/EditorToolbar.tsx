@@ -55,6 +55,7 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
     title: string;
   }) => (
     <button
+      type="button"
       onClick={onClick}
       disabled={disabled}
       title={title}
