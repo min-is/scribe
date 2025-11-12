@@ -9,11 +9,15 @@ import {
   deleteProvider,
   ProviderFormData,
 } from '@/provider/actions';
+import { WikiContent, createEmptyWikiContent, validateWikiContent, MediaItem } from '@/provider/wiki-schema';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { DifficultyDialInput } from '@/components/DifficultyDialInput';
 import { ProviderDifficultyPreview } from '@/components/ProviderDifficultyPreview';
 import { RichTextEditor } from '@/components/editor/RichTextEditor';
+import { SectionManager } from '@/components/wiki/SectionManager';
+import { UploadDropzone } from '@/components/upload/UploadDropzone';
+import { MediaLibrary } from '@/components/upload/MediaLibrary';
 
 type ProvidersClientProps = {
   providers: Provider[];
@@ -42,26 +46,37 @@ export default function ProvidersClient({
   );
 
   // Form state for rich text content
-  const [noteTemplate, setNoteTemplate] = useState<JSONContent>({
-    type: 'doc',
-    content: [{ type: 'paragraph' }],
-  });
   const [noteSmartPhrase, setNoteSmartPhrase] = useState<JSONContent>({
     type: 'doc',
     content: [{ type: 'paragraph' }],
   });
+
+  // Form state for wiki content
+  const [wikiContent, setWikiContent] = useState<WikiContent>(createEmptyWikiContent());
+  const [activeWikiTab, setActiveWikiTab] = useState<'sections' | 'media'>('sections');
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
 
     const formData = new FormData(e.currentTarget);
+
+    // Update wiki metadata before saving
+    const updatedWikiContent: WikiContent = {
+      ...wikiContent,
+      metadata: {
+        ...wikiContent.metadata,
+        lastEditedAt: new Date().toISOString(),
+        totalEdits: wikiContent.metadata.totalEdits + 1,
+      },
+    };
+
     const data: ProviderFormData = {
       name: formData.get('name') as string,
       slug: formData.get('slug') as string,
       credentials: formData.get('credentials') as string,
-      noteTemplate: JSON.stringify(noteTemplate),
       noteSmartPhrase: JSON.stringify(noteSmartPhrase),
+      wikiContent: updatedWikiContent as any,
       generalDifficulty,
       speedDifficulty,
       terminologyDifficulty,
@@ -117,22 +132,7 @@ export default function ProvidersClient({
     setTerminologyDifficulty(provider.terminologyDifficulty ?? undefined);
     setNoteDifficulty(provider.noteDifficulty ?? undefined);
 
-    // Load rich text content
-    if (provider.noteTemplate) {
-      try {
-        const parsed = JSON.parse(provider.noteTemplate);
-        setNoteTemplate(parsed);
-      } catch {
-        // If not JSON, convert plain text to JSONContent
-        setNoteTemplate({
-          type: 'doc',
-          content: [{ type: 'paragraph', content: [{ type: 'text', text: provider.noteTemplate }] }],
-        });
-      }
-    } else {
-      setNoteTemplate({ type: 'doc', content: [{ type: 'paragraph' }] });
-    }
-
+    // Load note smartphrase content
     if (provider.noteSmartPhrase) {
       try {
         const parsed = JSON.parse(provider.noteSmartPhrase);
@@ -146,6 +146,13 @@ export default function ProvidersClient({
       }
     } else {
       setNoteSmartPhrase({ type: 'doc', content: [{ type: 'paragraph' }] });
+    }
+
+    // Load wiki content
+    if (provider.wikiContent && validateWikiContent(provider.wikiContent)) {
+      setWikiContent(provider.wikiContent as WikiContent);
+    } else {
+      setWikiContent(createEmptyWikiContent());
     }
 
     setShowForm(true);
@@ -166,8 +173,23 @@ export default function ProvidersClient({
   };
 
   const resetRichTextFields = () => {
-    setNoteTemplate({ type: 'doc', content: [{ type: 'paragraph' }] });
     setNoteSmartPhrase({ type: 'doc', content: [{ type: 'paragraph' }] });
+    setWikiContent(createEmptyWikiContent());
+    setActiveWikiTab('sections');
+  };
+
+  const handleUploadComplete = (media: MediaItem) => {
+    setWikiContent({
+      ...wikiContent,
+      media: [...wikiContent.media, media],
+    });
+  };
+
+  const handleDeleteMedia = (mediaId: string) => {
+    setWikiContent({
+      ...wikiContent,
+      media: wikiContent.media.filter((m) => m.id !== mediaId),
+    });
   };
 
   return (
@@ -292,26 +314,8 @@ export default function ProvidersClient({
                 </div>
               </div>
 
-              <div>
-                <label
-                  htmlFor="noteTemplate"
-                  className="block text-sm font-medium text-main mb-1"
-                >
-                  Provider Documentation
-                </label>
-                <div className="border border-gray-300 dark:border-gray-700 rounded-md overflow-hidden">
-                  <RichTextEditor
-                    content={noteTemplate}
-                    onChange={setNoteTemplate}
-                    placeholder="Add clinical information, preferences, and documentation for this provider..."
-                  />
-                </div>
-                <p className="text-xs text-dim mt-1">
-                  Rich text documentation including templates, preferences, and clinical notes
-                </p>
-              </div>
-
-              <div>
+              {/* Note SmartPhrase */}
+              <div className="border-t border-gray-200 dark:border-gray-700 pt-4 mt-4">
                 <label
                   htmlFor="noteSmartPhrase"
                   className="block text-sm font-medium text-main mb-1"
@@ -322,12 +326,89 @@ export default function ProvidersClient({
                   <RichTextEditor
                     content={noteSmartPhrase}
                     onChange={setNoteSmartPhrase}
-                    placeholder="Add SmartPhrases for this provider..."
+                    placeholder="Add SmartPhrases and custom notes from general template..."
                   />
                 </div>
                 <p className="text-xs text-dim mt-1">
-                  Common SmartPhrases and quick text templates used with this provider
+                  Custom notes and SmartPhrases specific to this provider
                 </p>
+              </div>
+
+              {/* Provider Documentation - Wiki System */}
+              <div className="border-t border-gray-200 dark:border-gray-700 pt-4 mt-4">
+                <h3 className="text-lg font-medium text-main mb-4">
+                  Provider Documentation (Wiki)
+                </h3>
+
+                {/* Tabs */}
+                <div className="border-b border-gray-200 dark:border-gray-700 mb-4">
+                  <div className="flex gap-4">
+                    <button
+                      type="button"
+                      onClick={() => setActiveWikiTab('sections')}
+                      className={`px-4 py-2 border-b-2 transition-colors ${
+                        activeWikiTab === 'sections'
+                          ? 'border-blue-600 text-blue-600 dark:text-blue-400 font-medium'
+                          : 'border-transparent text-dim hover:text-main'
+                      }`}
+                    >
+                      📝 Sections ({wikiContent.sections.length})
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setActiveWikiTab('media')}
+                      className={`px-4 py-2 border-b-2 transition-colors ${
+                        activeWikiTab === 'media'
+                          ? 'border-blue-600 text-blue-600 dark:text-blue-400 font-medium'
+                          : 'border-transparent text-dim hover:text-main'
+                      }`}
+                    >
+                      🖼️ Media ({wikiContent.media.length})
+                    </button>
+                  </div>
+                </div>
+
+                {/* Tab Content */}
+                {activeWikiTab === 'sections' && (
+                  <div>
+                    <div className="text-sm text-dim mb-4">
+                      Create sections to organize clinical information, preferences, and documentation. Drag to reorder.
+                    </div>
+                    <SectionManager
+                      sections={wikiContent.sections}
+                      onChange={(sections) =>
+                        setWikiContent({ ...wikiContent, sections })
+                      }
+                    />
+                  </div>
+                )}
+
+                {activeWikiTab === 'media' && (
+                  <div className="space-y-6">
+                    <div>
+                      <h4 className="text-md font-semibold text-main mb-2">
+                        Upload Media
+                      </h4>
+                      <p className="text-sm text-dim mb-4">
+                        Upload images, videos, or documents to use in wiki sections
+                      </p>
+                      <UploadDropzone
+                        onUploadComplete={handleUploadComplete}
+                        onUploadError={(err) => toast.error(err)}
+                      />
+                    </div>
+
+                    <div>
+                      <h4 className="text-md font-semibold text-main mb-4">
+                        Media Library ({wikiContent.media.length})
+                      </h4>
+                      <MediaLibrary
+                        media={wikiContent.media}
+                        onDelete={handleDeleteMedia}
+                      />
+                    </div>
+                  </div>
+                )}
               </div>
 
               <div className="flex gap-3 pt-2">

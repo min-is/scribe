@@ -225,6 +225,9 @@ export async function updateProvider(
         ...(data.preferences !== undefined && {
           preferences: data.preferences,
         }),
+        ...(data.wikiContent !== undefined && {
+          wikiContent: data.wikiContent,
+        }),
       },
     });
 
