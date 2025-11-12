@@ -185,7 +185,12 @@ export default function SearchModal({
 
     // Then navigate
     if (item.path) {
-      router.push(item.path);
+      // Check if it's a hash-only navigation (like #provider-slug)
+      if (item.path.startsWith('#')) {
+        window.location.hash = item.path;
+      } else {
+        router.push(item.path);
+      }
     }
 
     onClose();
