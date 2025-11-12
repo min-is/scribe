@@ -10,7 +10,7 @@ interface ProviderDifficultyFullProps {
 }
 
 /**
- * Shows all 4 difficulty dials in a 2x2 grid
+ * Shows all 4 difficulty dials in a single row
  * Used in: full provider profile modal
  */
 export function ProviderDifficultyFull({
@@ -35,12 +35,12 @@ export function ProviderDifficultyFull({
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 py-4">
+    <div className="flex flex-row flex-wrap justify-center gap-4 py-4">
       <div className="flex justify-center">
         <DifficultyDial
           value={generalDifficulty}
           label="General Difficulty"
-          size="medium"
+          size="small"
           showValue={true}
         />
       </div>
@@ -49,7 +49,7 @@ export function ProviderDifficultyFull({
         <DifficultyDial
           value={speedDifficulty}
           label="Speed Expectations"
-          size="medium"
+          size="small"
           showValue={true}
         />
       </div>
@@ -58,7 +58,7 @@ export function ProviderDifficultyFull({
         <DifficultyDial
           value={terminologyDifficulty}
           label="Terminology Level"
-          size="medium"
+          size="small"
           showValue={true}
         />
       </div>
@@ -67,7 +67,7 @@ export function ProviderDifficultyFull({
         <DifficultyDial
           value={noteDifficulty}
           label="Note Complexity"
-          size="medium"
+          size="small"
           showValue={true}
         />
       </div>
