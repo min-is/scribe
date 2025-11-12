@@ -103,7 +103,7 @@ export default function ProviderProfileView() {
               boxShadow: 'none',
               background: 'transparent',
               padding: '0',
-              margin: '0'
+              margin: '0',
             }}
             aria-label="Close"
           >

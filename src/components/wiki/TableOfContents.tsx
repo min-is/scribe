@@ -15,7 +15,7 @@ export function TableOfContents({ sections, onNavigate }: TableOfContentsProps) 
     const handleScroll = () => {
       // Find which section is currently in view
       const sectionElements = sections.map((s) =>
-        document.getElementById(`section-${s.id}`)
+        document.getElementById(`section-${s.id}`),
       );
 
       for (const element of sectionElements) {
@@ -60,10 +60,10 @@ export function TableOfContents({ sections, onNavigate }: TableOfContentsProps) 
             className={`
               w-full text-left px-3 py-2 rounded text-sm transition-colors
               ${
-                activeSection === section.id
-                  ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 font-medium'
-                  : 'text-dim hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-main'
-              }
+          activeSection === section.id
+            ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 font-medium'
+            : 'text-dim hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-main'
+          }
             `}
           >
             {section.title}

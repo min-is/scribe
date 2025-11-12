@@ -43,7 +43,7 @@ export function UploadDropzone({
           {
             method: 'POST',
             body: file,
-          }
+          },
         );
 
         if (!uploadResponse.ok) {
@@ -82,7 +82,7 @@ export function UploadDropzone({
         setTimeout(() => setProgress(0), 1000);
       }
     },
-    [onUploadComplete, onUploadError]
+    [onUploadComplete, onUploadError],
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({

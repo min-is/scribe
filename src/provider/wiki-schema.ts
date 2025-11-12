@@ -98,7 +98,7 @@ export const createEmptyWikiContent = (): WikiContent => ({
 export const createSection = (
   type: SectionType,
   title: string,
-  order: number
+  order: number,
 ): WikiSection => ({
   id: crypto.randomUUID(),
   type,
@@ -176,7 +176,7 @@ export const validateWikiContent = (content: unknown): content is WikiContent =>
 export const migrateLegacyContent = (
   noteTemplate?: string | null,
   noteSmartPhrase?: string | null,
-  preferences?: unknown
+  preferences?: unknown,
 ): WikiContent => {
   const wikiContent = createEmptyWikiContent();
 

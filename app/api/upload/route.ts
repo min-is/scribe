@@ -18,7 +18,7 @@ export async function POST(request: Request): Promise<Response> {
     if (!filename) {
       return NextResponse.json(
         { error: 'Filename is required' },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -37,7 +37,7 @@ export async function POST(request: Request): Promise<Response> {
     if (!allAllowedTypes.includes(fileType)) {
       return NextResponse.json(
         { error: `File type ${fileType} not allowed. Allowed types: ${allAllowedTypes.join(', ')}` },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -48,7 +48,7 @@ export async function POST(request: Request): Promise<Response> {
     if (fileSize > maxSize) {
       return NextResponse.json(
         { error: `File too large. Maximum size: ${maxSize / (1024 * 1024)}MB` },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -75,7 +75,7 @@ export async function POST(request: Request): Promise<Response> {
     console.error('Upload error:', error);
     return NextResponse.json(
       { error: 'Upload failed. Please try again.' },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

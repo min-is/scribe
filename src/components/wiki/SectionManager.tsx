@@ -33,7 +33,7 @@ export function SectionManager({ sections, onChange }: SectionManagerProps) {
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
-    })
+    }),
   );
 
   const handleDragEnd = (event: DragEndEvent) => {
@@ -47,7 +47,7 @@ export function SectionManager({ sections, onChange }: SectionManagerProps) {
         (section, index) => ({
           ...section,
           order: index,
-        })
+        }),
       );
 
       onChange(reorderedSections);
@@ -64,7 +64,7 @@ export function SectionManager({ sections, onChange }: SectionManagerProps) {
 
   const updateSection = (updatedSection: WikiSection) => {
     const updatedSections = sections.map((s) =>
-      s.id === updatedSection.id ? updatedSection : s
+      s.id === updatedSection.id ? updatedSection : s,
     );
     onChange(updatedSections);
   };
@@ -81,7 +81,7 @@ export function SectionManager({ sections, onChange }: SectionManagerProps) {
 
   const toggleVisibility = (sectionId: string) => {
     const updated = sections.map((s) =>
-      s.id === sectionId ? { ...s, visible: !s.visible } : s
+      s.id === sectionId ? { ...s, visible: !s.visible } : s,
     );
     onChange(updated);
   };
