@@ -5,9 +5,10 @@ import { notFound } from 'next/navigation';
 export default async function WikiEditorPage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  const provider = await getProviderBySlug(params.slug);
+  const { slug } = await params;
+  const provider = await getProviderBySlug(slug);
 
   if (!provider) {
     notFound();
