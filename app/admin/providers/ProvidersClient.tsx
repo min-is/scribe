@@ -322,13 +322,11 @@ export default function ProvidersClient({
                 >
                   Note SmartPhrase
                 </label>
-                <div className="border border-gray-300 dark:border-gray-700 rounded-md overflow-hidden">
-                  <RichTextEditor
-                    content={noteSmartPhrase}
-                    onChange={setNoteSmartPhrase}
-                    placeholder="Add SmartPhrases and custom notes from general template..."
-                  />
-                </div>
+                <RichTextEditor
+                  content={noteSmartPhrase}
+                  onChange={setNoteSmartPhrase}
+                  placeholder="Add SmartPhrases and custom notes from general template..."
+                />
                 <p className="text-xs text-dim mt-1">
                   Custom notes and SmartPhrases specific to this provider
                 </p>
@@ -491,22 +489,36 @@ export default function ProvidersClient({
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <button
+                          type="button"
                           onClick={() => handleEdit(provider)}
-                          className="text-blue-600 hover:text-blue-900 dark:hover:text-blue-400 mr-4"
+                          className="font-admin mr-4 px-3 py-1.5 rounded-md transition-all duration-300 text-blue-600 dark:text-blue-400"
+                          style={{
+                            boxShadow: '0 0 10px rgba(59, 130, 246, 0.2)',
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.boxShadow = '0 0 15px rgba(59, 130, 246, 0.4), 0 0 25px rgba(59, 130, 246, 0.2)';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.boxShadow = '0 0 10px rgba(59, 130, 246, 0.2)';
+                          }}
                         >
                           Edit
                         </button>
                         <button
-                          onClick={() => router.push(`/admin/providers/${provider.slug}/wiki`)}
-                          className="text-green-600 hover:text-green-900 dark:hover:text-green-400 mr-4"
-                        >
-                          Wiki
-                        </button>
-                        <button
+                          type="button"
                           onClick={() =>
                             handleDelete(provider.id, provider.name)
                           }
-                          className="text-red-600 hover:text-red-900 dark:hover:text-red-400"
+                          className="font-admin px-3 py-1.5 rounded-md transition-all duration-300 text-red-600 dark:text-red-400"
+                          style={{
+                            boxShadow: '0 0 10px rgba(239, 68, 68, 0.2)',
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.boxShadow = '0 0 15px rgba(239, 68, 68, 0.4), 0 0 25px rgba(239, 68, 68, 0.2)';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.boxShadow = '0 0 10px rgba(239, 68, 68, 0.2)';
+                          }}
                         >
                           Delete
                         </button>

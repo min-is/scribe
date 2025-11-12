@@ -55,12 +55,14 @@ export function SectionEditor({ section, onSave, onCancel }: SectionEditorProps)
           </div>
           <div className="flex gap-2">
             <button
+              type="button"
               onClick={onCancel}
               className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
             >
               Cancel
             </button>
             <button
+              type="button"
               onClick={handleSave}
               className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition-colors"
             >
