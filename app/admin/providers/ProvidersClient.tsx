@@ -76,12 +76,15 @@ export default function ProvidersClient({
       return value && value.trim() !== '' ? value : undefined;
     };
 
+    // Serialize wikiContent to ensure it's plain JSON without client references
+    const serializedWikiContent = JSON.parse(JSON.stringify(updatedWikiContent));
+
     const data: ProviderFormData = {
       name: formData.get('name') as string,
       slug: formData.get('slug') as string,
       credentials: getStringOrUndefined(formData.get('credentials') as string),
       noteSmartPhrase: JSON.stringify(noteSmartPhrase),
-      wikiContent: updatedWikiContent as any,
+      wikiContent: serializedWikiContent,
       generalDifficulty,
       speedDifficulty,
       terminologyDifficulty,
