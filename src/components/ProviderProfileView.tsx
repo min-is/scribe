@@ -139,10 +139,8 @@ export default function ProviderProfileView() {
               <div className="pr-10">
                 <h2 className="text-3xl font-bold text-main mb-1">
                   {provider.name}
+                  {provider.credentials && <span>, {provider.credentials}</span>}
                 </h2>
-                {provider.credentials && (
-                  <p className="text-dim text-lg">{provider.credentials}</p>
-                )}
               </div>
 
               {/* Difficulty Metrics */}
