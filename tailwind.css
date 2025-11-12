@@ -2,6 +2,7 @@
 @import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap");
 
 @import 'tailwindcss';
+@plugin '@tailwindcss/typography';
 
 @import './src/css/sonner.css';
 @import './src/css/viewerjs.css';
@@ -18,6 +19,7 @@
 
 @theme {
   --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  --font-admin: Calibri, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 
   --breakpoint-xs: 24.5rem;
   --breakpoint-3xl: 102rem;
@@ -224,6 +226,11 @@
 /* Typing Trainer Utilities */
 @utility font-typing {
   font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+}
+
+/* Admin Interface Utilities */
+@utility font-admin {
+  font-family: Calibri, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 @layer base {
