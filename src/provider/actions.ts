@@ -15,6 +15,7 @@ export type ProviderFormData = {
   noteTemplate?: string;
   noteSmartPhrase?: string;
   preferences?: Prisma.InputJsonValue;
+  wikiContent?: Prisma.InputJsonValue;
 };
 
 /**

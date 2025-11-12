@@ -43,7 +43,7 @@ export function TypingTrainer() {
   const [stats, setStats] = useState<TypingStats | null>(null);
   const [settings, setSettings] = useState<TestSettings>({
     mode: 'time',
-    duration: 30
+    duration: 30,
   });
   const [inputFocused, setInputFocused] = useState(false);
   const [currentTheme, setCurrentTheme] = useState<Theme>(themesData.themes[4]); // Dark theme default
@@ -233,7 +233,7 @@ export function TypingTrainer() {
                 backgroundColor: 'var(--typing-caret)',
                 left: `${currentInput.length * 0.6}em`,
                 top: '0.1em',
-                boxShadow: `0 0 8px var(--typing-caret)`
+                boxShadow: '0 0 8px var(--typing-caret)',
               }}
             />
           )}
@@ -273,7 +273,7 @@ export function TypingTrainer() {
               : 'text-[var(--typing-error)] opacity-0 scale-95'
           }`}
           style={{
-            animation: 'fadeOut 0.5s ease-out forwards'
+            animation: 'fadeOut 0.5s ease-out forwards',
           }}
         >
           {word}
@@ -323,7 +323,7 @@ export function TypingTrainer() {
           style={{
             backgroundColor: 'var(--typing-bg)',
             borderColor: 'var(--typing-subtext)',
-            color: 'var(--typing-text)'
+            color: 'var(--typing-text)',
           }}
         >
           <div className="space-y-4">
@@ -341,7 +341,7 @@ export function TypingTrainer() {
                   style={{
                     backgroundColor: settings.mode === 'time' ? 'var(--typing-primary)' : 'transparent',
                     color: settings.mode === 'time' ? 'var(--typing-bg)' : 'var(--typing-text)',
-                    border: `1px solid ${settings.mode === 'time' ? 'var(--typing-primary)' : 'var(--typing-subtext)'}`
+                    border: `1px solid ${settings.mode === 'time' ? 'var(--typing-primary)' : 'var(--typing-subtext)'}`,
                   }}
                 >
                   time
@@ -354,7 +354,7 @@ export function TypingTrainer() {
                   style={{
                     backgroundColor: settings.mode === 'words' ? 'var(--typing-primary)' : 'transparent',
                     color: settings.mode === 'words' ? 'var(--typing-bg)' : 'var(--typing-text)',
-                    border: `1px solid ${settings.mode === 'words' ? 'var(--typing-primary)' : 'var(--typing-subtext)'}`
+                    border: `1px solid ${settings.mode === 'words' ? 'var(--typing-primary)' : 'var(--typing-subtext)'}`,
                   }}
                 >
                   words
@@ -378,7 +378,7 @@ export function TypingTrainer() {
                     style={{
                       backgroundColor: settings.duration === duration ? 'var(--typing-primary)' : 'transparent',
                       color: settings.duration === duration ? 'var(--typing-bg)' : 'var(--typing-text)',
-                      border: `1px solid ${settings.duration === duration ? 'var(--typing-primary)' : 'var(--typing-subtext)'}`
+                      border: `1px solid ${settings.duration === duration ? 'var(--typing-primary)' : 'var(--typing-subtext)'}`,
                     }}
                   >
                     {duration}
@@ -393,8 +393,8 @@ export function TypingTrainer() {
                 onClick={() => setShowThemeSelector(!showThemeSelector)}
                 className="w-full px-4 py-2 rounded-lg transition-all duration-200 opacity-60 hover:opacity-100"
                 style={{
-                  border: `1px solid var(--typing-subtext)`,
-                  color: 'var(--typing-text)'
+                  border: '1px solid var(--typing-subtext)',
+                  color: 'var(--typing-text)',
                 }}
               >
                 Theme: {currentTheme.name}
@@ -410,7 +410,7 @@ export function TypingTrainer() {
           style={{
             backgroundColor: 'var(--typing-bg)',
             borderColor: 'var(--typing-subtext)',
-            color: 'var(--typing-text)'
+            color: 'var(--typing-text)',
           }}
         >
           <div className="grid gap-2">
@@ -428,7 +428,7 @@ export function TypingTrainer() {
                   backgroundColor: theme.background,
                   color: theme.text,
                   outline: currentTheme.name === theme.name ? `2px solid ${theme.primary}` : 'none',
-                  outlineOffset: '2px'
+                  outlineOffset: '2px',
                 }}
               >
                 <div className="font-medium">{theme.name}</div>
@@ -478,7 +478,7 @@ export function TypingTrainer() {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    backgroundColor: `color-mix(in srgb, var(--typing-bg) 30%, transparent)`
+                    backgroundColor: 'color-mix(in srgb, var(--typing-bg) 30%, transparent)',
                   }}
                 >
                   <div className="text-2xl font-light tracking-wide" style={{ color: 'var(--typing-text)' }}>
@@ -560,8 +560,8 @@ export function TypingTrainer() {
                 onClick={resetTest}
                 className="px-8 py-3 rounded-lg transition-all duration-200 opacity-60 hover:opacity-100 hover:scale-105"
                 style={{
-                  border: `1px solid var(--typing-subtext)`,
-                  color: 'var(--typing-text)'
+                  border: '1px solid var(--typing-subtext)',
+                  color: 'var(--typing-text)',
                 }}
               >
                 change settings
@@ -572,7 +572,7 @@ export function TypingTrainer() {
                 style={{
                   backgroundColor: 'var(--typing-primary)',
                   color: 'var(--typing-bg)',
-                  boxShadow: `0 4px 12px rgba(0,0,0,0.2)`
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.2)',
                 }}
               >
                 try again

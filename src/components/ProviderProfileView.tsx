@@ -7,6 +7,8 @@ import {
   incrementProviderViewCount,
 } from '@/provider/actions';
 import { ProviderDifficultyFull } from './ProviderDifficultyFull';
+import { WikiContentRenderer } from './wiki/WikiContentRenderer';
+import { validateWikiContent } from '@/provider/wiki-schema';
 
 export default function ProviderProfileView() {
   const [provider, setProvider] = useState<Provider | null>(null);
@@ -101,7 +103,7 @@ export default function ProviderProfileView() {
               boxShadow: 'none',
               background: 'transparent',
               padding: '0',
-              margin: '0'
+              margin: '0',
             }}
             aria-label="Close"
           >
@@ -156,67 +158,50 @@ export default function ProviderProfileView() {
                 />
               </div>
 
-              {/* Preferences (Note Template) */}
-              {provider.noteTemplate && (
+              {/* Wiki Content or Legacy Content */}
+              {provider.wikiContent && validateWikiContent(provider.wikiContent) ? (
                 <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
-                  <h4 className="text-lg font-medium text-main mb-2">
-                    Preferences
-                  </h4>
-                  <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
-                    <pre className="text-sm text-main whitespace-pre-wrap font-mono">
-                      {provider.noteTemplate}
-                    </pre>
-                  </div>
-                </div>
-              )}
-
-              {/* Note SmartPhrase */}
-              {provider.noteSmartPhrase ? (
-                <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
-                  <h4 className="text-lg font-medium text-main mb-2">
-                    Note SmartPhrase
-                  </h4>
-                  <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
-                    <pre className="text-sm text-main whitespace-pre-wrap font-mono">
-                      {provider.noteSmartPhrase}
-                    </pre>
-                  </div>
+                  <WikiContentRenderer wikiContent={provider.wikiContent as any} />
                 </div>
               ) : (
-                <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
-                  <h4 className="text-lg font-medium text-main mb-2">
-                    Note SmartPhrase
-                  </h4>
-                  <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
-                    <p className="text-sm text-dim">No note smartphrases</p>
-                  </div>
-                </div>
-              )}
+                <>
+                  {/* Legacy Content - Show if no wiki content */}
+                  {provider.noteTemplate && (
+                    <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
+                      <h4 className="text-lg font-medium text-main mb-2">
+                        Preferences
+                      </h4>
+                      <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
+                        <pre className="text-sm text-main whitespace-pre-wrap font-mono">
+                          {provider.noteTemplate}
+                        </pre>
+                      </div>
+                    </div>
+                  )}
 
-              {/* Additional Preferences (JSON) */}
-              {provider.preferences && (
-                <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
-                  <h4 className="text-lg font-medium text-main mb-2">
-                    Preferences
-                  </h4>
-                  <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
-                    <pre className="text-sm text-main whitespace-pre-wrap">
-                      {JSON.stringify(provider.preferences, null, 2)}
-                    </pre>
-                  </div>
-                </div>
-              )}
+                  {provider.noteSmartPhrase && (
+                    <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
+                      <h4 className="text-lg font-medium text-main mb-2">
+                        Note SmartPhrase
+                      </h4>
+                      <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
+                        <pre className="text-sm text-main whitespace-pre-wrap font-mono">
+                          {provider.noteSmartPhrase}
+                        </pre>
+                      </div>
+                    </div>
+                  )}
 
-              {!provider.noteTemplate &&
-                !provider.preferences &&
-                !provider.generalDifficulty &&
-                !provider.speedDifficulty &&
-                !provider.terminologyDifficulty &&
-                !provider.noteDifficulty && (
-                  <div className="text-center py-8 text-dim">
-                    <p>No additional information available for this provider.</p>
-                  </div>
-                )}
+                  {!provider.noteTemplate && !provider.noteSmartPhrase && (
+                    <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
+                      <div className="text-center py-8 text-dim">
+                        <p>No additional information available for this provider.</p>
+                        <p className="text-sm mt-2">Content can be added via the Admin Wiki Editor.</p>
+                      </div>
+                    </div>
+                  )}
+                </>
+              )}
             </div>
           )}
         </div>

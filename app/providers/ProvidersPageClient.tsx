@@ -38,48 +38,48 @@ export default function ProvidersPageClient({
             </div>
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-            {providers.map((provider) => (
-              <div
-                key={provider.id}
-                onClick={() => handleProviderClick(provider.slug)}
-                className="relative bg-medium border border-main rounded-lg p-4 hover:shadow-lg transition-all duration-300 cursor-pointer group overflow-hidden"
-                style={{
-                  boxShadow: '0 0 0 0 transparent',
-                  transition: 'all 0.3s ease',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.boxShadow = '0 0 20px rgba(255, 255, 255, 0.3), 0 0 40px rgba(255, 255, 255, 0.2), 0 0 60px rgba(255, 255, 255, 0.1)';
-                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.4)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.boxShadow = '0 0 0 0 transparent';
-                  e.currentTarget.style.borderColor = '';
-                }}
-              >
-                {/* Provider Info */}
-                <div className="mb-3">
-                  <h3 className="text-base font-semibold text-main mb-0.5 group-hover:text-gray-100 dark:group-hover:text-white transition-colors line-clamp-2">
-                    {provider.name}
-                  </h3>
-                  {provider.credentials && (
-                    <p className="text-xs text-dim">{provider.credentials}</p>
-                  )}
-                </div>
+              {providers.map((provider) => (
+                <div
+                  key={provider.id}
+                  onClick={() => handleProviderClick(provider.slug)}
+                  className="relative bg-medium border border-main rounded-lg p-4 hover:shadow-lg transition-all duration-300 cursor-pointer group overflow-hidden"
+                  style={{
+                    boxShadow: '0 0 0 0 transparent',
+                    transition: 'all 0.3s ease',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.boxShadow = '0 0 20px rgba(255, 255, 255, 0.3), 0 0 40px rgba(255, 255, 255, 0.2), 0 0 60px rgba(255, 255, 255, 0.1)';
+                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.4)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.boxShadow = '0 0 0 0 transparent';
+                    e.currentTarget.style.borderColor = '';
+                  }}
+                >
+                  {/* Provider Info */}
+                  <div className="mb-3">
+                    <h3 className="text-base font-semibold text-main mb-0.5 group-hover:text-gray-100 dark:group-hover:text-white transition-colors line-clamp-2">
+                      {provider.name}
+                    </h3>
+                    {provider.credentials && (
+                      <p className="text-xs text-dim">{provider.credentials}</p>
+                    )}
+                  </div>
 
-                {/* Difficulty Preview */}
-                <div className="flex justify-center py-2">
-                  <ProviderDifficultyPreview
-                    generalDifficulty={provider.generalDifficulty}
-                    size="xs"
-                    showLabel={true}
-                  />
+                  {/* Difficulty Preview */}
+                  <div className="flex justify-center py-2">
+                    <ProviderDifficultyPreview
+                      generalDifficulty={provider.generalDifficulty}
+                      size="xs"
+                      showLabel={true}
+                    />
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        )}
+              ))}
+            </div>
+          )}
+        </div>
       </div>
-    </div>
     </>
   );
 }

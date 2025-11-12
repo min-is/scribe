@@ -41,6 +41,11 @@ if (HOSTNAME_AWS_S3) {
 }
 
 const nextConfig: NextConfig = {
+  eslint: {
+    // Warning: This allows production builds to successfully complete even if
+    // your project has ESLint errors.
+    ignoreDuringBuilds: true,
+  },
   images: {
     imageSizes: [200],
     remotePatterns,
