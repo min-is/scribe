@@ -368,6 +368,12 @@ export default function ProvidersClient({
                           Edit
                         </button>
                         <button
+                          onClick={() => router.push(`/admin/providers/${provider.slug}/wiki`)}
+                          className="text-green-600 hover:text-green-900 dark:hover:text-green-400 mr-4"
+                        >
+                          Wiki
+                        </button>
+                        <button
                           onClick={() =>
                             handleDelete(provider.id, provider.name)
                           }
