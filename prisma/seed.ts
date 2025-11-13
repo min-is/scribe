@@ -15,7 +15,7 @@ async function main() {
     const tableCheck = await client.query(`
       SELECT EXISTS (
         SELECT FROM information_schema.tables
-        WHERE table_name = 'SmartPhrase'
+        WHERE table_schema = 'public' AND table_name = 'SmartPhrase'
       );
     `);
 
@@ -24,10 +24,14 @@ async function main() {
 
       // Read and execute the migration SQL
       const migrationPath = path.join(__dirname, 'migrations', '20251113000000_add_smartphrase_model', 'migration.sql');
-      const migrationSQL = fs.readFileSync(migrationPath, 'utf-8');
 
-      await client.query(migrationSQL);
-      console.log('SmartPhrase table created successfully');
+      if (fs.existsSync(migrationPath)) {
+        const migrationSQL = fs.readFileSync(migrationPath, 'utf-8');
+        await client.query(migrationSQL);
+        console.log('SmartPhrase table created successfully');
+      } else {
+        console.warn('Migration file not found, assuming table will be created by Prisma migrations');
+      }
     } else {
       console.log('SmartPhrase table already exists');
     }
