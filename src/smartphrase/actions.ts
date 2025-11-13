@@ -161,9 +161,21 @@ export async function createSmartPhrase(
     revalidatePath('/admin/smartphrases');
 
     return { success: true, smartphrase };
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error creating smartphrase:', error);
-    return { success: false, error: 'Failed to create smartphrase' };
+
+    // Provide more specific error messages
+    if (error?.code === 'P2002') {
+      return { success: false, error: `SmartPhrase with slug "${data.slug}" already exists` };
+    }
+    if (error?.code === 'P2003') {
+      return { success: false, error: 'Foreign key constraint violation' };
+    }
+    if (error?.message?.includes('does not exist') || error?.message?.includes('Unknown')) {
+      return { success: false, error: 'SmartPhrase table does not exist. Run: npm run prisma:migrate:deploy' };
+    }
+
+    return { success: false, error: error?.message || 'Failed to create smartphrase' };
   }
 }
 
