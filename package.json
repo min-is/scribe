@@ -12,6 +12,7 @@
     "prisma:migrate:deploy": "prisma migrate deploy",
     "prisma:studio": "prisma studio",
     "prisma:seed": "ts-node prisma/seed.ts",
+    "setup:medical": "prisma generate && echo '✅ Prisma client regenerated! Restart your dev server if running.'",
     "postinstall": "prisma generate",
     "vercel-build": "prisma migrate deploy && prisma generate && next build"
   },
