@@ -116,18 +116,44 @@ export default function DatabaseManagementClient() {
             Database Setup
           </h1>
           <p className="text-dim text-lg">
-            Run these SQL commands in your database console
+            Automatic migrations on deployment + manual fallback
           </p>
         </div>
 
-        {/* Instructions */}
+        {/* Automatic Migrations Info */}
+        <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-6 mb-8">
+          <div className="flex items-start gap-3">
+            <FiCheck className="text-2xl text-green-400 flex-shrink-0 mt-1" />
+            <div>
+              <h2 className="text-lg font-semibold text-main mb-2">
+                ✨ Migrations Run Automatically
+              </h2>
+              <p className="text-medium text-sm mb-3">
+                Database migrations now run automatically when you:
+              </p>
+              <ul className="list-disc list-inside text-medium space-y-1 text-sm ml-4">
+                <li>Deploy to production (Vercel, etc.)</li>
+                <li>Start the development server (<code className="bg-content px-1 py-0.5 rounded">npm run dev</code>)</li>
+                <li>Start the production server (<code className="bg-content px-1 py-0.5 rounded">npm start</code>)</li>
+              </ul>
+              <p className="text-medium text-sm mt-3">
+                <strong className="text-main">No manual setup required!</strong> The tables will be created automatically on your next deployment.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Manual Fallback Instructions */}
         <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-6 mb-8">
           <div className="flex items-start gap-3">
             <FiAlertCircle className="text-2xl text-blue-400 flex-shrink-0 mt-1" />
             <div>
               <h2 className="text-lg font-semibold text-main mb-2">
-                How to Apply Migrations
+                Manual Setup (Fallback Only)
               </h2>
+              <p className="text-medium text-sm mb-3">
+                Only use this if automatic migrations failed or you need to run them manually:
+              </p>
               <ol className="list-decimal list-inside text-medium space-y-2 text-sm">
                 <li>Copy the SQL for each migration below</li>
                 <li>Open your database console:
