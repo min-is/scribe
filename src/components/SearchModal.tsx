@@ -4,12 +4,13 @@ import { Command } from 'cmdk';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { clsx } from 'clsx/lite';
-import { PATH_PRACTICE_TYPING, PATH_ADMIN, PATH_ADMIN_CONFIGURATION, PATH_SMARTPHRASES } from '@/app/paths';
+import { PATH_PRACTICE_TYPING, PATH_ADMIN, PATH_ADMIN_CONFIGURATION, PATH_SMARTPHRASES, PATH_SCENARIOS, PATH_PROCEDURES } from '@/app/paths';
 import Modal from './Modal';
 import CommandKItem from '@/cmdk/CommandKItem';
 import { FaUserMd, FaHospital, FaFileAlt, FaKeyboard } from 'react-icons/fa';
 import { HiDocumentText } from 'react-icons/hi';
 import { RiToolsFill } from 'react-icons/ri';
+import { FiActivity } from 'react-icons/fi';
 import Spinner from './Spinner';
 import { Provider } from '@prisma/client';
 import { incrementProviderSearchClick } from '@/provider/actions';
@@ -74,22 +75,29 @@ export default function SearchModal({
   }, [topProviders]);
 
   const scenariosSection: CommandKSection = useMemo(() => ({
-    heading: 'Scenarios',
+    heading: 'Clinical Scenarios',
     accessory: <FaHospital size={14} />,
     items: [
       {
-        label: 'Chest Pain Presentation',
-        annotation: 'Cardiac',
-        keywords: ['chest', 'pain', 'cardiac', 'heart', 'scenario'],
-        path: '#scenario-chest-pain',
+        label: 'Clinical Scenarios',
+        annotation: 'Browse all scenario walkthroughs',
+        keywords: ['scenarios', 'scenario', 'walkthrough', 'emergency', 'code', 'blue', 'stroke', 'clinical'],
+        path: PATH_SCENARIOS,
         accessory: <FaHospital size={14} className="text-gray-500 dark:text-gray-400" />,
       },
+    ],
+  }), []);
+
+  const proceduresSection: CommandKSection = useMemo(() => ({
+    heading: 'Medical Procedures',
+    accessory: <FiActivity size={14} />,
+    items: [
       {
-        label: 'Diabetic Follow-up',
-        annotation: 'Endocrine',
-        keywords: ['diabetes', 'follow', 'endocrine', 'scenario'],
-        path: '#scenario-diabetes',
-        accessory: <FaHospital size={14} className="text-gray-500 dark:text-gray-400" />,
+        label: 'Medical Procedures',
+        annotation: 'Browse all procedure guides',
+        keywords: ['procedures', 'procedure', 'lumbar', 'puncture', 'intubation', 'central', 'line', 'medical'],
+        path: PATH_PROCEDURES,
+        accessory: <FiActivity size={14} className="text-gray-500 dark:text-gray-400" />,
       },
     ],
   }), []);
@@ -139,9 +147,10 @@ export default function SearchModal({
   const categorySections: CommandKSection[] = useMemo(() => [
     providerPreferencesSection,
     scenariosSection,
+    proceduresSection,
     epicDotPhrasesSection,
     miscellaneousSection,
-  ], [providerPreferencesSection, scenariosSection, epicDotPhrasesSection, miscellaneousSection]);
+  ], [providerPreferencesSection, scenariosSection, proceduresSection, epicDotPhrasesSection, miscellaneousSection]);
 
   // Filter sections based on query
   const filteredSections = useMemo(() => {
