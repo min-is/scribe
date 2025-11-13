@@ -67,6 +67,18 @@ export default function AdminPage() {
           </a>
 
           <a
+            href="/admin/database"
+            className="bg-medium border border-main rounded-lg p-6 hover:bg-dim transition-colors"
+          >
+            <h2 className="text-xl font-semibold text-main mb-2">
+              Database
+            </h2>
+            <p className="text-dim">
+              Run migrations and manage database
+            </p>
+          </a>
+
+          <a
             href="/admin/tags"
             className="bg-medium border border-main rounded-lg p-6 hover:bg-dim transition-colors"
           >
