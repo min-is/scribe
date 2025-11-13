@@ -17,6 +17,9 @@ export const PATH_ADMIN_PROVIDERS       = `${PATH_ADMIN}/providers`;
 // Practice paths
 export const PATH_PRACTICE_TYPING       = '/practice/typing';
 
+// SmartPhrase paths
+export const PATH_SMARTPHRASES          = '/smartphrases';
+
 // View paths (photography - to be removed)
 export const PATH_GRID_INFERRED         = '/grid';
 export const PATH_FEED_INFERRED         = '/feed';

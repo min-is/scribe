@@ -40,3 +40,24 @@ model Provider {
   @@index([viewCount])
   @@index([searchClickCount])
 }
+
+model SmartPhrase {
+  id          String   @id @default(cuid())
+  slug        String   @unique  // The dot phrase itself (e.g., ".PEABD")
+  title       String              // Display name (e.g., "Physical Exam - Abdomen")
+  category    String              // Category (e.g., "Physical Exam", "HPI", "MDM")
+  description String?             // Brief description
+  content     String              // Full text of the smartphrase
+  tags        String[]            // Additional searchable tags
+
+  // Analytics
+  usageCount  Int      @default(0)  // Track how often it's copied
+
+  // Metadata
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([category])
+  @@index([slug])
+  @@index([usageCount])
+}

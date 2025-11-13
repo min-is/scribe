@@ -4,7 +4,7 @@ import { Command } from 'cmdk';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { clsx } from 'clsx/lite';
-import { PATH_PRACTICE_TYPING, PATH_ADMIN, PATH_ADMIN_CONFIGURATION } from '@/app/paths';
+import { PATH_PRACTICE_TYPING, PATH_ADMIN, PATH_ADMIN_CONFIGURATION, PATH_SMARTPHRASES } from '@/app/paths';
 import Modal from './Modal';
 import CommandKItem from '@/cmdk/CommandKItem';
 import { FaUserMd, FaHospital, FaFileAlt, FaKeyboard } from 'react-icons/fa';
@@ -95,28 +95,14 @@ export default function SearchModal({
   }), []);
 
   const epicDotPhrasesSection: CommandKSection = useMemo(() => ({
-    heading: 'EPIC Dot Phrases',
+    heading: 'SmartPhrase Library',
     accessory: <HiDocumentText size={14} />,
     items: [
       {
-        label: '.chestpain',
-        annotation: 'Chest pain template',
-        keywords: ['chest', 'pain', 'dot', 'phrase', 'epic', 'template'],
-        path: '#dotphrase-chestpain',
-        accessory: <HiDocumentText size={14} className="text-gray-500 dark:text-gray-400" />,
-      },
-      {
-        label: '.physicalexam',
-        annotation: 'Physical exam template',
-        keywords: ['physical', 'exam', 'dot', 'phrase', 'epic', 'template'],
-        path: '#dotphrase-physical',
-        accessory: <HiDocumentText size={14} className="text-gray-500 dark:text-gray-400" />,
-      },
-      {
-        label: '.rosgeneral',
-        annotation: 'Review of systems',
-        keywords: ['ros', 'review', 'systems', 'dot', 'phrase', 'epic'],
-        path: '#dotphrase-ros',
+        label: 'SmartPhrase Library',
+        annotation: 'Browse all EPIC SmartPhrases',
+        keywords: ['smartphrase', 'smart', 'phrase', 'dot', 'epic', 'template', 'library', 'browse'],
+        path: PATH_SMARTPHRASES,
         accessory: <HiDocumentText size={14} className="text-gray-500 dark:text-gray-400" />,
       },
     ],
