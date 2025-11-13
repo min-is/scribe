@@ -17,6 +17,18 @@ export const PATH_ADMIN_PROVIDERS       = `${PATH_ADMIN}/providers`;
 // Practice paths
 export const PATH_PRACTICE_TYPING       = '/practice/typing';
 
+// SmartPhrase paths
+export const PATH_SMARTPHRASES          = '/smartphrases';
+export const PATH_ADMIN_SMARTPHRASES    = `${PATH_ADMIN}/smartphrases`;
+
+// Scenario paths
+export const PATH_SCENARIOS             = '/scenarios';
+export const PATH_ADMIN_SCENARIOS       = `${PATH_ADMIN}/scenarios`;
+
+// Procedure paths
+export const PATH_PROCEDURES            = '/procedures';
+export const PATH_ADMIN_PROCEDURES      = `${PATH_ADMIN}/procedures`;
+
 // View paths (photography - to be removed)
 export const PATH_GRID_INFERRED         = '/grid';
 export const PATH_FEED_INFERRED         = '/feed';
@@ -25,6 +37,9 @@ export const PATHS_ADMIN = [
   PATH_ADMIN,
   PATH_ADMIN_CONFIGURATION,
   PATH_ADMIN_PROVIDERS,
+  PATH_ADMIN_SMARTPHRASES,
+  PATH_ADMIN_SCENARIOS,
+  PATH_ADMIN_PROCEDURES,
 ];
 
 export const PATHS_TO_CACHE = [

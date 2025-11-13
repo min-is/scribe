@@ -2,15 +2,18 @@
   "name": "scribe-dashboard",
   "scripts": {
     "dev": "next dev --turbo",
-    "build": "prisma migrate deploy && next build",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "test": "jest --watch --transformIgnorePatterns 'node_modules/(?!my-library-dir)/'",
     "analyze": "ANALYZE=true next build",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
+    "prisma:migrate:deploy": "prisma migrate deploy",
     "prisma:studio": "prisma studio",
-    "postinstall": "prisma generate"
+    "prisma:seed": "ts-node prisma/seed.ts",
+    "postinstall": "prisma generate",
+    "vercel-build": "prisma migrate deploy && prisma generate && next build"
   },
   "dependencies": {
     "@ai-sdk/openai": "^1.3.22",

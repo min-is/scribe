@@ -31,6 +31,42 @@ export default function AdminPage() {
           </a>
 
           <a
+            href="/admin/smartphrases"
+            className="bg-medium border border-main rounded-lg p-6 hover:bg-dim transition-colors"
+          >
+            <h2 className="text-xl font-semibold text-main mb-2">
+              SmartPhrases
+            </h2>
+            <p className="text-dim">
+              Manage EPIC SmartPhrases (.phrases)
+            </p>
+          </a>
+
+          <a
+            href="/admin/scenarios"
+            className="bg-medium border border-main rounded-lg p-6 hover:bg-dim transition-colors"
+          >
+            <h2 className="text-xl font-semibold text-main mb-2">
+              Scenarios
+            </h2>
+            <p className="text-dim">
+              Manage clinical scenario walkthroughs
+            </p>
+          </a>
+
+          <a
+            href="/admin/procedures"
+            className="bg-medium border border-main rounded-lg p-6 hover:bg-dim transition-colors"
+          >
+            <h2 className="text-xl font-semibold text-main mb-2">
+              Procedures
+            </h2>
+            <p className="text-dim">
+              Manage medical procedure guides
+            </p>
+          </a>
+
+          <a
             href="/admin/tags"
             className="bg-medium border border-main rounded-lg p-6 hover:bg-dim transition-colors"
           >
