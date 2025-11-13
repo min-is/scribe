@@ -1,8 +1,26 @@
 'use server';
 
-import { prisma } from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
-import { Procedure } from '@prisma/client';
+import { query, queryOne, tableExists } from '@/lib/db';
+import { nanoid } from 'nanoid';
+
+// Procedure type (matches Prisma schema)
+export type Procedure = {
+  id: string;
+  slug: string;
+  title: string;
+  category: string;
+  description: string | null;
+  indications: string | null;
+  contraindications: string | null;
+  equipment: string | null;
+  steps: string;
+  complications: string | null;
+  tags: string[];
+  viewCount: number;
+  createdAt: Date;
+  updatedAt: Date;
+};
 
 export type ProcedureFormData = {
   slug: string;
@@ -17,14 +35,32 @@ export type ProcedureFormData = {
   tags: string[];
 };
 
+// Helper to check if Procedure table exists
+async function ensureTableExists(): Promise<{ exists: boolean; error?: string }> {
+  const exists = await tableExists('Procedure');
+  if (!exists) {
+    return {
+      exists: false,
+      error: 'Procedure table does not exist. Please run the SQL migrations from /admin/database',
+    };
+  }
+  return { exists: true };
+}
+
 /**
  * Get all procedures
  */
 export async function getProcedures(): Promise<Procedure[]> {
   try {
-    return await prisma.procedure.findMany({
-      orderBy: [{ category: 'asc' }, { title: 'asc' }],
-    });
+    const check = await ensureTableExists();
+    if (!check.exists) {
+      console.error(check.error);
+      return [];
+    }
+
+    return await query<Procedure>(
+      `SELECT * FROM "Procedure" ORDER BY category ASC, title ASC`
+    );
   } catch (error) {
     console.error('Error fetching procedures:', error);
     return [];
@@ -38,10 +74,13 @@ export async function getProceduresByCategory(
   category: string,
 ): Promise<Procedure[]> {
   try {
-    return await prisma.procedure.findMany({
-      where: { category },
-      orderBy: { title: 'asc' },
-    });
+    const check = await ensureTableExists();
+    if (!check.exists) return [];
+
+    return await query<Procedure>(
+      `SELECT * FROM "Procedure" WHERE category = $1 ORDER BY title ASC`,
+      [category]
+    );
   } catch (error) {
     console.error('Error fetching procedures by category:', error);
     return [];
@@ -51,21 +90,25 @@ export async function getProceduresByCategory(
 /**
  * Search procedures by query
  */
-export async function searchProcedures(query: string): Promise<Procedure[]> {
+export async function searchProcedures(
+  searchQuery: string,
+): Promise<Procedure[]> {
   try {
-    const lowerQuery = query.toLowerCase();
-    return await prisma.procedure.findMany({
-      where: {
-        OR: [
-          { slug: { contains: lowerQuery, mode: 'insensitive' } },
-          { title: { contains: lowerQuery, mode: 'insensitive' } },
-          { description: { contains: lowerQuery, mode: 'insensitive' } },
-          { steps: { contains: lowerQuery, mode: 'insensitive' } },
-          { tags: { has: lowerQuery } },
-        ],
-      },
-      orderBy: [{ viewCount: 'desc' }, { title: 'asc' }],
-    });
+    const check = await ensureTableExists();
+    if (!check.exists) return [];
+
+    const lowerQuery = `%${searchQuery.toLowerCase()}%`;
+    return await query<Procedure>(
+      `SELECT * FROM "Procedure"
+       WHERE
+         LOWER(slug) LIKE $1 OR
+         LOWER(title) LIKE $1 OR
+         LOWER(description) LIKE $1 OR
+         LOWER(steps) LIKE $1 OR
+         EXISTS (SELECT 1 FROM unnest(tags) tag WHERE LOWER(tag) LIKE $1)
+       ORDER BY "viewCount" DESC, title ASC`,
+      [lowerQuery]
+    );
   } catch (error) {
     console.error('Error searching procedures:', error);
     return [];
@@ -77,9 +120,13 @@ export async function searchProcedures(query: string): Promise<Procedure[]> {
  */
 export async function getProcedure(id: string): Promise<Procedure | null> {
   try {
-    return await prisma.procedure.findUnique({
-      where: { id },
-    });
+    const check = await ensureTableExists();
+    if (!check.exists) return null;
+
+    return await queryOne<Procedure>(
+      `SELECT * FROM "Procedure" WHERE id = $1`,
+      [id]
+    );
   } catch (error) {
     console.error('Error fetching procedure:', error);
     return null;
@@ -93,9 +140,13 @@ export async function getProcedureBySlug(
   slug: string,
 ): Promise<Procedure | null> {
   try {
-    return await prisma.procedure.findUnique({
-      where: { slug },
-    });
+    const check = await ensureTableExists();
+    if (!check.exists) return null;
+
+    return await queryOne<Procedure>(
+      `SELECT * FROM "Procedure" WHERE slug = $1`,
+      [slug]
+    );
   } catch (error) {
     console.error('Error fetching procedure by slug:', error);
     return null;
@@ -109,14 +160,13 @@ export async function incrementProcedureViewCount(
   id: string,
 ): Promise<{ success: boolean }> {
   try {
-    await prisma.procedure.update({
-      where: { id },
-      data: {
-        viewCount: {
-          increment: 1,
-        },
-      },
-    });
+    const check = await ensureTableExists();
+    if (!check.exists) return { success: false };
+
+    await query(
+      `UPDATE "Procedure" SET "viewCount" = "viewCount" + 1 WHERE id = $1`,
+      [id]
+    );
     return { success: true };
   } catch (error) {
     console.error('Error incrementing procedure view count:', error);
@@ -129,12 +179,13 @@ export async function incrementProcedureViewCount(
  */
 export async function getProcedureCategories(): Promise<string[]> {
   try {
-    const result = await prisma.procedure.findMany({
-      select: { category: true },
-      distinct: ['category'],
-      orderBy: { category: 'asc' },
-    });
-    return result.map((r: { category: string }) => r.category);
+    const check = await ensureTableExists();
+    if (!check.exists) return [];
+
+    const result = await query<{ category: string }>(
+      `SELECT DISTINCT category FROM "Procedure" ORDER BY category ASC`
+    );
+    return result.map((r) => r.category);
   } catch (error) {
     console.error('Error fetching procedure categories:', error);
     return [];
@@ -148,20 +199,48 @@ export async function createProcedure(
   data: ProcedureFormData,
 ): Promise<{ success: boolean; error?: string; procedure?: Procedure }> {
   try {
-    const procedure = await prisma.procedure.create({
-      data: {
-        slug: data.slug,
-        title: data.title,
-        category: data.category,
-        description: data.description,
-        indications: data.indications,
-        contraindications: data.contraindications,
-        equipment: data.equipment,
-        steps: data.steps,
-        complications: data.complications,
-        tags: data.tags,
-      },
-    });
+    const check = await ensureTableExists();
+    if (!check.exists) {
+      return { success: false, error: check.error };
+    }
+
+    // Check if slug already exists
+    const existing = await getProcedureBySlug(data.slug);
+    if (existing) {
+      return {
+        success: false,
+        error: `Procedure with slug "${data.slug}" already exists`,
+      };
+    }
+
+    const id = nanoid();
+    const now = new Date();
+
+    const result = await query<Procedure>(
+      `INSERT INTO "Procedure" (
+        id, slug, title, category, description, indications, contraindications,
+        equipment, steps, complications, tags, "viewCount", "createdAt", "updatedAt"
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+      RETURNING *`,
+      [
+        id,
+        data.slug,
+        data.title,
+        data.category,
+        data.description || null,
+        data.indications || null,
+        data.contraindications || null,
+        data.equipment || null,
+        data.steps,
+        data.complications || null,
+        data.tags,
+        0,
+        now,
+        now,
+      ]
+    );
+
+    const procedure = result[0];
 
     revalidatePath('/procedures');
     revalidatePath('/admin/procedures');
@@ -170,15 +249,18 @@ export async function createProcedure(
   } catch (error: any) {
     console.error('Error creating procedure:', error);
 
-    // Provide more specific error messages
-    if (error?.code === 'P2002') {
-      return { success: false, error: `Procedure with slug "${data.slug}" already exists` };
-    }
-    if (error?.message?.includes('does not exist') || error?.message?.includes('Unknown')) {
-      return { success: false, error: 'Procedure table does not exist. Run: npm run prisma:migrate:deploy' };
+    // Handle PostgreSQL unique constraint violation
+    if (error?.code === '23505') {
+      return {
+        success: false,
+        error: `Procedure with slug "${data.slug}" already exists`,
+      };
     }
 
-    return { success: false, error: error?.message || 'Failed to create procedure' };
+    return {
+      success: false,
+      error: error?.message || 'Failed to create procedure',
+    };
   }
 }
 
@@ -190,21 +272,45 @@ export async function updateProcedure(
   data: Partial<ProcedureFormData>,
 ): Promise<{ success: boolean; error?: string; procedure?: Procedure }> {
   try {
-    const procedure = await prisma.procedure.update({
-      where: { id },
-      data: {
-        slug: data.slug,
-        title: data.title,
-        category: data.category,
-        description: data.description,
-        indications: data.indications,
-        contraindications: data.contraindications,
-        equipment: data.equipment,
-        steps: data.steps,
-        complications: data.complications,
-        tags: data.tags,
-      },
-    });
+    const check = await ensureTableExists();
+    if (!check.exists) {
+      return { success: false, error: check.error };
+    }
+
+    const now = new Date();
+    const result = await query<Procedure>(
+      `UPDATE "Procedure"
+       SET
+         slug = COALESCE($2, slug),
+         title = COALESCE($3, title),
+         category = COALESCE($4, category),
+         description = COALESCE($5, description),
+         indications = COALESCE($6, indications),
+         contraindications = COALESCE($7, contraindications),
+         equipment = COALESCE($8, equipment),
+         steps = COALESCE($9, steps),
+         complications = COALESCE($10, complications),
+         tags = COALESCE($11, tags),
+         "updatedAt" = $12
+       WHERE id = $1
+       RETURNING *`,
+      [
+        id,
+        data.slug,
+        data.title,
+        data.category,
+        data.description,
+        data.indications,
+        data.contraindications,
+        data.equipment,
+        data.steps,
+        data.complications,
+        data.tags,
+        now,
+      ]
+    );
+
+    const procedure = result[0];
 
     revalidatePath('/procedures');
     revalidatePath('/admin/procedures');
@@ -223,9 +329,12 @@ export async function deleteProcedure(
   id: string,
 ): Promise<{ success: boolean; error?: string }> {
   try {
-    await prisma.procedure.delete({
-      where: { id },
-    });
+    const check = await ensureTableExists();
+    if (!check.exists) {
+      return { success: false, error: check.error };
+    }
+
+    await query(`DELETE FROM "Procedure" WHERE id = $1`, [id]);
 
     revalidatePath('/procedures');
     revalidatePath('/admin/procedures');
