@@ -1,9 +1,9 @@
 {
   "name": "scribe-dashboard",
   "scripts": {
-    "dev": "next dev --turbo",
+    "dev": "prisma migrate deploy && next dev --turbo",
     "build": "next build",
-    "start": "next start",
+    "start": "prisma migrate deploy && next start",
     "lint": "next lint",
     "test": "jest --watch --transformIgnorePatterns 'node_modules/(?!my-library-dir)/'",
     "analyze": "ANALYZE=true next build",
