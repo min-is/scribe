@@ -61,3 +61,49 @@ model SmartPhrase {
   @@index([slug])
   @@index([usageCount])
 }
+
+model Scenario {
+  id          String   @id @default(cuid())
+  slug        String   @unique  // URL-friendly identifier (e.g., "code-blue")
+  title       String              // Display name (e.g., "Code Blue Response")
+  category    String              // Category (e.g., "Emergency", "Cardiac", "Neuro")
+  description String?             // Brief overview
+  content     String              // Detailed walkthrough/steps in markdown or plain text
+  tags        String[]            // Additional searchable tags
+
+  // Analytics
+  viewCount   Int      @default(0)  // Track how often it's viewed
+
+  // Metadata
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([category])
+  @@index([slug])
+  @@index([viewCount])
+}
+
+model Procedure {
+  id          String   @id @default(cuid())
+  slug        String   @unique  // URL-friendly identifier (e.g., "lumbar-puncture")
+  title       String              // Display name (e.g., "Lumbar Puncture")
+  category    String              // Category (e.g., "Neurology", "Emergency", "ICU")
+  description String?             // Brief overview
+  indications String?             // When to perform this procedure
+  contraindications String?       // When NOT to perform this procedure
+  equipment   String?             // Required equipment/supplies
+  steps       String              // Step-by-step instructions
+  complications String?           // Potential complications
+  tags        String[]            // Additional searchable tags
+
+  // Analytics
+  viewCount   Int      @default(0)  // Track how often it's viewed
+
+  // Metadata
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([category])
+  @@index([slug])
+  @@index([viewCount])
+}
