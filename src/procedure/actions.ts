@@ -167,9 +167,18 @@ export async function createProcedure(
     revalidatePath('/admin/procedures');
 
     return { success: true, procedure };
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error creating procedure:', error);
-    return { success: false, error: 'Failed to create procedure' };
+
+    // Provide more specific error messages
+    if (error?.code === 'P2002') {
+      return { success: false, error: `Procedure with slug "${data.slug}" already exists` };
+    }
+    if (error?.message?.includes('does not exist') || error?.message?.includes('Unknown')) {
+      return { success: false, error: 'Procedure table does not exist. Run: npm run prisma:migrate:deploy' };
+    }
+
+    return { success: false, error: error?.message || 'Failed to create procedure' };
   }
 }
 
