@@ -129,20 +129,31 @@ async function runMigrations() {
   console.log('🔄 MIGRATION SCRIPT STARTED');
   console.log('========================================\n');
 
-  // Check for DATABASE_URL
-  if (!process.env.DATABASE_URL) {
-    console.error('❌ CRITICAL: DATABASE_URL environment variable is not set!');
+  // Check for database URL (try multiple env vars)
+  const databaseUrl =
+    process.env.DATABASE_URL ||
+    process.env.POSTGRES_URL ||
+    process.env.PRISMA_DATABASE_URL;
+
+  if (!databaseUrl) {
+    console.error('❌ CRITICAL: No database URL found!');
+    console.log('Checked: DATABASE_URL, POSTGRES_URL, PRISMA_DATABASE_URL');
     console.log('Available env vars:', Object.keys(process.env).filter(k => k.includes('DATABASE') || k.includes('POSTGRES')));
     console.log('\n⚠️  Skipping migrations - database tables will NOT be created');
     console.log('========================================\n');
     return;
   }
 
-  console.log('✓ DATABASE_URL found');
-  console.log('  Connection string:', process.env.DATABASE_URL.replace(/:[^:@]+@/, ':****@')); // Hide password
+  // Log which env var was used
+  const envVarUsed = process.env.DATABASE_URL ? 'DATABASE_URL' :
+                     process.env.POSTGRES_URL ? 'POSTGRES_URL' :
+                     'PRISMA_DATABASE_URL';
+
+  console.log(`✓ Using ${envVarUsed}`);
+  console.log('  Connection string:', databaseUrl.replace(/:[^:@]+@/, ':****@')); // Hide password
 
   const pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
+    connectionString: databaseUrl,
     connectionTimeoutMillis: 10000,
   });
 

@@ -21,14 +21,26 @@ export async function GET(request: NextRequest) {
       NODE_ENV: process.env.NODE_ENV,
     };
 
-    if (!process.env.DATABASE_URL) {
-      diagnostics.errors.push('DATABASE_URL environment variable is not set');
+    // Use any available database URL
+    const databaseUrl =
+      process.env.DATABASE_URL ||
+      process.env.POSTGRES_URL ||
+      process.env.PRISMA_DATABASE_URL;
+
+    if (!databaseUrl) {
+      diagnostics.errors.push('No database URL found (checked DATABASE_URL, POSTGRES_URL, PRISMA_DATABASE_URL)');
       return NextResponse.json(diagnostics, { status: 500 });
     }
 
+    // Log which one is being used
+    const envVarUsed = process.env.DATABASE_URL ? 'DATABASE_URL' :
+                       process.env.POSTGRES_URL ? 'POSTGRES_URL' :
+                       'PRISMA_DATABASE_URL';
+    diagnostics.environment.using = `✓ Using ${envVarUsed}`;
+
     // Try to connect to database
     const pool = new Pool({
-      connectionString: process.env.DATABASE_URL,
+      connectionString: databaseUrl,
       connectionTimeoutMillis: 5000,
     });
 
