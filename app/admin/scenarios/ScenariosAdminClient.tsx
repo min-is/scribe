@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { Scenario } from '@prisma/client';
 import {
+  Scenario,
   createScenario,
   updateScenario,
   deleteScenario,

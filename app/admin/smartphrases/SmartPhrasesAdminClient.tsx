@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { SmartPhrase } from '@prisma/client';
 import {
+  SmartPhrase,
   createSmartPhrase,
   updateSmartPhrase,
   deleteSmartPhrase,

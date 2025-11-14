@@ -1,9 +1,8 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { SmartPhrase } from '@prisma/client';
 import { toast } from 'sonner';
-import { incrementSmartPhraseUsage } from '@/smartphrase/actions';
+import { SmartPhrase, incrementSmartPhraseUsage } from '@/smartphrase/actions';
 import {
   FiSearch,
   FiCopy,

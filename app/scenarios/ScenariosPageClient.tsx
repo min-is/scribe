@@ -1,8 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { Scenario } from '@prisma/client';
-import { incrementScenarioViewCount } from '@/scenario/actions';
+import { Scenario, incrementScenarioViewCount } from '@/scenario/actions';
 import {
   FiSearch,
   FiChevronDown,
