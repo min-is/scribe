@@ -4,10 +4,25 @@ import { Pool } from 'pg';
 // This is used for models that can't use Prisma due to client generation issues
 let pool: Pool | null = null;
 
+// Get database URL from any available environment variable
+function getDatabaseUrl(): string | undefined {
+  return (
+    process.env.DATABASE_URL ||
+    process.env.POSTGRES_URL ||
+    process.env.PRISMA_DATABASE_URL
+  );
+}
+
 export function getPool(): Pool {
   if (!pool) {
+    const connectionString = getDatabaseUrl();
+    if (!connectionString) {
+      throw new Error(
+        'No database URL found. Set DATABASE_URL, POSTGRES_URL, or PRISMA_DATABASE_URL'
+      );
+    }
     pool = new Pool({
-      connectionString: process.env.DATABASE_URL,
+      connectionString,
       // Connection pool settings
       max: 20,
       idleTimeoutMillis: 30000,
