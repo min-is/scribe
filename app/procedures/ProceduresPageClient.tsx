@@ -1,8 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { Procedure } from '@prisma/client';
-import { incrementProcedureViewCount } from '@/procedure/actions';
+import { Procedure, incrementProcedureViewCount } from '@/procedure/actions';
 import {
   FiSearch,
   FiChevronDown,

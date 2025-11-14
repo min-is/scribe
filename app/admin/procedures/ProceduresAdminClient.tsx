@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { Procedure } from '@prisma/client';
 import {
+  Procedure,
   createProcedure,
   updateProcedure,
   deleteProcedure,
