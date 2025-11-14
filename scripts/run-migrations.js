@@ -125,36 +125,92 @@ END $$;
 ];
 
 async function runMigrations() {
+  console.log('\n========================================');
+  console.log('🔄 MIGRATION SCRIPT STARTED');
+  console.log('========================================\n');
+
+  // Check for DATABASE_URL
   if (!process.env.DATABASE_URL) {
-    console.log('⚠️  DATABASE_URL not set, skipping migrations');
+    console.error('❌ CRITICAL: DATABASE_URL environment variable is not set!');
+    console.log('Available env vars:', Object.keys(process.env).filter(k => k.includes('DATABASE') || k.includes('POSTGRES')));
+    console.log('\n⚠️  Skipping migrations - database tables will NOT be created');
+    console.log('========================================\n');
     return;
   }
 
+  console.log('✓ DATABASE_URL found');
+  console.log('  Connection string:', process.env.DATABASE_URL.replace(/:[^:@]+@/, ':****@')); // Hide password
+
   const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
+    connectionTimeoutMillis: 10000,
   });
 
   try {
-    console.log('🔄 Running automatic migrations...');
+    // Test connection first
+    console.log('\n📡 Testing database connection...');
+    const client = await pool.connect();
+    console.log('✓ Database connection successful');
+
+    // Get database info
+    const dbInfo = await client.query('SELECT current_database(), current_user, version()');
+    console.log('  Database:', dbInfo.rows[0].current_database);
+    console.log('  User:', dbInfo.rows[0].current_user);
+    console.log('  PostgreSQL:', dbInfo.rows[0].version.split(',')[0]);
+
+    client.release();
+
+    console.log('\n🔧 Applying migrations...\n');
+
+    let successCount = 0;
+    let failCount = 0;
 
     for (const migration of MIGRATIONS) {
-      console.log(`  ➜ Applying ${migration.name}...`);
+      console.log(`➜ Migration: ${migration.name}`);
       try {
+        const startTime = Date.now();
         await pool.query(migration.sql);
-        console.log(`  ✅ ${migration.name} completed`);
+        const duration = Date.now() - startTime;
+        console.log(`  ✅ Completed in ${duration}ms\n`);
+        successCount++;
       } catch (error) {
-        console.error(`  ❌ ${migration.name} failed:`, error.message);
-        // Continue with other migrations even if one fails
+        console.error(`  ❌ FAILED:`);
+        console.error(`     Error: ${error.message}`);
+        console.error(`     Code: ${error.code}`);
+        console.error(`     Detail: ${error.detail || 'N/A'}`);
+        console.error(`     Hint: ${error.hint || 'N/A'}\n`);
+        failCount++;
       }
     }
 
-    console.log('✅ All migrations completed successfully');
+    console.log('========================================');
+    console.log(`✅ Migration Summary:`);
+    console.log(`   ${successCount} succeeded`);
+    console.log(`   ${failCount} failed`);
+    console.log('========================================\n');
+
+    if (failCount > 0) {
+      console.warn('⚠️  Some migrations failed - check errors above');
+      console.warn('⚠️  App will continue, but features may not work correctly\n');
+    }
+
   } catch (error) {
-    console.error('❌ Migration error:', error);
-    // Don't throw - allow the app to start even if migrations fail
-    console.error('⚠️  App will continue, but some features may not work');
+    console.error('\n========================================');
+    console.error('❌ MIGRATION FATAL ERROR:');
+    console.error('========================================');
+    console.error('Error:', error.message);
+    console.error('Code:', error.code);
+    console.error('Stack:', error.stack);
+    console.error('========================================');
+    console.error('⚠️  App will continue, but database features will NOT work');
+    console.error('========================================\n');
   } finally {
-    await pool.end();
+    try {
+      await pool.end();
+      console.log('🔌 Database connection closed\n');
+    } catch (error) {
+      console.error('Error closing pool:', error.message);
+    }
   }
 }
 
