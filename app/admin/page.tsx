@@ -79,6 +79,18 @@ export default function AdminPage() {
           </a>
 
           <a
+            href="/admin/diagnostics"
+            className="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-6 hover:bg-yellow-500/20 transition-colors"
+          >
+            <h2 className="text-xl font-semibold text-yellow-400 mb-2">
+              🔍 System Diagnostics
+            </h2>
+            <p className="text-dim">
+              Check database connectivity and table status
+            </p>
+          </a>
+
+          <a
             href="/admin/tags"
             className="bg-medium border border-main rounded-lg p-6 hover:bg-dim transition-colors"
           >
