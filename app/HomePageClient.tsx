@@ -89,8 +89,9 @@ export default function HomePageClient() {
             </Link>
 
             {/* Smartphrase Library */}
-            <div
-              className="bg-medium border border-main rounded-lg p-6 space-y-4 transition-all duration-300 cursor-pointer overflow-hidden"
+            <Link
+              href="/smartphrases"
+              className="bg-medium border border-main rounded-lg p-6 space-y-4 transition-all duration-300 block group overflow-hidden"
               style={{
                 boxShadow: '0 0 0 0 transparent',
                 transition: 'all 0.3s ease',
@@ -104,20 +105,35 @@ export default function HomePageClient() {
                 e.currentTarget.style.borderColor = '';
               }}
             >
-              <h2 className="text-2xl font-semibold text-main">
+              <h2 className="text-2xl font-semibold text-main group-hover:text-gray-100 dark:group-hover:text-white transition-colors">
                 Smartphrase Library
               </h2>
               <p className="text-dim">
                 Common smartphrases and templates for EPIC documentation.
               </p>
               <div className="pt-4">
-                <span className="text-sm text-medium">Coming soon...</span>
+                <div className="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400 group-hover:text-white dark:group-hover:text-white font-medium transition-colors">
+                  Browse SmartPhrases
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </div>
               </div>
-            </div>
+            </Link>
 
             {/* Scenarios */}
-            <div
-              className="bg-medium border border-main rounded-lg p-6 space-y-4 transition-all duration-300 cursor-pointer overflow-hidden"
+            <Link
+              href="/scenarios"
+              className="bg-medium border border-main rounded-lg p-6 space-y-4 transition-all duration-300 block group overflow-hidden"
               style={{
                 boxShadow: '0 0 0 0 transparent',
                 transition: 'all 0.3s ease',
@@ -131,20 +147,35 @@ export default function HomePageClient() {
                 e.currentTarget.style.borderColor = '';
               }}
             >
-              <h2 className="text-2xl font-semibold text-main">
+              <h2 className="text-2xl font-semibold text-main group-hover:text-gray-100 dark:group-hover:text-white transition-colors">
                 Scenarios
               </h2>
               <p className="text-dim">
                 Critical scenarios like code blue, full arrest, and stroke protocols.
               </p>
               <div className="pt-4">
-                <span className="text-sm text-medium">Coming soon...</span>
+                <div className="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400 group-hover:text-white dark:group-hover:text-white font-medium transition-colors">
+                  Browse Scenarios
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </div>
               </div>
-            </div>
+            </Link>
 
             {/* Procedures */}
-            <div
-              className="bg-medium border border-main rounded-lg p-6 space-y-4 transition-all duration-300 cursor-pointer overflow-hidden"
+            <Link
+              href="/procedures"
+              className="bg-medium border border-main rounded-lg p-6 space-y-4 transition-all duration-300 block group overflow-hidden"
               style={{
                 boxShadow: '0 0 0 0 transparent',
                 transition: 'all 0.3s ease',
@@ -158,16 +189,30 @@ export default function HomePageClient() {
                 e.currentTarget.style.borderColor = '';
               }}
             >
-              <h2 className="text-2xl font-semibold text-main">
+              <h2 className="text-2xl font-semibold text-main group-hover:text-gray-100 dark:group-hover:text-white transition-colors">
                 Procedures
               </h2>
               <p className="text-dim">
                 Documentation guides for common procedures in EPIC.
               </p>
               <div className="pt-4">
-                <span className="text-sm text-medium">Coming soon...</span>
+                <div className="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400 group-hover:text-white dark:group-hover:text-white font-medium transition-colors">
+                  Browse Procedures
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
+                      clipRule="evenodd"
+                    />
+                  </svg>
+                </div>
               </div>
-            </div>
+            </Link>
           </div>
 
           {/* Quick Links */}
