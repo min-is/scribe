@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 import { WorkspaceSidebar } from '@/components/workspace/WorkspaceSidebarClient';
+import SearchModal from '@/components/search/SearchModal';
 
 export default function RootLayoutWithSidebar({ children }: { children: ReactNode }) {
   return (
@@ -14,6 +15,9 @@ export default function RootLayoutWithSidebar({ children }: { children: ReactNod
           {children}
         </main>
       </div>
+
+      {/* Global Search Modal */}
+      <SearchModal />
     </div>
   );
 }
