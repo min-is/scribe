@@ -129,7 +129,7 @@ export function WorkspaceSidebar() {
       <div className="flex-1"></div>
 
       {/* Sidebar Footer */}
-      <div className="p-4 border-t border-main space-y-3 font-mono">
+      <div className="p-4 border-t border-main space-y-3">
         <div className="flex items-center justify-between text-xs text-dim">
           <RepoLink />
         </div>

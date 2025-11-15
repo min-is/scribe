@@ -251,7 +251,7 @@
   /* Forms */
   label {
     @apply
-      font-mono font-medium block uppercase text-xs
+      font-sans font-medium block uppercase text-xs
       text-medium
       tracking-wider
   }

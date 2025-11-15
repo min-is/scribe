@@ -7,7 +7,7 @@ import { BiLogoGithub } from 'react-icons/bi';
 export default function RepoLink() {
   const appText = useAppText();
   return (
-    <span className="inline-flex items-center gap-2 whitespace-nowrap">
+    <span className="inline-flex items-center gap-2 whitespace-nowrap font-mono">
       <span className="hidden sm:inline-block">
         {appText.misc.repo}
       </span>

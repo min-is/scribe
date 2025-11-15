@@ -66,7 +66,7 @@ export default function Nav({
               key="nav"
               ref={ref}
               className={clsx(
-                'w-full flex items-center bg-main font-mono',
+                'w-full flex items-center bg-main',
                 NAV_HEIGHT_CLASS,
                 // Enlarge nav to ensure it fully masks underlying content
                 'md:w-[calc(100%+8px)] md:translate-x-[-4px] md:px-[4px]',
@@ -80,7 +80,7 @@ export default function Nav({
                 'hidden xs:block',
                 'translate-y-[-1px]',
               )}>
-                <div className="truncate overflow-hidden select-none">
+                <div className="truncate overflow-hidden select-none font-mono">
                   {renderLink(navTitleOrDomain, PATH_ROOT)}
                 </div>
                 {NAV_CAPTION &&
