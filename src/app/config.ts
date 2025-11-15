@@ -15,7 +15,7 @@ export const TEMPLATE_DESCRIPTION = 'Medical scribe dashboard and resources';
 // SOURCE CODE
 
 export const TEMPLATE_REPO_OWNER  = 'min-is';
-export const TEMPLATE_REPO_NAME   = 'luminous';
+export const TEMPLATE_REPO_NAME   = 'scribe';
 export const TEMPLATE_REPO_BRANCH = 'main';
 export const TEMPLATE_REPO_URL =
   `https://github.com/${TEMPLATE_REPO_OWNER}/${TEMPLATE_REPO_NAME}`;

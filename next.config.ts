@@ -41,8 +41,6 @@ if (HOSTNAME_AWS_S3) {
 }
 
 const nextConfig: NextConfig = {
-  // Enable instrumentation hook for server startup tasks (like migrations)
-  instrumentationHook: true,
   eslint: {
     // Warning: This allows production builds to successfully complete even if
     // your project has ESLint errors.
