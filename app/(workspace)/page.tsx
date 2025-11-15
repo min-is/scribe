@@ -1,6 +1,5 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { FileText, FolderOpen, Plus, TrendingUp } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Workspace | Scribe Dashboard',
@@ -25,19 +24,16 @@ export default async function WorkspaceHomePage() {
       {/* Quick Actions */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
         <QuickAction
-          icon={<Plus className="text-blue-500" size={24} />}
           title="New Page"
           description="Create a new documentation page"
           href="/pages/new"
         />
         <QuickAction
-          icon={<FileText className="text-green-500" size={24} />}
           title="Browse Pages"
           description="View all your pages"
           href="/pages"
         />
         <QuickAction
-          icon={<FolderOpen className="text-purple-500" size={24} />}
           title="Provider Profiles"
           description="Emergency Department providers"
           href="/pages?type=PROVIDER"
@@ -92,8 +88,7 @@ export default async function WorkspaceHomePage() {
             href="/pages/new"
             className="inline-flex items-center gap-2 mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
           >
-            <Plus size={18} />
-            Create Your First Page
+            + Create Your First Page
           </Link>
         </div>
       </div>
@@ -102,12 +97,10 @@ export default async function WorkspaceHomePage() {
 }
 
 function QuickAction({
-  icon,
   title,
   description,
   href,
 }: {
-  icon: React.ReactNode;
   title: string;
   description: string;
   href: string;
@@ -117,7 +110,6 @@ function QuickAction({
       href={href}
       className="flex items-start gap-4 p-6 bg-medium border border-main rounded-lg hover:border-dim hover:shadow-lg transition-all"
     >
-      <div className="flex-shrink-0">{icon}</div>
       <div>
         <h3 className="font-semibold text-main mb-1">{title}</h3>
         <p className="text-sm text-dim">{description}</p>
