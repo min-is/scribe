@@ -252,6 +252,12 @@
     transition-all duration-200 ease-out
     hover:shadow-hover hover:-translate-y-0.5
 }
+@utility hover-glow {
+  @apply
+    transition-all duration-200 ease-out
+    hover:shadow-[0_0_0_1px_rgba(255,255,255,0.2),0_0_12px_rgba(255,255,255,0.15)]
+    dark:hover:shadow-[0_0_0_1px_rgba(255,255,255,0.1),0_0_12px_rgba(255,255,255,0.08)]
+}
 /* Typography Enhancements */
 @utility prose-headings {
   @apply
