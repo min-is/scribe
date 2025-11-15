@@ -7,9 +7,7 @@ import { clsx } from 'clsx/lite';
 import {
   ChevronRight,
   ChevronDown,
-  Home,
   FileText,
-  Trash2,
   Menu,
   X,
 } from 'lucide-react';
@@ -35,21 +33,8 @@ export function WorkspaceSidebar() {
         </button>
       </div>
 
-      {/* Quick Actions */}
+      {/* Navigation */}
       <div className="p-3 space-y-1.5">
-        <Link
-          href="/"
-          className={clsx(
-            'flex items-center gap-3 px-3 py-2 rounded-lg text-sm border transition-all',
-            isActive('/')
-              ? 'border-primary text-main font-semibold shadow-soft'
-              : 'border-main text-dim hover:text-main hover:border-primary/50 hover-glow'
-          )}
-        >
-          <Home size={18} />
-          <span>Home</span>
-        </Link>
-
         <Link
           href="/workspace"
           className={clsx(
@@ -114,23 +99,10 @@ export function WorkspaceSidebar() {
           <span className="text-lg">🚨</span>
           <span>Scenarios</span>
         </Link>
-
-        <Link
-          href="/workspace/trash"
-          className={clsx(
-            'flex items-center gap-3 px-3 py-2 rounded-lg text-sm border transition-all',
-            isActive('/workspace/trash')
-              ? 'border-primary text-main font-semibold shadow-soft'
-              : 'border-main text-dim hover:text-main hover:border-primary/50 hover-glow'
-          )}
-        >
-          <Trash2 size={18} />
-          <span>Trash</span>
-        </Link>
       </div>
 
       {/* Page Tree Section */}
-      <div className="border-t border-main mt-2">
+      <div className="mt-2">
         <button
           onClick={() => setShowPages(!showPages)}
           className="w-full flex items-center justify-between px-3 py-2 text-xs font-medium text-dim hover:text-main transition-colors"
