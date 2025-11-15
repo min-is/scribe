@@ -66,7 +66,7 @@ export default function Nav({
               key="nav"
               ref={ref}
               className={clsx(
-                'w-full flex items-center bg-main',
+                'w-full flex items-center bg-main font-mono',
                 NAV_HEIGHT_CLASS,
                 // Enlarge nav to ensure it fully masks underlying content
                 'md:w-[calc(100%+8px)] md:translate-x-[-4px] md:px-[4px]',
