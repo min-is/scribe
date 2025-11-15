@@ -34,7 +34,7 @@ export function WorkspaceSidebar() {
           href="/"
           className="flex items-center gap-2 text-lg font-semibold text-main hover:text-dim transition-colors"
         >
-          <span>{NAV_TITLE_OR_DOMAIN}</span>
+          <span>Scribe</span>
         </Link>
         <button
           onClick={() => setIsMobileOpen(false)}
