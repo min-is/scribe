@@ -243,11 +243,6 @@
       text-main
       bg-main
   }
-  /* Headings use monospace font */
-  h1, h2, h3, h4, h5, h6 {
-    @apply
-      font-mono
-  }
   /* Forms */
   label {
     @apply
