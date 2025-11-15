@@ -32,6 +32,9 @@ model Provider {
   viewCount        Int @default(0)  // Profile view tracking
   searchClickCount Int @default(0)  // Search click tracking
 
+  // New Page relationship
+  page          Page?
+
   // Metadata
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -53,6 +56,9 @@ model SmartPhrase {
   // Analytics
   usageCount  Int      @default(0)  // Track how often it's copied
 
+  // New Page relationship
+  page          Page?
+
   // Metadata
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -73,6 +79,9 @@ model Scenario {
 
   // Analytics
   viewCount   Int      @default(0)  // Track how often it's viewed
+
+  // New Page relationship
+  page          Page?
 
   // Metadata
   createdAt   DateTime @default(now())
@@ -99,6 +108,9 @@ model Procedure {
   // Analytics
   viewCount   Int      @default(0)  // Track how often it's viewed
 
+  // New Page relationship
+  page          Page?
+
   // Metadata
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -106,4 +118,66 @@ model Procedure {
   @@index([category])
   @@index([slug])
   @@index([viewCount])
+}
+
+// ============================================================================
+// UNIFIED PAGE MODEL - Notion-like Document System
+// ============================================================================
+
+model Page {
+  id            String   @id @default(cuid())
+  slug          String   @unique
+  title         String
+  content       Json     // TipTap JSON content
+  textContent   String?  @db.Text  // Plain text for search
+
+  // Page Type & Hierarchy
+  type          PageType // PROVIDER, PROCEDURE, SMARTPHRASE, SCENARIO, WIKI, FOLDER
+  parentId      String?
+  parent        Page?    @relation("PageHierarchy", fields: [parentId], references: [id], onDelete: Cascade)
+  children      Page[]   @relation("PageHierarchy")
+  position      String   @default("a0")  // Fractional index for ordering
+
+  // Visual & Metadata
+  icon          String?  // Emoji or icon identifier (e.g., "📋", "lucide:stethoscope")
+  coverPhoto    String?  // Header image URL
+  category      String?  // For filtering/grouping
+  tags          String[] // Searchable tags
+
+  // Legacy compatibility - links to old models during migration
+  providerId    String?  @unique
+  provider      Provider? @relation(fields: [providerId], references: [id])
+  procedureId   String?  @unique
+  procedure     Procedure? @relation(fields: [procedureId], references: [id])
+  scenarioId    String?  @unique
+  scenario      Scenario? @relation(fields: [scenarioId], references: [id])
+  smartPhraseId String?  @unique
+  smartPhrase   SmartPhrase? @relation(fields: [smartPhraseId], references: [id])
+
+  // Soft delete
+  deletedAt     DateTime?
+
+  // Analytics
+  viewCount     Int      @default(0)
+
+  // Timestamps
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  createdBy     String?
+  updatedBy     String?
+
+  @@index([parentId, position])
+  @@index([type, deletedAt])
+  @@index([slug])
+  @@index([category])
+  @@fulltext([title, textContent])
+}
+
+enum PageType {
+  PROVIDER
+  PROCEDURE
+  SMARTPHRASE
+  SCENARIO
+  WIKI
+  FOLDER
 }
