@@ -170,7 +170,6 @@ model Page {
   @@index([type, deletedAt])
   @@index([slug])
   @@index([category])
-  @@fulltext([title, textContent])
 }
 
 enum PageType {
