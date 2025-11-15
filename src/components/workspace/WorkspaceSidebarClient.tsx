@@ -7,17 +7,12 @@ import { clsx } from 'clsx/lite';
 import {
   ChevronRight,
   ChevronDown,
-  Plus,
   Home,
   FileText,
   Trash2,
-  Settings,
   Menu,
   X,
 } from 'lucide-react';
-import ThemeSwitcher from '@/app/ThemeSwitcher';
-import RepoLink from '@/components/RepoLink';
-import { NAV_TITLE_OR_DOMAIN } from '@/app/config';
 import DraggablePageTree from '@/components/workspace/DraggablePageTree';
 
 export function WorkspaceSidebar() {
@@ -29,7 +24,7 @@ export function WorkspaceSidebar() {
   const isActive = (path: string) => pathname === path || pathname?.startsWith(path + '/');
 
   const sidebarContent = (
-    <div className="flex flex-col h-full bg-main border-r border-main">
+    <div className="flex flex-col h-full bg-main">
       {/* Mobile Close Button */}
       <div className="lg:hidden flex justify-end p-2 border-b border-main">
         <button
@@ -153,26 +148,6 @@ export function WorkspaceSidebar() {
             <DraggablePageTree />
           </div>
         )}
-      </div>
-
-      {/* Spacer */}
-      <div className="flex-1"></div>
-
-      {/* Sidebar Footer */}
-      <div className="p-4 border-t border-main space-y-3">
-        <div className="flex items-center justify-between text-xs text-dim">
-          <RepoLink />
-        </div>
-        <div className="flex items-center justify-between">
-          <Link
-            href="/admin"
-            className="text-xs text-dim hover:text-main transition-colors flex items-center gap-1"
-          >
-            <Settings size={14} />
-            <span>Admin</span>
-          </Link>
-          <ThemeSwitcher />
-        </div>
       </div>
     </div>
   );
