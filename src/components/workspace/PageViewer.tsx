@@ -40,12 +40,18 @@ export function PageViewer({ page }: PageViewerProps) {
             );
           }
           if (node.type === 'heading') {
-            const Tag = `h${node.attrs.level}` as keyof JSX.IntrinsicElements;
-            return (
-              <Tag key={i}>
-                {node.content?.map((textNode: any) => textNode.text).join('')}
-              </Tag>
-            );
+            const level = node.attrs.level;
+            const text = node.content?.map((textNode: any) => textNode.text).join('');
+
+            switch (level) {
+              case 1: return <h1 key={i}>{text}</h1>;
+              case 2: return <h2 key={i}>{text}</h2>;
+              case 3: return <h3 key={i}>{text}</h3>;
+              case 4: return <h4 key={i}>{text}</h4>;
+              case 5: return <h5 key={i}>{text}</h5>;
+              case 6: return <h6 key={i}>{text}</h6>;
+              default: return <p key={i}>{text}</p>;
+            }
           }
           return null;
         })}
