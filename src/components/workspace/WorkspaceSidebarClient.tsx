@@ -18,7 +18,7 @@ import {
 import ThemeSwitcher from '@/app/ThemeSwitcher';
 import RepoLink from '@/components/RepoLink';
 import { NAV_TITLE_OR_DOMAIN } from '@/app/config';
-import PageTreeClient from '@/components/workspace/PageTreeClient';
+import DraggablePageTree from '@/components/workspace/DraggablePageTree';
 
 export function WorkspaceSidebar() {
   const [isOpen, setIsOpen] = useState(true);
@@ -119,6 +119,19 @@ export function WorkspaceSidebar() {
           <span className="text-lg">🚨</span>
           <span>Scenarios</span>
         </Link>
+
+        <Link
+          href="/workspace/trash"
+          className={clsx(
+            'flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors',
+            isActive('/workspace/trash')
+              ? 'bg-dim text-main font-medium'
+              : 'text-dim hover:bg-dim hover:text-main'
+          )}
+        >
+          <Trash2 size={18} />
+          <span>Trash</span>
+        </Link>
       </div>
 
       {/* Page Tree Section */}
@@ -137,7 +150,7 @@ export function WorkspaceSidebar() {
 
         {showPages && (
           <div className="max-h-96 overflow-y-auto">
-            <PageTreeClient />
+            <DraggablePageTree />
           </div>
         )}
       </div>
