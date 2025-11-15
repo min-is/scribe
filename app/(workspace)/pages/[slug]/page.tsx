@@ -1,17 +1,18 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { prisma } from '@/lib/db';
+import { prisma } from '@/lib/prisma';
 import { PageViewer } from '@/components/workspace/PageViewer';
 
 export const dynamic = 'force-dynamic';
 
 interface PageProps {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params;
   const page = await prisma.page.findUnique({
-    where: { slug: params.slug, deletedAt: null },
+    where: { slug, deletedAt: null },
     select: { title: true },
   });
 
@@ -21,8 +22,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function PageViewPage({ params }: PageProps) {
+  const { slug } = await params;
   const page = await prisma.page.findUnique({
-    where: { slug: params.slug, deletedAt: null },
+    where: { slug, deletedAt: null },
     include: {
       parent: {
         select: { id: true, title: true, slug: true, icon: true },

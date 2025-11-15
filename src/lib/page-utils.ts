@@ -4,7 +4,7 @@
  * Utilities for managing pages, hierarchy, and tree operations.
  */
 
-import { prisma } from '@/lib/db';
+import { prisma } from '@/lib/prisma';
 import { Page, PageType } from '@prisma/client';
 import { getPositionAfter, getPositionBetween, getPositionBefore, sortByPosition } from './fractional-index';
 
