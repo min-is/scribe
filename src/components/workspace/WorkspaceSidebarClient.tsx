@@ -18,10 +18,12 @@ import {
 import ThemeSwitcher from '@/app/ThemeSwitcher';
 import RepoLink from '@/components/RepoLink';
 import { NAV_TITLE_OR_DOMAIN } from '@/app/config';
+import PageTreeClient from '@/components/workspace/PageTreeClient';
 
 export function WorkspaceSidebar() {
   const [isOpen, setIsOpen] = useState(true);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const [showPages, setShowPages] = useState(true);
   const pathname = usePathname();
 
   const isActive = (path: string) => pathname === path || pathname?.startsWith(path + '/');
@@ -117,6 +119,27 @@ export function WorkspaceSidebar() {
           <span className="text-lg">🚨</span>
           <span>Scenarios</span>
         </Link>
+      </div>
+
+      {/* Page Tree Section */}
+      <div className="border-t border-main mt-2">
+        <button
+          onClick={() => setShowPages(!showPages)}
+          className="w-full flex items-center justify-between px-3 py-2 text-xs font-medium text-dim hover:text-main transition-colors"
+        >
+          <span>PAGES</span>
+          {showPages ? (
+            <ChevronDown size={14} />
+          ) : (
+            <ChevronRight size={14} />
+          )}
+        </button>
+
+        {showPages && (
+          <div className="max-h-96 overflow-y-auto">
+            <PageTreeClient />
+          </div>
+        )}
       </div>
 
       {/* Spacer */}
