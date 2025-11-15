@@ -34,14 +34,14 @@ export function WorkspaceSidebar() {
       </div>
 
       {/* Navigation */}
-      <div className="p-3 space-y-1.5">
+      <div className="p-3 space-y-1">
         <Link
           href="/workspace"
           className={clsx(
-            'flex items-center gap-3 px-3 py-2 rounded-lg text-sm border transition-all',
+            'flex items-center gap-3 px-3 py-2 text-sm transition-all border-b-2',
             isActive('/workspace')
-              ? 'border-primary text-main font-semibold shadow-soft'
-              : 'border-main text-dim hover:text-main hover:border-primary/50 hover-glow'
+              ? 'border-primary text-main font-semibold'
+              : 'border-transparent text-dim hover:text-main hover:border-primary/30 hover-glow'
           )}
         >
           <FileText size={18} />
@@ -51,61 +51,57 @@ export function WorkspaceSidebar() {
         <Link
           href="/providers"
           className={clsx(
-            'flex items-center gap-3 px-3 py-2 rounded-lg text-sm border transition-all',
+            'flex items-center gap-3 px-3 py-2 text-sm transition-all border-b-2',
             isActive('/providers')
-              ? 'border-primary text-main font-semibold shadow-soft'
-              : 'border-main text-dim hover:text-main hover:border-primary/50 hover-glow'
+              ? 'border-primary text-main font-semibold'
+              : 'border-transparent text-dim hover:text-main hover:border-primary/30 hover-glow'
           )}
         >
-          <span className="text-lg">👨‍⚕️</span>
           <span>Providers</span>
         </Link>
 
         <Link
           href="/procedures"
           className={clsx(
-            'flex items-center gap-3 px-3 py-2 rounded-lg text-sm border transition-all',
+            'flex items-center gap-3 px-3 py-2 text-sm transition-all border-b-2',
             isActive('/procedures')
-              ? 'border-primary text-main font-semibold shadow-soft'
-              : 'border-main text-dim hover:text-main hover:border-primary/50 hover-glow'
+              ? 'border-primary text-main font-semibold'
+              : 'border-transparent text-dim hover:text-main hover:border-primary/30 hover-glow'
           )}
         >
-          <span className="text-lg">📋</span>
           <span>Procedures</span>
         </Link>
 
         <Link
           href="/smartphrases"
           className={clsx(
-            'flex items-center gap-3 px-3 py-2 rounded-lg text-sm border transition-all',
+            'flex items-center gap-3 px-3 py-2 text-sm transition-all border-b-2',
             isActive('/smartphrases')
-              ? 'border-primary text-main font-semibold shadow-soft'
-              : 'border-main text-dim hover:text-main hover:border-primary/50 hover-glow'
+              ? 'border-primary text-main font-semibold'
+              : 'border-transparent text-dim hover:text-main hover:border-primary/30 hover-glow'
           )}
         >
-          <span className="text-lg">💬</span>
           <span>Smart Phrases</span>
         </Link>
 
         <Link
           href="/scenarios"
           className={clsx(
-            'flex items-center gap-3 px-3 py-2 rounded-lg text-sm border transition-all',
+            'flex items-center gap-3 px-3 py-2 text-sm transition-all border-b-2',
             isActive('/scenarios')
-              ? 'border-primary text-main font-semibold shadow-soft'
-              : 'border-main text-dim hover:text-main hover:border-primary/50 hover-glow'
+              ? 'border-primary text-main font-semibold'
+              : 'border-transparent text-dim hover:text-main hover:border-primary/30 hover-glow'
           )}
         >
-          <span className="text-lg">🚨</span>
           <span>Scenarios</span>
         </Link>
       </div>
 
       {/* Page Tree Section */}
-      <div className="mt-2">
+      <div className="mt-4">
         <button
           onClick={() => setShowPages(!showPages)}
-          className="w-full flex items-center justify-between px-3 py-2 text-xs font-medium text-dim hover:text-main transition-colors"
+          className="w-full flex items-center justify-between px-3 py-2 text-xs font-medium text-dim hover:text-main transition-all border-b-2 border-transparent hover:border-primary/30 hover-glow"
         >
           <span>PAGES</span>
           {showPages ? (
