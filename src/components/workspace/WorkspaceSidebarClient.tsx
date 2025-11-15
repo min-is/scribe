@@ -45,10 +45,10 @@ export function WorkspaceSidebar() {
         <Link
           href="/"
           className={clsx(
-            'flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors',
+            'flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all border-l-2',
             isActive('/')
-              ? 'bg-dim text-main font-medium'
-              : 'text-dim hover:bg-dim hover:text-main'
+              ? 'bg-dim text-main font-semibold border-primary shadow-soft'
+              : 'text-dim hover:bg-dim hover:text-main border-transparent'
           )}
         >
           <Home size={18} />
@@ -58,10 +58,10 @@ export function WorkspaceSidebar() {
         <Link
           href="/workspace"
           className={clsx(
-            'flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors',
+            'flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all border-l-2',
             isActive('/workspace')
-              ? 'bg-dim text-main font-medium'
-              : 'text-dim hover:bg-dim hover:text-main'
+              ? 'bg-dim text-main font-semibold border-primary shadow-soft'
+              : 'text-dim hover:bg-dim hover:text-main border-transparent'
           )}
         >
           <FileText size={18} />
@@ -71,10 +71,10 @@ export function WorkspaceSidebar() {
         <Link
           href="/providers"
           className={clsx(
-            'flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors',
+            'flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all border-l-2',
             isActive('/providers')
-              ? 'bg-dim text-main font-medium'
-              : 'text-dim hover:bg-dim hover:text-main'
+              ? 'bg-dim text-main font-semibold border-primary shadow-soft'
+              : 'text-dim hover:bg-dim hover:text-main border-transparent'
           )}
         >
           <span className="text-lg">👨‍⚕️</span>
@@ -84,10 +84,10 @@ export function WorkspaceSidebar() {
         <Link
           href="/procedures"
           className={clsx(
-            'flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors',
+            'flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all border-l-2',
             isActive('/procedures')
-              ? 'bg-dim text-main font-medium'
-              : 'text-dim hover:bg-dim hover:text-main'
+              ? 'bg-dim text-main font-semibold border-primary shadow-soft'
+              : 'text-dim hover:bg-dim hover:text-main border-transparent'
           )}
         >
           <span className="text-lg">📋</span>
@@ -97,10 +97,10 @@ export function WorkspaceSidebar() {
         <Link
           href="/smartphrases"
           className={clsx(
-            'flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors',
+            'flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all border-l-2',
             isActive('/smartphrases')
-              ? 'bg-dim text-main font-medium'
-              : 'text-dim hover:bg-dim hover:text-main'
+              ? 'bg-dim text-main font-semibold border-primary shadow-soft'
+              : 'text-dim hover:bg-dim hover:text-main border-transparent'
           )}
         >
           <span className="text-lg">💬</span>
@@ -110,10 +110,10 @@ export function WorkspaceSidebar() {
         <Link
           href="/scenarios"
           className={clsx(
-            'flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors',
+            'flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all border-l-2',
             isActive('/scenarios')
-              ? 'bg-dim text-main font-medium'
-              : 'text-dim hover:bg-dim hover:text-main'
+              ? 'bg-dim text-main font-semibold border-primary shadow-soft'
+              : 'text-dim hover:bg-dim hover:text-main border-transparent'
           )}
         >
           <span className="text-lg">🚨</span>
@@ -123,10 +123,10 @@ export function WorkspaceSidebar() {
         <Link
           href="/workspace/trash"
           className={clsx(
-            'flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors',
+            'flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-all border-l-2',
             isActive('/workspace/trash')
-              ? 'bg-dim text-main font-medium'
-              : 'text-dim hover:bg-dim hover:text-main'
+              ? 'bg-dim text-main font-semibold border-primary shadow-soft'
+              : 'text-dim hover:bg-dim hover:text-main border-transparent'
           )}
         >
           <Trash2 size={18} />

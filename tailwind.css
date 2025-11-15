@@ -192,6 +192,79 @@
   @apply
     bg-gray-900 dark:bg-gray-100
 }
+/* Shadows & Depth */
+@utility shadow-soft {
+  @apply
+    shadow-sm shadow-gray-200/50 dark:shadow-gray-900/50
+}
+@utility shadow-hover {
+  @apply
+    shadow-md shadow-gray-200/60 dark:shadow-gray-900/60
+}
+@utility shadow-lifted {
+  @apply
+    shadow-lg shadow-gray-300/50 dark:shadow-black/50
+}
+/* Accent Colors */
+@utility text-primary {
+  @apply
+    text-blue-600 dark:text-blue-500
+}
+@utility bg-primary {
+  @apply
+    bg-blue-600 dark:bg-blue-500
+}
+@utility border-primary {
+  @apply
+    border-blue-600 dark:border-blue-500
+}
+@utility text-success {
+  @apply
+    text-green-600 dark:text-green-500
+}
+@utility bg-success {
+  @apply
+    bg-green-50 dark:bg-green-900/20
+}
+@utility border-success {
+  @apply
+    border-green-600 dark:border-green-500
+}
+@utility text-warning {
+  @apply
+    text-amber-600 dark:text-amber-500
+}
+@utility bg-warning {
+  @apply
+    bg-amber-50 dark:bg-amber-900/20
+}
+@utility border-warning {
+  @apply
+    border-amber-600 dark:border-amber-500
+}
+@utility bg-error {
+  @apply
+    bg-red-50 dark:bg-red-900/20
+}
+/* Hover States */
+@utility hover-lift {
+  @apply
+    transition-all duration-200 ease-out
+    hover:shadow-hover hover:-translate-y-0.5
+}
+/* Typography Enhancements */
+@utility prose-headings {
+  @apply
+    font-semibold text-main tracking-tight
+}
+@utility prose-body {
+  @apply
+    text-base leading-relaxed text-main
+}
+@utility prose-compact {
+  @apply
+    text-sm leading-normal text-medium
+}
 /* Baseline Grid */
 @utility space-y-baseline {
   @apply

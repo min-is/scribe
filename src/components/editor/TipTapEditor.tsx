@@ -116,10 +116,10 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
       disabled={disabled}
       title={title}
       className={clsx(
-        'p-2 rounded hover:bg-dim transition-colors',
-        active && 'bg-medium text-main',
-        disabled && 'opacity-50 cursor-not-allowed',
-        !active && !disabled && 'text-dim hover:text-main'
+        'p-2 rounded-md transition-all',
+        active && 'bg-primary text-white shadow-soft',
+        disabled && 'opacity-40 cursor-not-allowed',
+        !active && !disabled && 'text-dim hover:bg-dim hover:text-main'
       )}
       type="button"
     >
@@ -127,11 +127,17 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
     </button>
   );
 
+  const ToolbarGroup = ({ children }: { children: React.ReactNode }) => (
+    <div className="flex gap-0.5 px-2 py-1 bg-extra-dim rounded-lg">
+      {children}
+    </div>
+  );
+
   return (
-    <div className="border-b border-main bg-main sticky top-0 z-10">
-      <div className="flex flex-wrap gap-1 p-2">
+    <div className="border-b border-main bg-main sticky top-0 z-10 shadow-soft">
+      <div className="flex flex-wrap gap-2 p-3">
         {/* Text Formatting */}
-        <div className="flex gap-1 border-r border-main pr-2">
+        <ToolbarGroup>
           <ToolbarButton
             onClick={() => editor.chain().focus().toggleBold().run()}
             active={editor.isActive('bold')}
@@ -167,10 +173,10 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
           >
             <Code size={18} />
           </ToolbarButton>
-        </div>
+        </ToolbarGroup>
 
         {/* Headings */}
-        <div className="flex gap-1 border-r border-main pr-2">
+        <ToolbarGroup>
           <ToolbarButton
             onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
             active={editor.isActive('heading', { level: 1 })}
@@ -192,10 +198,10 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
           >
             <Heading3 size={18} />
           </ToolbarButton>
-        </div>
+        </ToolbarGroup>
 
         {/* Lists */}
-        <div className="flex gap-1 border-r border-main pr-2">
+        <ToolbarGroup>
           <ToolbarButton
             onClick={() => editor.chain().focus().toggleBulletList().run()}
             active={editor.isActive('bulletList')}
@@ -224,21 +230,10 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
           >
             <Code2 size={18} />
           </ToolbarButton>
-        </div>
-
-        {/* Highlight */}
-        <div className="flex gap-1 border-r border-main pr-2">
-          <ToolbarButton
-            onClick={() => editor.chain().focus().toggleHighlight().run()}
-            active={editor.isActive('highlight')}
-            title="Highlight"
-          >
-            <Highlighter size={18} />
-          </ToolbarButton>
-        </div>
+        </ToolbarGroup>
 
         {/* Callouts */}
-        <div className="flex gap-1 border-r border-main pr-2">
+        <ToolbarGroup>
           <ToolbarButton
             onClick={() => editor.chain().focus().toggleCallout('info').run()}
             active={editor.isActive('callout', { type: 'info' })}
@@ -267,21 +262,10 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
           >
             <XCircle size={18} />
           </ToolbarButton>
-        </div>
-
-        {/* Collapsible */}
-        <div className="flex gap-1 border-r border-main pr-2">
-          <ToolbarButton
-            onClick={() => editor.chain().focus().toggleCollapsible('Click to expand').run()}
-            active={editor.isActive('collapsible')}
-            title="Collapsible Section"
-          >
-            <ChevronRight size={18} />
-          </ToolbarButton>
-        </div>
+        </ToolbarGroup>
 
         {/* Insert */}
-        <div className="flex gap-1 border-r border-main pr-2">
+        <ToolbarGroup>
           <ToolbarButton
             onClick={() => setIsLinkDialogOpen(true)}
             active={editor.isActive('link')}
@@ -307,10 +291,10 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
           >
             <YoutubeIcon size={18} />
           </ToolbarButton>
-        </div>
+        </ToolbarGroup>
 
         {/* Undo/Redo */}
-        <div className="flex gap-1">
+        <ToolbarGroup>
           <ToolbarButton
             onClick={() => editor.chain().focus().undo().run()}
             disabled={!editor.can().undo()}
@@ -325,7 +309,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
           >
             <Redo size={18} />
           </ToolbarButton>
-        </div>
+        </ToolbarGroup>
       </div>
 
       {/* Link Dialog */}
