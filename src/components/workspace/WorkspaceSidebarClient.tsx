@@ -28,17 +28,11 @@ export function WorkspaceSidebar() {
 
   const sidebarContent = (
     <div className="flex flex-col h-full bg-medium border-r border-main">
-      {/* Sidebar Header */}
-      <div className="flex items-center justify-between p-4 border-b border-main">
-        <Link
-          href="/"
-          className="flex items-center gap-2 text-lg font-semibold text-main hover:text-dim transition-colors"
-        >
-          <span>Scribe</span>
-        </Link>
+      {/* Mobile Close Button */}
+      <div className="lg:hidden flex justify-end p-2 border-b border-main">
         <button
           onClick={() => setIsMobileOpen(false)}
-          className="lg:hidden p-1 hover:bg-dim rounded"
+          className="p-1 hover:bg-dim rounded"
         >
           <X size={20} className="text-dim" />
         </button>
