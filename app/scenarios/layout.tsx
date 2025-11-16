@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 import { WorkspaceSidebar } from '@/components/workspace/WorkspaceSidebarClient';
 import SearchModal from '@/components/search/SearchModal';
 
-export default function RootLayoutWithSidebar({ children }: { children: ReactNode }) {
+export default function ScenariosLayout({ children }: { children: ReactNode }) {
   return (
     <div className="flex h-screen overflow-hidden bg-main">
       {/* Sidebar */}

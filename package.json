@@ -8,6 +8,7 @@
     "test": "jest --watch --transformIgnorePatterns 'node_modules/(?!my-library-dir)/'",
     "analyze": "ANALYZE=true next build",
     "migrate": "node scripts/run-migrations.js",
+    "migrate:pages": "tsx scripts/migrate-to-pages.ts",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:migrate:deploy": "prisma migrate deploy",
@@ -98,6 +99,7 @@
     "prisma": "^6.19.0",
     "tailwindcss": "4.1.7",
     "ts-node": "^10.9.2",
+    "tsx": "^4.20.6",
     "typescript": "5.8.3"
   },
   "pnpm": {

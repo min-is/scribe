@@ -80,7 +80,7 @@ export default function Nav({
                 'hidden xs:block',
                 'translate-y-[-1px]',
               )}>
-                <div className="truncate overflow-hidden select-none">
+                <div className="truncate overflow-hidden select-none font-mono">
                   {renderLink(navTitleOrDomain, PATH_ROOT)}
                 </div>
                 {NAV_CAPTION &&

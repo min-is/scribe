@@ -1,0 +1,148 @@
+import { Metadata } from 'next';
+import { prisma } from '@/lib/prisma';
+import { notFound } from 'next/navigation';
+import Link from 'next/link';
+import TipTapEditor from '@/components/editor/TipTapEditor';
+import { Edit, Trash2, Eye } from 'lucide-react';
+
+export const dynamic = 'force-dynamic';
+
+interface PageViewProps {
+  params: Promise<{ slug: string }>;
+}
+
+export async function generateMetadata({ params }: PageViewProps): Promise<Metadata> {
+  const { slug } = await params;
+  const page = await prisma.page.findUnique({
+    where: { slug, deletedAt: null },
+    select: { title: true },
+  });
+
+  return {
+    title: page ? page.title : 'Page Not Found',
+  };
+}
+
+export default async function PageView({ params }: PageViewProps) {
+  const { slug } = await params;
+
+  const page = await prisma.page.findUnique({
+    where: { slug, deletedAt: null },
+    include: {
+      parent: true,
+      children: {
+        where: { deletedAt: null },
+        orderBy: { position: 'asc' },
+      },
+    },
+  });
+
+  if (!page) {
+    notFound();
+  }
+
+  // Increment view count
+  await prisma.page.update({
+    where: { id: page.id },
+    data: { viewCount: { increment: 1 } },
+  });
+
+  return (
+    <div className="h-full flex flex-col bg-main">
+      {/* Page Header */}
+      <div className="border-b border-main bg-main sticky top-0 z-10 shadow-soft">
+        <div className="flex items-center justify-between px-6 py-3">
+          <div className="flex items-center gap-2 text-sm text-medium">
+            {page.parent && (
+              <>
+                <Link
+                  href={`/workspace/pages/${page.parent.slug}`}
+                  className="hover:text-primary transition-colors"
+                >
+                  {page.parent.title}
+                </Link>
+                <span>/</span>
+              </>
+            )}
+            <span className="text-main font-semibold">{page.title}</span>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <Link
+              href={`/workspace/pages/${page.slug}/edit`}
+              className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:shadow-hover transition-all text-sm font-medium"
+            >
+              <Edit size={16} />
+              Edit
+            </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* Page Content */}
+      <div className="flex-1 overflow-y-auto">
+        <div className="max-w-4xl mx-auto py-12 px-8">
+          {/* Icon and Title */}
+          <div className="mb-10">
+            {page.icon && (
+              <div className="text-7xl mb-6">
+                {page.icon}
+              </div>
+            )}
+            <h1 className="text-5xl font-bold text-main mb-4 tracking-tight leading-tight">
+              {page.title}
+            </h1>
+            <div className="flex items-center gap-3 text-sm text-medium">
+              <div className="flex items-center gap-1.5">
+                <Eye size={14} />
+                <span>{page.viewCount} views</span>
+              </div>
+              <span className="text-dim">•</span>
+              <span>Last updated {new Date(page.updatedAt).toLocaleDateString()}</span>
+            </div>
+          </div>
+
+          {/* Content */}
+          <div className="mb-12 prose-body">
+            <TipTapEditor
+              content={page.content}
+              editable={false}
+              className="prose-body"
+            />
+          </div>
+
+          {/* Child Pages */}
+          {page.children.length > 0 && (
+            <div className="mt-16 pt-8 border-t border-main">
+              <h2 className="text-xl font-semibold text-main mb-6 prose-headings">
+                Subpages in {page.title}
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {page.children.map((child) => (
+                  <Link
+                    key={child.id}
+                    href={`/workspace/pages/${child.slug}`}
+                    className="group flex items-start gap-3 p-5 border border-main rounded-xl hover:shadow-soft hover:border-primary/50 transition-all bg-main"
+                  >
+                    {child.icon && (
+                      <span className="text-3xl flex-shrink-0">{child.icon}</span>
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <div className="font-semibold text-main group-hover:text-primary transition-colors mb-1">
+                        {child.title}
+                      </div>
+                      <div className="text-sm text-dim flex items-center gap-1.5">
+                        <Eye size={12} />
+                        {child.viewCount} views
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}

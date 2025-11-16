@@ -1,5 +1,5 @@
 import { Metadata } from 'next/types';
-import { getProviders } from '@/provider/actions';
+import { prisma } from '@/lib/prisma';
 import ProvidersClient from './ProvidersClient';
 
 export const metadata: Metadata = {
@@ -7,7 +7,9 @@ export const metadata: Metadata = {
 };
 
 export default async function ProvidersPage() {
-  const providers = await getProviders();
+  const providers = await prisma.provider.findMany({
+    orderBy: { name: 'asc' },
+  });
 
   return <ProvidersClient providers={providers} />;
 }

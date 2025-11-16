@@ -1,5 +1,5 @@
 import { Metadata } from 'next/types';
-import { getSmartPhrases, getCategories } from '@/smartphrase/actions';
+import { prisma } from '@/lib/prisma';
 import SmartPhrasesPageClient from './SmartPhrasesPageClient';
 
 export const metadata: Metadata = {
@@ -9,14 +9,32 @@ export const metadata: Metadata = {
 };
 
 export default async function SmartPhrasesPage() {
-  const [smartphrases, categories] = await Promise.all([
-    getSmartPhrases(),
-    getCategories(),
-  ]);
+  // Fetch smartphrases with their associated pages (if table exists)
+  let smartphrases;
+  try {
+    smartphrases = await prisma.smartPhrase.findMany({
+      orderBy: { title: 'asc' },
+      include: {
+        page: {
+          select: {
+            slug: true,
+          },
+        },
+      },
+    });
+  } catch (error) {
+    // Fallback if Page table doesn't exist yet
+    smartphrases = await prisma.smartPhrase.findMany({
+      orderBy: { title: 'asc' },
+    });
+  }
+
+  // Get unique categories
+  const categories = Array.from(new Set(smartphrases.map(s => s.category).filter(Boolean))) as string[];
 
   return (
     <SmartPhrasesPageClient
-      smartphrases={smartphrases}
+      smartphrases={smartphrases as any}
       categories={categories}
     />
   );

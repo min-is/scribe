@@ -1,5 +1,5 @@
 import { Metadata } from 'next/types';
-import { getProcedures, getProcedureCategories } from '@/procedure/actions';
+import { prisma } from '@/lib/prisma';
 import ProceduresAdminClient from './ProceduresAdminClient';
 
 export const metadata: Metadata = {
@@ -8,10 +8,12 @@ export const metadata: Metadata = {
 };
 
 export default async function ProceduresAdminPage() {
-  const [procedures, categories] = await Promise.all([
-    getProcedures(),
-    getProcedureCategories(),
-  ]);
+  const procedures = await prisma.procedure.findMany({
+    orderBy: { title: 'asc' },
+  });
+
+  // Get unique categories
+  const categories = Array.from(new Set(procedures.map(p => p.category).filter(Boolean))) as string[];
 
   return (
     <ProceduresAdminClient
