@@ -41,6 +41,7 @@ import {
   CheckCircle,
   XCircle,
   ChevronRight,
+  Palette,
 } from 'lucide-react';
 import { clsx } from 'clsx/lite';
 import { useCallback, useState } from 'react';
@@ -60,10 +61,34 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
   const [isImageDialogOpen, setIsImageDialogOpen] = useState(false);
   const [youtubeUrl, setYoutubeUrl] = useState('');
   const [isYoutubeDialogOpen, setIsYoutubeDialogOpen] = useState(false);
+  const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
 
   if (!editor) {
     return null;
   }
+
+  const textColors = [
+    { name: 'Red', value: '#ef4444' },
+    { name: 'Orange', value: '#f97316' },
+    { name: 'Amber', value: '#f59e0b' },
+    { name: 'Yellow', value: '#eab308' },
+    { name: 'Lime', value: '#84cc16' },
+    { name: 'Green', value: '#22c55e' },
+    { name: 'Emerald', value: '#10b981' },
+    { name: 'Teal', value: '#14b8a6' },
+    { name: 'Cyan', value: '#06b6d4' },
+    { name: 'Sky', value: '#0ea5e9' },
+    { name: 'Blue', value: '#3b82f6' },
+    { name: 'Indigo', value: '#6366f1' },
+    { name: 'Violet', value: '#8b5cf6' },
+    { name: 'Purple', value: '#a855f7' },
+    { name: 'Fuchsia', value: '#d946ef' },
+    { name: 'Pink', value: '#ec4899' },
+    { name: 'Rose', value: '#f43f5e' },
+    { name: 'Gray', value: '#6b7280' },
+    { name: 'Black', value: '#000000' },
+    { name: 'White', value: '#ffffff' },
+  ];
 
   const addLink = useCallback(() => {
     if (linkUrl) {
@@ -172,6 +197,13 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
             title="Inline Code"
           >
             <Code size={18} />
+          </ToolbarButton>
+          <ToolbarButton
+            onClick={() => setIsColorPickerOpen(!isColorPickerOpen)}
+            active={isColorPickerOpen}
+            title="Text Color"
+          >
+            <Palette size={18} />
           </ToolbarButton>
         </ToolbarGroup>
 
@@ -421,6 +453,43 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
               className="px-4 py-2 border border-main rounded-md hover:bg-dim transition-colors text-sm"
             >
               Cancel
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Color Picker */}
+      {isColorPickerOpen && (
+        <div className="p-3 border-t border-main bg-dim">
+          <div className="mb-2 text-sm font-medium text-main">Text Color</div>
+          <div className="grid grid-cols-10 gap-2">
+            {textColors.map((color) => (
+              <button
+                key={color.value}
+                onClick={() => {
+                  editor.chain().focus().setColor(color.value).run();
+                }}
+                className="w-8 h-8 rounded-md border-2 border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 transition-all hover:scale-110"
+                style={{ backgroundColor: color.value }}
+                title={color.name}
+              />
+            ))}
+          </div>
+          <div className="mt-3 flex gap-2">
+            <button
+              onClick={() => {
+                editor.chain().focus().unsetColor().run();
+                setIsColorPickerOpen(false);
+              }}
+              className="px-3 py-1.5 border border-main rounded-md hover:bg-dim transition-colors text-sm text-main"
+            >
+              Remove Color
+            </button>
+            <button
+              onClick={() => setIsColorPickerOpen(false)}
+              className="px-3 py-1.5 border border-main rounded-md hover:bg-dim transition-colors text-sm text-main"
+            >
+              Close
             </button>
           </div>
         </div>
