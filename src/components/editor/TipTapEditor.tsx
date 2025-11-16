@@ -41,6 +41,7 @@ import {
   CheckCircle,
   XCircle,
   ChevronRight,
+  Palette,
 } from 'lucide-react';
 import { clsx } from 'clsx/lite';
 import { useCallback, useState } from 'react';
@@ -60,10 +61,34 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
   const [isImageDialogOpen, setIsImageDialogOpen] = useState(false);
   const [youtubeUrl, setYoutubeUrl] = useState('');
   const [isYoutubeDialogOpen, setIsYoutubeDialogOpen] = useState(false);
+  const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
 
   if (!editor) {
     return null;
   }
+
+  const textColors = [
+    { name: 'Red', value: '#ef4444' },
+    { name: 'Orange', value: '#f97316' },
+    { name: 'Amber', value: '#f59e0b' },
+    { name: 'Yellow', value: '#eab308' },
+    { name: 'Lime', value: '#84cc16' },
+    { name: 'Green', value: '#22c55e' },
+    { name: 'Emerald', value: '#10b981' },
+    { name: 'Teal', value: '#14b8a6' },
+    { name: 'Cyan', value: '#06b6d4' },
+    { name: 'Sky', value: '#0ea5e9' },
+    { name: 'Blue', value: '#3b82f6' },
+    { name: 'Indigo', value: '#6366f1' },
+    { name: 'Violet', value: '#8b5cf6' },
+    { name: 'Purple', value: '#a855f7' },
+    { name: 'Fuchsia', value: '#d946ef' },
+    { name: 'Pink', value: '#ec4899' },
+    { name: 'Rose', value: '#f43f5e' },
+    { name: 'Gray', value: '#6b7280' },
+    { name: 'Black', value: '#000000' },
+    { name: 'White', value: '#ffffff' },
+  ];
 
   const addLink = useCallback(() => {
     if (linkUrl) {
@@ -172,6 +197,13 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
             title="Inline Code"
           >
             <Code size={18} />
+          </ToolbarButton>
+          <ToolbarButton
+            onClick={() => setIsColorPickerOpen(!isColorPickerOpen)}
+            active={isColorPickerOpen}
+            title="Text Color"
+          >
+            <Palette size={18} />
           </ToolbarButton>
         </ToolbarGroup>
 
@@ -425,6 +457,43 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
           </div>
         </div>
       )}
+
+      {/* Color Picker */}
+      {isColorPickerOpen && (
+        <div className="p-3 border-t border-main bg-dim">
+          <div className="mb-2 text-sm font-medium text-main">Text Color</div>
+          <div className="grid grid-cols-10 gap-2">
+            {textColors.map((color) => (
+              <button
+                key={color.value}
+                onClick={() => {
+                  editor.chain().focus().setColor(color.value).run();
+                }}
+                className="w-8 h-8 rounded-md border-2 border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 transition-all hover:scale-110"
+                style={{ backgroundColor: color.value }}
+                title={color.name}
+              />
+            ))}
+          </div>
+          <div className="mt-3 flex gap-2">
+            <button
+              onClick={() => {
+                editor.chain().focus().unsetColor().run();
+                setIsColorPickerOpen(false);
+              }}
+              className="px-3 py-1.5 border border-main rounded-md hover:bg-dim transition-colors text-sm text-main"
+            >
+              Remove Color
+            </button>
+            <button
+              onClick={() => setIsColorPickerOpen(false)}
+              className="px-3 py-1.5 border border-main rounded-md hover:bg-dim transition-colors text-sm text-main"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -502,12 +571,28 @@ export default function TipTapEditor({
     editorProps: {
       attributes: {
         class: clsx(
-          'prose prose-sm sm:prose lg:prose-lg max-w-none',
+          'max-w-none',
           'focus:outline-none',
-          'min-h-[300px] p-4',
-          'text-main',
-          '[&_h1]:font-mono [&_h2]:font-mono [&_h3]:font-mono',
-          '[&_h4]:font-mono [&_h5]:font-mono [&_h6]:font-mono',
+          editable ? 'min-h-[300px]' : 'min-h-0',
+          'p-4',
+          'text-main leading-relaxed',
+          '[&_p]:mb-3 [&_p]:text-main [&_p]:leading-relaxed',
+          '[&_h1]:text-3xl [&_h1]:font-bold [&_h1]:mb-4 [&_h1]:mt-6 [&_h1]:text-main',
+          '[&_h2]:text-2xl [&_h2]:font-bold [&_h2]:mb-3 [&_h2]:mt-5 [&_h2]:text-main',
+          '[&_h3]:text-xl [&_h3]:font-semibold [&_h3]:mb-2 [&_h3]:mt-4 [&_h3]:text-main',
+          '[&_ul]:list-disc [&_ul]:ml-6 [&_ul]:mb-3 [&_ul]:text-main',
+          '[&_ol]:list-decimal [&_ol]:ml-6 [&_ol]:mb-3 [&_ol]:text-main',
+          '[&_li]:mb-1 [&_li]:text-main',
+          '[&_blockquote]:border-l-4 [&_blockquote]:border-gray-300 [&_blockquote]:dark:border-gray-600 [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:text-medium [&_blockquote]:my-4',
+          '[&_code]:bg-gray-100 [&_code]:dark:bg-gray-800 [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_code]:text-sm [&_code]:text-main [&_code]:font-mono',
+          '[&_pre]:bg-gray-100 [&_pre]:dark:bg-gray-800 [&_pre]:p-4 [&_pre]:rounded-lg [&_pre]:my-4 [&_pre]:overflow-x-auto [&_pre]:text-main',
+          '[&_pre_code]:bg-transparent [&_pre_code]:p-0',
+          '[&_a]:text-blue-500 [&_a]:underline [&_a]:hover:text-blue-600 [&_a]:cursor-pointer',
+          '[&_strong]:font-bold [&_strong]:text-main',
+          '[&_em]:italic [&_em]:text-main',
+          '[&_table]:border-collapse [&_table]:w-full [&_table]:my-4',
+          '[&_td]:border [&_td]:border-gray-300 [&_td]:dark:border-gray-700 [&_td]:px-3 [&_td]:py-2 [&_td]:text-main',
+          '[&_th]:border [&_th]:border-gray-300 [&_th]:dark:border-gray-700 [&_th]:px-3 [&_th]:py-2 [&_th]:bg-gray-100 [&_th]:dark:bg-gray-800 [&_th]:font-bold [&_th]:text-main',
         ),
       },
     },

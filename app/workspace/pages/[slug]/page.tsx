@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import TipTapEditor from '@/components/editor/TipTapEditor';
 import { Edit, Trash2, Eye } from 'lucide-react';
+import { PageViewTracker } from '@/components/pages/PageViewTracker';
 
 export const dynamic = 'force-dynamic';
 
@@ -40,12 +41,6 @@ export default async function PageView({ params }: PageViewProps) {
   if (!page) {
     notFound();
   }
-
-  // Increment view count
-  await prisma.page.update({
-    where: { id: page.id },
-    data: { viewCount: { increment: 1 } },
-  });
 
   // Extract TipTap content from old wiki format if needed
   let displayContent = page.content;
@@ -86,6 +81,9 @@ export default async function PageView({ params }: PageViewProps) {
 
   return (
     <div className="h-full flex flex-col bg-main">
+      {/* Track page view asynchronously */}
+      <PageViewTracker pageId={page.id} />
+
       {/* Page Content */}
       <div className="flex-1 overflow-y-auto">
         <div className="max-w-4xl mx-auto py-12 px-8">

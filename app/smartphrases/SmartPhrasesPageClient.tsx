@@ -95,7 +95,7 @@ export default function SmartPhrasesPageClient({
   }, [smartphrases]);
 
   return (
-    <div className="min-h-screen p-8 font-mono">
+    <div className="min-h-screen p-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
@@ -125,12 +125,7 @@ export default function SmartPhrasesPageClient({
                       : 'text-medium hover:bg-dim hover:text-main'
                   }`}
                 >
-                  <div className="flex justify-between items-center">
-                    <span>All Categories</span>
-                    <span className="text-xs text-dim">
-                      {categoryCounts['All']}
-                    </span>
-                  </div>
+                  All Categories
                 </button>
                 {categories.map((category) => (
                   <button
@@ -142,12 +137,7 @@ export default function SmartPhrasesPageClient({
                         : 'text-medium hover:bg-dim hover:text-main'
                     }`}
                   >
-                    <div className="flex justify-between items-center">
-                      <span>{category}</span>
-                      <span className="text-xs text-dim">
-                        {categoryCounts[category] || 0}
-                      </span>
-                    </div>
+                    {category}
                   </button>
                 ))}
               </div>
