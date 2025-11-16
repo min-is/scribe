@@ -242,6 +242,22 @@ export async function createProcedure(
 
     const procedure = result[0];
 
+    // Create associated Page record using Prisma
+    await prisma.page.create({
+      data: {
+        slug: procedure.slug,
+        title: procedure.title,
+        content: {
+          type: 'doc',
+          content: [{ type: 'paragraph', content: [] }],
+        },
+        type: 'PROCEDURE',
+        procedureId: procedure.id,
+        category: procedure.category,
+        position: 'a0',
+      },
+    });
+
     revalidatePath('/procedures');
     revalidatePath('/admin/procedures');
 

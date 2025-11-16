@@ -145,27 +145,61 @@ export async function createProvider(
       };
     }
 
-    const provider = await prisma.provider.create({
-      data: {
-        name: data.name,
-        slug: data.slug,
-        credentials: data.credentials || null,
-        generalDifficulty: data.generalDifficulty || null,
-        speedDifficulty: data.speedDifficulty || null,
-        terminologyDifficulty: data.terminologyDifficulty || null,
-        noteDifficulty: data.noteDifficulty || null,
-        noteTemplate: data.noteTemplate || null,
-        noteSmartPhrase: data.noteSmartPhrase || null,
-        ...(data.preferences && { preferences: data.preferences }),
-        ...(data.wikiContent && { wikiContent: data.wikiContent }),
-      },
+    // Create provider and associated page in a transaction
+    const result = await prisma.$transaction(async (tx) => {
+      // Create the provider
+      const provider = await tx.provider.create({
+        data: {
+          name: data.name,
+          slug: data.slug,
+          credentials: data.credentials || null,
+          generalDifficulty: data.generalDifficulty || null,
+          speedDifficulty: data.speedDifficulty || null,
+          terminologyDifficulty: data.terminologyDifficulty || null,
+          noteDifficulty: data.noteDifficulty || null,
+          noteTemplate: data.noteTemplate || null,
+          noteSmartPhrase: data.noteSmartPhrase || null,
+          ...(data.preferences && { preferences: data.preferences }),
+          ...(data.wikiContent && { wikiContent: data.wikiContent }),
+        },
+      });
+
+      // Extract content from wikiContent if it exists
+      let pageContent: any = {
+        type: 'doc',
+        content: [{ type: 'paragraph', content: [] }],
+      };
+
+      if (data.wikiContent && typeof data.wikiContent === 'object') {
+        const wikiContentObj = data.wikiContent as any;
+        if (wikiContentObj.sections && Array.isArray(wikiContentObj.sections) && wikiContentObj.sections.length > 0) {
+          const firstSection = wikiContentObj.sections[0];
+          if (firstSection.content && firstSection.content.type === 'doc') {
+            pageContent = firstSection.content;
+          }
+        }
+      }
+
+      // Create associated Page record
+      await tx.page.create({
+        data: {
+          slug: provider.slug,
+          title: provider.name,
+          content: pageContent,
+          type: 'PROVIDER',
+          providerId: provider.id,
+          position: 'a0',
+        },
+      });
+
+      return provider;
     });
 
     revalidatePath('/admin/providers');
     revalidatePath('/providers');
     revalidatePath('/');
 
-    return { success: true, provider };
+    return { success: true, provider: result };
   } catch (error) {
     console.error('Error creating provider:', error);
     const errorMessage = error instanceof Error ? error.message : 'Failed to create provider';

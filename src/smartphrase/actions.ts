@@ -229,6 +229,22 @@ export async function createSmartPhrase(
 
     const smartphrase = result[0];
 
+    // Create associated Page record using Prisma
+    await prisma.page.create({
+      data: {
+        slug: smartphrase.slug,
+        title: smartphrase.title,
+        content: {
+          type: 'doc',
+          content: [{ type: 'paragraph', content: [] }],
+        },
+        type: 'SMARTPHRASE',
+        smartPhraseId: smartphrase.id,
+        category: smartphrase.category,
+        position: 'a0',
+      },
+    });
+
     revalidatePath('/smartphrases');
     revalidatePath('/admin/smartphrases');
 
