@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { query, queryOne, tableExists } from '@/lib/db';
+import { prisma } from '@/lib/prisma';
 import { nanoid } from 'nanoid';
 
 // Procedure type (matches Prisma schema)
@@ -241,6 +242,22 @@ export async function createProcedure(
     );
 
     const procedure = result[0];
+
+    // Create associated Page record using Prisma
+    await prisma.page.create({
+      data: {
+        slug: procedure.slug,
+        title: procedure.title,
+        content: {
+          type: 'doc',
+          content: [{ type: 'paragraph', content: [] }],
+        },
+        type: 'PROCEDURE',
+        procedureId: procedure.id,
+        category: procedure.category,
+        position: 'a0',
+      },
+    });
 
     revalidatePath('/procedures');
     revalidatePath('/admin/procedures');

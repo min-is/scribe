@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { query, queryOne, tableExists } from '@/lib/db';
+import { prisma } from '@/lib/prisma';
 import { nanoid } from 'nanoid';
 
 // SmartPhrase type (matches Prisma schema)
@@ -228,6 +229,22 @@ export async function createSmartPhrase(
     );
 
     const smartphrase = result[0];
+
+    // Create associated Page record using Prisma
+    await prisma.page.create({
+      data: {
+        slug: smartphrase.slug,
+        title: smartphrase.title,
+        content: {
+          type: 'doc',
+          content: [{ type: 'paragraph', content: [] }],
+        },
+        type: 'SMARTPHRASE',
+        smartPhraseId: smartphrase.id,
+        category: smartphrase.category,
+        position: 'a0',
+      },
+    });
 
     revalidatePath('/smartphrases');
     revalidatePath('/admin/smartphrases');

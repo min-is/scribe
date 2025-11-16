@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { query, queryOne, tableExists } from '@/lib/db';
+import { prisma } from '@/lib/prisma';
 import { nanoid } from 'nanoid';
 
 // Scenario type (matches Prisma schema)
@@ -228,6 +229,22 @@ export async function createScenario(
     );
 
     const scenario = result[0];
+
+    // Create associated Page record using Prisma
+    await prisma.page.create({
+      data: {
+        slug: scenario.slug,
+        title: scenario.title,
+        content: {
+          type: 'doc',
+          content: [{ type: 'paragraph', content: [] }],
+        },
+        type: 'SCENARIO',
+        scenarioId: scenario.id,
+        category: scenario.category,
+        position: 'a0',
+      },
+    });
 
     revalidatePath('/scenarios');
     revalidatePath('/admin/scenarios');
