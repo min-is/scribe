@@ -9,17 +9,25 @@ export const metadata: Metadata = {
 };
 
 export default async function ProvidersPage() {
-  // Fetch providers with their associated pages
-  const providers = await prisma.provider.findMany({
-    orderBy: { name: 'asc' },
-    include: {
-      page: {
-        select: {
-          slug: true,
+  // Fetch providers with their associated pages (if table exists)
+  let providers;
+  try {
+    providers = await prisma.provider.findMany({
+      orderBy: { name: 'asc' },
+      include: {
+        page: {
+          select: {
+            slug: true,
+          },
         },
       },
-    },
-  });
+    });
+  } catch (error) {
+    // Fallback if Page table doesn't exist yet
+    providers = await prisma.provider.findMany({
+      orderBy: { name: 'asc' },
+    });
+  }
 
-  return <ProvidersPageClient providers={providers} />;
+  return <ProvidersPageClient providers={providers as any} />;
 }

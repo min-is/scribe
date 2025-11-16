@@ -9,22 +9,30 @@ export const metadata: Metadata = {
 };
 
 export default async function ProceduresPage() {
-  // Fetch procedures with their associated pages
-  const procedures = await prisma.procedure.findMany({
-    orderBy: { title: 'asc' },
-    include: {
-      page: {
-        select: {
-          slug: true,
+  // Fetch procedures with their associated pages (if table exists)
+  let procedures;
+  try {
+    procedures = await prisma.procedure.findMany({
+      orderBy: { title: 'asc' },
+      include: {
+        page: {
+          select: {
+            slug: true,
+          },
         },
       },
-    },
-  });
+    });
+  } catch (error) {
+    // Fallback if Page table doesn't exist yet
+    procedures = await prisma.procedure.findMany({
+      orderBy: { title: 'asc' },
+    });
+  }
 
   // Get unique categories
   const categories = Array.from(new Set(procedures.map(p => p.category).filter(Boolean))) as string[];
 
   return (
-    <ProceduresPageClient procedures={procedures} categories={categories} />
+    <ProceduresPageClient procedures={procedures as any} categories={categories} />
   );
 }
