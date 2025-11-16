@@ -330,6 +330,12 @@ export async function deleteSmartPhrase(
       return { success: false, error: check.error };
     }
 
+    // Delete associated Page records first using Prisma
+    await prisma.page.deleteMany({
+      where: { smartPhraseId: id },
+    });
+
+    // Then delete the smartphrase
     await query(`DELETE FROM "SmartPhrase" WHERE id = $1`, [id]);
 
     revalidatePath('/smartphrases');

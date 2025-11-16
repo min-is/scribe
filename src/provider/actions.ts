@@ -287,8 +287,17 @@ export async function deleteProvider(
   id: string,
 ): Promise<{ success: boolean; error?: string }> {
   try {
-    await prisma.provider.delete({
-      where: { id },
+    // Delete provider and associated page in a transaction
+    await prisma.$transaction(async (tx) => {
+      // Delete associated Page records first
+      await tx.page.deleteMany({
+        where: { providerId: id },
+      });
+
+      // Then delete the provider
+      await tx.provider.delete({
+        where: { id },
+      });
     });
 
     revalidatePath('/admin/providers');
