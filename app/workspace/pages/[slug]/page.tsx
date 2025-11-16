@@ -5,6 +5,7 @@ import Link from 'next/link';
 import TipTapEditor from '@/components/editor/TipTapEditor';
 import { Edit, Trash2, Eye } from 'lucide-react';
 import { PageViewTracker } from '@/components/pages/PageViewTracker';
+import { cache } from 'react';
 
 export const dynamic = 'force-dynamic';
 
@@ -12,12 +13,42 @@ interface PageViewProps {
   params: Promise<{ slug: string }>;
 }
 
+// Cache the page fetch to avoid duplicate queries between metadata and page
+const getPage = cache(async (slug: string) => {
+  return await prisma.page.findUnique({
+    where: { slug, deletedAt: null },
+    select: {
+      id: true,
+      slug: true,
+      title: true,
+      content: true,
+      icon: true,
+      viewCount: true,
+      updatedAt: true,
+      parent: {
+        select: {
+          slug: true,
+          title: true,
+        },
+      },
+      children: {
+        where: { deletedAt: null },
+        orderBy: { position: 'asc' },
+        select: {
+          id: true,
+          slug: true,
+          title: true,
+          icon: true,
+          viewCount: true,
+        },
+      },
+    },
+  });
+});
+
 export async function generateMetadata({ params }: PageViewProps): Promise<Metadata> {
   const { slug } = await params;
-  const page = await prisma.page.findUnique({
-    where: { slug, deletedAt: null },
-    select: { title: true },
-  });
+  const page = await getPage(slug);
 
   return {
     title: page ? page.title : 'Page Not Found',
@@ -26,17 +57,7 @@ export async function generateMetadata({ params }: PageViewProps): Promise<Metad
 
 export default async function PageView({ params }: PageViewProps) {
   const { slug } = await params;
-
-  const page = await prisma.page.findUnique({
-    where: { slug, deletedAt: null },
-    include: {
-      parent: true,
-      children: {
-        where: { deletedAt: null },
-        orderBy: { position: 'asc' },
-      },
-    },
-  });
+  const page = await getPage(slug);
 
   if (!page) {
     notFound();
