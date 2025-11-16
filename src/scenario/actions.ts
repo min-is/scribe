@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { query, queryOne, tableExists } from '@/lib/db';
+import { prisma } from '@/lib/prisma';
 import { nanoid } from 'nanoid';
 
 // Scenario type (matches Prisma schema)
