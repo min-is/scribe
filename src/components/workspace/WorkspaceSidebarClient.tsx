@@ -40,8 +40,8 @@ export function WorkspaceSidebar() {
           className={clsx(
             'flex items-center gap-3 px-3 py-2 text-sm transition-all border-b-2',
             isActive('/workspace')
-              ? 'border-primary text-main font-semibold'
-              : 'border-transparent text-dim hover:text-main hover:border-primary/30 hover-glow'
+              ? 'border-white dark:border-white text-main font-semibold'
+              : 'border-transparent text-dim hover:text-main hover:border-white/30 dark:hover:border-white/30 hover-glow'
           )}
         >
           <FileText size={18} />
@@ -53,8 +53,8 @@ export function WorkspaceSidebar() {
           className={clsx(
             'flex items-center gap-3 px-3 py-2 text-sm transition-all border-b-2',
             isActive('/providers')
-              ? 'border-primary text-main font-semibold'
-              : 'border-transparent text-dim hover:text-main hover:border-primary/30 hover-glow'
+              ? 'border-white dark:border-white text-main font-semibold'
+              : 'border-transparent text-dim hover:text-main hover:border-white/30 dark:hover:border-white/30 hover-glow'
           )}
         >
           <span>Providers</span>
@@ -65,8 +65,8 @@ export function WorkspaceSidebar() {
           className={clsx(
             'flex items-center gap-3 px-3 py-2 text-sm transition-all border-b-2',
             isActive('/procedures')
-              ? 'border-primary text-main font-semibold'
-              : 'border-transparent text-dim hover:text-main hover:border-primary/30 hover-glow'
+              ? 'border-white dark:border-white text-main font-semibold'
+              : 'border-transparent text-dim hover:text-main hover:border-white/30 dark:hover:border-white/30 hover-glow'
           )}
         >
           <span>Procedures</span>
@@ -77,8 +77,8 @@ export function WorkspaceSidebar() {
           className={clsx(
             'flex items-center gap-3 px-3 py-2 text-sm transition-all border-b-2',
             isActive('/smartphrases')
-              ? 'border-primary text-main font-semibold'
-              : 'border-transparent text-dim hover:text-main hover:border-primary/30 hover-glow'
+              ? 'border-white dark:border-white text-main font-semibold'
+              : 'border-transparent text-dim hover:text-main hover:border-white/30 dark:hover:border-white/30 hover-glow'
           )}
         >
           <span>Smart Phrases</span>
@@ -89,8 +89,8 @@ export function WorkspaceSidebar() {
           className={clsx(
             'flex items-center gap-3 px-3 py-2 text-sm transition-all border-b-2',
             isActive('/scenarios')
-              ? 'border-primary text-main font-semibold'
-              : 'border-transparent text-dim hover:text-main hover:border-primary/30 hover-glow'
+              ? 'border-white dark:border-white text-main font-semibold'
+              : 'border-transparent text-dim hover:text-main hover:border-white/30 dark:hover:border-white/30 hover-glow'
           )}
         >
           <span>Scenarios</span>
@@ -101,7 +101,7 @@ export function WorkspaceSidebar() {
       <div className="mt-4">
         <button
           onClick={() => setShowPages(!showPages)}
-          className="w-full flex items-center justify-between px-3 py-2 text-xs font-medium text-dim hover:text-main transition-all border-b-2 border-transparent hover:border-primary/30 hover-glow"
+          className="w-full flex items-center justify-between px-3 py-2 text-xs font-medium text-dim hover:text-main transition-all border-b-2 border-transparent hover:border-white/30 dark:hover:border-white/30 hover-glow"
         >
           <span>PAGES</span>
           {showPages ? (
@@ -142,7 +142,7 @@ export function WorkspaceSidebar() {
       <aside
         className={clsx(
           'hidden lg:block transition-all duration-300',
-          isOpen ? 'w-64' : 'w-0'
+          isOpen ? 'w-48' : 'w-0'
         )}
       >
         {isOpen && sidebarContent}
@@ -151,7 +151,7 @@ export function WorkspaceSidebar() {
       {/* Mobile Sidebar */}
       <aside
         className={clsx(
-          'lg:hidden fixed inset-y-0 left-0 z-50 w-64 transition-transform duration-300 transform',
+          'lg:hidden fixed inset-y-0 left-0 z-50 w-48 transition-transform duration-300 transform',
           isMobileOpen ? 'translate-x-0' : '-translate-x-full'
         )}
       >
