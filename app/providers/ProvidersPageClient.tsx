@@ -2,23 +2,26 @@
 
 import { Provider } from '@prisma/client';
 import { ProviderDifficultyPreview } from '@/components/ProviderDifficultyPreview';
-import ProviderProfileView from '@/components/ProviderProfileView';
+import { useRouter } from 'next/navigation';
 
 interface ProvidersPageClientProps {
-  providers: Provider[];
+  providers: (Provider & { page: { slug: string } | null })[];
 }
 
 export default function ProvidersPageClient({
   providers,
 }: ProvidersPageClientProps) {
-  const handleProviderClick = (slug: string) => {
-    // Navigate to provider profile using hash
-    window.location.hash = `provider-${slug}`;
+  const router = useRouter();
+
+  const handleProviderClick = (pageSlug: string | null) => {
+    if (pageSlug) {
+      // Navigate to the provider's page
+      router.push(`/workspace/pages/${pageSlug}`);
+    }
   };
 
   return (
     <>
-      <ProviderProfileView />
       <div className="min-h-screen p-8">
         <div className="max-w-7xl mx-auto">
           {/* Header */}
@@ -41,7 +44,7 @@ export default function ProvidersPageClient({
               {providers.map((provider) => (
                 <div
                   key={provider.id}
-                  onClick={() => handleProviderClick(provider.slug)}
+                  onClick={() => handleProviderClick(provider.page?.slug || null)}
                   className="relative bg-medium border border-main rounded-lg p-4 hover:shadow-lg transition-all duration-300 cursor-pointer group overflow-hidden"
                   style={{
                     boxShadow: '0 0 0 0 transparent',

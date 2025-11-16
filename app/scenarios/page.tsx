@@ -1,5 +1,5 @@
 import { Metadata } from 'next/types';
-import { getScenarios, getScenarioCategories } from '@/scenario/actions';
+import { prisma } from '@/lib/prisma';
 import ScenariosPageClient from './ScenariosPageClient';
 
 export const metadata: Metadata = {
@@ -9,10 +9,20 @@ export const metadata: Metadata = {
 };
 
 export default async function ScenariosPage() {
-  const [scenarios, categories] = await Promise.all([
-    getScenarios(),
-    getScenarioCategories(),
-  ]);
+  // Fetch scenarios with their associated pages
+  const scenarios = await prisma.scenario.findMany({
+    orderBy: { title: 'asc' },
+    include: {
+      page: {
+        select: {
+          slug: true,
+        },
+      },
+    },
+  });
+
+  // Get unique categories
+  const categories = Array.from(new Set(scenarios.map(s => s.category).filter(Boolean))) as string[];
 
   return <ScenariosPageClient scenarios={scenarios} categories={categories} />;
 }
