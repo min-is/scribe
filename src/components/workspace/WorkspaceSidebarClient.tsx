@@ -37,7 +37,7 @@ export function WorkspaceSidebar() {
             'flex items-center gap-3 px-3 py-2 text-sm transition-all border-b-2',
             isActive('/workspace')
               ? 'border-white dark:border-white text-main font-semibold'
-              : 'border-transparent text-dim hover:text-main hover:border-white/30 dark:hover:border-white/30 hover-glow'
+              : 'border-transparent text-dim hover:text-main hover:border-white/30 dark:hover:border-white/30'
           )}
         >
           <FileText size={18} />
@@ -50,7 +50,7 @@ export function WorkspaceSidebar() {
             'flex items-center gap-3 px-3 py-2 text-sm transition-all border-b-2',
             isActive('/providers')
               ? 'border-white dark:border-white text-main font-semibold'
-              : 'border-transparent text-dim hover:text-main hover:border-white/30 dark:hover:border-white/30 hover-glow'
+              : 'border-transparent text-dim hover:text-main hover:border-white/30 dark:hover:border-white/30'
           )}
         >
           <span>Providers</span>
@@ -62,7 +62,7 @@ export function WorkspaceSidebar() {
             'flex items-center gap-3 px-3 py-2 text-sm transition-all border-b-2',
             isActive('/procedures')
               ? 'border-white dark:border-white text-main font-semibold'
-              : 'border-transparent text-dim hover:text-main hover:border-white/30 dark:hover:border-white/30 hover-glow'
+              : 'border-transparent text-dim hover:text-main hover:border-white/30 dark:hover:border-white/30'
           )}
         >
           <span>Procedures</span>
@@ -74,7 +74,7 @@ export function WorkspaceSidebar() {
             'flex items-center gap-3 px-3 py-2 text-sm transition-all border-b-2',
             isActive('/smartphrases')
               ? 'border-white dark:border-white text-main font-semibold'
-              : 'border-transparent text-dim hover:text-main hover:border-white/30 dark:hover:border-white/30 hover-glow'
+              : 'border-transparent text-dim hover:text-main hover:border-white/30 dark:hover:border-white/30'
           )}
         >
           <span>Smart Phrases</span>
@@ -86,7 +86,7 @@ export function WorkspaceSidebar() {
             'flex items-center gap-3 px-3 py-2 text-sm transition-all border-b-2',
             isActive('/scenarios')
               ? 'border-white dark:border-white text-main font-semibold'
-              : 'border-transparent text-dim hover:text-main hover:border-white/30 dark:hover:border-white/30 hover-glow'
+              : 'border-transparent text-dim hover:text-main hover:border-white/30 dark:hover:border-white/30'
           )}
         >
           <span>Scenarios</span>
