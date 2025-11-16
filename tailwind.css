@@ -337,7 +337,7 @@
       border rounded-md
       bg-main
       border-gray-200 dark:border-gray-700
-      font-mono text-base leading-tight
+      font-sans text-base leading-tight
   }
   input[type=text], input[type=email], input[type=password], select, textarea {
     @apply
@@ -364,7 +364,7 @@
   }
   input[type=file] {
     @apply
-      block font-mono w-full text-medium
+      block font-sans w-full text-medium
       file:bg-white dark:file:bg-gray-950
       file:mr-2 file:my-2 file:px-4 file:py-1.5 file:rounded-md
       file:border-solid file:border
