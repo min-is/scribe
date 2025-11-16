@@ -1,13 +1,37 @@
 'use client';
 
 import { Editor } from '@tiptap/react';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 
 interface EditorToolbarProps {
   editor: Editor;
 }
 
 export function EditorToolbar({ editor }: EditorToolbarProps) {
+  const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
+
+  const textColors = [
+    { name: 'Red', value: '#ef4444' },
+    { name: 'Orange', value: '#f97316' },
+    { name: 'Amber', value: '#f59e0b' },
+    { name: 'Yellow', value: '#eab308' },
+    { name: 'Lime', value: '#84cc16' },
+    { name: 'Green', value: '#22c55e' },
+    { name: 'Emerald', value: '#10b981' },
+    { name: 'Teal', value: '#14b8a6' },
+    { name: 'Cyan', value: '#06b6d4' },
+    { name: 'Sky', value: '#0ea5e9' },
+    { name: 'Blue', value: '#3b82f6' },
+    { name: 'Indigo', value: '#6366f1' },
+    { name: 'Violet', value: '#8b5cf6' },
+    { name: 'Purple', value: '#a855f7' },
+    { name: 'Fuchsia', value: '#d946ef' },
+    { name: 'Pink', value: '#ec4899' },
+    { name: 'Rose', value: '#f43f5e' },
+    { name: 'Gray', value: '#6b7280' },
+    { name: 'Black', value: '#000000' },
+    { name: 'White', value: '#ffffff' },
+  ];
   const setLink = useCallback(() => {
     const previousUrl = editor.getAttributes('link').href;
     const url = window.prompt('URL', previousUrl);
@@ -78,7 +102,7 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
   );
 
   return (
-    <div className="border-b border-gray-200 dark:border-gray-700 p-2 flex flex-wrap gap-1 bg-gray-50 dark:bg-gray-800">
+    <div className="relative border-b border-gray-200 dark:border-gray-700 p-2 flex flex-wrap gap-1 bg-gray-50 dark:bg-gray-800">
       {/* Text Formatting */}
       <ToolbarButton
         onClick={() => editor.chain().focus().toggleBold().run()}
@@ -110,6 +134,14 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
         title="Strikethrough"
       >
         <s>S</s>
+      </ToolbarButton>
+
+      <ToolbarButton
+        onClick={() => setIsColorPickerOpen(!isColorPickerOpen)}
+        active={isColorPickerOpen}
+        title="Text Color"
+      >
+        🎨
       </ToolbarButton>
 
       <div className="w-px h-6 bg-gray-300 dark:bg-gray-600 mx-1" />
@@ -234,6 +266,48 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
       >
         ↷
       </ToolbarButton>
+
+      {/* Color Picker Dropdown */}
+      {isColorPickerOpen && (
+        <div className="absolute top-full left-0 right-0 mt-1 p-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg z-50">
+          <div className="mb-2 text-sm font-medium text-gray-900 dark:text-gray-100">
+            Text Color
+          </div>
+          <div className="grid grid-cols-10 gap-2 mb-3">
+            {textColors.map((color) => (
+              <button
+                key={color.value}
+                type="button"
+                onClick={() => {
+                  editor.chain().focus().setColor(color.value).run();
+                }}
+                className="w-8 h-8 rounded-md border-2 border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 transition-all hover:scale-110"
+                style={{ backgroundColor: color.value }}
+                title={color.name}
+              />
+            ))}
+          </div>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                editor.chain().focus().unsetColor().run();
+                setIsColorPickerOpen(false);
+              }}
+              className="px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+            >
+              Remove Color
+            </button>
+            <button
+              type="button"
+              onClick={() => setIsColorPickerOpen(false)}
+              className="px-3 py-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
