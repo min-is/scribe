@@ -47,38 +47,45 @@ export default async function PageView({ params }: PageViewProps) {
     data: { viewCount: { increment: 1 } },
   });
 
+  // Extract TipTap content from old wiki format if needed
+  let displayContent = page.content;
+
+  // Check if content is in old wiki format with sections
+  if (typeof displayContent === 'object' && displayContent !== null) {
+    const contentObj = displayContent as any;
+
+    // Old format: { sections: [{ content: { type: 'doc', content: [...] } }] }
+    if (contentObj.sections && Array.isArray(contentObj.sections) && contentObj.sections.length > 0) {
+      const firstSection = contentObj.sections[0];
+      if (firstSection.content && firstSection.content.type === 'doc') {
+        displayContent = firstSection.content;
+      }
+    }
+    // Migration format: stringified JSON in a paragraph
+    else if (contentObj.type === 'doc' && contentObj.content && Array.isArray(contentObj.content)) {
+      const firstNode = contentObj.content[0];
+      if (firstNode?.type === 'paragraph' && firstNode.content?.[0]?.text) {
+        const text = firstNode.content[0].text;
+        // Try to parse as JSON if it looks like the old wiki format
+        if (text.startsWith('{') && text.includes('sections')) {
+          try {
+            const parsed = JSON.parse(text);
+            if (parsed.sections && Array.isArray(parsed.sections) && parsed.sections.length > 0) {
+              const firstSection = parsed.sections[0];
+              if (firstSection.content && firstSection.content.type === 'doc') {
+                displayContent = firstSection.content;
+              }
+            }
+          } catch {
+            // Keep original content if parsing fails
+          }
+        }
+      }
+    }
+  }
+
   return (
     <div className="h-full flex flex-col bg-main">
-      {/* Page Header */}
-      <div className="border-b border-main bg-main sticky top-0 z-10 shadow-soft">
-        <div className="flex items-center justify-between px-6 py-3">
-          <div className="flex items-center gap-2 text-sm text-medium">
-            {page.parent && (
-              <>
-                <Link
-                  href={`/workspace/pages/${page.parent.slug}`}
-                  className="hover:text-primary transition-colors"
-                >
-                  {page.parent.title}
-                </Link>
-                <span>/</span>
-              </>
-            )}
-            <span className="text-main font-semibold">{page.title}</span>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <Link
-              href={`/workspace/pages/${page.slug}/edit`}
-              className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:shadow-hover transition-all text-sm font-medium"
-            >
-              <Edit size={16} />
-              Edit
-            </Link>
-          </div>
-        </div>
-      </div>
-
       {/* Page Content */}
       <div className="flex-1 overflow-y-auto">
         <div className="max-w-4xl mx-auto py-12 px-8">
@@ -105,7 +112,7 @@ export default async function PageView({ params }: PageViewProps) {
           {/* Content */}
           <div className="mb-12 prose-body">
             <TipTapEditor
-              content={page.content}
+              content={displayContent}
               editable={false}
               className="prose-body"
             />

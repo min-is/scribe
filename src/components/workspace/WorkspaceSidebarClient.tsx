@@ -5,18 +5,14 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { clsx } from 'clsx/lite';
 import {
-  ChevronRight,
-  ChevronDown,
   FileText,
   Menu,
   X,
 } from 'lucide-react';
-import DraggablePageTree from '@/components/workspace/DraggablePageTree';
 
 export function WorkspaceSidebar() {
   const [isOpen, setIsOpen] = useState(true);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
-  const [showPages, setShowPages] = useState(true);
   const pathname = usePathname();
 
   const isActive = (path: string) => pathname === path || pathname?.startsWith(path + '/');
@@ -95,27 +91,6 @@ export function WorkspaceSidebar() {
         >
           <span>Scenarios</span>
         </Link>
-      </div>
-
-      {/* Page Tree Section */}
-      <div className="mt-4">
-        <button
-          onClick={() => setShowPages(!showPages)}
-          className="w-full flex items-center justify-between px-3 py-2 text-xs font-medium text-dim hover:text-main transition-all border-b-2 border-transparent hover:border-white/30 dark:hover:border-white/30 hover-glow"
-        >
-          <span>PAGES</span>
-          {showPages ? (
-            <ChevronDown size={14} />
-          ) : (
-            <ChevronRight size={14} />
-          )}
-        </button>
-
-        {showPages && (
-          <div className="max-h-96 overflow-y-auto">
-            <DraggablePageTree />
-          </div>
-        )}
       </div>
     </div>
   );
