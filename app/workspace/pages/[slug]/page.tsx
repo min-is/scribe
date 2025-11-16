@@ -70,11 +70,25 @@ export default async function PageView({ params }: PageViewProps) {
   if (typeof displayContent === 'object' && displayContent !== null) {
     const contentObj = displayContent as any;
 
-    // Old format: { sections: [{ content: { type: 'doc', content: [...] } }] }
-    if (contentObj.sections && Array.isArray(contentObj.sections) && contentObj.sections.length > 0) {
-      const firstSection = contentObj.sections[0];
-      if (firstSection.content && firstSection.content.type === 'doc') {
-        displayContent = firstSection.content;
+    // Old format: { sections: [...], metadata: {...}, media: [...] }
+    if (contentObj.sections && Array.isArray(contentObj.sections)) {
+      if (contentObj.sections.length > 0) {
+        // Has sections - extract first section content
+        const firstSection = contentObj.sections[0];
+        if (firstSection.content && firstSection.content.type === 'doc') {
+          displayContent = firstSection.content;
+        }
+      } else {
+        // Empty sections - create empty TipTap document
+        displayContent = {
+          type: 'doc',
+          content: [
+            {
+              type: 'paragraph',
+              content: [],
+            },
+          ],
+        };
       }
     }
     // Migration format: stringified JSON in a paragraph
