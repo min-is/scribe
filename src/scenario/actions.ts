@@ -330,6 +330,12 @@ export async function deleteScenario(
       return { success: false, error: check.error };
     }
 
+    // Delete associated Page records first using Prisma
+    await prisma.page.deleteMany({
+      where: { scenarioId: id },
+    });
+
+    // Then delete the scenario
     await query(`DELETE FROM "Scenario" WHERE id = $1`, [id]);
 
     revalidatePath('/scenarios');

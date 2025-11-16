@@ -351,6 +351,12 @@ export async function deleteProcedure(
       return { success: false, error: check.error };
     }
 
+    // Delete associated Page records first using Prisma
+    await prisma.page.deleteMany({
+      where: { procedureId: id },
+    });
+
+    // Then delete the procedure
     await query(`DELETE FROM "Procedure" WHERE id = $1`, [id]);
 
     revalidatePath('/procedures');
