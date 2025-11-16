@@ -12,8 +12,27 @@ const prisma = new PrismaClient();
  */
 export async function GET() {
   try {
-    // Check if pages already exist
-    const existingPages = await prisma.page.count();
+    // Check if Page table exists and has data
+    let existingPages = 0;
+    let tableExists = true;
+
+    try {
+      existingPages = await prisma.page.count();
+    } catch (error: any) {
+      if (error.message.includes('does not exist')) {
+        tableExists = false;
+      } else {
+        throw error;
+      }
+    }
+
+    if (!tableExists) {
+      return NextResponse.json({
+        success: false,
+        message: 'Page table does not exist yet. The database migration may have failed during deployment. Please check Vercel deployment logs.',
+        hint: 'The automated migration should run during build. If it failed, you may need to run migrations manually.',
+      }, { status: 500 });
+    }
     if (existingPages > 0) {
       return NextResponse.json({
         success: false,
