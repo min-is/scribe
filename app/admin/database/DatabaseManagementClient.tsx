@@ -85,6 +85,7 @@ CREATE INDEX "Procedure_viewCount_idx" ON "Procedure"("viewCount");`,
 
 export default function DatabaseManagementClient() {
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
+  const [isRunningMigration, setIsRunningMigration] = useState(false);
 
   const copyToClipboard = async (sql: string, index: number) => {
     try {
@@ -107,6 +108,31 @@ export default function DatabaseManagementClient() {
     }
   };
 
+  const runMigrations = async () => {
+    if (!confirm('Are you sure you want to run database migrations? This will apply all pending migrations to your database.')) {
+      return;
+    }
+
+    setIsRunningMigration(true);
+    try {
+      const response = await fetch('/api/admin/migrate', {
+        method: 'POST',
+      });
+      const data = await response.json();
+
+      if (data.success) {
+        toast.success('Migrations completed successfully!');
+      } else {
+        toast.error(data.error || 'Migration failed');
+      }
+    } catch (error) {
+      toast.error('Failed to run migrations');
+      console.error('Migration error:', error);
+    } finally {
+      setIsRunningMigration(false);
+    }
+  };
+
   return (
     <div className="min-h-screen p-8 font-mono">
       <div className="max-w-6xl mx-auto">
@@ -124,7 +150,7 @@ export default function DatabaseManagementClient() {
         <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-6 mb-8">
           <div className="flex items-start gap-3">
             <FiCheck className="text-2xl text-green-400 flex-shrink-0 mt-1" />
-            <div>
+            <div className="flex-1">
               <h2 className="text-lg font-semibold text-main mb-2">
                 ✨ Migrations Run Automatically
               </h2>
@@ -139,6 +165,19 @@ export default function DatabaseManagementClient() {
               <p className="text-medium text-sm mt-3">
                 <strong className="text-main">No manual setup required!</strong> The tables will be created automatically on your next deployment.
               </p>
+              <div className="mt-4">
+                <button
+                  onClick={runMigrations}
+                  disabled={isRunningMigration}
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <FiDatabase />
+                  {isRunningMigration ? 'Running Migrations...' : 'Run Migrations Now'}
+                </button>
+                <p className="text-dim text-sm mt-2">
+                  Click to manually run all pending database migrations
+                </p>
+              </div>
             </div>
           </div>
         </div>
