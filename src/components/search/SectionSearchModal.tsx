@@ -27,6 +27,8 @@ const SECTION_TITLES: Record<PageType, string> = {
   SCENARIO: 'Scenarios',
   WIKI: 'Pages',
   FOLDER: 'Folders',
+  PHYSICIAN_DIRECTORY: 'Physicians',
+  MEDICATION: 'Medications',
 };
 
 export default function SectionSearchModal({
