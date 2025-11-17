@@ -1,11 +1,19 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Star } from 'lucide-react';
 import SectionSearchModal from '@/components/search/SectionSearchModal';
+import TypewriterText from '@/components/TypewriterText';
 
 type SectionType = 'PROVIDER' | 'PROCEDURE' | 'SMARTPHRASE' | 'SCENARIO' | null;
+
+interface AnimatedMessage {
+  id: string;
+  message: string;
+  order: number;
+  enabled: boolean;
+}
 
 interface HomePageClientProps {
   greeting: string;
@@ -13,6 +21,30 @@ interface HomePageClientProps {
 
 export default function HomePageClient({ greeting }: HomePageClientProps) {
   const [activeModal, setActiveModal] = useState<SectionType>(null);
+  const [messages, setMessages] = useState<string[]>([]);
+  const [isLoadingMessages, setIsLoadingMessages] = useState(true);
+
+  // Fetch animated messages
+  useEffect(() => {
+    async function fetchMessages() {
+      try {
+        const response = await fetch('/api/animated-messages?enabled=true');
+        if (response.ok) {
+          const data: AnimatedMessage[] = await response.json();
+          const messageTexts = data.map((m) => m.message);
+          setMessages(messageTexts.length > 0 ? messageTexts : ['Your comprehensive medical scribe documentation system']);
+        } else {
+          setMessages(['Your comprehensive medical scribe documentation system']);
+        }
+      } catch (error) {
+        console.error('Error fetching animated messages:', error);
+        setMessages(['Your comprehensive medical scribe documentation system']);
+      } finally {
+        setIsLoadingMessages(false);
+      }
+    }
+    fetchMessages();
+  }, []);
 
   return (
     <>
@@ -22,8 +54,12 @@ export default function HomePageClient({ greeting }: HomePageClientProps) {
           <h1 className="text-5xl font-bold text-main mb-3">
             {greeting}
           </h1>
-          <p className="text-lg text-medium">
-            Your comprehensive medical scribe documentation system
+          <p className="text-lg text-medium min-h-[28px]">
+            {isLoadingMessages ? (
+              'Your comprehensive medical scribe documentation system'
+            ) : (
+              <TypewriterText messages={messages} className="text-medium" />
+            )}
           </p>
         </div>
 
