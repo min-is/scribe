@@ -10,7 +10,7 @@ import {
 } from '@/scenario/actions';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
-import { FiEdit, FiTrash2, FiPlus, FiX, FiEye } from 'react-icons/fi';
+import { FiEdit, FiTrash2, FiPlus, FiX } from 'react-icons/fi';
 
 type ScenariosAdminClientProps = {
   scenarios: Scenario[];
@@ -114,7 +114,7 @@ export default function ScenariosAdminClient({
   };
 
   return (
-    <div className="min-h-screen p-8 font-mono">
+    <div className="min-h-screen p-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8 flex justify-between items-center">
@@ -285,13 +285,13 @@ export default function ScenariosAdminClient({
               <thead className="bg-dim border-b border-main">
                 <tr>
                   <th className="text-left px-4 py-3 text-main font-semibold text-sm">
-                    Title
+                    Scenario Title
                   </th>
                   <th className="text-left px-4 py-3 text-main font-semibold text-sm">
                     Category
                   </th>
                   <th className="text-left px-4 py-3 text-main font-semibold text-sm">
-                    Views
+                    Description
                   </th>
                   <th className="text-right px-4 py-3 text-main font-semibold text-sm">
                     Actions
@@ -321,11 +321,8 @@ export default function ScenariosAdminClient({
                           {scenario.category}
                         </span>
                       </td>
-                      <td className="px-4 py-3 text-medium text-sm">
-                        <div className="flex items-center gap-1">
-                          <FiEye className="text-sm" />
-                          {scenario.viewCount}
-                        </div>
+                      <td className="px-4 py-3 text-dim text-sm">
+                        {scenario.description || '—'}
                       </td>
                       <td className="px-4 py-3 text-right">
                         <div className="flex gap-2 justify-end">

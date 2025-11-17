@@ -159,7 +159,7 @@ export default function SmartPhrasesPageClient({
                           {/* Expand icon column */}
                         </th>
                         <th className="text-left px-4 py-3 text-main font-semibold text-sm">
-                          Phrase
+                          Dot Phrase
                         </th>
                         <th className="text-left px-4 py-3 text-main font-semibold text-sm hidden md:table-cell">
                           Category
@@ -203,17 +203,10 @@ export default function SmartPhrasesPageClient({
                                     </button>
                                   </div>
 
-                                  {/* Phrase */}
-                                  <div className="px-4 py-3 flex-shrink-0">
-                                    <code className="text-blue-400 font-mono text-sm bg-content px-2 py-1 rounded">
-                                      {phrase.slug}
-                                    </code>
-                                  </div>
-
-                                  {/* Title */}
+                                  {/* Dot Phrase */}
                                   <div className="px-4 py-3 flex-1 min-w-0">
-                                    <p className="text-main font-medium text-sm truncate">
-                                      {phrase.title}
+                                    <p className="text-main font-medium text-sm">
+                                      {phrase.slug}
                                     </p>
                                   </div>
 
