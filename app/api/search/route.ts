@@ -17,6 +17,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Build where clause with optional type filter
+    // Support fuzzy search for physician names and medication names
     const whereClause: any = {
       deletedAt: null,
       OR: [

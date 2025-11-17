@@ -145,14 +145,18 @@ model Page {
   tags          String[] // Searchable tags
 
   // Legacy compatibility - links to old models during migration
-  providerId    String?  @unique
-  provider      Provider? @relation(fields: [providerId], references: [id])
-  procedureId   String?  @unique
-  procedure     Procedure? @relation(fields: [procedureId], references: [id])
-  scenarioId    String?  @unique
-  scenario      Scenario? @relation(fields: [scenarioId], references: [id])
-  smartPhraseId String?  @unique
-  smartPhrase   SmartPhrase? @relation(fields: [smartPhraseId], references: [id])
+  providerId           String?  @unique
+  provider             Provider? @relation(fields: [providerId], references: [id])
+  procedureId          String?  @unique
+  procedure            Procedure? @relation(fields: [procedureId], references: [id])
+  scenarioId           String?  @unique
+  scenario             Scenario? @relation(fields: [scenarioId], references: [id])
+  smartPhraseId        String?  @unique
+  smartPhrase          SmartPhrase? @relation(fields: [smartPhraseId], references: [id])
+  physicianDirectoryId String?  @unique
+  physicianDirectory   PhysicianDirectory? @relation(fields: [physicianDirectoryId], references: [id])
+  medicationId         String?  @unique
+  medication           Medication? @relation(fields: [medicationId], references: [id])
 
   // Soft delete
   deletedAt     DateTime?
@@ -179,6 +183,53 @@ enum PageType {
   SCENARIO
   WIKI
   FOLDER
+  PHYSICIAN_DIRECTORY
+  MEDICATION
+}
+
+model PhysicianDirectory {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  name      String
+  specialty String
+  tags      String[] // For fuzzy search
+
+  // Analytics
+  viewCount Int      @default(0)
+
+  // Page relationship
+  page      Page?
+
+  // Metadata
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([slug])
+  @@index([name])
+  @@index([specialty])
+}
+
+model Medication {
+  id              String   @id @default(cuid())
+  slug            String   @unique
+  name            String
+  type            String   // e.g., "Antibiotic", "Analgesic"
+  commonlyUsedFor String?  // Description
+  tags            String[] // For fuzzy search
+
+  // Analytics
+  viewCount       Int      @default(0)
+
+  // Page relationship
+  page            Page?
+
+  // Metadata
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([slug])
+  @@index([name])
+  @@index([type])
 }
 
 model AnimatedMessage {
