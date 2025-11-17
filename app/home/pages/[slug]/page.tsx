@@ -161,7 +161,7 @@ export default async function PageView({ params }: PageViewProps) {
                 {page.children.map((child) => (
                   <Link
                     key={child.id}
-                    href={`/workspace/pages/${child.slug}`}
+                    href={`/home/pages/${child.slug}`}
                     className="group flex items-start gap-3 p-5 border border-main rounded-xl hover:shadow-soft hover:border-primary/50 transition-all bg-main"
                   >
                     {child.icon && (

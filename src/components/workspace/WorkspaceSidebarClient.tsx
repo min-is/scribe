@@ -32,16 +32,16 @@ export function WorkspaceSidebar() {
       {/* Navigation */}
       <div className="p-3 space-y-1">
         <Link
-          href="/workspace"
+          href="/home"
           className={clsx(
             'flex items-center gap-3 px-3 py-2 text-sm transition-all border-b-2',
-            isActive('/workspace')
+            isActive('/home')
               ? 'border-white dark:border-white text-main font-semibold'
               : 'border-transparent text-dim hover:text-main hover:border-white/30 dark:hover:border-white/30'
           )}
         >
           <FileText size={18} />
-          <span>Workspace</span>
+          <span>Home</span>
         </Link>
 
         <Link

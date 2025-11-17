@@ -10,36 +10,45 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const query = searchParams.get('q');
+    const type = searchParams.get('type'); // Optional type filter
 
     if (!query || query.trim().length === 0) {
       return NextResponse.json([]);
     }
 
+    // Build where clause with optional type filter
+    const whereClause: any = {
+      deletedAt: null,
+      OR: [
+        {
+          title: {
+            contains: query,
+            mode: 'insensitive',
+          },
+        },
+        {
+          textContent: {
+            contains: query,
+            mode: 'insensitive',
+          },
+        },
+        {
+          tags: {
+            hasSome: [query],
+          },
+        },
+      ],
+    };
+
+    // Add type filter if provided
+    if (type) {
+      whereClause.type = type;
+    }
+
     // Search using case-insensitive LIKE for title and textContent
     // PostgreSQL full-text search would be more efficient for large datasets
     const pages = await prisma.page.findMany({
-      where: {
-        deletedAt: null,
-        OR: [
-          {
-            title: {
-              contains: query,
-              mode: 'insensitive',
-            },
-          },
-          {
-            textContent: {
-              contains: query,
-              mode: 'insensitive',
-            },
-          },
-          {
-            tags: {
-              hasSome: [query],
-            },
-          },
-        ],
-      },
+      where: whereClause,
       select: {
         id: true,
         slug: true,

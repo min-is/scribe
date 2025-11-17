@@ -92,7 +92,7 @@ export function WorkspaceSidebar() {
       <div className="flex-1 overflow-y-auto p-3">
         <div className="mb-2 flex items-center justify-between">
           <span className="text-xs font-semibold text-dim uppercase tracking-wider">
-            Workspace
+            Pages
           </span>
           <Link
             href="/pages/new"
