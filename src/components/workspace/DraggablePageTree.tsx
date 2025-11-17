@@ -184,7 +184,7 @@ function SortablePageNode({ page, level, currentPath }: SortablePageNodeProps) {
   const [children, setChildren] = useState<PageNode[]>([]);
   const [isLoadingChildren, setIsLoadingChildren] = useState(false);
   const hasChildren = page._count.children > 0;
-  const isActive = currentPath === `/workspace/pages/${page.slug}`;
+  const isActive = currentPath === `/home/pages/${page.slug}`;
 
   const {
     attributes,
@@ -266,7 +266,7 @@ function SortablePageNode({ page, level, currentPath }: SortablePageNodeProps) {
 
         {/* Page Link */}
         <Link
-          href={`/workspace/pages/${page.slug}`}
+          href={`/home/pages/${page.slug}`}
           className="flex items-center gap-2 flex-1 min-w-0 py-1.5 pr-3"
         >
           <span className="text-base flex-shrink-0">

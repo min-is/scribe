@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { Search, FileText, Loader2, X } from 'lucide-react';
 import { clsx } from 'clsx/lite';
@@ -15,31 +15,25 @@ interface SearchResult {
   viewCount: number;
 }
 
-export default function SearchModal() {
-  const [isOpen, setIsOpen] = useState(false);
+interface SectionSearchModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  sectionType: 'PROVIDER' | 'PROCEDURE' | 'SMARTPHRASE' | 'SCENARIO';
+  sectionTitle: string;
+}
+
+export default function SectionSearchModal({
+  isOpen,
+  onClose,
+  sectionType,
+  sectionTitle,
+}: SectionSearchModalProps) {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<SearchResult[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
-
-  // Listen for Cmd+K / Ctrl+K
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-        e.preventDefault();
-        setIsOpen(true);
-      }
-
-      if (e.key === 'Escape') {
-        setIsOpen(false);
-      }
-    };
-
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, []);
 
   // Focus input when modal opens
   useEffect(() => {
@@ -58,7 +52,9 @@ export default function SearchModal() {
     const timer = setTimeout(async () => {
       try {
         setIsSearching(true);
-        const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+        const response = await fetch(
+          `/api/search?q=${encodeURIComponent(query)}&type=${sectionType}`
+        );
 
         if (!response.ok) {
           throw new Error('Search failed');
@@ -75,7 +71,7 @@ export default function SearchModal() {
     }, 300);
 
     return () => clearTimeout(timer);
-  }, [query]);
+  }, [query, sectionType]);
 
   // Handle keyboard navigation
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -88,12 +84,14 @@ export default function SearchModal() {
     } else if (e.key === 'Enter' && results[selectedIndex]) {
       e.preventDefault();
       navigateToResult(results[selectedIndex]);
+    } else if (e.key === 'Escape') {
+      onClose();
     }
   };
 
   const navigateToResult = (result: SearchResult) => {
     router.push(`/home/pages/${result.slug}`);
-    setIsOpen(false);
+    onClose();
     setQuery('');
     setResults([]);
   };
@@ -120,7 +118,7 @@ export default function SearchModal() {
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black bg-opacity-50"
-        onClick={() => setIsOpen(false)}
+        onClick={onClose}
       />
 
       {/* Search Modal */}
@@ -134,14 +132,14 @@ export default function SearchModal() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Search pages..."
+            placeholder={`Search ${sectionTitle.toLowerCase()}...`}
             className="flex-1 bg-transparent border-none outline-none text-main placeholder-dim text-base"
           />
           {isSearching && (
             <Loader2 size={20} className="text-dim animate-spin flex-shrink-0" />
           )}
           <button
-            onClick={() => setIsOpen(false)}
+            onClick={onClose}
             className="p-1 hover:bg-dim rounded transition-colors"
           >
             <X size={20} className="text-dim" />
@@ -150,71 +148,72 @@ export default function SearchModal() {
 
         {/* Results */}
         <div className="max-h-96 overflow-y-auto">
-          {results.length === 0 && query.trim() && !isSearching && (
-            <div className="px-4 py-8 text-center text-dim">
-              No pages found for "{query}"
+          {query.trim() && results.length === 0 && !isSearching && (
+            <div className="p-8 text-center text-dim">
+              No {sectionTitle.toLowerCase()} found for "{query}"
             </div>
           )}
 
-          {results.length === 0 && !query.trim() && (
-            <div className="px-4 py-8 text-center text-dim">
-              <div className="mb-2">Quick search</div>
-              <div className="text-sm">
-                Type to search across all pages
-              </div>
-            </div>
-          )}
-
-          {results.map((result, index) => (
-            <button
-              key={result.id}
-              onClick={() => navigateToResult(result)}
-              onMouseEnter={() => setSelectedIndex(index)}
-              className={clsx(
-                'w-full flex items-start gap-3 px-4 py-3 text-left transition-colors',
-                index === selectedIndex
-                  ? 'bg-dim'
-                  : 'hover:bg-dim'
-              )}
-            >
-              <div className="text-2xl flex-shrink-0 mt-0.5">
-                {result.icon || <FileText size={20} className="text-dim" />}
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="font-medium text-main mb-1">
-                  {highlightMatch(result.title, query)}
-                </div>
-                {result.snippet && (
-                  <div className="text-sm text-dim line-clamp-2">
-                    {highlightMatch(result.snippet, query)}
+          {query.trim() && results.length > 0 && (
+            <div className="py-2">
+              {results.map((result, index) => (
+                <button
+                  key={result.id}
+                  onClick={() => navigateToResult(result)}
+                  className={clsx(
+                    'w-full text-left px-4 py-3 hover:bg-dim transition-colors border-l-2',
+                    selectedIndex === index
+                      ? 'bg-dim border-primary'
+                      : 'border-transparent'
+                  )}
+                  onMouseEnter={() => setSelectedIndex(index)}
+                >
+                  <div className="flex items-start gap-3">
+                    <div className="text-2xl flex-shrink-0 mt-1">
+                      {result.icon || <FileText size={20} className="text-dim" />}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="font-medium text-main mb-1">
+                        {highlightMatch(result.title, query)}
+                      </div>
+                      {result.snippet && (
+                        <div className="text-sm text-dim line-clamp-2">
+                          {highlightMatch(result.snippet, query)}
+                        </div>
+                      )}
+                      <div className="flex items-center gap-2 text-xs text-dim mt-1">
+                        <span className="capitalize">{result.type.toLowerCase()}</span>
+                        <span>•</span>
+                        <span>{result.viewCount} views</span>
+                      </div>
+                    </div>
                   </div>
-                )}
-                <div className="flex items-center gap-2 mt-1 text-xs text-dim">
-                  <span className="px-2 py-0.5 bg-medium rounded text-xs">
-                    {result.type}
-                  </span>
-                  <span>•</span>
-                  <span>{result.viewCount} views</span>
-                </div>
-              </div>
-            </button>
-          ))}
+                </button>
+              ))}
+            </div>
+          )}
+
+          {!query.trim() && (
+            <div className="p-8 text-center text-dim">
+              Start typing to search {sectionTitle.toLowerCase()}...
+            </div>
+          )}
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-between px-4 py-2 border-t border-main bg-dim text-xs text-dim">
+        <div className="px-4 py-2 border-t border-main bg-medium text-xs text-dim flex items-center justify-between">
           <div className="flex items-center gap-4">
             <span>
-              <kbd className="px-1.5 py-0.5 bg-medium border border-main rounded text-xs">↑</kbd>
-              <kbd className="px-1.5 py-0.5 bg-medium border border-main rounded text-xs ml-1">↓</kbd>
+              <kbd className="px-2 py-0.5 bg-dim rounded text-main font-mono">↑</kbd>
+              <kbd className="px-2 py-0.5 bg-dim rounded text-main font-mono ml-1">↓</kbd>
               {' '}to navigate
             </span>
             <span>
-              <kbd className="px-1.5 py-0.5 bg-medium border border-main rounded text-xs">↵</kbd>
+              <kbd className="px-2 py-0.5 bg-dim rounded text-main font-mono">Enter</kbd>
               {' '}to select
             </span>
             <span>
-              <kbd className="px-1.5 py-0.5 bg-medium border border-main rounded text-xs">esc</kbd>
+              <kbd className="px-2 py-0.5 bg-dim rounded text-main font-mono">Esc</kbd>
               {' '}to close
             </span>
           </div>

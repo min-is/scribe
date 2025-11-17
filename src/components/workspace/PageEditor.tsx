@@ -82,7 +82,7 @@ export default function PageEditor({ page }: PageEditorProps) {
         throw new Error('Failed to delete');
       }
 
-      router.push('/workspace');
+      router.push('/home');
     } catch (error) {
       console.error('Error deleting page:', error);
       alert('Failed to delete page');
@@ -96,7 +96,7 @@ export default function PageEditor({ page }: PageEditorProps) {
         <div className="flex items-center justify-between px-6 py-3">
           <div className="flex items-center gap-3">
             <Link
-              href={`/workspace/pages/${page.slug}`}
+              href={`/home/pages/${page.slug}`}
               className="p-2 hover:bg-dim rounded-md transition-colors"
               title="Close editor"
             >
@@ -119,7 +119,7 @@ export default function PageEditor({ page }: PageEditorProps) {
 
           <div className="flex items-center gap-2">
             <Link
-              href={`/workspace/pages/${page.slug}`}
+              href={`/home/pages/${page.slug}`}
               className="flex items-center gap-2 px-4 py-2 border border-main rounded-md hover:bg-dim transition-colors text-sm"
             >
               <Eye size={16} />
