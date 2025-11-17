@@ -85,7 +85,6 @@ CREATE INDEX "Procedure_viewCount_idx" ON "Procedure"("viewCount");`,
 
 export default function DatabaseManagementClient() {
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
-  const [isRunningMigration, setIsRunningMigration] = useState(false);
 
   const copyToClipboard = async (sql: string, index: number) => {
     try {
@@ -105,31 +104,6 @@ export default function DatabaseManagementClient() {
       toast.success('All SQL copied to clipboard!');
     } catch (error) {
       toast.error('Failed to copy to clipboard');
-    }
-  };
-
-  const runMigrations = async () => {
-    if (!confirm('Are you sure you want to run database migrations? This will apply all pending migrations to your database.')) {
-      return;
-    }
-
-    setIsRunningMigration(true);
-    try {
-      const response = await fetch('/api/admin/migrate', {
-        method: 'POST',
-      });
-      const data = await response.json();
-
-      if (data.success) {
-        toast.success('Migrations completed successfully!');
-      } else {
-        toast.error(data.error || 'Migration failed');
-      }
-    } catch (error) {
-      toast.error('Failed to run migrations');
-      console.error('Migration error:', error);
-    } finally {
-      setIsRunningMigration(false);
     }
   };
 
@@ -155,29 +129,19 @@ export default function DatabaseManagementClient() {
                 ✨ Migrations Run Automatically
               </h2>
               <p className="text-medium text-sm mb-3">
-                Database migrations now run automatically when you:
+                Database migrations run automatically when you:
               </p>
               <ul className="list-disc list-inside text-medium space-y-1 text-sm ml-4">
-                <li>Deploy to production (Vercel, etc.)</li>
+                <li>Deploy to production (Vercel, etc.) - migrations run during build</li>
                 <li>Start the development server (<code className="bg-content px-1 py-0.5 rounded">npm run dev</code>)</li>
                 <li>Start the production server (<code className="bg-content px-1 py-0.5 rounded">npm start</code>)</li>
               </ul>
               <p className="text-medium text-sm mt-3">
-                <strong className="text-main">No manual setup required!</strong> The tables will be created automatically on your next deployment.
+                <strong className="text-main">No manual setup required!</strong> The tables are created automatically via the <code className="bg-content px-1 py-0.5 rounded">scripts/run-migrations.js</code> script during deployment.
               </p>
-              <div className="mt-4">
-                <button
-                  onClick={runMigrations}
-                  disabled={isRunningMigration}
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  <FiDatabase />
-                  {isRunningMigration ? 'Running Migrations...' : 'Run Migrations Now'}
-                </button>
-                <p className="text-dim text-sm mt-2">
-                  Click to manually run all pending database migrations
-                </p>
-              </div>
+              <p className="text-dim text-sm mt-2">
+                💡 If you need to add a table immediately, redeploy your app or restart your dev server.
+              </p>
             </div>
           </div>
         </div>

@@ -246,6 +246,51 @@ BEGIN
 END $$;
     `,
   },
+  {
+    name: '20251117000000_add_animated_message',
+    sql: `
+-- CreateTable AnimatedMessage (only if not exists)
+CREATE TABLE IF NOT EXISTS "AnimatedMessage" (
+    "id" TEXT NOT NULL,
+    "message" TEXT NOT NULL,
+    "order" INTEGER NOT NULL DEFAULT 0,
+    "enabled" BOOLEAN NOT NULL DEFAULT true,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "AnimatedMessage_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateIndexes for AnimatedMessage
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_indexes WHERE indexname = 'AnimatedMessage_order_idx') THEN
+        CREATE INDEX "AnimatedMessage_order_idx" ON "AnimatedMessage"("order");
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM pg_indexes WHERE indexname = 'AnimatedMessage_enabled_idx') THEN
+        CREATE INDEX "AnimatedMessage_enabled_idx" ON "AnimatedMessage"("enabled");
+    END IF;
+END $$;
+
+-- Insert default messages if table is empty
+INSERT INTO "AnimatedMessage" ("id", "message", "order", "enabled", "createdAt", "updatedAt")
+SELECT
+    gen_random_uuid()::text,
+    message,
+    order_num,
+    true,
+    CURRENT_TIMESTAMP,
+    CURRENT_TIMESTAMP
+FROM (
+    VALUES
+        ('The best place for your documentation needs', 1),
+        ('A magician pulls a rabbit out of a hat, an ER doctor pulls a rabbit out of a body cavity', 2),
+        ('Love your neighbors like Dr. Gromis loves his US machine', 3)
+) AS default_messages(message, order_num)
+WHERE NOT EXISTS (SELECT 1 FROM "AnimatedMessage");
+    `,
+  },
 ];
 
 async function runMigrations() {
