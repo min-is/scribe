@@ -160,66 +160,64 @@ export default function ProceduresPageClient({
                         const isExpanded = expandedRows.has(procedure.id);
 
                         return (
-                          <tr
-                            key={procedure.id}
-                            className={`border-b border-main/50 hover:bg-dim/30 transition-colors ${
-                              index % 2 === 0 ? 'bg-medium' : 'bg-dim/10'
-                            }`}
-                          >
-                            {/* Full row with expandable content */}
-                            <td colSpan={5} className="p-0">
-                              <div>
-                                {/* Main row content */}
-                                <div className="flex items-center">
-                                  {/* Expand button */}
-                                  <div className="px-4 py-3 w-12">
-                                    <button
-                                      onClick={() => toggleRow(procedure.id)}
-                                      className="text-dim/50 hover:text-main transition-colors bg-transparent"
-                                      aria-label={
-                                        isExpanded ? 'Collapse' : 'Expand'
-                                      }
-                                    >
-                                      {isExpanded ? (
-                                        <FiChevronDown className="text-lg" />
-                                      ) : (
-                                        <FiChevronRight className="text-lg" />
-                                      )}
-                                    </button>
-                                  </div>
+                          <>
+                            <tr
+                              key={procedure.id}
+                              className={`border-b border-main/50 hover:bg-dim/30 transition-colors ${
+                                index % 2 === 0 ? 'bg-medium' : 'bg-dim/10'
+                              }`}
+                            >
+                              {/* Expand button */}
+                              <td className="px-4 py-3 w-12">
+                                <button
+                                  onClick={() => toggleRow(procedure.id)}
+                                  className="text-dim/50 hover:text-main transition-colors bg-transparent"
+                                  aria-label={
+                                    isExpanded ? 'Collapse' : 'Expand'
+                                  }
+                                >
+                                  {isExpanded ? (
+                                    <FiChevronDown className="text-lg" />
+                                  ) : (
+                                    <FiChevronRight className="text-lg" />
+                                  )}
+                                </button>
+                              </td>
 
-                                  {/* Title */}
-                                  <div className="px-4 py-3 flex-1 min-w-0">
-                                    <p className="text-main font-medium text-sm">
-                                      {procedure.title}
-                                    </p>
-                                  </div>
+                              {/* Title */}
+                              <td className="px-4 py-3">
+                                <p className="text-main font-medium text-sm">
+                                  {procedure.title}
+                                </p>
+                              </td>
 
-                                  {/* Category - hidden on mobile */}
-                                  <div className="px-4 py-3 hidden md:block flex-shrink-0">
-                                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-500/10 text-purple-400 border border-purple-500/20">
-                                      {procedure.category}
-                                    </span>
-                                  </div>
+                              {/* Category - hidden on mobile */}
+                              <td className="px-4 py-3 hidden md:table-cell">
+                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-500/10 text-purple-400 border border-purple-500/20">
+                                  {procedure.category}
+                                </span>
+                              </td>
 
-                                  {/* Description - hidden on smaller screens */}
-                                  <div className="px-4 py-3 hidden lg:block flex-1 min-w-0">
-                                    <p className="text-dim text-sm truncate">
-                                      {procedure.description || '—'}
-                                    </p>
-                                  </div>
+                              {/* Description - hidden on smaller screens */}
+                              <td className="px-4 py-3 hidden lg:table-cell">
+                                <p className="text-dim text-sm truncate">
+                                  {procedure.description || '—'}
+                                </p>
+                              </td>
 
-                                  {/* Views */}
-                                  <div className="px-4 py-3 w-24 flex-shrink-0">
-                                    <div className="flex items-center gap-1 text-medium text-sm">
-                                      <FiEye className="text-sm" />
-                                      {procedure.viewCount}
-                                    </div>
-                                  </div>
+                              {/* Views */}
+                              <td className="px-4 py-3 w-24">
+                                <div className="flex items-center gap-1 text-medium text-sm">
+                                  <FiEye className="text-sm" />
+                                  {procedure.viewCount}
                                 </div>
+                              </td>
+                            </tr>
 
-                                {/* Expanded content */}
-                                {isExpanded && (
+                            {/* Expanded content row */}
+                            {isExpanded && (
+                              <tr key={`${procedure.id}-expanded`}>
+                                <td colSpan={5} className="p-0">
                                   <div className="bg-content border-t border-main/50 p-6 animate-in slide-in-from-top-2 duration-200">
                                     <div className="space-y-6">
                                       {/* Mobile-only category and description */}
@@ -329,10 +327,10 @@ export default function ProceduresPageClient({
                                       )}
                                     </div>
                                   </div>
-                                )}
-                              </div>
-                            </td>
-                          </tr>
+                                </td>
+                              </tr>
+                            )}
+                          </>
                         );
                       })}
                     </tbody>

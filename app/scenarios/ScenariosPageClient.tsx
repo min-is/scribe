@@ -152,58 +152,56 @@ export default function ScenariosPageClient({
                         const isExpanded = expandedRows.has(scenario.id);
 
                         return (
-                          <tr
-                            key={scenario.id}
-                            className={`border-b border-main/50 hover:bg-dim/30 transition-colors ${
-                              index % 2 === 0 ? 'bg-medium' : 'bg-dim/10'
-                            }`}
-                          >
-                            {/* Full row with expandable content */}
-                            <td colSpan={4} className="p-0">
-                              <div>
-                                {/* Main row content */}
-                                <div className="flex items-center">
-                                  {/* Expand button */}
-                                  <div className="px-4 py-3 w-12">
-                                    <button
-                                      onClick={() => toggleRow(scenario.id)}
-                                      className="text-dim/50 hover:text-main transition-colors bg-transparent"
-                                      aria-label={
-                                        isExpanded ? 'Collapse' : 'Expand'
-                                      }
-                                    >
-                                      {isExpanded ? (
-                                        <FiChevronDown className="text-lg" />
-                                      ) : (
-                                        <FiChevronRight className="text-lg" />
-                                      )}
-                                    </button>
-                                  </div>
+                          <>
+                            <tr
+                              key={scenario.id}
+                              className={`border-b border-main/50 hover:bg-dim/30 transition-colors ${
+                                index % 2 === 0 ? 'bg-medium' : 'bg-dim/10'
+                              }`}
+                            >
+                              {/* Expand button */}
+                              <td className="px-4 py-3 w-12">
+                                <button
+                                  onClick={() => toggleRow(scenario.id)}
+                                  className="text-dim/50 hover:text-main transition-colors bg-transparent"
+                                  aria-label={
+                                    isExpanded ? 'Collapse' : 'Expand'
+                                  }
+                                >
+                                  {isExpanded ? (
+                                    <FiChevronDown className="text-lg" />
+                                  ) : (
+                                    <FiChevronRight className="text-lg" />
+                                  )}
+                                </button>
+                              </td>
 
-                                  {/* Title */}
-                                  <div className="px-4 py-3 flex-1 min-w-0">
-                                    <p className="text-main font-medium text-sm">
-                                      {scenario.title}
-                                    </p>
-                                  </div>
+                              {/* Title */}
+                              <td className="px-4 py-3">
+                                <p className="text-main font-medium text-sm">
+                                  {scenario.title}
+                                </p>
+                              </td>
 
-                                  {/* Category - hidden on mobile */}
-                                  <div className="px-4 py-3 hidden md:block flex-shrink-0">
-                                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-500/10 text-green-400 border border-green-500/20">
-                                      {scenario.category}
-                                    </span>
-                                  </div>
+                              {/* Category - hidden on mobile */}
+                              <td className="px-4 py-3 hidden md:table-cell">
+                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-500/10 text-green-400 border border-green-500/20">
+                                  {scenario.category}
+                                </span>
+                              </td>
 
-                                  {/* Description - hidden on smaller screens */}
-                                  <div className="px-4 py-3 hidden lg:block flex-1 min-w-0">
-                                    <p className="text-dim text-sm truncate">
-                                      {scenario.description || '—'}
-                                    </p>
-                                  </div>
-                                </div>
+                              {/* Description - hidden on smaller screens */}
+                              <td className="px-4 py-3 hidden lg:table-cell">
+                                <p className="text-dim text-sm truncate">
+                                  {scenario.description || '—'}
+                                </p>
+                              </td>
+                            </tr>
 
-                                {/* Expanded content */}
-                                {isExpanded && (
+                            {/* Expanded content row */}
+                            {isExpanded && (
+                              <tr key={`${scenario.id}-expanded`}>
+                                <td colSpan={4} className="p-0">
                                   <div className="bg-content border-t border-main/50 p-6 animate-in slide-in-from-top-2 duration-200">
                                     <div className="space-y-4">
                                       {/* Mobile-only category and description */}
@@ -252,10 +250,10 @@ export default function ScenariosPageClient({
                                       )}
                                     </div>
                                   </div>
-                                )}
-                              </div>
-                            </td>
-                          </tr>
+                                </td>
+                              </tr>
+                            )}
+                          </>
                         );
                       })}
                     </tbody>
