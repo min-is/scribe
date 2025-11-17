@@ -180,3 +180,15 @@ enum PageType {
   WIKI
   FOLDER
 }
+
+model AnimatedMessage {
+  id        String   @id @default(cuid())
+  message   String
+  order     Int      @default(0)
+  enabled   Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([order])
+  @@index([enabled])
+}
