@@ -288,6 +288,8 @@ export function getDefaultIconForType(type: PageType): string {
     SCENARIO: '🚨',
     WIKI: '📄',
     FOLDER: '📁',
+    PHYSICIAN_DIRECTORY: '🩺',
+    MEDICATION: '💊',
   };
 
   return icons[type] || '📄';
