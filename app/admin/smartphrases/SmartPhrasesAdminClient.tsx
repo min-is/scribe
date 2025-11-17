@@ -114,7 +114,7 @@ export default function SmartPhrasesAdminClient({
   };
 
   return (
-    <div className="min-h-screen p-8 font-mono">
+    <div className="min-h-screen p-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8 flex justify-between items-center">
@@ -285,16 +285,13 @@ export default function SmartPhrasesAdminClient({
               <thead className="bg-dim border-b border-main">
                 <tr>
                   <th className="text-left px-4 py-3 text-main font-semibold text-sm">
-                    Slug
-                  </th>
-                  <th className="text-left px-4 py-3 text-main font-semibold text-sm">
-                    Title
+                    Dot Phrase
                   </th>
                   <th className="text-left px-4 py-3 text-main font-semibold text-sm">
                     Category
                   </th>
                   <th className="text-left px-4 py-3 text-main font-semibold text-sm">
-                    Usage
+                    Description
                   </th>
                   <th className="text-right px-4 py-3 text-main font-semibold text-sm">
                     Actions
@@ -304,7 +301,7 @@ export default function SmartPhrasesAdminClient({
               <tbody>
                 {initialSmartPhrases.length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="px-4 py-8 text-center text-dim">
+                    <td colSpan={4} className="px-4 py-8 text-center text-dim">
                       No SmartPhrases yet. Create one to get started!
                     </td>
                   </tr>
@@ -316,19 +313,16 @@ export default function SmartPhrasesAdminClient({
                         index % 2 === 0 ? 'bg-medium' : 'bg-dim/10'
                       }`}
                     >
-                      <td className="px-4 py-3">
-                        <code className="text-blue-400 font-mono text-sm bg-content px-2 py-1 rounded">
-                          {phrase.slug}
-                        </code>
+                      <td className="px-4 py-3 text-main font-medium">
+                        {phrase.slug}
                       </td>
-                      <td className="px-4 py-3 text-main">{phrase.title}</td>
                       <td className="px-4 py-3">
                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-500/10 text-blue-400 border border-blue-500/20">
                           {phrase.category}
                         </span>
                       </td>
-                      <td className="px-4 py-3 text-medium text-sm">
-                        {phrase.usageCount} times
+                      <td className="px-4 py-3 text-dim text-sm">
+                        {phrase.description || '—'}
                       </td>
                       <td className="px-4 py-3 text-right">
                         <div className="flex gap-2 justify-end">

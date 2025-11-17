@@ -130,7 +130,7 @@ export default function ProceduresAdminClient({
   };
 
   return (
-    <div className="min-h-screen p-8 font-mono">
+    <div className="min-h-screen p-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8 flex justify-between items-center">
@@ -357,10 +357,13 @@ export default function ProceduresAdminClient({
               <thead className="bg-dim border-b border-main">
                 <tr>
                   <th className="text-left px-4 py-3 text-main font-semibold text-sm">
-                    Title
+                    Procedure
                   </th>
                   <th className="text-left px-4 py-3 text-main font-semibold text-sm">
                     Category
+                  </th>
+                  <th className="text-left px-4 py-3 text-main font-semibold text-sm">
+                    Description
                   </th>
                   <th className="text-left px-4 py-3 text-main font-semibold text-sm">
                     Views
@@ -373,7 +376,7 @@ export default function ProceduresAdminClient({
               <tbody>
                 {initialProcedures.length === 0 ? (
                   <tr>
-                    <td colSpan={4} className="px-4 py-8 text-center text-dim">
+                    <td colSpan={5} className="px-4 py-8 text-center text-dim">
                       No Procedures yet. Create one to get started!
                     </td>
                   </tr>
@@ -392,6 +395,9 @@ export default function ProceduresAdminClient({
                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-500/10 text-purple-400 border border-purple-500/20">
                           {procedure.category}
                         </span>
+                      </td>
+                      <td className="px-4 py-3 text-dim text-sm">
+                        {procedure.description || '—'}
                       </td>
                       <td className="px-4 py-3 text-medium text-sm">
                         <div className="flex items-center gap-1">

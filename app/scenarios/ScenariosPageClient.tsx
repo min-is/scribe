@@ -145,9 +145,6 @@ export default function ScenariosPageClient({
                         <th className="text-left px-4 py-3 text-main font-semibold text-sm hidden lg:table-cell">
                           Description
                         </th>
-                        <th className="text-left px-4 py-3 text-main font-semibold text-sm w-24">
-                          Views
-                        </th>
                       </tr>
                     </thead>
                     <tbody>
@@ -162,7 +159,7 @@ export default function ScenariosPageClient({
                             }`}
                           >
                             {/* Full row with expandable content */}
-                            <td colSpan={5} className="p-0">
+                            <td colSpan={4} className="p-0">
                               <div>
                                 {/* Main row content */}
                                 <div className="flex items-center">
@@ -202,14 +199,6 @@ export default function ScenariosPageClient({
                                     <p className="text-dim text-sm truncate">
                                       {scenario.description || '—'}
                                     </p>
-                                  </div>
-
-                                  {/* Views */}
-                                  <div className="px-4 py-3 w-24 flex-shrink-0">
-                                    <div className="flex items-center gap-1 text-medium text-sm">
-                                      <FiEye className="text-sm" />
-                                      {scenario.viewCount}
-                                    </div>
                                   </div>
                                 </div>
 
