@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { toast } from 'sonner';
-import { FiDatabase, FiCopy, FiCheck, FiAlertCircle, FiCode } from 'react-icons/fi';
+import { FiDatabase, FiCopy, FiCheck, FiAlertCircle, FiCode, FiPlay } from 'react-icons/fi';
 
 const MIGRATIONS = [
   {
@@ -85,6 +85,7 @@ CREATE INDEX "Procedure_viewCount_idx" ON "Procedure"("viewCount");`,
 
 export default function DatabaseManagementClient() {
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
+  const [isRunningMigration, setIsRunningMigration] = useState(false);
 
   const copyToClipboard = async (sql: string, index: number) => {
     try {
@@ -107,6 +108,30 @@ export default function DatabaseManagementClient() {
     }
   };
 
+  const runMigrations = async () => {
+    if (!confirm('Are you sure you want to run database migrations? This will apply all pending migrations to your database.')) {
+      return;
+    }
+
+    setIsRunningMigration(true);
+    try {
+      const response = await fetch('/api/admin/migrate', {
+        method: 'POST',
+      });
+      const data = await response.json();
+
+      if (data.success) {
+        toast.success('Migrations applied successfully!');
+      } else {
+        toast.error(data.error || 'Migration failed');
+      }
+    } catch (error) {
+      toast.error('Failed to run migrations');
+    } finally {
+      setIsRunningMigration(false);
+    }
+  };
+
   return (
     <div className="min-h-screen p-8 font-mono">
       <div className="max-w-6xl mx-auto">
@@ -118,6 +143,29 @@ export default function DatabaseManagementClient() {
           <p className="text-dim text-lg">
             Automatic migrations on deployment + manual fallback
           </p>
+        </div>
+
+        {/* Run Migrations Button */}
+        <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-6 mb-8">
+          <div className="flex items-start gap-3">
+            <FiPlay className="text-2xl text-blue-400 flex-shrink-0 mt-1" />
+            <div className="flex-1">
+              <h2 className="text-lg font-semibold text-main mb-2">
+                🚀 Run Migrations Now
+              </h2>
+              <p className="text-medium text-sm mb-4">
+                Click the button below to run all pending database migrations immediately. This is useful if you need to apply migrations without redeploying.
+              </p>
+              <button
+                onClick={runMigrations}
+                disabled={isRunningMigration}
+                className="inline-flex items-center gap-2 px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <FiPlay />
+                {isRunningMigration ? 'Running Migrations...' : 'Run Migrations'}
+              </button>
+            </div>
+          </div>
         </div>
 
         {/* Automatic Migrations Info */}
