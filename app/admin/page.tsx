@@ -67,6 +67,30 @@ export default function AdminPage() {
           </a>
 
           <a
+            href="/admin/physicians"
+            className="bg-medium border border-main rounded-lg p-6 hover:bg-dim transition-colors"
+          >
+            <h2 className="text-xl font-semibold text-main mb-2">
+              Physician Directory
+            </h2>
+            <p className="text-dim">
+              Manage hospital physician directory
+            </p>
+          </a>
+
+          <a
+            href="/admin/medications"
+            className="bg-medium border border-main rounded-lg p-6 hover:bg-dim transition-colors"
+          >
+            <h2 className="text-xl font-semibold text-main mb-2">
+              Medications
+            </h2>
+            <p className="text-dim">
+              Manage medication reference library
+            </p>
+          </a>
+
+          <a
             href="/admin/database"
             className="bg-medium border border-main rounded-lg p-6 hover:bg-dim transition-colors"
           >

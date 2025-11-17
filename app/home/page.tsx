@@ -37,7 +37,7 @@ export default function HomePage() {
         </div>
 
         {/* Quick Access Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-10">
           <QuickAccessCard
             title="Providers"
             count={null}
@@ -58,6 +58,16 @@ export default function HomePage() {
             count={null}
             onClick={() => handleSectionClick(PageType.SCENARIO)}
           />
+          <QuickAccessCard
+            title="Physician Directory"
+            count={null}
+            onClick={() => handleSectionClick(PageType.PHYSICIAN_DIRECTORY)}
+          />
+          <QuickAccessCard
+            title="Medications"
+            count={null}
+            onClick={() => handleSectionClick(PageType.MEDICATION)}
+          />
         </div>
 
         {/* Quick Actions */}
@@ -66,7 +76,7 @@ export default function HomePage() {
             <Star size={20} className="text-dim" />
             Quick Actions
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             <ActionButton
               title="Provider Preferences"
               description="View provider profiles"
@@ -86,6 +96,16 @@ export default function HomePage() {
               title="Scenarios"
               description="Emergency protocols"
               onClick={() => handleSectionClick(PageType.SCENARIO)}
+            />
+            <ActionButton
+              title="Physician Directory"
+              description="Hospital physician lookup"
+              onClick={() => handleSectionClick(PageType.PHYSICIAN_DIRECTORY)}
+            />
+            <ActionButton
+              title="Medications"
+              description="Drug reference library"
+              onClick={() => handleSectionClick(PageType.MEDICATION)}
             />
           </div>
         </div>

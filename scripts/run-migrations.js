@@ -291,6 +291,132 @@ FROM (
 WHERE NOT EXISTS (SELECT 1 FROM "AnimatedMessage");
     `,
   },
+  {
+    name: '20251117000001_add_physician_directory_and_medications',
+    sql: `
+-- Update PageType enum to include new types (only if not exists)
+DO $$
+BEGIN
+    -- Check if PHYSICIAN_DIRECTORY and MEDICATION values exist
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_enum
+        WHERE enumlabel = 'PHYSICIAN_DIRECTORY'
+        AND enumtypid = (SELECT oid FROM pg_type WHERE typname = 'PageType')
+    ) THEN
+        ALTER TYPE "PageType" ADD VALUE 'PHYSICIAN_DIRECTORY';
+    END IF;
+
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_enum
+        WHERE enumlabel = 'MEDICATION'
+        AND enumtypid = (SELECT oid FROM pg_type WHERE typname = 'PageType')
+    ) THEN
+        ALTER TYPE "PageType" ADD VALUE 'MEDICATION';
+    END IF;
+END $$;
+
+-- CreateTable PhysicianDirectory (only if not exists)
+CREATE TABLE IF NOT EXISTS "PhysicianDirectory" (
+    "id" TEXT NOT NULL,
+    "slug" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "specialty" TEXT NOT NULL,
+    "tags" TEXT[],
+    "viewCount" INTEGER NOT NULL DEFAULT 0,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "PhysicianDirectory_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable Medication (only if not exists)
+CREATE TABLE IF NOT EXISTS "Medication" (
+    "id" TEXT NOT NULL,
+    "slug" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "type" TEXT NOT NULL,
+    "commonlyUsedFor" TEXT,
+    "tags" TEXT[],
+    "viewCount" INTEGER NOT NULL DEFAULT 0,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "Medication_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateIndexes for PhysicianDirectory
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_indexes WHERE indexname = 'PhysicianDirectory_slug_key') THEN
+        CREATE UNIQUE INDEX "PhysicianDirectory_slug_key" ON "PhysicianDirectory"("slug");
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM pg_indexes WHERE indexname = 'PhysicianDirectory_name_idx') THEN
+        CREATE INDEX "PhysicianDirectory_name_idx" ON "PhysicianDirectory"("name");
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM pg_indexes WHERE indexname = 'PhysicianDirectory_specialty_idx') THEN
+        CREATE INDEX "PhysicianDirectory_specialty_idx" ON "PhysicianDirectory"("specialty");
+    END IF;
+END $$;
+
+-- CreateIndexes for Medication
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_indexes WHERE indexname = 'Medication_slug_key') THEN
+        CREATE UNIQUE INDEX "Medication_slug_key" ON "Medication"("slug");
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM pg_indexes WHERE indexname = 'Medication_name_idx') THEN
+        CREATE INDEX "Medication_name_idx" ON "Medication"("name");
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM pg_indexes WHERE indexname = 'Medication_type_idx') THEN
+        CREATE INDEX "Medication_type_idx" ON "Medication"("type");
+    END IF;
+END $$;
+
+-- Add new foreign key columns to Page table (only if not exists)
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.columns
+        WHERE table_name = 'Page' AND column_name = 'physicianDirectoryId'
+    ) THEN
+        ALTER TABLE "Page" ADD COLUMN "physicianDirectoryId" TEXT;
+        CREATE UNIQUE INDEX "Page_physicianDirectoryId_key" ON "Page"("physicianDirectoryId");
+    END IF;
+
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.columns
+        WHERE table_name = 'Page' AND column_name = 'medicationId'
+    ) THEN
+        ALTER TABLE "Page" ADD COLUMN "medicationId" TEXT;
+        CREATE UNIQUE INDEX "Page_medicationId_key" ON "Page"("medicationId");
+    END IF;
+END $$;
+
+-- AddForeignKeys (only if not exists)
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.table_constraints
+        WHERE constraint_name = 'Page_physicianDirectoryId_fkey' AND table_name = 'Page'
+    ) THEN
+        ALTER TABLE "Page" ADD CONSTRAINT "Page_physicianDirectoryId_fkey"
+        FOREIGN KEY ("physicianDirectoryId") REFERENCES "PhysicianDirectory"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+    END IF;
+
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.table_constraints
+        WHERE constraint_name = 'Page_medicationId_fkey' AND table_name = 'Page'
+    ) THEN
+        ALTER TABLE "Page" ADD CONSTRAINT "Page_medicationId_fkey"
+        FOREIGN KEY ("medicationId") REFERENCES "Medication"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+    END IF;
+END $$;
+    `,
+  },
 ];
 
 async function runMigrations() {
