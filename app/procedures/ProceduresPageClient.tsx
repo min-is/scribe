@@ -92,41 +92,7 @@ export default function ProceduresPageClient({
         </div>
 
         {/* Search and Filter Section */}
-        <div className="flex flex-col lg:flex-row gap-6 mb-8">
-          {/* Category Sidebar */}
-          <div className="lg:w-64 flex-shrink-0">
-            <div className="bg-medium border border-main rounded-lg p-4">
-              <h2 className="text-lg font-semibold text-main mb-4">
-                Categories
-              </h2>
-              <div className="space-y-1">
-                <button
-                  onClick={() => setSelectedCategory('All')}
-                  className={`w-full text-left px-3 py-2 rounded-md transition-colors text-sm ${
-                    selectedCategory === 'All'
-                      ? 'bg-content text-main font-semibold'
-                      : 'text-medium hover:bg-dim hover:text-main'
-                  }`}
-                >
-                  All Categories
-                </button>
-                {categories.map((category) => (
-                  <button
-                    key={category}
-                    onClick={() => setSelectedCategory(category)}
-                    className={`w-full text-left px-3 py-2 rounded-md transition-colors text-sm ${
-                      selectedCategory === category
-                        ? 'bg-content text-main font-semibold'
-                        : 'text-medium hover:bg-dim hover:text-main'
-                    }`}
-                  >
-                    {category}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-
+        <div className="flex flex-col gap-6 mb-8">
           {/* Main Content Area */}
           <div className="flex-1">
             {/* Search Bar */}
@@ -209,7 +175,7 @@ export default function ProceduresPageClient({
                                   <div className="px-4 py-3 w-12">
                                     <button
                                       onClick={() => toggleRow(procedure.id)}
-                                      className="text-medium hover:text-main transition-colors"
+                                      className="text-dim/50 hover:text-main transition-colors bg-transparent"
                                       aria-label={
                                         isExpanded ? 'Collapse' : 'Expand'
                                       }

@@ -109,41 +109,7 @@ export default function SmartPhrasesPageClient({
         </div>
 
         {/* Search and Filter Section */}
-        <div className="flex flex-col lg:flex-row gap-6 mb-8">
-          {/* Category Sidebar */}
-          <div className="lg:w-64 flex-shrink-0">
-            <div className="bg-medium border border-main rounded-lg p-4">
-              <h2 className="text-lg font-semibold text-main mb-4">
-                Categories
-              </h2>
-              <div className="space-y-1">
-                <button
-                  onClick={() => setSelectedCategory('All')}
-                  className={`w-full text-left px-3 py-2 rounded-md transition-colors text-sm ${
-                    selectedCategory === 'All'
-                      ? 'bg-content text-main font-semibold'
-                      : 'text-medium hover:bg-dim hover:text-main'
-                  }`}
-                >
-                  All Categories
-                </button>
-                {categories.map((category) => (
-                  <button
-                    key={category}
-                    onClick={() => setSelectedCategory(category)}
-                    className={`w-full text-left px-3 py-2 rounded-md transition-colors text-sm ${
-                      selectedCategory === category
-                        ? 'bg-content text-main font-semibold'
-                        : 'text-medium hover:bg-dim hover:text-main'
-                    }`}
-                  >
-                    {category}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-
+        <div className="flex flex-col gap-6 mb-8">
           {/* Main Content Area */}
           <div className="flex-1">
             {/* Search Bar */}
@@ -195,17 +161,11 @@ export default function SmartPhrasesPageClient({
                         <th className="text-left px-4 py-3 text-main font-semibold text-sm">
                           Phrase
                         </th>
-                        <th className="text-left px-4 py-3 text-main font-semibold text-sm">
-                          Title
-                        </th>
                         <th className="text-left px-4 py-3 text-main font-semibold text-sm hidden md:table-cell">
                           Category
                         </th>
                         <th className="text-left px-4 py-3 text-main font-semibold text-sm hidden lg:table-cell">
                           Description
-                        </th>
-                        <th className="text-right px-4 py-3 text-main font-semibold text-sm w-24">
-                          Actions
                         </th>
                       </tr>
                     </thead>
@@ -222,7 +182,7 @@ export default function SmartPhrasesPageClient({
                             }`}
                           >
                             {/* Full row with expandable content */}
-                            <td colSpan={6} className="p-0">
+                            <td colSpan={4} className="p-0">
                               <div>
                                 {/* Main row content */}
                                 <div className="flex items-center">
@@ -230,7 +190,7 @@ export default function SmartPhrasesPageClient({
                                   <div className="px-4 py-3 w-12">
                                     <button
                                       onClick={() => toggleRow(phrase.id)}
-                                      className="text-medium hover:text-main transition-colors"
+                                      className="text-dim/50 hover:text-main transition-colors bg-transparent"
                                       aria-label={
                                         isExpanded ? 'Collapse' : 'Expand'
                                       }
@@ -270,31 +230,6 @@ export default function SmartPhrasesPageClient({
                                       {phrase.description || '—'}
                                     </p>
                                   </div>
-
-                                  {/* Actions */}
-                                  <div className="px-4 py-3 w-24 text-right flex-shrink-0">
-                                    <button
-                                      onClick={() => handleCopy(phrase)}
-                                      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
-                                        isCopied
-                                          ? 'bg-green-500/20 text-green-400 border border-green-500/30'
-                                          : 'bg-blue-500/10 text-blue-400 border border-blue-500/20 hover:bg-blue-500/20'
-                                      }`}
-                                      disabled={isCopied}
-                                    >
-                                      {isCopied ? (
-                                        <>
-                                          <FiCheck className="text-sm" />
-                                          Copied
-                                        </>
-                                      ) : (
-                                        <>
-                                          <FiCopy className="text-sm" />
-                                          Copy
-                                        </>
-                                      )}
-                                    </button>
-                                  </div>
                                 </div>
 
                                 {/* Expanded content */}
@@ -313,6 +248,31 @@ export default function SmartPhrasesPageClient({
                                             {phrase.description}
                                           </p>
                                         )}
+                                      </div>
+
+                                      {/* Copy button */}
+                                      <div className="flex justify-end">
+                                        <button
+                                          onClick={() => handleCopy(phrase)}
+                                          className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
+                                            isCopied
+                                              ? 'bg-green-500/20 text-green-400 border border-green-500/30'
+                                              : 'bg-blue-500/10 text-blue-400 border border-blue-500/20 hover:bg-blue-500/20'
+                                          }`}
+                                          disabled={isCopied}
+                                        >
+                                          {isCopied ? (
+                                            <>
+                                              <FiCheck className="text-sm" />
+                                              Copied
+                                            </>
+                                          ) : (
+                                            <>
+                                              <FiCopy className="text-sm" />
+                                              Copy
+                                            </>
+                                          )}
+                                        </button>
                                       </div>
 
                                       {/* Full content */}
