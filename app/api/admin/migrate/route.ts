@@ -4,7 +4,7 @@ import { promisify } from 'util';
 
 const execAsync = promisify(exec);
 
-export async function POST(request: NextRequest) {
+async function runMigration() {
   try {
     // Run Prisma migrate deploy
     const { stdout, stderr } = await execAsync('npx prisma migrate deploy', {
@@ -32,4 +32,12 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     );
   }
+}
+
+export async function POST(request: NextRequest) {
+  return runMigration();
+}
+
+export async function GET(request: NextRequest) {
+  return runMigration();
 }
