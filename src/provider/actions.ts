@@ -232,43 +232,126 @@ export async function updateProvider(
       }
     }
 
-    const provider = await prisma.provider.update({
-      where: { id },
-      data: {
-        ...(data.name && { name: data.name }),
-        ...(data.slug && { slug: data.slug }),
-        ...(data.credentials !== undefined && {
-          credentials: data.credentials,
-        }),
-        ...(data.generalDifficulty !== undefined && {
-          generalDifficulty: data.generalDifficulty,
-        }),
-        ...(data.speedDifficulty !== undefined && {
-          speedDifficulty: data.speedDifficulty,
-        }),
-        ...(data.terminologyDifficulty !== undefined && {
-          terminologyDifficulty: data.terminologyDifficulty,
-        }),
-        ...(data.noteDifficulty !== undefined && {
-          noteDifficulty: data.noteDifficulty,
-        }),
-        ...(data.noteTemplate !== undefined && {
-          noteTemplate: data.noteTemplate,
-        }),
-        ...(data.noteSmartPhrase !== undefined && {
-          noteSmartPhrase: data.noteSmartPhrase,
-        }),
-        ...(data.preferences !== undefined && {
-          preferences: data.preferences,
-        }),
-        ...(data.wikiContent !== undefined && {
-          wikiContent: data.wikiContent,
-        }),
-      },
+    // Use transaction to update both provider and associated page
+    const provider = await prisma.$transaction(async (tx) => {
+      const updatedProvider = await tx.provider.update({
+        where: { id },
+        data: {
+          ...(data.name && { name: data.name }),
+          ...(data.slug && { slug: data.slug }),
+          ...(data.credentials !== undefined && {
+            credentials: data.credentials,
+          }),
+          ...(data.generalDifficulty !== undefined && {
+            generalDifficulty: data.generalDifficulty,
+          }),
+          ...(data.speedDifficulty !== undefined && {
+            speedDifficulty: data.speedDifficulty,
+          }),
+          ...(data.terminologyDifficulty !== undefined && {
+            terminologyDifficulty: data.terminologyDifficulty,
+          }),
+          ...(data.noteDifficulty !== undefined && {
+            noteDifficulty: data.noteDifficulty,
+          }),
+          ...(data.noteTemplate !== undefined && {
+            noteTemplate: data.noteTemplate,
+          }),
+          ...(data.noteSmartPhrase !== undefined && {
+            noteSmartPhrase: data.noteSmartPhrase,
+          }),
+          ...(data.preferences !== undefined && {
+            preferences: data.preferences,
+          }),
+          ...(data.wikiContent !== undefined && {
+            wikiContent: data.wikiContent,
+          }),
+        },
+      });
+
+      // Sync wiki content to associated Page record if wikiContent is updated
+      if (data.wikiContent !== undefined) {
+        // Extract content from wikiContent sections
+        let pageContent: any = {
+          type: 'doc',
+          content: [],
+        };
+
+        if (data.wikiContent && typeof data.wikiContent === 'object') {
+          const wikiContentObj = data.wikiContent as any;
+          if (wikiContentObj.sections && Array.isArray(wikiContentObj.sections)) {
+            // Combine all visible section contents into one document
+            const allContent: any[] = [];
+            for (const section of wikiContentObj.sections) {
+              if (section.visible !== false && section.content && section.content.type === 'doc') {
+                // Add section title as heading
+                if (section.title) {
+                  allContent.push({
+                    type: 'heading',
+                    attrs: { level: 2 },
+                    content: [{ type: 'text', text: section.title }],
+                  });
+                }
+                // Add section content
+                if (section.content.content && Array.isArray(section.content.content)) {
+                  allContent.push(...section.content.content);
+                }
+              }
+            }
+            pageContent.content = allContent;
+          }
+        }
+
+        // Update or create the associated Page record
+        const existingPage = await tx.page.findUnique({
+          where: { providerId: id },
+        });
+
+        if (existingPage) {
+          await tx.page.update({
+            where: { providerId: id },
+            data: {
+              content: pageContent,
+              ...(data.name && { title: data.name }),
+              ...(data.slug && { slug: data.slug }),
+            },
+          });
+        } else {
+          // Create page if it doesn't exist (for legacy providers)
+          await tx.page.create({
+            data: {
+              slug: data.slug || updatedProvider.slug,
+              title: data.name || updatedProvider.name,
+              content: pageContent,
+              type: 'PROVIDER',
+              providerId: id,
+              position: 'a0',
+            },
+          });
+        }
+      } else if (data.name || data.slug) {
+        // Update page title/slug even if wiki content isn't changing
+        const existingPage = await tx.page.findUnique({
+          where: { providerId: id },
+        });
+
+        if (existingPage) {
+          await tx.page.update({
+            where: { providerId: id },
+            data: {
+              ...(data.name && { title: data.name }),
+              ...(data.slug && { slug: data.slug }),
+            },
+          });
+        }
+      }
+
+      return updatedProvider;
     });
 
     revalidatePath('/admin/providers');
     revalidatePath('/providers');
+    revalidatePath('/workspace');
     revalidatePath('/');
 
     return { success: true, provider };

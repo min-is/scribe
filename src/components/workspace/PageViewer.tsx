@@ -13,6 +13,8 @@ import {
   Share2,
 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
+import { EditorRenderer } from '@/components/editor/EditorRenderer';
+import { JSONContent } from '@tiptap/react';
 
 interface PageViewerProps {
   page: any; // TODO: Type this properly
@@ -22,39 +24,16 @@ export function PageViewer({ page }: PageViewerProps) {
   const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
 
-  // Render TipTap content (simplified version)
+  // Render TipTap content using the proper EditorRenderer
   const renderContent = (content: any) => {
     if (!content || !content.content) {
       return <p className="text-dim">No content yet. Click Edit to add content.</p>;
     }
 
-    // Simple rendering - would be replaced with actual TipTap renderer
+    // Use the proper TipTap EditorRenderer for full compatibility
     return (
       <div className="prose prose-lg dark:prose-invert max-w-none">
-        {content.content.map((node: any, i: number) => {
-          if (node.type === 'paragraph') {
-            return (
-              <p key={i}>
-                {node.content?.map((textNode: any) => textNode.text).join('')}
-              </p>
-            );
-          }
-          if (node.type === 'heading') {
-            const level = node.attrs.level;
-            const text = node.content?.map((textNode: any) => textNode.text).join('');
-
-            switch (level) {
-              case 1: return <h1 key={i}>{text}</h1>;
-              case 2: return <h2 key={i}>{text}</h2>;
-              case 3: return <h3 key={i}>{text}</h3>;
-              case 4: return <h4 key={i}>{text}</h4>;
-              case 5: return <h5 key={i}>{text}</h5>;
-              case 6: return <h6 key={i}>{text}</h6>;
-              default: return <p key={i}>{text}</p>;
-            }
-          }
-          return null;
-        })}
+        <EditorRenderer content={content as JSONContent} />
       </div>
     );
   };
