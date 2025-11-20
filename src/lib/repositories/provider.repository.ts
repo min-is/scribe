@@ -11,6 +11,7 @@ import { CreateProviderInput, UpdateProviderInput } from '../dtos';
 import { toInputJsonValue } from '../utils/json-helpers';
 import { generateJitteredKeyBetween } from 'fractional-indexing-jittered';
 import { wikiContentToTipTap, tipTapToPlainText } from '../utils/content-transformers';
+import { JSONContent } from '@tiptap/core';
 
 /**
  * Provider with page relation included
@@ -72,7 +73,7 @@ export class ProviderRepository extends BaseRepository<Provider, CreateProviderI
     const title = data.credentials ? `${data.name}, ${data.credentials}` : data.name;
 
     // Prepare page content from WikiContent if provided
-    let pageContent = { type: 'doc', content: [{ type: 'paragraph', content: [] }] };
+    let pageContent: JSONContent = { type: 'doc', content: [{ type: 'paragraph', content: [] }] };
     let textContent = title;
 
     if (data.wikiContent) {
