@@ -11,12 +11,14 @@ import { Prisma } from '@prisma/client';
  * Converts any value to Prisma's InputJsonValue type
  * This is necessary because TypeScript interfaces without index signatures
  * cannot be directly assigned to InputJsonValue
+ *
+ * IMPORTANT: Do NOT pass null or undefined to this function.
+ * For optional JSON fields, use: field ? toInputJsonValue(field) : Prisma.JsonNull
+ * For required JSON fields with possible null, use: toInputJsonValue(field ?? defaultValue)
  */
 export function toInputJsonValue(value: unknown): Prisma.InputJsonValue {
-  if (value === null) return Prisma.JsonNull;
-  if (value === undefined) return Prisma.JsonNull;
-
-  // Serialize and deserialize to ensure compatibility
+  // Serialize and deserialize to ensure compatibility with Prisma's InputJsonValue type
+  // This handles objects, arrays, primitives, but NOT null/undefined
   return JSON.parse(JSON.stringify(value)) as Prisma.InputJsonValue;
 }
 
