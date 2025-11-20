@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { PrismaClient, PageType } from '@prisma/client';
 import { generateJitteredKeyBetween } from 'fractional-indexing-jittered';
+import { wikiContentToTipTap, tipTapToPlainText } from '@/lib/utils/content-transformers';
+import { parseWikiContent } from '@/lib/utils/type-guards';
 
 const prisma = new PrismaClient();
 
@@ -59,33 +61,38 @@ export async function GET() {
       let position = generateJitteredKeyBetween(null, null);
 
       for (const provider of providers) {
-        const content = {
-          type: 'doc',
-          content: [
-            {
-              type: 'paragraph',
+        // Parse and transform WikiContent to TipTap format
+        const wikiContent = parseWikiContent(provider.wikiContent);
+        const content = wikiContent
+          ? wikiContentToTipTap(wikiContent)
+          : {
+              type: 'doc',
               content: [
                 {
-                  type: 'text',
-                  text: provider.wikiContent
-                    ? JSON.stringify(provider.wikiContent)
-                    : 'Provider information will be added here.',
+                  type: 'paragraph',
+                  content: [
+                    {
+                      type: 'text',
+                      text: 'Provider information will be added here.',
+                    },
+                  ],
                 },
               ],
-            },
-          ],
-        };
+            };
 
         const title = provider.credentials
           ? `${provider.name}, ${provider.credentials}`
           : provider.name;
+
+        // Generate searchable text content
+        const textContent = tipTapToPlainText(content);
 
         await prisma.page.create({
           data: {
             slug: provider.slug,
             title,
             content,
-            textContent: title,
+            textContent,
             type: PageType.PROVIDER,
             position,
             icon: '👨‍⚕️',
