@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { PrismaClient, PageType } from '@prisma/client';
 import { generateJitteredKeyBetween } from 'fractional-indexing-jittered';
+import { wikiContentToTipTap, tipTapToPlainText } from '@/lib/utils/content-transformers';
+import { parseWikiContent } from '@/lib/utils/type-guards';
 
 const prisma = new PrismaClient();
 
@@ -59,22 +61,33 @@ export async function GET() {
       let position = generateJitteredKeyBetween(null, null);
 
       for (const provider of providers) {
-        const content = {
-          type: 'doc',
-          content: [
-            {
-              type: 'paragraph',
-              content: [
-                {
-                  type: 'text',
-                  text: provider.wikiContent
-                    ? JSON.stringify(provider.wikiContent)
-                    : 'Provider information will be added here.',
-                },
-              ],
-            },
-          ],
-        };
+        // Parse and transform WikiContent properly
+        const wikiContent = parseWikiContent(provider.wikiContent);
+        let content;
+        let textContent;
+
+        if (wikiContent) {
+          // Extract TipTap content from WikiContent sections
+          content = wikiContentToTipTap(wikiContent);
+          textContent = tipTapToPlainText(content);
+        } else {
+          // Fallback for providers without WikiContent
+          content = {
+            type: 'doc',
+            content: [
+              {
+                type: 'paragraph',
+                content: [
+                  {
+                    type: 'text',
+                    text: 'Provider information will be added here.',
+                  },
+                ],
+              },
+            ],
+          };
+          textContent = 'Provider information will be added here.';
+        }
 
         const title = provider.credentials
           ? `${provider.name}, ${provider.credentials}`
@@ -85,7 +98,7 @@ export async function GET() {
             slug: provider.slug,
             title,
             content,
-            textContent: title,
+            textContent: textContent || title,
             type: PageType.PROVIDER,
             position,
             icon: '👨‍⚕️',
