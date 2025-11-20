@@ -13,8 +13,9 @@ import { Prisma } from '@prisma/client';
  * cannot be directly assigned to InputJsonValue
  */
 export function toInputJsonValue(value: unknown): Prisma.InputJsonValue {
-  if (value === null) return Prisma.JsonNull;
-  if (value === undefined) return Prisma.JsonNull;
+  if (value === null || value === undefined) {
+    return null;
+  }
 
   // Serialize and deserialize to ensure compatibility
   return JSON.parse(JSON.stringify(value)) as Prisma.InputJsonValue;
