@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { PrismaClient, PageType } from '@prisma/client';
 import { generateJitteredKeyBetween } from 'fractional-indexing-jittered';
+import { ContentTransformers } from '@/lib/content-transformers';
+import { parseWikiContent } from '@/lib/type-guards';
 
 const prisma = new PrismaClient();
 
@@ -59,33 +61,33 @@ export async function GET() {
       let position = generateJitteredKeyBetween(null, null);
 
       for (const provider of providers) {
-        const content = {
-          type: 'doc',
-          content: [
-            {
-              type: 'paragraph',
-              content: [
-                {
-                  type: 'text',
-                  text: provider.wikiContent
-                    ? JSON.stringify(provider.wikiContent)
-                    : 'Provider information will be added here.',
-                },
-              ],
-            },
-          ],
-        };
+        // FIXED: Use proper content transformation instead of JSON.stringify
+        let content;
+        if (provider.wikiContent) {
+          const wikiContent = parseWikiContent(provider.wikiContent);
+          content = wikiContent
+            ? ContentTransformers.wikiContentToTipTap(wikiContent)
+            : ContentTransformers.createPlaceholderDocument(
+                'Provider information will be added here.'
+              );
+        } else {
+          content = ContentTransformers.createPlaceholderDocument(
+            'Provider information will be added here.'
+          );
+        }
 
         const title = provider.credentials
           ? `${provider.name}, ${provider.credentials}`
           : provider.name;
+
+        const textContent = ContentTransformers.tipTapToPlainText(content);
 
         await prisma.page.create({
           data: {
             slug: provider.slug,
             title,
             content,
-            textContent: title,
+            textContent,
             type: PageType.PROVIDER,
             position,
             icon: '👨‍⚕️',
