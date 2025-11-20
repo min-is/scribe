@@ -13,6 +13,7 @@ import {
   Share2,
 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
+import { EditorRenderer } from '@/components/editor/EditorRenderer';
 
 interface PageViewerProps {
   page: any; // TODO: Type this properly
@@ -21,43 +22,6 @@ interface PageViewerProps {
 export function PageViewer({ page }: PageViewerProps) {
   const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
-
-  // Render TipTap content (simplified version)
-  const renderContent = (content: any) => {
-    if (!content || !content.content) {
-      return <p className="text-dim">No content yet. Click Edit to add content.</p>;
-    }
-
-    // Simple rendering - would be replaced with actual TipTap renderer
-    return (
-      <div className="prose prose-lg dark:prose-invert max-w-none">
-        {content.content.map((node: any, i: number) => {
-          if (node.type === 'paragraph') {
-            return (
-              <p key={i}>
-                {node.content?.map((textNode: any) => textNode.text).join('')}
-              </p>
-            );
-          }
-          if (node.type === 'heading') {
-            const level = node.attrs.level;
-            const text = node.content?.map((textNode: any) => textNode.text).join('');
-
-            switch (level) {
-              case 1: return <h1 key={i}>{text}</h1>;
-              case 2: return <h2 key={i}>{text}</h2>;
-              case 3: return <h3 key={i}>{text}</h3>;
-              case 4: return <h4 key={i}>{text}</h4>;
-              case 5: return <h5 key={i}>{text}</h5>;
-              case 6: return <h6 key={i}>{text}</h6>;
-              default: return <p key={i}>{text}</p>;
-            }
-          }
-          return null;
-        })}
-      </div>
-    );
-  };
 
   return (
     <div className="max-w-4xl mx-auto px-8 py-12">
@@ -134,7 +98,13 @@ export function PageViewer({ page }: PageViewerProps) {
       </div>
 
       {/* Content */}
-      <div className="mb-12">{renderContent(page.content)}</div>
+      <div className="mb-12">
+        {page.content && page.content.content ? (
+          <EditorRenderer content={page.content} />
+        ) : (
+          <p className="text-dim">No content yet. Click Edit to add content.</p>
+        )}
+      </div>
 
       {/* Child Pages */}
       {page.children && page.children.length > 0 && (

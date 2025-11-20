@@ -232,39 +232,84 @@ export async function updateProvider(
       }
     }
 
-    const provider = await prisma.provider.update({
-      where: { id },
-      data: {
-        ...(data.name && { name: data.name }),
-        ...(data.slug && { slug: data.slug }),
-        ...(data.credentials !== undefined && {
-          credentials: data.credentials,
-        }),
-        ...(data.generalDifficulty !== undefined && {
-          generalDifficulty: data.generalDifficulty,
-        }),
-        ...(data.speedDifficulty !== undefined && {
-          speedDifficulty: data.speedDifficulty,
-        }),
-        ...(data.terminologyDifficulty !== undefined && {
-          terminologyDifficulty: data.terminologyDifficulty,
-        }),
-        ...(data.noteDifficulty !== undefined && {
-          noteDifficulty: data.noteDifficulty,
-        }),
-        ...(data.noteTemplate !== undefined && {
-          noteTemplate: data.noteTemplate,
-        }),
-        ...(data.noteSmartPhrase !== undefined && {
-          noteSmartPhrase: data.noteSmartPhrase,
-        }),
-        ...(data.preferences !== undefined && {
-          preferences: data.preferences,
-        }),
-        ...(data.wikiContent !== undefined && {
-          wikiContent: data.wikiContent,
-        }),
-      },
+    // Update provider and sync to Page in a transaction
+    const provider = await prisma.$transaction(async (tx) => {
+      // Update the provider
+      const updatedProvider = await tx.provider.update({
+        where: { id },
+        data: {
+          ...(data.name && { name: data.name }),
+          ...(data.slug && { slug: data.slug }),
+          ...(data.credentials !== undefined && {
+            credentials: data.credentials,
+          }),
+          ...(data.generalDifficulty !== undefined && {
+            generalDifficulty: data.generalDifficulty,
+          }),
+          ...(data.speedDifficulty !== undefined && {
+            speedDifficulty: data.speedDifficulty,
+          }),
+          ...(data.terminologyDifficulty !== undefined && {
+            terminologyDifficulty: data.terminologyDifficulty,
+          }),
+          ...(data.noteDifficulty !== undefined && {
+            noteDifficulty: data.noteDifficulty,
+          }),
+          ...(data.noteTemplate !== undefined && {
+            noteTemplate: data.noteTemplate,
+          }),
+          ...(data.noteSmartPhrase !== undefined && {
+            noteSmartPhrase: data.noteSmartPhrase,
+          }),
+          ...(data.preferences !== undefined && {
+            preferences: data.preferences,
+          }),
+          ...(data.wikiContent !== undefined && {
+            wikiContent: data.wikiContent,
+          }),
+        },
+        include: {
+          page: true,
+        },
+      });
+
+      // If wikiContent was updated, sync to the Page record
+      if (data.wikiContent !== undefined && updatedProvider.page) {
+        const wikiContentObj = data.wikiContent as any;
+
+        // Extract and combine all visible section content
+        let combinedContent: any = {
+          type: 'doc',
+          content: [],
+        };
+
+        if (wikiContentObj?.sections && Array.isArray(wikiContentObj.sections)) {
+          const visibleSections = wikiContentObj.sections.filter((s: any) => s.visible);
+
+          for (const section of visibleSections) {
+            if (section.content?.content) {
+              combinedContent.content.push(...section.content.content);
+            }
+          }
+        }
+
+        // If no content, use empty paragraph
+        if (combinedContent.content.length === 0) {
+          combinedContent.content = [{ type: 'paragraph', content: [] }];
+        }
+
+        // Update the associated Page record
+        await tx.page.update({
+          where: { id: updatedProvider.page.id },
+          data: {
+            content: combinedContent,
+            ...(data.name && { title: data.name }),
+            ...(data.slug && { slug: data.slug }),
+          },
+        });
+      }
+
+      return updatedProvider;
     });
 
     revalidatePath('/admin/providers');
