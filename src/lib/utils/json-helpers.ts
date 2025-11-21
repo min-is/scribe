@@ -11,21 +11,22 @@ import { Prisma } from '@prisma/client';
  * Converts any value to Prisma's InputJsonValue type
  * This is necessary because TypeScript interfaces without index signatures
  * cannot be directly assigned to InputJsonValue
+ *
+ * Note: This function should not receive null or undefined values.
+ * All callers should check for null/undefined before calling this function
+ * and use Prisma.JsonNull directly for null values.
  */
 export function toInputJsonValue(value: unknown): Prisma.InputJsonValue {
-  if (value === null) return Prisma.JsonNull;
-  if (value === undefined) return Prisma.JsonNull;
-
   // Serialize and deserialize to ensure compatibility
   return JSON.parse(JSON.stringify(value)) as Prisma.InputJsonValue;
 }
 
 /**
  * Safely extracts a typed value from Prisma's JsonValue
- * Returns null if the value is JsonNull or invalid
+ * Returns null if the value is null or invalid
  */
 export function fromJsonValue<T>(value: Prisma.JsonValue | null): T | null {
-  if (value === null || value === Prisma.JsonNull) return null;
+  if (value === null) return null;
 
   try {
     // JsonValue is already a valid JS type, just cast it
