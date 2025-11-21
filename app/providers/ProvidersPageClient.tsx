@@ -16,7 +16,7 @@ export default function ProvidersPageClient({
   const handleProviderClick = (pageSlug: string | null) => {
     if (pageSlug) {
       // Navigate to the provider's page
-      router.push(`/workspace/pages/${pageSlug}`);
+      router.push(`/home/pages/${pageSlug}`);
     }
   };
 

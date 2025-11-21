@@ -92,7 +92,7 @@ export default function SearchModal() {
   };
 
   const navigateToResult = (result: SearchResult) => {
-    router.push(`/workspace/pages/${result.slug}`);
+    router.push(`/home/pages/${result.slug}`);
     setIsOpen(false);
     setQuery('');
     setResults([]);
