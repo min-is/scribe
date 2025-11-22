@@ -81,6 +81,35 @@ CREATE INDEX "Procedure_category_idx" ON "Procedure"("category");
 CREATE INDEX "Procedure_slug_idx" ON "Procedure"("slug");
 CREATE INDEX "Procedure_viewCount_idx" ON "Procedure"("viewCount");`,
   },
+  {
+    name: '20251122070000_add_home_page_content',
+    description: 'Create HomePageContent table',
+    sql: `-- CreateTable
+CREATE TABLE "HomePageContent" (
+    "id" TEXT NOT NULL,
+    "announcementText" TEXT NOT NULL,
+    "gettingStartedText" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "HomePageContent_pkey" PRIMARY KEY ("id")
+);
+
+-- Insert default content
+INSERT INTO "HomePageContent" ("id", "announcementText", "gettingStartedText", "createdAt", "updatedAt")
+VALUES (
+    'default',
+    'Welcome! Check back here for important updates and announcements.',
+    'Welcome to your home!
+
+• Browse provider preferences and documentation
+• Access procedure guides and protocols
+• Find smart phrases for EPIC documentation
+• Review critical scenarios and emergency protocols',
+    CURRENT_TIMESTAMP,
+    CURRENT_TIMESTAMP
+);`,
+  },
 ];
 
 export default function DatabaseManagementClient() {
@@ -255,10 +284,10 @@ export default function DatabaseManagementClient() {
 {`SELECT table_name
 FROM information_schema.tables
 WHERE table_schema = 'public'
-  AND table_name IN ('SmartPhrase', 'Scenario', 'Procedure');`}
+  AND table_name IN ('SmartPhrase', 'Scenario', 'Procedure', 'HomePageContent');`}
           </pre>
           <p className="text-medium text-sm">
-            You should see all three tables listed. If so, you're ready to go! 🎉
+            You should see all four tables listed. If so, you're ready to go! 🎉
           </p>
         </div>
 
