@@ -36,9 +36,6 @@ export default function ProvidersClient({
     number | undefined
   >(undefined);
 
-  // Form state for icon
-  const [icon, setIcon] = useState<string>('👨‍⚕️');
-
   // Form state for rich text content
   const [noteSmartPhrase, setNoteSmartPhrase] = useState<JSONContent>({
     type: 'doc',
@@ -77,7 +74,7 @@ export default function ProvidersClient({
       name: formData.get('name') as string,
       slug: formData.get('slug') as string,
       credentials: getStringOrUndefined(formData.get('credentials') as string),
-      icon: getStringOrUndefined(formData.get('icon') as string),
+      icon: undefined,
       noteSmartPhrase: JSON.stringify(noteSmartPhrase),
       wikiContent: serializedWikiContent,
       generalDifficulty,
@@ -131,7 +128,6 @@ export default function ProvidersClient({
   const handleEdit = (provider: Provider) => {
     setEditingProvider(provider);
     setGeneralDifficulty(provider.generalDifficulty ?? undefined);
-    setIcon(provider.icon ?? '👨‍⚕️');
 
     // Load note smartphrase content
     if (provider.noteSmartPhrase) {
@@ -162,7 +158,6 @@ export default function ProvidersClient({
   const handleCancel = () => {
     setShowForm(false);
     setEditingProvider(null);
-    setIcon('👨‍⚕️');
     resetDifficultyFields();
     resetRichTextFields();
   };
@@ -276,28 +271,6 @@ export default function ProvidersClient({
                   className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="MD, FACEM"
                 />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="icon"
-                  className="block text-sm font-medium text-main mb-1"
-                >
-                  Icon / Emoji
-                </label>
-                <input
-                  type="text"
-                  id="icon"
-                  name="icon"
-                  value={icon}
-                  onChange={(e) => setIcon(e.target.value)}
-                  className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="👨‍⚕️"
-                  maxLength={10}
-                />
-                <p className="text-xs text-dim mt-1">
-                  Enter an emoji to represent this provider (e.g., 👨‍⚕️, 👩‍⚕️, 🩺)
-                </p>
               </div>
 
               {/* Difficulty Metrics */}
@@ -452,9 +425,6 @@ export default function ProvidersClient({
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4 flex-1 min-w-0">
-                      <div className="text-3xl flex-shrink-0">
-                        {provider.icon || '👨‍⚕️'}
-                      </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-baseline gap-2 mb-1">
                           <h3 className="text-base font-semibold text-main truncate">
