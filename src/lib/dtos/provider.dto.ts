@@ -15,10 +15,8 @@ export interface ProviderDTO {
   slug: string;
   name: string;
   credentials: string | null;
+  icon: string | null;
   generalDifficulty: number | null;
-  speedDifficulty: number | null;
-  terminologyDifficulty: number | null;
-  noteDifficulty: number | null;
   noteTemplate: string | null;
   noteSmartPhrase: string | null;
   preferences: unknown;
@@ -43,10 +41,8 @@ export interface CreateProviderInput {
   slug: string;
   name: string;
   credentials?: string;
+  icon?: string;
   generalDifficulty?: number;
-  speedDifficulty?: number;
-  terminologyDifficulty?: number;
-  noteDifficulty?: number;
   noteTemplate?: string;
   noteSmartPhrase?: string;
   preferences?: unknown;
@@ -59,10 +55,8 @@ export interface CreateProviderInput {
 export interface UpdateProviderInput {
   name?: string;
   credentials?: string;
+  icon?: string;
   generalDifficulty?: number;
-  speedDifficulty?: number;
-  terminologyDifficulty?: number;
-  noteDifficulty?: number;
   noteTemplate?: string;
   noteSmartPhrase?: string;
   preferences?: unknown;

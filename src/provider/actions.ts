@@ -8,10 +8,8 @@ export type ProviderFormData = {
   name: string;
   slug: string;
   credentials?: string;
+  icon?: string;
   generalDifficulty?: number;
-  speedDifficulty?: number;
-  terminologyDifficulty?: number;
-  noteDifficulty?: number;
   noteTemplate?: string;
   noteSmartPhrase?: string;
   preferences?: Prisma.InputJsonValue;
@@ -153,10 +151,8 @@ export async function createProvider(
           name: data.name,
           slug: data.slug,
           credentials: data.credentials || null,
+          icon: data.icon || null,
           generalDifficulty: data.generalDifficulty || null,
-          speedDifficulty: data.speedDifficulty || null,
-          terminologyDifficulty: data.terminologyDifficulty || null,
-          noteDifficulty: data.noteDifficulty || null,
           noteTemplate: data.noteTemplate || null,
           noteSmartPhrase: data.noteSmartPhrase || null,
           ...(data.preferences && { preferences: data.preferences }),
@@ -243,17 +239,11 @@ export async function updateProvider(
           ...(data.credentials !== undefined && {
             credentials: data.credentials,
           }),
+          ...(data.icon !== undefined && {
+            icon: data.icon,
+          }),
           ...(data.generalDifficulty !== undefined && {
             generalDifficulty: data.generalDifficulty,
-          }),
-          ...(data.speedDifficulty !== undefined && {
-            speedDifficulty: data.speedDifficulty,
-          }),
-          ...(data.terminologyDifficulty !== undefined && {
-            terminologyDifficulty: data.terminologyDifficulty,
-          }),
-          ...(data.noteDifficulty !== undefined && {
-            noteDifficulty: data.noteDifficulty,
           }),
           ...(data.noteTemplate !== undefined && {
             noteTemplate: data.noteTemplate,

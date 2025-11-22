@@ -35,15 +35,9 @@ export default function ProvidersClient({
   const [generalDifficulty, setGeneralDifficulty] = useState<
     number | undefined
   >(undefined);
-  const [speedDifficulty, setSpeedDifficulty] = useState<number | undefined>(
-    undefined,
-  );
-  const [terminologyDifficulty, setTerminologyDifficulty] = useState<
-    number | undefined
-  >(undefined);
-  const [noteDifficulty, setNoteDifficulty] = useState<number | undefined>(
-    undefined,
-  );
+
+  // Form state for icon
+  const [icon, setIcon] = useState<string>('👨‍⚕️');
 
   // Form state for rich text content
   const [noteSmartPhrase, setNoteSmartPhrase] = useState<JSONContent>({
@@ -83,12 +77,10 @@ export default function ProvidersClient({
       name: formData.get('name') as string,
       slug: formData.get('slug') as string,
       credentials: getStringOrUndefined(formData.get('credentials') as string),
+      icon: getStringOrUndefined(formData.get('icon') as string),
       noteSmartPhrase: JSON.stringify(noteSmartPhrase),
       wikiContent: serializedWikiContent,
       generalDifficulty,
-      speedDifficulty,
-      terminologyDifficulty,
-      noteDifficulty,
     };
 
     console.log('Submitting provider data:', data);
@@ -139,9 +131,7 @@ export default function ProvidersClient({
   const handleEdit = (provider: Provider) => {
     setEditingProvider(provider);
     setGeneralDifficulty(provider.generalDifficulty ?? undefined);
-    setSpeedDifficulty(provider.speedDifficulty ?? undefined);
-    setTerminologyDifficulty(provider.terminologyDifficulty ?? undefined);
-    setNoteDifficulty(provider.noteDifficulty ?? undefined);
+    setIcon(provider.icon ?? '👨‍⚕️');
 
     // Load note smartphrase content
     if (provider.noteSmartPhrase) {
@@ -172,15 +162,13 @@ export default function ProvidersClient({
   const handleCancel = () => {
     setShowForm(false);
     setEditingProvider(null);
+    setIcon('👨‍⚕️');
     resetDifficultyFields();
     resetRichTextFields();
   };
 
   const resetDifficultyFields = () => {
     setGeneralDifficulty(undefined);
-    setSpeedDifficulty(undefined);
-    setTerminologyDifficulty(undefined);
-    setNoteDifficulty(undefined);
   };
 
   const resetRichTextFields = () => {
@@ -290,38 +278,39 @@ export default function ProvidersClient({
                 />
               </div>
 
+              <div>
+                <label
+                  htmlFor="icon"
+                  className="block text-sm font-medium text-main mb-1"
+                >
+                  Icon / Emoji
+                </label>
+                <input
+                  type="text"
+                  id="icon"
+                  name="icon"
+                  value={icon}
+                  onChange={(e) => setIcon(e.target.value)}
+                  className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="👨‍⚕️"
+                  maxLength={10}
+                />
+                <p className="text-xs text-dim mt-1">
+                  Enter an emoji to represent this provider (e.g., 👨‍⚕️, 👩‍⚕️, 🩺)
+                </p>
+              </div>
+
               {/* Difficulty Metrics */}
               <div className="border-t border-gray-200 dark:border-gray-700 pt-4 mt-4">
                 <h3 className="text-lg font-medium text-main mb-4">
-                  Difficulty Metrics (1-10 scale)
+                  Difficulty Level
                 </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="max-w-md">
                   <DifficultyDialInput
                     label="General Difficulty"
                     value={generalDifficulty}
                     onChange={setGeneralDifficulty}
-                    helperText="Overall difficulty level for new scribes"
-                  />
-
-                  <DifficultyDialInput
-                    label="Speed Expectations"
-                    value={speedDifficulty}
-                    onChange={setSpeedDifficulty}
-                    helperText="How fast this provider works"
-                  />
-
-                  <DifficultyDialInput
-                    label="Terminology Level"
-                    value={terminologyDifficulty}
-                    onChange={setTerminologyDifficulty}
-                    helperText="Medical terminology expectations"
-                  />
-
-                  <DifficultyDialInput
-                    label="Note Complexity"
-                    value={noteDifficulty}
-                    onChange={setNoteDifficulty}
-                    helperText="Complexity of note requirements"
+                    helperText="Overall difficulty level for new scribes (1-10 scale)"
                   />
                 </div>
               </div>
@@ -446,99 +435,73 @@ export default function ProvidersClient({
           </div>
         )}
 
-        <div className="bg-medium border border-main rounded-lg overflow-hidden">
+        <div>
           {initialProviders.length === 0 ? (
-            <div className="p-8 text-center text-dim">
-              <p>No providers added yet.</p>
-              <p className="text-sm mt-1">
+            <div className="bg-medium border border-main rounded-2xl p-12 text-center">
+              <p className="text-dim text-base">No providers added yet.</p>
+              <p className="text-sm text-dim mt-2">
                 Click &quot;Add Provider&quot; to get started.
               </p>
             </div>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-gray-50 dark:bg-gray-800 border-b border-main">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-dim uppercase tracking-wider">
-                      Name
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-dim uppercase tracking-wider">
-                      Credentials
-                    </th>
-                    <th className="px-6 py-3 text-center text-xs font-medium text-dim uppercase tracking-wider">
-                      Difficulty
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-dim uppercase tracking-wider">
-                      URL Slug
-                    </th>
-                    <th className="px-6 py-3 text-right text-xs font-medium text-dim uppercase tracking-wider">
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                  {initialProviders.map((provider) => (
-                    <tr
-                      key={provider.id}
-                      className="hover:bg-gray-50 dark:hover:bg-gray-800"
-                    >
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-main">
-                        {provider.name}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-dim">
-                        {provider.credentials || '—'}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-center">
-                        <div className="flex justify-center">
-                          <ProviderDifficultyPreview
-                            generalDifficulty={provider.generalDifficulty}
-                            size="small"
-                          />
+            <div className="grid grid-cols-1 gap-3">
+              {initialProviders.map((provider) => (
+                <div
+                  key={provider.id}
+                  className="bg-medium border border-main rounded-xl p-5 hover:shadow-lg hover:border-primary/30 transition-all duration-200 group"
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4 flex-1 min-w-0">
+                      <div className="text-3xl flex-shrink-0">
+                        {provider.icon || '👨‍⚕️'}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-baseline gap-2 mb-1">
+                          <h3 className="text-base font-semibold text-main truncate">
+                            {provider.name}
+                          </h3>
+                          {provider.credentials && (
+                            <span className="text-sm text-dim whitespace-nowrap">
+                              {provider.credentials}
+                            </span>
+                          )}
                         </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-dim">
-                        #{provider.slug}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <button
-                          type="button"
-                          onClick={() => handleEdit(provider)}
-                          className="font-admin mr-4 px-3 py-1.5 rounded-md transition-all duration-300 text-blue-600 dark:text-blue-400"
-                          style={{
-                            boxShadow: '0 0 10px rgba(59, 130, 246, 0.2)',
-                          }}
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.boxShadow = '0 0 15px rgba(59, 130, 246, 0.4), 0 0 25px rgba(59, 130, 246, 0.2)';
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.boxShadow = '0 0 10px rgba(59, 130, 246, 0.2)';
-                          }}
-                        >
-                          Edit
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() =>
-                            handleDelete(provider.id, provider.name)
-                          }
-                          className="font-admin px-3 py-1.5 rounded-md transition-all duration-300 text-red-600 dark:text-red-400"
-                          style={{
-                            boxShadow: '0 0 10px rgba(239, 68, 68, 0.2)',
-                          }}
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.boxShadow = '0 0 15px rgba(239, 68, 68, 0.4), 0 0 25px rgba(239, 68, 68, 0.2)';
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.boxShadow = '0 0 10px rgba(239, 68, 68, 0.2)';
-                          }}
-                        >
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+                        <div className="flex items-center gap-3 text-xs text-dim">
+                          <span className="font-mono">#{provider.slug}</span>
+                          {provider.generalDifficulty && (
+                            <>
+                              <span className="text-dim/50">•</span>
+                              <div className="flex items-center gap-1.5">
+                                <span>Difficulty:</span>
+                                <ProviderDifficultyPreview
+                                  generalDifficulty={provider.generalDifficulty}
+                                  size="xs"
+                                />
+                              </div>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 ml-4">
+                      <button
+                        type="button"
+                        onClick={() => handleEdit(provider)}
+                        className="px-4 py-2 rounded-lg text-sm font-medium text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleDelete(provider.id, provider.name)}
+                        className="px-4 py-2 rounded-lg text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           )}
         </div>
