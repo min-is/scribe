@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { toast } from 'sonner';
 import { Plus, Pencil, Trash2, Check, X } from 'lucide-react';
 
@@ -9,6 +9,14 @@ type AnimatedMessage = {
   message: string;
   order: number;
   enabled: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
+type HomePageContent = {
+  id: string;
+  announcementText: string;
+  gettingStartedText: string;
   createdAt: Date;
   updatedAt: Date;
 };
@@ -23,6 +31,13 @@ export default function AnimatedMessagesClient({
   const [editingId, setEditingId] = useState<string | null>(null);
   const [newMessage, setNewMessage] = useState('');
   const [editMessage, setEditMessage] = useState('');
+
+  // Home page content state
+  const [announcementText, setAnnouncementText] = useState('');
+  const [gettingStartedText, setGettingStartedText] = useState('');
+  const [isLoadingContent, setIsLoadingContent] = useState(true);
+  const [isSavingAnnouncement, setIsSavingAnnouncement] = useState(false);
+  const [isSavingGettingStarted, setIsSavingGettingStarted] = useState(false);
 
   const handleCreate = async () => {
     if (!newMessage.trim()) {
@@ -117,6 +132,76 @@ export default function AnimatedMessagesClient({
     }
   };
 
+  // Fetch home page content on mount
+  useEffect(() => {
+    const fetchContent = async () => {
+      try {
+        const response = await fetch('/api/home-page-content');
+        if (!response.ok) throw new Error('Failed to fetch content');
+        const data: HomePageContent = await response.json();
+        setAnnouncementText(data.announcementText);
+        setGettingStartedText(data.gettingStartedText);
+      } catch (error) {
+        toast.error('Failed to load home page content');
+        console.error(error);
+      } finally {
+        setIsLoadingContent(false);
+      }
+    };
+
+    fetchContent();
+  }, []);
+
+  const handleSaveAnnouncement = async () => {
+    if (!announcementText.trim()) {
+      toast.error('Announcement text cannot be empty');
+      return;
+    }
+
+    setIsSavingAnnouncement(true);
+    try {
+      const response = await fetch('/api/home-page-content', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ announcementText }),
+      });
+
+      if (!response.ok) throw new Error('Failed to update announcement');
+
+      toast.success('Announcement updated successfully');
+    } catch (error) {
+      toast.error('Failed to update announcement');
+      console.error(error);
+    } finally {
+      setIsSavingAnnouncement(false);
+    }
+  };
+
+  const handleSaveGettingStarted = async () => {
+    if (!gettingStartedText.trim()) {
+      toast.error('Getting started text cannot be empty');
+      return;
+    }
+
+    setIsSavingGettingStarted(true);
+    try {
+      const response = await fetch('/api/home-page-content', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ gettingStartedText }),
+      });
+
+      if (!response.ok) throw new Error('Failed to update getting started content');
+
+      toast.success('Getting started content updated successfully');
+    } catch (error) {
+      toast.error('Failed to update getting started content');
+      console.error(error);
+    } finally {
+      setIsSavingGettingStarted(false);
+    }
+  };
+
   return (
     <div className="max-w-4xl mx-auto py-8 px-4">
       <div className="mb-8">
@@ -130,34 +215,76 @@ export default function AnimatedMessagesClient({
       <div className="mb-8 bg-zinc-900 border border-zinc-800 rounded-xl p-6">
         <h2 className="text-xl font-semibold text-zinc-100 mb-3">Announcements Banner</h2>
         <p className="text-sm text-zinc-400 mb-4">
-          This content appears in the red-orange banner on the home page. Edit the text below to update it.
+          This content appears in the announcements banner on the home page. Edit the text below to update it.
         </p>
         <textarea
+          value={announcementText}
+          onChange={(e) => setAnnouncementText(e.target.value)}
           placeholder="Welcome! Check back here for important updates and announcements."
           className="w-full p-4 border border-zinc-800 rounded-lg text-zinc-100 bg-zinc-950 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           rows={3}
-          disabled
+          disabled={isLoadingContent}
         />
-        <p className="text-xs text-zinc-500 mt-2">
-          Note: This is a placeholder. To enable editing, add a database model for home page content.
-        </p>
+        <div className="flex items-center justify-between mt-3">
+          <p className="text-xs text-zinc-500">
+            Changes will be reflected immediately on the home page
+          </p>
+          <button
+            onClick={handleSaveAnnouncement}
+            disabled={isSavingAnnouncement || isLoadingContent}
+            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+          >
+            {isSavingAnnouncement ? (
+              <>
+                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                Saving...
+              </>
+            ) : (
+              <>
+                <Check size={16} />
+                Save
+              </>
+            )}
+          </button>
+        </div>
       </div>
 
       {/* Getting Started Section */}
       <div className="mb-8 bg-zinc-900 border border-zinc-800 rounded-xl p-6">
         <h2 className="text-xl font-semibold text-zinc-100 mb-3">Getting Started Content</h2>
         <p className="text-sm text-zinc-400 mb-4">
-          This content appears in the blue "Getting Started" box on the home page.
+          This content appears in the "Getting Started" box on the home page. You can use line breaks and bullet points.
         </p>
         <textarea
+          value={gettingStartedText}
+          onChange={(e) => setGettingStartedText(e.target.value)}
           placeholder="Welcome to your home! Browse provider preferences, access procedure guides..."
-          className="w-full p-4 border border-zinc-800 rounded-lg text-zinc-100 bg-zinc-950 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-          rows={5}
-          disabled
+          className="w-full p-4 border border-zinc-800 rounded-lg text-zinc-100 bg-zinc-950 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-mono text-sm"
+          rows={8}
+          disabled={isLoadingContent}
         />
-        <p className="text-xs text-zinc-500 mt-2">
-          Note: This is a placeholder. To enable editing, add a database model for home page content.
-        </p>
+        <div className="flex items-center justify-between mt-3">
+          <p className="text-xs text-zinc-500">
+            Use • for bullet points. Changes will be reflected immediately on the home page.
+          </p>
+          <button
+            onClick={handleSaveGettingStarted}
+            disabled={isSavingGettingStarted || isLoadingContent}
+            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+          >
+            {isSavingGettingStarted ? (
+              <>
+                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                Saving...
+              </>
+            ) : (
+              <>
+                <Check size={16} />
+                Save
+              </>
+            )}
+          </button>
+        </div>
       </div>
 
       <div className="mb-6">

@@ -4,14 +4,22 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { Clock, Star } from 'lucide-react';
 import { toZonedTime } from 'date-fns-tz';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import SectionSearchModal from '@/components/search/SectionSearchModal';
 import { PageType } from '@prisma/client';
 import TypewriterText from '@/components/TypewriterText';
 
+type HomePageContent = {
+  id: string;
+  announcementText: string;
+  gettingStartedText: string;
+};
+
 export default function HomePage() {
   const [searchModalOpen, setSearchModalOpen] = useState(false);
   const [searchSection, setSearchSection] = useState<PageType | null>(null);
+  const [announcementText, setAnnouncementText] = useState('Welcome! Check back here for important updates and announcements.');
+  const [gettingStartedText, setGettingStartedText] = useState('Welcome to your home!');
 
   // Get PST time for greeting
   const pstDate = toZonedTime(new Date(), 'America/Los_Angeles');
@@ -22,6 +30,24 @@ export default function HomePage() {
     setSearchSection(section);
     setSearchModalOpen(true);
   };
+
+  // Fetch home page content
+  useEffect(() => {
+    const fetchContent = async () => {
+      try {
+        const response = await fetch('/api/home-page-content');
+        if (response.ok) {
+          const data: HomePageContent = await response.json();
+          setAnnouncementText(data.announcementText);
+          setGettingStartedText(data.gettingStartedText);
+        }
+      } catch (error) {
+        console.error('Failed to load home page content:', error);
+      }
+    };
+
+    fetchContent();
+  }, []);
 
   return (
     <>
@@ -44,8 +70,8 @@ export default function HomePage() {
               <h3 className="text-sm font-semibold text-blue-600 dark:text-blue-400 mb-2 uppercase tracking-wide">
                 Announcements
               </h3>
-              <p className="text-base text-main leading-relaxed">
-                Welcome! Check back here for important updates and announcements.
+              <p className="text-base text-main leading-relaxed whitespace-pre-line">
+                {announcementText}
               </p>
             </div>
           </div>
@@ -94,26 +120,8 @@ export default function HomePage() {
         {/* Getting Started */}
         <div className="bg-blue-50 dark:bg-blue-900/10 border border-blue-200 dark:border-blue-800 rounded-xl p-6">
           <h3 className="text-lg font-semibold text-main mb-3">Getting Started</h3>
-          <div className="space-y-2 text-sm text-medium">
-            <p className="font-medium text-main">Welcome to your home!</p>
-            <ul className="space-y-1.5 ml-4">
-              <li className="flex items-start gap-2">
-                <span className="text-primary mt-0.5">•</span>
-                <span>Browse provider preferences and documentation</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-primary mt-0.5">•</span>
-                <span>Access procedure guides and protocols</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-primary mt-0.5">•</span>
-                <span>Find smart phrases for EPIC documentation</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <span className="text-primary mt-0.5">•</span>
-                <span>Review critical scenarios and emergency protocols</span>
-              </li>
-            </ul>
+          <div className="space-y-2 text-sm text-medium whitespace-pre-line">
+            {gettingStartedText}
           </div>
         </div>
       </div>

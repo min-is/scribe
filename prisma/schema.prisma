@@ -241,3 +241,11 @@ model AnimatedMessage {
   @@index([order])
   @@index([enabled])
 }
+
+model HomePageContent {
+  id                    String   @id @default(cuid())
+  announcementText      String   @db.Text
+  gettingStartedText    String   @db.Text
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+}
