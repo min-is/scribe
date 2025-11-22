@@ -21,6 +21,7 @@ const getPage = cache(async (slug: string) => {
       id: true,
       slug: true,
       title: true,
+      type: true, // Need type to validate PROVIDER pages
       content: true,
       icon: true,
       viewCount: true,
@@ -67,6 +68,12 @@ export default async function PageView({ params }: PageViewProps) {
   const page = await getPage(slug);
 
   if (!page) {
+    notFound();
+  }
+
+  // PROVIDER pages MUST have an associated provider
+  // If providerId is null, this is an orphaned page that should not be accessible
+  if (page.type === 'PROVIDER' && !page.provider) {
     notFound();
   }
 

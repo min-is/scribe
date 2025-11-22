@@ -20,6 +20,13 @@ export async function GET(request: NextRequest) {
     // Support fuzzy search for physician names and medication names
     const whereClause: any = {
       deletedAt: null,
+      // Exclude orphaned PROVIDER pages (pages with type=PROVIDER but no associated Provider)
+      NOT: {
+        AND: [
+          { type: 'PROVIDER' },
+          { providerId: null },
+        ],
+      },
       OR: [
         {
           title: {
