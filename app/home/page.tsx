@@ -36,40 +36,6 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Quick Access Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-10">
-          <QuickAccessCard
-            title="Providers"
-            count={null}
-            onClick={() => handleSectionClick(PageType.PROVIDER)}
-          />
-          <QuickAccessCard
-            title="Procedures"
-            count={null}
-            onClick={() => handleSectionClick(PageType.PROCEDURE)}
-          />
-          <QuickAccessCard
-            title="Smart Phrases"
-            count={null}
-            onClick={() => handleSectionClick(PageType.SMARTPHRASE)}
-          />
-          <QuickAccessCard
-            title="Scenarios"
-            count={null}
-            onClick={() => handleSectionClick(PageType.SCENARIO)}
-          />
-          <QuickAccessCard
-            title="Physician Directory"
-            count={null}
-            onClick={() => handleSectionClick(PageType.PHYSICIAN_DIRECTORY)}
-          />
-          <QuickAccessCard
-            title="Medications"
-            count={null}
-            onClick={() => handleSectionClick(PageType.MEDICATION)}
-          />
-        </div>
-
         {/* Quick Actions */}
         <div className="mb-10">
           <h2 className="text-xl font-semibold text-main mb-4 flex items-center gap-2">
@@ -107,6 +73,16 @@ export default function HomePage() {
               description="Drug reference library"
               onClick={() => handleSectionClick(PageType.MEDICATION)}
             />
+          </div>
+        </div>
+
+        {/* Announcements */}
+        <div className="bg-gradient-to-br from-orange-600/20 to-red-600/20 border border-orange-600/30 rounded-xl p-6 mb-6">
+          <h3 className="text-lg font-semibold text-orange-400 mb-3">Announcements</h3>
+          <div className="space-y-2 text-sm text-zinc-300">
+            <p className="leading-relaxed">
+              Welcome! Check back here for important updates and announcements.
+            </p>
           </div>
         </div>
 
@@ -149,34 +125,6 @@ export default function HomePage() {
         />
       )}
     </>
-  );
-}
-
-function QuickAccessCard({
-  title,
-  count,
-  onClick,
-}: {
-  title: string;
-  count: number | null;
-  onClick: () => void;
-}) {
-  return (
-    <button
-      onClick={onClick}
-      className="group bg-main border border-main rounded-xl p-5 hover:shadow-hover hover:border-primary/50 transition-all text-left w-full"
-    >
-      <div className="flex items-center justify-between mb-2">
-        {count !== null && (
-          <span className="text-2xl font-bold text-dim group-hover:text-primary transition-colors">
-            {count}
-          </span>
-        )}
-      </div>
-      <div className="font-semibold text-main group-hover:text-primary transition-colors">
-        {title}
-      </div>
-    </button>
   );
 }
 
