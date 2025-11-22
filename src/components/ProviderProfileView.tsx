@@ -139,10 +139,15 @@ export default function ProviderProfileView() {
             <div className="space-y-6">
               {/* Provider Name as Main Header */}
               <div className="pr-10">
-                <h2 className="text-3xl font-bold text-main mb-1">
-                  {provider.name}
-                  {provider.credentials && <span>, {provider.credentials}</span>}
-                </h2>
+                <div className="flex items-center gap-3 mb-1">
+                  {provider.icon && (
+                    <span className="text-4xl">{provider.icon}</span>
+                  )}
+                  <h2 className="text-3xl font-bold text-main">
+                    {provider.name}
+                    {provider.credentials && <span>, {provider.credentials}</span>}
+                  </h2>
+                </div>
               </div>
 
               {/* Difficulty Metrics */}
