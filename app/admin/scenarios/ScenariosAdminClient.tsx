@@ -129,9 +129,9 @@ export default function ScenariosAdminClient({
           {!showForm && (
             <button
               onClick={() => setShowForm(true)}
-              className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 active:scale-[0.98] transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
             >
-              <FiPlus className="text-lg" />
+              <FiPlus className="w-4 h-4" />
               Add Scenario
             </button>
           )}
@@ -279,21 +279,21 @@ export default function ScenariosAdminClient({
         )}
 
         {/* Table */}
-        <div className="bg-medium border border-main rounded-lg overflow-hidden">
+        <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden shadow-sm">
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-dim border-b border-main">
+              <thead className="bg-zinc-900/50 border-b border-zinc-800">
                 <tr>
-                  <th className="text-left px-4 py-3 text-main font-semibold text-sm">
+                  <th className="text-left px-6 py-3.5 text-zinc-400 font-semibold text-xs uppercase tracking-wider">
                     Scenario Title
                   </th>
-                  <th className="text-left px-4 py-3 text-main font-semibold text-sm">
+                  <th className="text-left px-6 py-3.5 text-zinc-400 font-semibold text-xs uppercase tracking-wider">
                     Category
                   </th>
-                  <th className="text-left px-4 py-3 text-main font-semibold text-sm">
+                  <th className="text-left px-6 py-3.5 text-zinc-400 font-semibold text-xs uppercase tracking-wider">
                     Description
                   </th>
-                  <th className="text-right px-4 py-3 text-main font-semibold text-sm">
+                  <th className="text-right px-6 py-3.5 text-zinc-400 font-semibold text-xs uppercase tracking-wider">
                     Actions
                   </th>
                 </tr>
@@ -301,7 +301,7 @@ export default function ScenariosAdminClient({
               <tbody>
                 {initialScenarios.length === 0 ? (
                   <tr>
-                    <td colSpan={4} className="px-4 py-8 text-center text-dim">
+                    <td colSpan={4} className="px-6 py-12 text-center text-zinc-400">
                       No Scenarios yet. Create one to get started!
                     </td>
                   </tr>
@@ -309,38 +309,36 @@ export default function ScenariosAdminClient({
                   initialScenarios.map((scenario, index) => (
                     <tr
                       key={scenario.id}
-                      className={`border-b border-main/50 hover:bg-dim/30 transition-colors ${
-                        index % 2 === 0 ? 'bg-medium' : 'bg-dim/10'
-                      }`}
+                      className="border-b border-zinc-800/50 hover:bg-zinc-800/30 transition-colors duration-150"
                     >
-                      <td className="px-4 py-3 text-main font-medium">
+                      <td className="px-6 py-4 text-zinc-100 font-medium text-sm">
                         {scenario.title}
                       </td>
-                      <td className="px-4 py-3">
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-500/10 text-green-400 border border-green-500/20">
+                      <td className="px-6 py-4">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-600/10 text-green-400 border border-green-600/20">
                           {scenario.category}
                         </span>
                       </td>
-                      <td className="px-4 py-3 text-dim text-sm">
+                      <td className="px-6 py-4 text-zinc-400 text-sm leading-relaxed">
                         {scenario.description || '—'}
                       </td>
-                      <td className="px-4 py-3 text-right">
+                      <td className="px-6 py-4 text-right">
                         <div className="flex gap-2 justify-end">
                           <button
                             onClick={() => handleEdit(scenario)}
-                            className="p-2 text-blue-400 hover:bg-blue-500/10 rounded-lg transition-colors"
+                            className="p-2 text-blue-400 hover:bg-blue-600/10 rounded-md transition-colors duration-150"
                             title="Edit"
                           >
-                            <FiEdit className="text-lg" />
+                            <FiEdit className="w-4 h-4" />
                           </button>
                           <button
                             onClick={() =>
                               handleDelete(scenario.id, scenario.title)
                             }
-                            className="p-2 text-red-400 hover:bg-red-500/10 rounded-lg transition-colors"
+                            className="p-2 text-red-400 hover:bg-red-600/10 rounded-md transition-colors duration-150"
                             title="Delete"
                           >
-                            <FiTrash2 className="text-lg" />
+                            <FiTrash2 className="w-4 h-4" />
                           </button>
                         </div>
                       </td>

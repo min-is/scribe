@@ -99,7 +99,7 @@ export default function PhysiciansClient({
             <button
               type="button"
               onClick={() => setShowForm(true)}
-              className="font-admin px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 active:scale-[0.98] transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950"
             >
               Add Physician
             </button>
@@ -198,9 +198,9 @@ export default function PhysiciansClient({
           </div>
         )}
 
-        <div className="bg-medium border border-main rounded-lg overflow-hidden">
+        <div className="bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden shadow-sm">
           {initialPhysicians.length === 0 ? (
-            <div className="p-8 text-center text-dim">
+            <div className="px-6 py-12 text-center text-zinc-400">
               <p>No physicians added yet.</p>
               <p className="text-sm mt-1">
                 Click &quot;Add Physician&quot; to get started.
@@ -209,51 +209,43 @@ export default function PhysiciansClient({
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full">
-                <thead className="bg-gray-50 dark:bg-gray-800 border-b border-main">
+                <thead className="bg-zinc-900/50 border-b border-zinc-800">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-dim uppercase tracking-wider">
+                    <th className="px-6 py-3.5 text-left text-xs font-medium text-zinc-400 uppercase tracking-wider">
                       Name
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-dim uppercase tracking-wider">
+                    <th className="px-6 py-3.5 text-left text-xs font-medium text-zinc-400 uppercase tracking-wider">
                       Specialty
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-dim uppercase tracking-wider">
+                    <th className="px-6 py-3.5 text-left text-xs font-medium text-zinc-400 uppercase tracking-wider">
                       URL Slug
                     </th>
-                    <th className="px-6 py-3 text-right text-xs font-medium text-dim uppercase tracking-wider">
+                    <th className="px-6 py-3.5 text-right text-xs font-medium text-zinc-400 uppercase tracking-wider">
                       Actions
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                <tbody>
                   {initialPhysicians.map((physician) => (
                     <tr
                       key={physician.id}
-                      className="hover:bg-gray-50 dark:hover:bg-gray-800"
+                      className="border-b border-zinc-800/50 hover:bg-zinc-800/30 transition-colors duration-150"
                     >
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-main">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-zinc-100">
                         {physician.name}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-dim">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-zinc-400 leading-relaxed">
                         {physician.specialty}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-dim">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-mono text-zinc-400 leading-relaxed">
                         {physician.slug}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <button
                           type="button"
                           onClick={() => handleEdit(physician)}
-                          className="font-admin mr-4 px-3 py-1.5 rounded-md transition-all duration-300 text-blue-600 dark:text-blue-400"
-                          style={{
-                            boxShadow: '0 0 10px rgba(59, 130, 246, 0.2)',
-                          }}
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.boxShadow = '0 0 15px rgba(59, 130, 246, 0.4), 0 0 25px rgba(59, 130, 246, 0.2)';
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.boxShadow = '0 0 10px rgba(59, 130, 246, 0.2)';
-                          }}
+                          className="p-2 text-blue-400 hover:bg-blue-600/10 rounded-md transition-colors duration-150"
+                          title="Edit"
                         >
                           Edit
                         </button>
@@ -262,16 +254,8 @@ export default function PhysiciansClient({
                           onClick={() =>
                             handleDelete(physician.id, physician.name)
                           }
-                          className="font-admin px-3 py-1.5 rounded-md transition-all duration-300 text-red-600 dark:text-red-400"
-                          style={{
-                            boxShadow: '0 0 10px rgba(239, 68, 68, 0.2)',
-                          }}
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.boxShadow = '0 0 15px rgba(239, 68, 68, 0.4), 0 0 25px rgba(239, 68, 68, 0.2)';
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.boxShadow = '0 0 10px rgba(239, 68, 68, 0.2)';
-                          }}
+                          className="p-2 text-red-400 hover:bg-red-600/10 rounded-md transition-colors duration-150"
+                          title="Delete"
                         >
                           Delete
                         </button>

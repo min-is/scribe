@@ -120,9 +120,50 @@ export default function AnimatedMessagesClient({
   return (
     <div className="max-w-4xl mx-auto py-8 px-4">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-main mb-2">Animated Messages</h1>
-        <p className="text-medium">
-          Manage the typewriter messages displayed on the home page
+        <h1 className="text-3xl font-bold tracking-tight text-white mb-2">Home Page Content</h1>
+        <p className="text-zinc-400 text-base">
+          Manage the typewriter messages, announcements, and getting started content displayed on the home page
+        </p>
+      </div>
+
+      {/* Announcements Section */}
+      <div className="mb-8 bg-zinc-900 border border-zinc-800 rounded-xl p-6">
+        <h2 className="text-xl font-semibold text-zinc-100 mb-3">Announcements Banner</h2>
+        <p className="text-sm text-zinc-400 mb-4">
+          This content appears in the red-orange banner on the home page. Edit the text below to update it.
+        </p>
+        <textarea
+          placeholder="Welcome! Check back here for important updates and announcements."
+          className="w-full p-4 border border-zinc-800 rounded-lg text-zinc-100 bg-zinc-950 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          rows={3}
+          disabled
+        />
+        <p className="text-xs text-zinc-500 mt-2">
+          Note: This is a placeholder. To enable editing, add a database model for home page content.
+        </p>
+      </div>
+
+      {/* Getting Started Section */}
+      <div className="mb-8 bg-zinc-900 border border-zinc-800 rounded-xl p-6">
+        <h2 className="text-xl font-semibold text-zinc-100 mb-3">Getting Started Content</h2>
+        <p className="text-sm text-zinc-400 mb-4">
+          This content appears in the blue "Getting Started" box on the home page.
+        </p>
+        <textarea
+          placeholder="Welcome to your home! Browse provider preferences, access procedure guides..."
+          className="w-full p-4 border border-zinc-800 rounded-lg text-zinc-100 bg-zinc-950 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          rows={5}
+          disabled
+        />
+        <p className="text-xs text-zinc-500 mt-2">
+          Note: This is a placeholder. To enable editing, add a database model for home page content.
+        </p>
+      </div>
+
+      <div className="mb-6">
+        <h2 className="text-xl font-semibold text-zinc-100 mb-2">Typewriter Messages</h2>
+        <p className="text-zinc-400 text-sm">
+          Manage the rotating typewriter messages displayed on the home page
         </p>
       </div>
 
