@@ -36,6 +36,21 @@ export default function HomePage() {
           </div>
         </div>
 
+        {/* Announcements - Moved above Quick Actions */}
+        <div className="mb-8 bg-gradient-to-r from-blue-500/10 to-purple-500/10 dark:from-blue-500/5 dark:to-purple-500/5 border border-blue-500/20 rounded-2xl p-6">
+          <div className="flex items-start gap-3">
+            <div className="flex-shrink-0 w-1 h-full bg-gradient-to-b from-blue-500 to-purple-500 rounded-full"></div>
+            <div className="flex-1">
+              <h3 className="text-sm font-semibold text-blue-600 dark:text-blue-400 mb-2 uppercase tracking-wide">
+                Announcements
+              </h3>
+              <p className="text-base text-main leading-relaxed">
+                Welcome! Check back here for important updates and announcements.
+              </p>
+            </div>
+          </div>
+        </div>
+
         {/* Quick Actions */}
         <div className="mb-10">
           <h2 className="text-xl font-semibold text-main mb-4 flex items-center gap-2">
@@ -73,16 +88,6 @@ export default function HomePage() {
               description="Drug reference library"
               onClick={() => handleSectionClick(PageType.MEDICATION)}
             />
-          </div>
-        </div>
-
-        {/* Announcements */}
-        <div className="bg-gradient-to-br from-orange-600/20 to-red-600/20 border border-orange-600/30 rounded-xl p-6 mb-6">
-          <h3 className="text-lg font-semibold text-orange-400 mb-3">Announcements</h3>
-          <div className="space-y-2 text-sm text-zinc-300">
-            <p className="leading-relaxed">
-              Welcome! Check back here for important updates and announcements.
-            </p>
           </div>
         </div>
 

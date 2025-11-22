@@ -86,10 +86,8 @@ export class ProviderRepository extends BaseRepository<Provider, CreateProviderI
         slug: data.slug,
         name: data.name,
         credentials: data.credentials,
+        icon: data.icon,
         generalDifficulty: data.generalDifficulty,
-        speedDifficulty: data.speedDifficulty,
-        terminologyDifficulty: data.terminologyDifficulty,
-        noteDifficulty: data.noteDifficulty,
         noteTemplate: data.noteTemplate,
         noteSmartPhrase: data.noteSmartPhrase,
         preferences: data.preferences ? toInputJsonValue(data.preferences) : Prisma.JsonNull,
@@ -102,7 +100,7 @@ export class ProviderRepository extends BaseRepository<Provider, CreateProviderI
             textContent,
             type: PageType.PROVIDER,
             position,
-            icon: '👨‍⚕️',
+            icon: data.icon || '👨‍⚕️',
           },
         },
       },
@@ -120,10 +118,8 @@ export class ProviderRepository extends BaseRepository<Provider, CreateProviderI
         data: {
           name: data.name,
           credentials: data.credentials,
+          icon: data.icon,
           generalDifficulty: data.generalDifficulty,
-          speedDifficulty: data.speedDifficulty,
-          terminologyDifficulty: data.terminologyDifficulty,
-          noteDifficulty: data.noteDifficulty,
           noteTemplate: data.noteTemplate,
           noteSmartPhrase: data.noteSmartPhrase,
           preferences: data.preferences !== undefined
@@ -139,6 +135,7 @@ export class ProviderRepository extends BaseRepository<Provider, CreateProviderI
       // Prepare page update data
       const pageData: {
         title?: string;
+        icon?: string;
         content?: Prisma.InputJsonValue;
         textContent?: string;
       } = {};
@@ -147,6 +144,10 @@ export class ProviderRepository extends BaseRepository<Provider, CreateProviderI
         const name = data.name ?? provider.name;
         const credentials = data.credentials ?? provider.credentials;
         pageData.title = credentials ? `${name}, ${credentials}` : name;
+      }
+
+      if (data.icon !== undefined) {
+        pageData.icon = data.icon || '👨‍⚕️';
       }
 
       if (data.wikiContent !== undefined && data.wikiContent !== null) {
@@ -180,10 +181,8 @@ export class ProviderRepository extends BaseRepository<Provider, CreateProviderI
       data: {
         name: data.name,
         credentials: data.credentials,
+        icon: data.icon,
         generalDifficulty: data.generalDifficulty,
-        speedDifficulty: data.speedDifficulty,
-        terminologyDifficulty: data.terminologyDifficulty,
-        noteDifficulty: data.noteDifficulty,
         noteTemplate: data.noteTemplate,
         noteSmartPhrase: data.noteSmartPhrase,
         preferences: data.preferences !== undefined

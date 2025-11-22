@@ -15,12 +15,10 @@ model Provider {
   slug      String   @unique
   name      String
   credentials String?
+  icon      String?  // Custom emoji/icon for the provider
 
   // Difficulty Metrics (1-10 scale)
-  generalDifficulty     Int?  // Primary metric shown in preview
-  speedDifficulty       Int?  // How fast they work
-  terminologyDifficulty Int?  // Terminology expectations
-  noteDifficulty        Int?  // Note complexity requirements
+  generalDifficulty     Int?  // Overall difficulty level for new scribes
 
   // Preferences
   noteTemplate String?

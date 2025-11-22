@@ -152,9 +152,6 @@ export default function ProviderProfileView() {
                 </h4>
                 <ProviderDifficultyFull
                   generalDifficulty={provider.generalDifficulty}
-                  speedDifficulty={provider.speedDifficulty}
-                  terminologyDifficulty={provider.terminologyDifficulty}
-                  noteDifficulty={provider.noteDifficulty}
                 />
               </div>
 
