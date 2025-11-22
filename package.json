@@ -2,7 +2,7 @@
   "name": "scribe-dashboard",
   "scripts": {
     "dev": "npm run migrate && next dev --turbo",
-    "build": "prisma generate && next build",
+    "build": "npm run migrate && prisma generate && next build",
     "start": "npm run migrate && next start",
     "lint": "next lint",
     "test": "jest --watch --transformIgnorePatterns 'node_modules/(?!my-library-dir)/'",
