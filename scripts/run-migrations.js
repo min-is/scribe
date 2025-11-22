@@ -457,6 +457,36 @@ BEGIN
 END $$;
     `,
   },
+  {
+    name: '20251122070000_add_home_page_content',
+    sql: `
+-- CreateTable HomePageContent (only if not exists)
+CREATE TABLE IF NOT EXISTS "HomePageContent" (
+    "id" TEXT NOT NULL,
+    "announcementText" TEXT NOT NULL,
+    "gettingStartedText" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "HomePageContent_pkey" PRIMARY KEY ("id")
+);
+
+-- Insert default content if table is empty
+INSERT INTO "HomePageContent" ("id", "announcementText", "gettingStartedText", "createdAt", "updatedAt")
+SELECT
+    'default',
+    'Welcome! Check back here for important updates and announcements.',
+    'Welcome to your home!
+
+• Browse provider preferences and documentation
+• Access procedure guides and protocols
+• Find smart phrases for EPIC documentation
+• Review critical scenarios and emergency protocols',
+    CURRENT_TIMESTAMP,
+    CURRENT_TIMESTAMP
+WHERE NOT EXISTS (SELECT 1 FROM "HomePageContent");
+    `,
+  },
 ];
 
 async function runMigrations() {
