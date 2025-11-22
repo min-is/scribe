@@ -101,6 +101,7 @@ export class ProviderService {
       slug: provider.slug,
       name: provider.name,
       credentials: provider.credentials,
+      icon: provider.icon,
       generalDifficulty: provider.generalDifficulty,
       noteTemplate: provider.noteTemplate,
       noteSmartPhrase: provider.noteSmartPhrase,
