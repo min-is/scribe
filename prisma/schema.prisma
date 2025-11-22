@@ -143,18 +143,19 @@ model Page {
   tags          String[] // Searchable tags
 
   // Legacy compatibility - links to old models during migration
+  // CASCADE delete ensures Pages are automatically deleted when source entity is deleted
   providerId           String?  @unique
-  provider             Provider? @relation(fields: [providerId], references: [id])
+  provider             Provider? @relation(fields: [providerId], references: [id], onDelete: Cascade)
   procedureId          String?  @unique
-  procedure            Procedure? @relation(fields: [procedureId], references: [id])
+  procedure            Procedure? @relation(fields: [procedureId], references: [id], onDelete: Cascade)
   scenarioId           String?  @unique
-  scenario             Scenario? @relation(fields: [scenarioId], references: [id])
+  scenario             Scenario? @relation(fields: [scenarioId], references: [id], onDelete: Cascade)
   smartPhraseId        String?  @unique
-  smartPhrase          SmartPhrase? @relation(fields: [smartPhraseId], references: [id])
+  smartPhrase          SmartPhrase? @relation(fields: [smartPhraseId], references: [id], onDelete: Cascade)
   physicianDirectoryId String?  @unique
-  physicianDirectory   PhysicianDirectory? @relation(fields: [physicianDirectoryId], references: [id])
+  physicianDirectory   PhysicianDirectory? @relation(fields: [physicianDirectoryId], references: [id], onDelete: Cascade)
   medicationId         String?  @unique
-  medication           Medication? @relation(fields: [medicationId], references: [id])
+  medication           Medication? @relation(fields: [medicationId], references: [id], onDelete: Cascade)
 
   // Soft delete
   deletedAt     DateTime?

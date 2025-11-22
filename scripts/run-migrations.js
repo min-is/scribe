@@ -487,6 +487,99 @@ SELECT
 WHERE NOT EXISTS (SELECT 1 FROM "HomePageContent");
     `,
   },
+  {
+    name: '20251122080000_fix_provider_cascade_delete',
+    sql: `
+-- Fix foreign key constraint for Page.providerId to CASCADE instead of SET NULL
+-- This prevents orphaned PROVIDER pages when a Provider is deleted
+
+DO $$
+BEGIN
+    -- Drop existing constraint if it exists
+    IF EXISTS (
+        SELECT 1 FROM information_schema.table_constraints
+        WHERE constraint_name = 'Page_providerId_fkey' AND table_name = 'Page'
+    ) THEN
+        ALTER TABLE "Page" DROP CONSTRAINT "Page_providerId_fkey";
+    END IF;
+
+    -- Add new constraint with CASCADE delete
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.table_constraints
+        WHERE constraint_name = 'Page_providerId_fkey' AND table_name = 'Page'
+    ) THEN
+        ALTER TABLE "Page" ADD CONSTRAINT "Page_providerId_fkey"
+        FOREIGN KEY ("providerId") REFERENCES "Provider"("id")
+        ON DELETE CASCADE ON UPDATE CASCADE;
+    END IF;
+
+    -- Also fix other entity foreign keys for consistency
+    -- Procedure
+    IF EXISTS (
+        SELECT 1 FROM information_schema.table_constraints
+        WHERE constraint_name = 'Page_procedureId_fkey' AND table_name = 'Page'
+    ) THEN
+        ALTER TABLE "Page" DROP CONSTRAINT "Page_procedureId_fkey";
+        ALTER TABLE "Page" ADD CONSTRAINT "Page_procedureId_fkey"
+        FOREIGN KEY ("procedureId") REFERENCES "Procedure"("id")
+        ON DELETE CASCADE ON UPDATE CASCADE;
+    END IF;
+
+    -- Scenario
+    IF EXISTS (
+        SELECT 1 FROM information_schema.table_constraints
+        WHERE constraint_name = 'Page_scenarioId_fkey' AND table_name = 'Page'
+    ) THEN
+        ALTER TABLE "Page" DROP CONSTRAINT "Page_scenarioId_fkey";
+        ALTER TABLE "Page" ADD CONSTRAINT "Page_scenarioId_fkey"
+        FOREIGN KEY ("scenarioId") REFERENCES "Scenario"("id")
+        ON DELETE CASCADE ON UPDATE CASCADE;
+    END IF;
+
+    -- SmartPhrase
+    IF EXISTS (
+        SELECT 1 FROM information_schema.table_constraints
+        WHERE constraint_name = 'Page_smartPhraseId_fkey' AND table_name = 'Page'
+    ) THEN
+        ALTER TABLE "Page" DROP CONSTRAINT "Page_smartPhraseId_fkey";
+        ALTER TABLE "Page" ADD CONSTRAINT "Page_smartPhraseId_fkey"
+        FOREIGN KEY ("smartPhraseId") REFERENCES "SmartPhrase"("id")
+        ON DELETE CASCADE ON UPDATE CASCADE;
+    END IF;
+
+    -- PhysicianDirectory
+    IF EXISTS (
+        SELECT 1 FROM information_schema.table_constraints
+        WHERE constraint_name = 'Page_physicianDirectoryId_fkey' AND table_name = 'Page'
+    ) THEN
+        ALTER TABLE "Page" DROP CONSTRAINT "Page_physicianDirectoryId_fkey";
+        ALTER TABLE "Page" ADD CONSTRAINT "Page_physicianDirectoryId_fkey"
+        FOREIGN KEY ("physicianDirectoryId") REFERENCES "PhysicianDirectory"("id")
+        ON DELETE CASCADE ON UPDATE CASCADE;
+    END IF;
+
+    -- Medication
+    IF EXISTS (
+        SELECT 1 FROM information_schema.table_constraints
+        WHERE constraint_name = 'Page_medicationId_fkey' AND table_name = 'Page'
+    ) THEN
+        ALTER TABLE "Page" DROP CONSTRAINT "Page_medicationId_fkey";
+        ALTER TABLE "Page" ADD CONSTRAINT "Page_medicationId_fkey"
+        FOREIGN KEY ("medicationId") REFERENCES "Medication"("id")
+        ON DELETE CASCADE ON UPDATE CASCADE;
+    END IF;
+END $$;
+
+-- Soft-delete any existing orphaned PROVIDER pages
+-- These are pages with type='PROVIDER' but providerId=NULL
+UPDATE "Page"
+SET "deletedAt" = NOW(),
+    "updatedAt" = NOW()
+WHERE type = 'PROVIDER'
+  AND "providerId" IS NULL
+  AND "deletedAt" IS NULL;
+    `,
+  },
 ];
 
 async function runMigrations() {
