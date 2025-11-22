@@ -25,6 +25,13 @@ const getPage = cache(async (slug: string) => {
       icon: true,
       viewCount: true,
       updatedAt: true,
+      provider: {
+        select: {
+          name: true,
+          credentials: true,
+          icon: true,
+        },
+      },
       parent: {
         select: {
           slug: true,
@@ -124,13 +131,22 @@ export default async function PageView({ params }: PageViewProps) {
         <div className="max-w-4xl mx-auto py-12 px-8">
           {/* Icon and Title */}
           <div className="mb-10">
-            {page.icon && (
+            {(page.provider?.icon || page.icon) && (
               <div className="text-7xl mb-6">
-                {page.icon}
+                {page.provider?.icon || page.icon}
               </div>
             )}
             <h1 className="text-5xl font-bold text-main mb-4 tracking-tight leading-tight">
-              {page.title}
+              {page.provider ? (
+                <>
+                  {page.provider.name}
+                  {page.provider.credentials && (
+                    <span>, {page.provider.credentials}</span>
+                  )}
+                </>
+              ) : (
+                page.title
+              )}
             </h1>
             <div className="flex items-center gap-3 text-sm text-medium">
               <div className="flex items-center gap-1.5">
