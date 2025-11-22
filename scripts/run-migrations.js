@@ -417,6 +417,46 @@ BEGIN
 END $$;
     `,
   },
+  {
+    name: '20251122000000_add_icon_remove_difficulty_metrics',
+    sql: `
+-- Add icon column to Provider (only if not exists)
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.columns
+        WHERE table_name = 'Provider' AND column_name = 'icon'
+    ) THEN
+        ALTER TABLE "Provider" ADD COLUMN "icon" TEXT;
+    END IF;
+END $$;
+
+-- Drop old difficulty columns if they exist
+DO $$
+BEGIN
+    IF EXISTS (
+        SELECT 1 FROM information_schema.columns
+        WHERE table_name = 'Provider' AND column_name = 'speedDifficulty'
+    ) THEN
+        ALTER TABLE "Provider" DROP COLUMN "speedDifficulty";
+    END IF;
+
+    IF EXISTS (
+        SELECT 1 FROM information_schema.columns
+        WHERE table_name = 'Provider' AND column_name = 'terminologyDifficulty'
+    ) THEN
+        ALTER TABLE "Provider" DROP COLUMN "terminologyDifficulty";
+    END IF;
+
+    IF EXISTS (
+        SELECT 1 FROM information_schema.columns
+        WHERE table_name = 'Provider' AND column_name = 'noteDifficulty'
+    ) THEN
+        ALTER TABLE "Provider" DROP COLUMN "noteDifficulty";
+    END IF;
+END $$;
+    `,
+  },
 ];
 
 async function runMigrations() {
