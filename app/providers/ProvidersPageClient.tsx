@@ -40,11 +40,11 @@ export default function ProvidersPageClient({
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-gray-950 dark:via-black dark:to-gray-900">
       <div className="max-w-7xl mx-auto px-6 py-16">
         {/* Header Section */}
-        <div className="mb-16 text-center">
-          <h1 className="text-6xl font-semibold tracking-tight text-gray-900 dark:text-white mb-4">
+        <div className="mb-12 text-center">
+          <h1 className="text-5xl font-semibold tracking-tight text-gray-900 dark:text-white mb-3">
             Providers
           </h1>
-          <p className="text-xl text-gray-600 dark:text-gray-400 font-light max-w-2xl mx-auto">
+          <p className="text-lg text-gray-600 dark:text-gray-400 font-light max-w-2xl mx-auto">
             Discover provider profiles, preferences, and expertise levels
           </p>
         </div>
@@ -57,7 +57,7 @@ export default function ProvidersPageClient({
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {providers.map((provider) => (
               <div
                 key={provider.id}
@@ -65,59 +65,53 @@ export default function ProvidersPageClient({
                 className="group relative cursor-pointer"
               >
                 {/* Frosted Glass Card */}
-                <div className="relative overflow-hidden rounded-3xl bg-white/60 dark:bg-gray-800/60 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 shadow-sm hover:shadow-xl transition-all duration-500 ease-out hover:scale-[1.02] hover:border-gray-300/80 dark:hover:border-gray-600/80">
+                <div className="relative overflow-hidden rounded-2xl bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 shadow-sm hover:shadow-lg transition-all duration-300 ease-out hover:border-gray-300/80 dark:hover:border-gray-600/80">
                   {/* Gradient Background Overlay */}
-                  <div className={`absolute inset-0 bg-gradient-to-br ${getDifficultyColor(provider.generalDifficulty)} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
+                  <div className={`absolute inset-0 bg-gradient-to-br ${getDifficultyColor(provider.generalDifficulty)} opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
 
                   {/* Content */}
-                  <div className="relative p-8">
-                    {/* Icon */}
-                    {provider.icon && (
-                      <div className="text-6xl mb-6 transform group-hover:scale-110 transition-transform duration-500">
-                        {provider.icon}
-                      </div>
-                    )}
-
+                  <div className="relative p-5">
                     {/* Provider Name & Credentials */}
-                    <div className="mb-6">
-                      <h3 className="text-2xl font-semibold text-gray-900 dark:text-white mb-1 tracking-tight">
+                    <div className="mb-4">
+                      <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-0.5 tracking-tight">
                         {provider.name}
                       </h3>
                       {provider.credentials && (
-                        <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                        <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
                           {provider.credentials}
                         </p>
                       )}
                     </div>
 
-                    {/* Difficulty Badge */}
+                    {/* Difficulty Rating - Apple-inspired dot indicators */}
                     {provider.generalDifficulty && (
-                      <div className="flex items-center gap-3">
-                        <div className="flex-1">
-                          {/* Difficulty Bar */}
-                          <div className="h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-1.5">
+                          {Array.from({ length: 10 }).map((_, index) => (
                             <div
-                              className="h-full bg-gradient-to-r from-gray-400 to-gray-600 dark:from-gray-300 dark:to-gray-500 rounded-full transition-all duration-700"
-                              style={{ width: `${(provider.generalDifficulty / 10) * 100}%` }}
+                              key={index}
+                              className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
+                                index < provider.generalDifficulty!
+                                  ? 'bg-gray-800 dark:bg-gray-200'
+                                  : 'bg-gray-300 dark:bg-gray-600'
+                              }`}
                             />
-                          </div>
+                          ))}
                         </div>
-                        <div className="text-xs font-medium text-gray-500 dark:text-gray-400 tabular-nums">
-                          {provider.generalDifficulty}/10
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs font-medium text-gray-600 dark:text-gray-400">
+                            {getDifficultyLabel(provider.generalDifficulty)}
+                          </span>
+                          <span className="text-xs font-mono text-gray-500 dark:text-gray-500 tabular-nums">
+                            {provider.generalDifficulty}/10
+                          </span>
                         </div>
                       </div>
                     )}
-
-                    {/* Difficulty Label */}
-                    <div className="mt-3">
-                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-700/50 text-gray-700 dark:text-gray-300">
-                        {getDifficultyLabel(provider.generalDifficulty)}
-                      </span>
-                    </div>
                   </div>
 
                   {/* Hover Shine Effect */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
                 </div>
               </div>
             ))}
