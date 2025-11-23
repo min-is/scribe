@@ -580,6 +580,48 @@ WHERE type = 'PROVIDER'
   AND "deletedAt" IS NULL;
     `,
   },
+  {
+    name: '20251123000000_add_user_model',
+    sql: `
+-- CreateEnum UserRole (only if not exists)
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'UserRole') THEN
+        CREATE TYPE "UserRole" AS ENUM ('ADMIN', 'EDITOR');
+    END IF;
+END $$;
+
+-- CreateTable User (only if not exists)
+CREATE TABLE IF NOT EXISTS "User" (
+    "id" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "name" TEXT,
+    "password" TEXT,
+    "role" "UserRole" NOT NULL DEFAULT 'EDITOR',
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "lastLoginAt" TIMESTAMP(3),
+
+    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateIndexes for User
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_indexes WHERE indexname = 'User_email_key') THEN
+        CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM pg_indexes WHERE indexname = 'User_email_idx') THEN
+        CREATE INDEX "User_email_idx" ON "User"("email");
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM pg_indexes WHERE indexname = 'User_role_idx') THEN
+        CREATE INDEX "User_role_idx" ON "User"("role");
+    END IF;
+END $$;
+    `,
+  },
 ];
 
 async function runMigrations() {

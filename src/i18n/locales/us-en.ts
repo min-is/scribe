@@ -63,8 +63,8 @@ const TEXT = {
   auth: {
     signIn: 'Sign In',
     signOut: 'Sign Out',
-    email: 'Admin Email',
-    password: 'Admin Password',
+    email: 'Email',
+    password: 'Password',
     invalidEmailPassword: 'Invalid email/password',
   },
   admin: {
