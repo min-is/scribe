@@ -1,8 +1,25 @@
-import { redirect } from 'next/navigation';
-import { PATH_ADMIN_PROCEDURES } from '@/app/paths';
+import { Metadata } from 'next/types';
+import { prisma } from '@/lib/prisma';
+import ProceduresAdminClient from '../../admin/procedures/ProceduresAdminClient';
 
-export default function EditorProceduresPage() {
-  // For now, redirect to admin procedures page
-  // TODO: Create dedicated editor view with limited permissions
-  redirect(PATH_ADMIN_PROCEDURES);
+export const metadata: Metadata = {
+  title: 'Manage Procedures - Editor',
+  description: 'Create and edit medical procedures',
+};
+
+export default async function EditorProceduresPage() {
+  const procedures = await prisma.procedure.findMany({
+    orderBy: { title: 'asc' },
+  });
+
+  // Get unique categories
+  const categories = Array.from(new Set(procedures.map(p => p.category).filter(Boolean))) as string[];
+
+  return (
+    <ProceduresAdminClient
+      procedures={procedures}
+      existingCategories={categories}
+      showDelete={false}
+    />
+  );
 }
