@@ -250,3 +250,24 @@ model HomePageContent {
   createdAt             DateTime @default(now())
   updatedAt             DateTime @updatedAt
 }
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  password      String?   // Hashed password for editors
+  role          UserRole  @default(EDITOR)
+
+  // Metadata
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  lastLoginAt   DateTime?
+
+  @@index([email])
+  @@index([role])
+}
+
+enum UserRole {
+  ADMIN
+  EDITOR
+}
