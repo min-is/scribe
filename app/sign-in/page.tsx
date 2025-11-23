@@ -1,6 +1,6 @@
 import { auth } from '@/auth/server';
 import SignInForm from '@/auth/SignInForm';
-import { PATH_ADMIN, PATH_ROOT } from '@/app/paths';
+import { PATH_ADMIN, PATH_EDITOR, PATH_ROOT } from '@/app/paths';
 import { clsx } from 'clsx/lite';
 import { redirect } from 'next/navigation';
 import LinkWithStatus from '@/components/LinkWithStatus';
@@ -11,7 +11,14 @@ export default async function SignInPage() {
   const session = await auth();
 
   if (session?.user) {
-    redirect(PATH_ADMIN);
+    // Redirect based on user role
+    if (session.user.role === 'ADMIN') {
+      redirect(PATH_ADMIN);
+    } else if (session.user.role === 'EDITOR') {
+      redirect(PATH_EDITOR);
+    } else {
+      redirect(PATH_ADMIN);
+    }
   }
 
   const appText = await getAppText();

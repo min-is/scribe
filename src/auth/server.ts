@@ -18,16 +18,45 @@ export const {
         email: { label: 'Email', type: 'email' },
         password: { label: 'Password', type: 'password' },
       },
-      async authorize({ email, password }) {
+      async authorize(credentials) {
+        const email = credentials.email as string;
+        const password = credentials.password as string;
+
+        // Check admin credentials
         if (
-          process.env.ADMIN_EMAIL && process.env.ADMIN_EMAIL === email &&
-          process.env.ADMIN_PASSWORD && process.env.ADMIN_PASSWORD === password
+          process.env.ADMIN_EMAIL &&
+          process.env.ADMIN_EMAIL === email &&
+          process.env.ADMIN_PASSWORD &&
+          process.env.ADMIN_PASSWORD === password
         ) {
-          const user: User = { email, name: 'Admin User' };
+          const user: User = {
+            email,
+            name: 'Admin User',
+            role: 'ADMIN',
+          };
           return user;
-        } else {
-          return null;
         }
+
+        // Check editor credentials
+        const editorEmails = process.env.EDITOR_EMAILS?.split(',').map(e =>
+          e.trim()
+        ) || [];
+        const editorPassphrase = process.env.EDITOR_PASSPHRASE;
+
+        if (
+          editorPassphrase &&
+          editorEmails.includes(email) &&
+          password === editorPassphrase
+        ) {
+          const user: User = {
+            email,
+            name: 'Editor User',
+            role: 'EDITOR',
+          };
+          return user;
+        }
+
+        return null;
       },
     }),
   ],
@@ -40,6 +69,22 @@ export const {
       const isRequestAuthorized = !isUrlProtected || isUserLoggedIn;
 
       return isRequestAuthorized;
+    },
+    async jwt({ token, user }) {
+      if (user) {
+        token.email = user.email;
+        token.name = user.name;
+        token.role = user.role;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (session.user) {
+        session.user.email = token.email as string;
+        session.user.name = token.name as string | null;
+        session.user.role = token.role as 'ADMIN' | 'EDITOR';
+      }
+      return session;
     },
   },
   pages: {
