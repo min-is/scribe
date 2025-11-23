@@ -8,6 +8,7 @@ import {
   FileText,
   Menu,
   X,
+  LogIn,
 } from 'lucide-react';
 
 export function WorkspaceSidebar() {
@@ -90,6 +91,19 @@ export function WorkspaceSidebar() {
           )}
         >
           <span>Scenarios</span>
+        </Link>
+
+        <Link
+          href="/sign-in"
+          className={clsx(
+            'flex items-center gap-3 px-3 py-2 text-sm transition-all border-b-2',
+            isActive('/sign-in')
+              ? 'border-white dark:border-white text-main font-semibold'
+              : 'border-transparent text-dim hover:text-main hover:border-white/30 dark:hover:border-white/30'
+          )}
+        >
+          <LogIn size={18} />
+          <span>Login</span>
         </Link>
       </div>
     </div>

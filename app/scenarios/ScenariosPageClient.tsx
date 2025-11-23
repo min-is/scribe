@@ -4,9 +4,8 @@ import { useState, useMemo } from 'react';
 import { Scenario, incrementScenarioViewCount } from '@/scenario/actions';
 import {
   FiSearch,
-  FiChevronDown,
-  FiChevronRight,
   FiEye,
+  FiX,
 } from 'react-icons/fi';
 import { useDebounce } from 'use-debounce';
 
@@ -22,7 +21,7 @@ export default function ScenariosPageClient({
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedQuery] = useDebounce(searchQuery, 300);
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
-  const [expandedRows, setExpandedRows] = useState<Set<string>>(new Set());
+  const [selectedScenario, setSelectedScenario] = useState<Scenario | null>(null);
 
   // Filter scenarios based on search and category
   const filteredScenarios = useMemo(() => {
@@ -50,18 +49,14 @@ export default function ScenariosPageClient({
     return filtered;
   }, [scenarios, selectedCategory, debouncedQuery]);
 
-  const toggleRow = async (id: string) => {
-    const newExpanded = new Set(expandedRows);
-    const wasExpanded = newExpanded.has(id);
+  const handleScenarioClick = async (scenario: Scenario) => {
+    setSelectedScenario(scenario);
+    // Track view when opening
+    await incrementScenarioViewCount(scenario.id);
+  };
 
-    if (wasExpanded) {
-      newExpanded.delete(id);
-    } else {
-      newExpanded.add(id);
-      // Track view when expanding
-      await incrementScenarioViewCount(id);
-    }
-    setExpandedRows(newExpanded);
+  const handleClose = () => {
+    setSelectedScenario(null);
   };
 
   // Count by category
@@ -73,197 +68,227 @@ export default function ScenariosPageClient({
     return counts;
   }, [scenarios]);
 
+  const getCategoryColor = (category: string) => {
+    const colors: Record<string, string> = {
+      'All': 'from-gray-500/20 to-gray-600/20',
+      'Emergency': 'from-red-500/20 to-rose-600/20',
+      'Routine': 'from-green-500/20 to-emerald-600/20',
+      'Trauma': 'from-orange-500/20 to-amber-600/20',
+      'Pediatric': 'from-blue-500/20 to-cyan-600/20',
+      'Surgical': 'from-purple-500/20 to-violet-600/20',
+    };
+    return colors[category] || 'from-green-500/20 to-emerald-600/20';
+  };
+
   return (
-    <div className="min-h-screen p-8">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-main mb-2">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-gray-950 dark:via-black dark:to-gray-900">
+      <div className="max-w-7xl mx-auto px-6 py-16">
+        {/* Header Section */}
+        <div className="mb-12 text-center">
+          <h1 className="text-5xl font-semibold tracking-tight text-gray-900 dark:text-white mb-3">
             Clinical Scenarios
           </h1>
-          <p className="text-dim text-lg">
+          <p className="text-lg text-gray-600 dark:text-gray-400 font-light max-w-2xl mx-auto">
             Browse scenario walkthroughs for emergency and routine medical situations
           </p>
         </div>
 
-        {/* Search and Filter Section */}
-        <div className="flex flex-col gap-6 mb-8">
-          {/* Main Content Area */}
-          <div className="flex-1">
-            {/* Search Bar */}
-            <div className="mb-6">
-              <div className="relative">
-                <FiSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-dim text-xl" />
-                <input
-                  type="text"
-                  placeholder="Search by title, category, or description..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-medium border border-main rounded-lg pl-12 pr-4 py-3 text-main placeholder:text-dim focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all"
-                />
-              </div>
-              {debouncedQuery && (
-                <p className="text-dim text-sm mt-2">
-                  Found {filteredScenarios.length} result
-                  {filteredScenarios.length !== 1 ? 's' : ''} for &quot;
-                  {debouncedQuery}&quot;
-                </p>
-              )}
-            </div>
+        {/* Search Section */}
+        <div className="mb-8">
+          <div className="relative max-w-2xl mx-auto">
+            <FiSearch className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 text-xl" />
+            <input
+              type="text"
+              placeholder="Search by title, category, or description..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 rounded-2xl pl-14 pr-6 py-4 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:focus:ring-gray-600 transition-all shadow-sm"
+            />
+          </div>
+          {debouncedQuery && (
+            <p className="text-gray-500 dark:text-gray-400 text-sm mt-3 text-center font-light">
+              Found {filteredScenarios.length} result{filteredScenarios.length !== 1 ? 's' : ''} for &quot;{debouncedQuery}&quot;
+            </p>
+          )}
+        </div>
 
-            {/* Results Count */}
-            <div className="mb-4">
-              <p className="text-medium text-sm">
-                Showing {filteredScenarios.length} of {scenarios.length}{' '}
-                Scenarios
-              </p>
-            </div>
+        {/* Category Filter Pills */}
+        <div className="mb-10 flex flex-wrap justify-center gap-2">
+          {['All', ...categories].map((category) => (
+            <button
+              key={category}
+              onClick={() => setSelectedCategory(category)}
+              className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                selectedCategory === category
+                  ? 'bg-gray-900 dark:bg-white text-white dark:text-gray-900 shadow-md'
+                  : 'bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 text-gray-700 dark:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600'
+              }`}
+            >
+              {category}
+              <span className="ml-2 text-xs opacity-70">
+                {categoryCounts[category] || 0}
+              </span>
+            </button>
+          ))}
+        </div>
 
-            {/* Scenario Table */}
-            {filteredScenarios.length === 0 ? (
-              <div className="bg-medium border border-main rounded-lg p-12 text-center">
-                <p className="text-dim text-lg mb-2">No Scenarios found</p>
-                <p className="text-dim text-sm">
-                  Try adjusting your search or filter criteria
-                </p>
-              </div>
-            ) : (
-              <div className="bg-medium border border-main rounded-lg overflow-hidden">
-                <div className="overflow-x-auto">
-                  <table className="w-full">
-                    <thead className="bg-dim border-b border-main">
-                      <tr>
-                        <th className="text-left px-4 py-3 text-main font-semibold text-sm w-12">
-                          {/* Expand icon column */}
-                        </th>
-                        <th className="text-left px-4 py-3 text-main font-semibold text-sm">
-                          Title
-                        </th>
-                        <th className="text-left px-4 py-3 text-main font-semibold text-sm hidden md:table-cell">
-                          Category
-                        </th>
-                        <th className="text-left px-4 py-3 text-main font-semibold text-sm hidden lg:table-cell">
-                          Description
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {filteredScenarios.map((scenario, index) => {
-                        const isExpanded = expandedRows.has(scenario.id);
+        {/* Results Count */}
+        <div className="mb-6 text-center">
+          <p className="text-gray-500 dark:text-gray-400 text-sm font-light">
+            Showing {filteredScenarios.length} of {scenarios.length} scenarios
+          </p>
+        </div>
 
-                        return (
-                          <>
-                            <tr
-                              key={scenario.id}
-                              className={`border-b border-main/50 hover:bg-dim/30 transition-colors ${
-                                index % 2 === 0 ? 'bg-medium' : 'bg-dim/10'
-                              }`}
-                            >
-                              {/* Expand button */}
-                              <td className="px-4 py-3 w-12">
-                                <button
-                                  onClick={() => toggleRow(scenario.id)}
-                                  className="text-dim/50 hover:text-main transition-colors bg-transparent"
-                                  aria-label={
-                                    isExpanded ? 'Collapse' : 'Expand'
-                                  }
-                                >
-                                  {isExpanded ? (
-                                    <FiChevronDown className="text-lg" />
-                                  ) : (
-                                    <FiChevronRight className="text-lg" />
-                                  )}
-                                </button>
-                              </td>
+        {/* Scenario Cards Grid */}
+        {filteredScenarios.length === 0 ? (
+          <div className="text-center py-24">
+            <p className="text-gray-500 dark:text-gray-400 text-lg font-light mb-2">
+              No scenarios found
+            </p>
+            <p className="text-gray-400 dark:text-gray-500 text-sm">
+              Try adjusting your search or filter criteria
+            </p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {filteredScenarios.map((scenario) => (
+              <div
+                key={scenario.id}
+                onClick={() => handleScenarioClick(scenario)}
+                className="group relative cursor-pointer"
+              >
+                {/* Frosted Glass Card */}
+                <div className="relative overflow-hidden rounded-2xl bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 shadow-sm hover:shadow-lg transition-all duration-300 ease-out hover:border-gray-300/80 dark:hover:border-gray-600/80">
+                  {/* Gradient Background Overlay */}
+                  <div className={`absolute inset-0 bg-gradient-to-br ${getCategoryColor(scenario.category)} opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
 
-                              {/* Title */}
-                              <td className="px-4 py-3">
-                                <p className="text-main font-medium text-sm">
-                                  {scenario.title}
-                                </p>
-                              </td>
+                  {/* Content */}
+                  <div className="relative p-5">
+                    {/* Category Badge */}
+                    <div className="mb-3">
+                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-500/10 text-green-600 dark:text-green-400 border border-green-500/20">
+                        {scenario.category}
+                      </span>
+                    </div>
 
-                              {/* Category - hidden on mobile */}
-                              <td className="px-4 py-3 hidden md:table-cell">
-                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-500/10 text-green-400 border border-green-500/20">
-                                  {scenario.category}
-                                </span>
-                              </td>
+                    {/* Scenario Title */}
+                    <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2 tracking-tight">
+                      {scenario.title}
+                    </h3>
 
-                              {/* Description - hidden on smaller screens */}
-                              <td className="px-4 py-3 hidden lg:table-cell">
-                                <p className="text-dim text-sm truncate">
-                                  {scenario.description || '—'}
-                                </p>
-                              </td>
-                            </tr>
+                    {/* Description */}
+                    {scenario.description && (
+                      <p className="text-sm text-gray-600 dark:text-gray-400 font-light mb-4 line-clamp-2">
+                        {scenario.description}
+                      </p>
+                    )}
 
-                            {/* Expanded content row */}
-                            {isExpanded && (
-                              <tr key={`${scenario.id}-expanded`}>
-                                <td colSpan={4} className="p-0">
-                                  <div className="bg-content border-t border-main/50 p-6 animate-in slide-in-from-top-2 duration-200">
-                                    <div className="space-y-4">
-                                      {/* Mobile-only category and description */}
-                                      <div className="md:hidden space-y-2">
-                                        <div>
-                                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-500/10 text-green-400 border border-green-500/20">
-                                            {scenario.category}
-                                          </span>
-                                        </div>
-                                        {scenario.description && (
-                                          <p className="text-dim text-sm">
-                                            {scenario.description}
-                                          </p>
-                                        )}
-                                      </div>
+                    {/* View Count */}
+                    <div className="flex items-center gap-1.5 text-gray-500 dark:text-gray-400 text-xs mb-3">
+                      <FiEye className="text-sm" />
+                      <span className="font-medium">{scenario.viewCount} views</span>
+                    </div>
 
-                                      {/* Full content */}
-                                      <div>
-                                        <h4 className="text-main font-semibold text-sm mb-2">
-                                          Scenario Walkthrough:
-                                        </h4>
-                                        <div className="bg-medium border border-main rounded-lg p-4">
-                                          <pre className="text-medium text-sm whitespace-pre-wrap font-mono leading-relaxed">
-                                            {scenario.content}
-                                          </pre>
-                                        </div>
-                                      </div>
+                    {/* Tags Preview */}
+                    {scenario.tags.length > 0 && (
+                      <div className="flex flex-wrap gap-1.5">
+                        {scenario.tags.slice(0, 3).map((tag: string) => (
+                          <span
+                            key={tag}
+                            className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-gray-500/10 text-gray-600 dark:text-gray-400 border border-gray-500/20"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                        {scenario.tags.length > 3 && (
+                          <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium text-gray-500 dark:text-gray-400">
+                            +{scenario.tags.length - 3}
+                          </span>
+                        )}
+                      </div>
+                    )}
+                  </div>
 
-                                      {/* Tags */}
-                                      {scenario.tags.length > 0 && (
-                                        <div>
-                                          <h4 className="text-main font-semibold text-sm mb-2">
-                                            Tags:
-                                          </h4>
-                                          <div className="flex flex-wrap gap-2">
-                                            {scenario.tags.map((tag: string) => (
-                                              <span
-                                                key={tag}
-                                                className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-500/10 text-gray-400 border border-gray-500/20"
-                                              >
-                                                {tag}
-                                              </span>
-                                            ))}
-                                          </div>
-                                        </div>
-                                      )}
-                                    </div>
-                                  </div>
-                                </td>
-                              </tr>
-                            )}
-                          </>
-                        );
-                      })}
-                    </tbody>
-                  </table>
+                  {/* Hover Shine Effect */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
                 </div>
               </div>
-            )}
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Detail Modal */}
+      {selectedScenario && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
+          <div className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-white dark:bg-gray-900 rounded-3xl shadow-2xl animate-in zoom-in-95 duration-200">
+            {/* Close Button */}
+            <button
+              onClick={handleClose}
+              className="sticky top-4 float-right mr-4 mt-4 p-2 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors z-10"
+              aria-label="Close"
+            >
+              <FiX className="text-xl text-gray-700 dark:text-gray-300" />
+            </button>
+
+            <div className="p-8 pt-6">
+              {/* Header */}
+              <div className="mb-8">
+                <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-500/10 text-green-600 dark:text-green-400 border border-green-500/20 mb-4">
+                  {selectedScenario.category}
+                </span>
+                <h2 className="text-4xl font-semibold text-gray-900 dark:text-white mb-3 tracking-tight">
+                  {selectedScenario.title}
+                </h2>
+                {selectedScenario.description && (
+                  <p className="text-lg text-gray-600 dark:text-gray-400 font-light">
+                    {selectedScenario.description}
+                  </p>
+                )}
+              </div>
+
+              <div className="space-y-6">
+                {/* Scenario Content */}
+                <div className="bg-green-50 dark:bg-green-900/10 border border-green-200 dark:border-green-800 rounded-2xl p-6">
+                  <h4 className="text-gray-900 dark:text-white font-semibold text-base mb-3">
+                    Scenario Walkthrough
+                  </h4>
+                  <pre className="text-gray-700 dark:text-gray-300 text-sm whitespace-pre-wrap font-mono leading-relaxed">
+                    {selectedScenario.content}
+                  </pre>
+                </div>
+
+                {/* Tags */}
+                {selectedScenario.tags.length > 0 && (
+                  <div>
+                    <h4 className="text-gray-900 dark:text-white font-semibold text-base mb-3">
+                      Tags
+                    </h4>
+                    <div className="flex flex-wrap gap-2">
+                      {selectedScenario.tags.map((tag: string) => (
+                        <span
+                          key={tag}
+                          className="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-gray-500/10 text-gray-700 dark:text-gray-300 border border-gray-500/20"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* View Count Statistics */}
+                <div className="bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-2xl p-4">
+                  <p className="text-gray-600 dark:text-gray-400 text-sm flex items-center gap-2">
+                    <FiEye className="text-lg" />
+                    Viewed <span className="font-semibold text-gray-900 dark:text-white">{selectedScenario.viewCount}</span> times
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Provider } from '@prisma/client';
 import { JSONContent } from '@tiptap/core';
 import {
@@ -30,6 +30,7 @@ export default function ProvidersClient({
   const [showForm, setShowForm] = useState(false);
   const [editingProvider, setEditingProvider] = useState<Provider | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const formRef = useRef<HTMLDivElement>(null);
 
   // Form state for difficulty metrics
   const [generalDifficulty, setGeneralDifficulty] = useState<
@@ -155,6 +156,18 @@ export default function ProvidersClient({
     setShowForm(true);
   };
 
+  // Scroll to form when it opens
+  useEffect(() => {
+    if (showForm && formRef.current) {
+      formRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      // Add a subtle flash animation to draw attention
+      formRef.current.classList.add('animate-pulse-once');
+      setTimeout(() => {
+        formRef.current?.classList.remove('animate-pulse-once');
+      }, 1000);
+    }
+  }, [showForm]);
+
   const handleCancel = () => {
     setShowForm(false);
     setEditingProvider(null);
@@ -208,9 +221,19 @@ export default function ProvidersClient({
         </div>
 
         {showForm && (
-          <div className="bg-medium border border-main rounded-lg p-6">
-            <h2 className="text-xl font-semibold text-main mb-4">
-              {editingProvider ? 'Edit Provider' : 'Add New Provider'}
+          <div
+            ref={formRef}
+            className="bg-medium border-2 border-blue-500 dark:border-blue-400 rounded-lg p-6 shadow-lg shadow-blue-500/20 transition-all duration-300"
+          >
+            <h2 className="text-xl font-semibold text-main mb-4 flex items-center gap-2">
+              {editingProvider ? (
+                <>
+                  <span className="inline-block w-2 h-2 bg-blue-500 rounded-full animate-pulse"></span>
+                  Edit Provider: {editingProvider.name}
+                </>
+              ) : (
+                'Add New Provider'
+              )}
             </h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
