@@ -5,6 +5,7 @@ import {
   PATH_EDITOR_SMARTPHRASES,
   PATH_EDITOR_SCENARIOS,
   PATH_EDITOR_PROCEDURES,
+  PATH_EDITOR_HOME_CONTENT,
 } from '@/app/paths';
 
 export default async function EditorDashboard() {
@@ -30,6 +31,11 @@ export default async function EditorDashboard() {
       title: 'Procedures',
       description: 'Edit medical procedures',
       href: PATH_EDITOR_PROCEDURES,
+    },
+    {
+      title: 'Home Page Content',
+      description: 'Edit announcements and getting started section',
+      href: PATH_EDITOR_HOME_CONTENT,
     },
   ];
 

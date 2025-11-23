@@ -3,6 +3,7 @@
 import { prisma } from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
 import { Provider, Prisma } from '@prisma/client';
+import { requireAuth, requireAdmin } from '@/auth/server';
 
 export type ProviderFormData = {
   name: string;
@@ -131,6 +132,8 @@ export async function createProvider(
   data: ProviderFormData,
 ): Promise<{ success: boolean; error?: string; provider?: Provider }> {
   try {
+    // Require authentication (both admin and editor can create)
+    await requireAuth();
     // Check if slug already exists
     const existing = await prisma.provider.findUnique({
       where: { slug: data.slug },
@@ -211,6 +214,8 @@ export async function updateProvider(
   data: Partial<ProviderFormData>,
 ): Promise<{ success: boolean; error?: string; provider?: Provider }> {
   try {
+    // Require authentication (both admin and editor can update)
+    await requireAuth();
     // If slug is being updated, check it doesn't conflict
     if (data.slug) {
       const existing = await prisma.provider.findFirst({
@@ -322,6 +327,8 @@ export async function deleteProvider(
   id: string,
 ): Promise<{ success: boolean; error?: string }> {
   try {
+    // Require admin role (only admins can delete)
+    await requireAdmin();
     // Delete provider and associated page in a transaction
     await prisma.$transaction(async (tx) => {
       // Delete associated Page records first

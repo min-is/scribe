@@ -23,8 +23,10 @@ type HomePageContent = {
 
 export default function AnimatedMessagesClient({
   initialMessages,
+  showDelete = true,
 }: {
   initialMessages: AnimatedMessage[];
+  showDelete?: boolean;
 }) {
   const [messages, setMessages] = useState<AnimatedMessage[]>(initialMessages);
   const [isCreating, setIsCreating] = useState(false);
@@ -405,13 +407,15 @@ export default function AnimatedMessagesClient({
                   >
                     {message.enabled ? 'Enabled' : 'Disabled'}
                   </button>
-                  <button
-                    onClick={() => handleDelete(message.id)}
-                    className="p-2 text-dim hover:text-red-500 transition-colors"
-                    title="Delete"
-                  >
-                    <Trash2 size={16} />
-                  </button>
+                  {showDelete && (
+                    <button
+                      onClick={() => handleDelete(message.id)}
+                      className="p-2 text-dim hover:text-red-500 transition-colors"
+                      title="Delete"
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  )}
                 </div>
               </div>
             )}

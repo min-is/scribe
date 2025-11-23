@@ -1,8 +1,25 @@
-import { redirect } from 'next/navigation';
-import { PATH_ADMIN_SCENARIOS } from '@/app/paths';
+import { Metadata } from 'next/types';
+import { prisma } from '@/lib/prisma';
+import ScenariosAdminClient from '@/admin/scenarios/ScenariosAdminClient';
 
-export default function EditorScenariosPage() {
-  // For now, redirect to admin scenarios page
-  // TODO: Create dedicated editor view with limited permissions
-  redirect(PATH_ADMIN_SCENARIOS);
+export const metadata: Metadata = {
+  title: 'Manage Scenarios - Editor',
+  description: 'Create and edit clinical scenarios',
+};
+
+export default async function EditorScenariosPage() {
+  const scenarios = await prisma.scenario.findMany({
+    orderBy: { title: 'asc' },
+  });
+
+  // Get unique categories
+  const categories = Array.from(new Set(scenarios.map(s => s.category).filter(Boolean))) as string[];
+
+  return (
+    <ScenariosAdminClient
+      scenarios={scenarios}
+      existingCategories={categories}
+      showDelete={false}
+    />
+  );
 }

@@ -102,3 +102,46 @@ export const runAuthenticatedAdminServerAction = async <T>(
     throw new Error('Unauthorized server action request');
   }
 };
+
+export const runAuthenticatedServerAction = async <T>(
+  callback: () => T,
+): Promise<T> => {
+  const session = await auth();
+  if (session?.user) {
+    return callback();
+  } else {
+    throw new Error('Unauthorized server action request');
+  }
+};
+
+export const runAdminOnlyServerAction = async <T>(
+  callback: () => T,
+): Promise<T> => {
+  const session = await auth();
+  if (!session?.user) {
+    throw new Error('Unauthorized server action request');
+  }
+  if (session.user.role !== 'ADMIN') {
+    throw new Error('Admin privileges required');
+  }
+  return callback();
+};
+
+export const requireAuth = async () => {
+  const session = await auth();
+  if (!session?.user) {
+    throw new Error('Authentication required');
+  }
+  return session;
+};
+
+export const requireAdmin = async () => {
+  const session = await auth();
+  if (!session?.user) {
+    throw new Error('Authentication required');
+  }
+  if (session.user.role !== 'ADMIN') {
+    throw new Error('Admin privileges required');
+  }
+  return session;
+};

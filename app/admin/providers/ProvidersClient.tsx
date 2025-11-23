@@ -21,10 +21,12 @@ import { MediaLibrary } from '@/components/upload/MediaLibrary';
 
 type ProvidersClientProps = {
   providers: Provider[];
+  showDelete?: boolean;
 };
 
 export default function ProvidersClient({
   providers: initialProviders,
+  showDelete = true,
 }: ProvidersClientProps) {
   const router = useRouter();
   const [showForm, setShowForm] = useState(false);
@@ -484,13 +486,15 @@ export default function ProvidersClient({
                       >
                         Edit
                       </button>
-                      <button
-                        type="button"
-                        onClick={() => handleDelete(provider.id, provider.name)}
-                        className="px-4 py-2 rounded-lg text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
-                      >
-                        Delete
-                      </button>
+                      {showDelete && (
+                        <button
+                          type="button"
+                          onClick={() => handleDelete(provider.id, provider.name)}
+                          className="px-4 py-2 rounded-lg text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                        >
+                          Delete
+                        </button>
+                      )}
                     </div>
                   </div>
                 </div>

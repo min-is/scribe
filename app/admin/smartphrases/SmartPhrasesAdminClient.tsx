@@ -15,11 +15,13 @@ import { FiEdit, FiTrash2, FiPlus, FiX } from 'react-icons/fi';
 type SmartPhrasesAdminClientProps = {
   smartphrases: SmartPhrase[];
   existingCategories: string[];
+  showDelete?: boolean;
 };
 
 export default function SmartPhrasesAdminClient({
   smartphrases: initialSmartPhrases,
   existingCategories,
+  showDelete = true,
 }: SmartPhrasesAdminClientProps) {
   const router = useRouter();
   const [showForm, setShowForm] = useState(false);
@@ -331,13 +333,15 @@ export default function SmartPhrasesAdminClient({
                           >
                             <FiEdit className="w-4 h-4" />
                           </button>
-                          <button
-                            onClick={() => handleDelete(phrase.id, phrase.slug)}
-                            className="p-2 text-red-400 hover:bg-red-600/10 rounded-md transition-colors duration-150"
-                            title="Delete"
-                          >
-                            <FiTrash2 className="w-4 h-4" />
-                          </button>
+                          {showDelete && (
+                            <button
+                              onClick={() => handleDelete(phrase.id, phrase.slug)}
+                              className="p-2 text-red-400 hover:bg-red-600/10 rounded-md transition-colors duration-150"
+                              title="Delete"
+                            >
+                              <FiTrash2 className="w-4 h-4" />
+                            </button>
+                          )}
                         </div>
                       </td>
                     </tr>
