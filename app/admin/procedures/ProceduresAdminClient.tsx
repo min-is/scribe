@@ -15,11 +15,13 @@ import { FiEdit, FiTrash2, FiPlus, FiX, FiEye } from 'react-icons/fi';
 type ProceduresAdminClientProps = {
   procedures: Procedure[];
   existingCategories: string[];
+  showDelete?: boolean;
 };
 
 export default function ProceduresAdminClient({
   procedures: initialProcedures,
   existingCategories,
+  showDelete = true,
 }: ProceduresAdminClientProps) {
   const router = useRouter();
   const [showForm, setShowForm] = useState(false);
@@ -412,15 +414,17 @@ export default function ProceduresAdminClient({
                           >
                             <FiEdit className="w-4 h-4" />
                           </button>
-                          <button
-                            onClick={() =>
-                              handleDelete(procedure.id, procedure.title)
-                            }
-                            className="p-2 text-red-400 hover:bg-red-600/10 rounded-md transition-colors duration-150"
-                            title="Delete"
-                          >
-                            <FiTrash2 className="w-4 h-4" />
-                          </button>
+                          {showDelete && (
+                            <button
+                              onClick={() =>
+                                handleDelete(procedure.id, procedure.title)
+                              }
+                              className="p-2 text-red-400 hover:bg-red-600/10 rounded-md transition-colors duration-150"
+                              title="Delete"
+                            >
+                              <FiTrash2 className="w-4 h-4" />
+                            </button>
+                          )}
                         </div>
                       </td>
                     </tr>

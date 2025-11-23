@@ -15,11 +15,13 @@ import { FiEdit, FiTrash2, FiPlus, FiX } from 'react-icons/fi';
 type ScenariosAdminClientProps = {
   scenarios: Scenario[];
   existingCategories: string[];
+  showDelete?: boolean;
 };
 
 export default function ScenariosAdminClient({
   scenarios: initialScenarios,
   existingCategories,
+  showDelete = true,
 }: ScenariosAdminClientProps) {
   const router = useRouter();
   const [showForm, setShowForm] = useState(false);
@@ -331,15 +333,17 @@ export default function ScenariosAdminClient({
                           >
                             <FiEdit className="w-4 h-4" />
                           </button>
-                          <button
-                            onClick={() =>
-                              handleDelete(scenario.id, scenario.title)
-                            }
-                            className="p-2 text-red-400 hover:bg-red-600/10 rounded-md transition-colors duration-150"
-                            title="Delete"
-                          >
-                            <FiTrash2 className="w-4 h-4" />
-                          </button>
+                          {showDelete && (
+                            <button
+                              onClick={() =>
+                                handleDelete(scenario.id, scenario.title)
+                              }
+                              className="p-2 text-red-400 hover:bg-red-600/10 rounded-md transition-colors duration-150"
+                              title="Delete"
+                            >
+                              <FiTrash2 className="w-4 h-4" />
+                            </button>
+                          )}
                         </div>
                       </td>
                     </tr>
