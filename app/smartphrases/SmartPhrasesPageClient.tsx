@@ -162,7 +162,7 @@ export default function SmartPhrasesPageClient({
           </p>
         </div>
 
-        {/* SmartPhrase Cards Grid */}
+        {/* SmartPhrase List */}
         {filteredPhrases.length === 0 ? (
           <div className="text-center py-24">
             <p className="text-gray-500 dark:text-gray-400 text-lg font-light mb-2">
@@ -173,103 +173,83 @@ export default function SmartPhrasesPageClient({
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {filteredPhrases.map((phrase) => {
-              const isCopied = copiedId === phrase.id;
+          <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 rounded-2xl overflow-hidden shadow-sm">
+            <div className="divide-y divide-gray-200/50 dark:divide-gray-700/50">
+              {filteredPhrases.map((phrase) => {
+                const isCopied = copiedId === phrase.id;
 
-              return (
-                <div
-                  key={phrase.id}
-                  className="group relative"
-                >
-                  {/* Frosted Glass Card */}
-                  <div className="relative overflow-hidden rounded-2xl bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 shadow-sm hover:shadow-lg transition-all duration-300 ease-out hover:border-gray-300/80 dark:hover:border-gray-600/80">
-                    {/* Gradient Background Overlay */}
-                    <div className={`absolute inset-0 bg-gradient-to-br ${getCategoryColor(phrase.category)} opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
-
-                    {/* Content */}
-                    <div className="relative p-5">
-                      {/* Category Badge */}
-                      <div className="mb-3 flex items-center justify-between">
-                        <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
-                          {phrase.category}
-                        </span>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleCopy(phrase);
-                          }}
-                          className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all ${
-                            isCopied
-                              ? 'bg-green-500/20 text-green-600 dark:text-green-400 border border-green-500/30'
-                              : 'bg-gray-500/10 text-gray-600 dark:text-gray-400 border border-gray-500/20 hover:bg-gray-500/20'
-                          }`}
-                          disabled={isCopied}
-                        >
-                          {isCopied ? (
-                            <>
-                              <FiCheck className="text-sm" />
-                              Copied
-                            </>
-                          ) : (
-                            <>
-                              <FiCopy className="text-sm" />
-                              Copy
-                            </>
-                          )}
-                        </button>
-                      </div>
-
-                      {/* Dot Phrase */}
-                      <div
-                        className="cursor-pointer"
-                        onClick={() => handlePhraseClick(phrase)}
-                      >
-                        <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2 tracking-tight font-mono">
-                          {phrase.slug}
-                        </h3>
-
-                        {/* Description */}
+                return (
+                  <div
+                    key={phrase.id}
+                    className="group px-6 py-4 hover:bg-gray-50/50 dark:hover:bg-gray-900/30 transition-colors cursor-pointer"
+                    onClick={() => handlePhraseClick(phrase)}
+                  >
+                    <div className="flex items-center justify-between gap-4">
+                      {/* Left: Phrase info */}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-3 mb-1">
+                          <h3 className="text-base font-semibold text-gray-900 dark:text-white tracking-tight">
+                            {phrase.slug}
+                          </h3>
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
+                            {phrase.category}
+                          </span>
+                        </div>
                         {phrase.description && (
-                          <p className="text-sm text-gray-600 dark:text-gray-400 font-light mb-4 line-clamp-2">
+                          <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-1 mb-2">
                             {phrase.description}
                           </p>
                         )}
-
-                        {/* Usage Count */}
-                        <div className="flex items-center gap-1.5 text-gray-500 dark:text-gray-400 text-xs mb-3">
-                          <span className="font-medium">
-                            Used {phrase.usageCount} time{phrase.usageCount !== 1 ? 's' : ''}
-                          </span>
-                        </div>
-
                         {/* Tags Preview */}
                         {phrase.tags.length > 0 && (
                           <div className="flex flex-wrap gap-1.5">
-                            {phrase.tags.slice(0, 3).map((tag: string) => (
+                            {phrase.tags.slice(0, 5).map((tag: string) => (
                               <span
                                 key={tag}
-                                className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-gray-500/10 text-gray-600 dark:text-gray-400 border border-gray-500/20"
+                                className="inline-flex items-center px-2 py-0.5 rounded-md text-xs bg-gray-500/10 text-gray-600 dark:text-gray-400"
                               >
                                 {tag}
                               </span>
                             ))}
-                            {phrase.tags.length > 3 && (
-                              <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium text-gray-500 dark:text-gray-400">
-                                +{phrase.tags.length - 3}
+                            {phrase.tags.length > 5 && (
+                              <span className="inline-flex items-center px-2 py-0.5 text-xs text-gray-500 dark:text-gray-400">
+                                +{phrase.tags.length - 5} more
                               </span>
                             )}
                           </div>
                         )}
                       </div>
-                    </div>
 
-                    {/* Hover Shine Effect */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700 pointer-events-none" />
+                      {/* Right: Copy button */}
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleCopy(phrase);
+                        }}
+                        className={`flex-shrink-0 inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all ${
+                          isCopied
+                            ? 'bg-green-500/20 text-green-600 dark:text-green-400'
+                            : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                        }`}
+                        disabled={isCopied}
+                      >
+                        {isCopied ? (
+                          <>
+                            <FiCheck className="text-base" />
+                            Copied
+                          </>
+                        ) : (
+                          <>
+                            <FiCopy className="text-base" />
+                            Copy
+                          </>
+                        )}
+                      </button>
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
         )}
       </div>
@@ -354,13 +334,6 @@ export default function SmartPhrasesPageClient({
                     </div>
                   </div>
                 )}
-
-                {/* Usage Statistics */}
-                <div className="bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-2xl p-4">
-                  <p className="text-gray-600 dark:text-gray-400 text-sm">
-                    Used <span className="font-semibold text-gray-900 dark:text-white">{selectedPhrase.usageCount}</span> time{selectedPhrase.usageCount !== 1 ? 's' : ''}
-                  </p>
-                </div>
               </div>
             </div>
           </div>

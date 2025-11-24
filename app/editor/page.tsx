@@ -5,15 +5,23 @@ import {
   PATH_EDITOR_SMARTPHRASES,
   PATH_EDITOR_SCENARIOS,
   PATH_EDITOR_PROCEDURES,
+  PATH_EDITOR_MEDICATIONS,
+  PATH_EDITOR_TERMINOLOGY,
 } from '@/app/paths';
+import { toZonedTime } from 'date-fns-tz';
 
 export default async function EditorDashboard() {
   const session = await auth();
 
+  // Get PST time for greeting
+  const pstDate = toZonedTime(new Date(), 'America/Los_Angeles');
+  const hour = pstDate.getHours();
+  const greeting = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
+
   const sections = [
     {
       title: 'Providers',
-      description: 'Manage healthcare providers',
+      description: 'Manage EMSOC provider profiles',
       href: PATH_EDITOR_PROVIDERS,
     },
     {
@@ -31,6 +39,16 @@ export default async function EditorDashboard() {
       description: 'Edit medical procedures',
       href: PATH_EDITOR_PROCEDURES,
     },
+    {
+      title: 'Medications',
+      description: 'Medication reference lookup',
+      href: PATH_EDITOR_MEDICATIONS,
+    },
+    {
+      title: 'Terminology',
+      description: 'Medical terminology guide',
+      href: PATH_EDITOR_TERMINOLOGY,
+    },
   ];
 
   return (
@@ -38,7 +56,7 @@ export default async function EditorDashboard() {
       <div className="max-w-6xl mx-auto space-y-8">
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-white mb-2">
-            Welcome, {session?.user?.name || 'Editor'}
+            {greeting}
           </h1>
           <p className="text-zinc-400 text-base">
             Manage content across the platform

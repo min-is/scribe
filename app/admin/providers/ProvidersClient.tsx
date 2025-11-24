@@ -237,132 +237,191 @@ export default function ProvidersClient({
                 'Add New Provider'
               )}
             </h2>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label
-                    htmlFor="name"
-                    className="block text-sm font-medium text-main mb-1"
-                  >
-                    Full Name *
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    required
-                    defaultValue={editingProvider?.name || ''}
-                    className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Dr. John Smith"
-                  />
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="slug"
-                    className="block text-sm font-medium text-main mb-1"
-                  >
-                    URL Slug *
-                  </label>
-                  <input
-                    type="text"
-                    id="slug"
-                    name="slug"
-                    required
-                    defaultValue={editingProvider?.slug || ''}
-                    className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="provider-smith"
-                    pattern="[a-z0-9\-]+"
-                    title="Only lowercase letters, numbers, and hyphens"
-                  />
-                  <p className="text-xs text-dim mt-1">
-                    Used in URL: #provider-smith
-                  </p>
-                </div>
-              </div>
-
+            <form onSubmit={handleSubmit} className="space-y-6">
+              {/* Provider Name */}
               <div>
                 <label
-                  htmlFor="credentials"
-                  className="block text-sm font-medium text-main mb-1"
+                  htmlFor="name"
+                  className="block text-sm font-semibold text-main mb-2"
                 >
-                  Credentials
+                  Provider Name
                 </label>
                 <input
                   type="text"
-                  id="credentials"
-                  name="credentials"
-                  defaultValue={editingProvider?.credentials || ''}
-                  className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="MD, FACEM"
+                  id="name"
+                  name="name"
+                  required
+                  defaultValue={editingProvider?.name || ''}
+                  className="w-full px-4 py-3 bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-base"
+                  placeholder="Dr. John Smith"
                 />
               </div>
 
-              {/* Difficulty Metrics */}
-              <div className="border-t border-gray-200 dark:border-gray-700 pt-4 mt-4">
-                <h3 className="text-lg font-medium text-main mb-4">
-                  Difficulty Level
-                </h3>
-                <div className="max-w-md">
-                  <DifficultyDialInput
-                    label="General Difficulty"
-                    value={generalDifficulty}
-                    onChange={setGeneralDifficulty}
-                    helperText="Overall difficulty level for new scribes (1-10 scale)"
-                  />
-                </div>
-              </div>
+              {/* Read-only fields (admin only) */}
+              {showDelete && (
+                <>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label
+                        htmlFor="slug"
+                        className="block text-sm font-semibold text-main mb-2"
+                      >
+                        URL Slug
+                      </label>
+                      <input
+                        type="text"
+                        id="slug"
+                        name="slug"
+                        required
+                        defaultValue={editingProvider?.slug || ''}
+                        className="w-full px-4 py-3 bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-base"
+                        placeholder="provider-smith"
+                        pattern="[a-z0-9\-]+"
+                        title="Only lowercase letters, numbers, and hyphens"
+                      />
+                      <p className="text-xs text-zinc-500 mt-1.5">
+                        Used in URL: #provider-smith
+                      </p>
+                    </div>
+
+                    <div>
+                      <label
+                        htmlFor="credentials"
+                        className="block text-sm font-semibold text-main mb-2"
+                      >
+                        Credentials
+                      </label>
+                      <input
+                        type="text"
+                        id="credentials"
+                        name="credentials"
+                        defaultValue={editingProvider?.credentials || ''}
+                        className="w-full px-4 py-3 bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-base"
+                        placeholder="MD, FACEM"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Difficulty Level (admin only) */}
+                  <div>
+                    <h3 className="text-sm font-semibold text-main mb-3">
+                      Difficulty Level
+                    </h3>
+                    <div className="max-w-md">
+                      <DifficultyDialInput
+                        label="General Difficulty"
+                        value={generalDifficulty}
+                        onChange={setGeneralDifficulty}
+                        helperText="Overall difficulty level for new scribes (1-10 scale)"
+                      />
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {/* Read-only fields for editors */}
+              {!showDelete && editingProvider && (
+                <>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-semibold text-zinc-500 mb-2">
+                        URL Slug
+                      </label>
+                      <div className="w-full px-4 py-3 bg-zinc-100 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-700/50 rounded-xl text-zinc-500 cursor-not-allowed text-base">
+                        {editingProvider.slug}
+                      </div>
+                      <p className="text-xs text-zinc-500 mt-1.5">
+                        Admin-only field
+                      </p>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-semibold text-zinc-500 mb-2">
+                        Credentials
+                      </label>
+                      <div className="w-full px-4 py-3 bg-zinc-100 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-700/50 rounded-xl text-zinc-500 cursor-not-allowed text-base">
+                        {editingProvider.credentials || '—'}
+                      </div>
+                      <p className="text-xs text-zinc-500 mt-1.5">
+                        Admin-only field
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Hidden inputs to preserve values */}
+                  <input type="hidden" name="slug" value={editingProvider.slug} />
+                  <input type="hidden" name="credentials" value={editingProvider.credentials || ''} />
+
+                  {/* Difficulty Level (read-only for editors) */}
+                  <div>
+                    <h3 className="text-sm font-semibold text-zinc-500 mb-3">
+                      Difficulty Level
+                    </h3>
+                    <div className="max-w-md px-4 py-3 bg-zinc-100 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-700/50 rounded-xl">
+                      <div className="flex items-center gap-3">
+                        <span className="text-zinc-500">General Difficulty:</span>
+                        <span className="font-semibold text-zinc-600 dark:text-zinc-400">
+                          {editingProvider.generalDifficulty ? `${editingProvider.generalDifficulty}/10` : 'Not set'}
+                        </span>
+                      </div>
+                      <p className="text-xs text-zinc-500 mt-2">
+                        Admin-only field
+                      </p>
+                    </div>
+                  </div>
+                </>
+              )}
 
               {/* Note SmartPhrase */}
-              <div className="border-t border-gray-200 dark:border-gray-700 pt-4 mt-4">
+              <div>
                 <label
                   htmlFor="noteSmartPhrase"
-                  className="block text-sm font-medium text-main mb-1"
+                  className="block text-sm font-semibold text-main mb-2"
                 >
                   Note SmartPhrase
                 </label>
-                <RichTextEditor
-                  content={noteSmartPhrase}
-                  onChange={setNoteSmartPhrase}
-                  placeholder="Add SmartPhrases and custom notes from general template..."
-                />
-                <p className="text-xs text-dim mt-1">
+                <div className="max-h-48 overflow-y-auto border border-zinc-300 dark:border-zinc-700 rounded-xl">
+                  <RichTextEditor
+                    content={noteSmartPhrase}
+                    onChange={setNoteSmartPhrase}
+                    placeholder="Add SmartPhrases and custom notes from general template..."
+                  />
+                </div>
+                <p className="text-xs text-zinc-500 mt-1.5">
                   Custom notes and SmartPhrases specific to this provider
                 </p>
               </div>
 
               {/* Provider Documentation - Wiki System */}
-              <div className="border-t border-gray-200 dark:border-gray-700 pt-4 mt-4">
-                <h3 className="text-lg font-medium text-main mb-4">
-                  Provider Documentation (Wiki)
+              <div>
+                <h3 className="text-sm font-semibold text-main mb-3">
+                  Provider Documentation
                 </h3>
 
                 {/* Tabs */}
-                <div className="border-b border-gray-200 dark:border-gray-700 mb-4">
-                  <div className="flex gap-4">
-                    <button
-                      type="button"
-                      onClick={() => setActiveWikiTab('sections')}
-                      className={`font-admin px-4 py-2 border-b-2 transition-colors ${
-                        activeWikiTab === 'sections'
-                          ? 'border-blue-600 text-blue-600 dark:text-blue-400 font-medium'
-                          : 'border-transparent text-dim hover:text-main'
-                      }`}
-                    >
-                      📝 Sections ({wikiContent.sections.length})
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setActiveWikiTab('media')}
-                      className={`font-admin px-4 py-2 border-b-2 transition-colors ${
-                        activeWikiTab === 'media'
-                          ? 'border-blue-600 text-blue-600 dark:text-blue-400 font-medium'
-                          : 'border-transparent text-dim hover:text-main'
-                      }`}
-                    >
-                      🖼️ Media ({wikiContent.media.length})
-                    </button>
-                  </div>
+                <div className="bg-zinc-100 dark:bg-zinc-800/50 rounded-xl p-1 mb-4 inline-flex gap-1">
+                  <button
+                    type="button"
+                    onClick={() => setActiveWikiTab('sections')}
+                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                      activeWikiTab === 'sections'
+                        ? 'bg-white dark:bg-zinc-900 text-main shadow-sm'
+                        : 'text-zinc-600 dark:text-zinc-400 hover:text-main'
+                    }`}
+                  >
+                    Sections ({wikiContent.sections.length})
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setActiveWikiTab('media')}
+                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                      activeWikiTab === 'media'
+                        ? 'bg-white dark:bg-zinc-900 text-main shadow-sm'
+                        : 'text-zinc-600 dark:text-zinc-400 hover:text-main'
+                    }`}
+                  >
+                    Media ({wikiContent.media.length})
+                  </button>
                 </div>
 
                 {/* Tab Content */}
@@ -408,11 +467,11 @@ export default function ProvidersClient({
                 )}
               </div>
 
-              <div className="flex gap-3 pt-2">
+              <div className="flex gap-3 pt-4">
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="font-admin px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-6 py-3 bg-blue-600 text-white text-sm font-semibold rounded-xl hover:bg-blue-700 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
                 >
                   {isSubmitting
                     ? 'Saving...'
@@ -424,7 +483,7 @@ export default function ProvidersClient({
                   type="button"
                   onClick={handleCancel}
                   disabled={isSubmitting}
-                  className="font-admin px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-6 py-3 bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 text-sm font-semibold rounded-xl hover:bg-zinc-200 dark:hover:bg-zinc-700 active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Cancel
                 </button>

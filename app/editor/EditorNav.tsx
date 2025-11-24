@@ -9,6 +9,8 @@ import {
   PATH_EDITOR_SMARTPHRASES,
   PATH_EDITOR_SCENARIOS,
   PATH_EDITOR_PROCEDURES,
+  PATH_EDITOR_MEDICATIONS,
+  PATH_EDITOR_TERMINOLOGY,
 } from '@/app/paths';
 import { clsx } from 'clsx/lite';
 
@@ -21,6 +23,8 @@ export default function EditorNav() {
     { href: PATH_EDITOR_SMARTPHRASES, label: 'SmartPhrases' },
     { href: PATH_EDITOR_SCENARIOS, label: 'Scenarios' },
     { href: PATH_EDITOR_PROCEDURES, label: 'Procedures' },
+    { href: PATH_EDITOR_MEDICATIONS, label: 'Medications' },
+    { href: PATH_EDITOR_TERMINOLOGY, label: 'Terminology' },
   ];
 
   return (
