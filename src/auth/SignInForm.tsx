@@ -107,11 +107,11 @@ export default function SignInForm({
               value={password}
               onChange={setPassword}
             />
-            {shouldRedirect &&
+            {shouldRedirect && params.get(KEY_CALLBACK_URL) &&
               <input
                 type="hidden"
                 name={KEY_CALLBACK_URL}
-                value={params.get(KEY_CALLBACK_URL) || PATH_ADMIN_PHOTOS}
+                value={params.get(KEY_CALLBACK_URL) || ''}
               />}
           </div>
           <SubmitButtonWithStatus disabled={!isFormValid}>
