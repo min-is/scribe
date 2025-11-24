@@ -20,6 +20,8 @@ export const PATH_EDITOR_PROVIDERS      = `${PATH_EDITOR}/providers`;
 export const PATH_EDITOR_SMARTPHRASES   = `${PATH_EDITOR}/smartphrases`;
 export const PATH_EDITOR_SCENARIOS      = `${PATH_EDITOR}/scenarios`;
 export const PATH_EDITOR_PROCEDURES     = `${PATH_EDITOR}/procedures`;
+export const PATH_EDITOR_MEDICATIONS    = `${PATH_EDITOR}/medications`;
+export const PATH_EDITOR_TERMINOLOGY    = `${PATH_EDITOR}/terminology`;
 
 // Practice paths
 export const PATH_PRACTICE_TYPING       = '/practice/typing';
@@ -55,6 +57,8 @@ export const PATHS_EDITOR = [
   PATH_EDITOR_SMARTPHRASES,
   PATH_EDITOR_SCENARIOS,
   PATH_EDITOR_PROCEDURES,
+  PATH_EDITOR_MEDICATIONS,
+  PATH_EDITOR_TERMINOLOGY,
 ];
 
 export const PATHS_TO_CACHE = [
