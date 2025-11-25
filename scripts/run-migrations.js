@@ -721,8 +721,18 @@ async function runMigrations() {
 // Run migrations if this file is executed directly
 if (require.main === module) {
   runMigrations()
-    .then(() => {
+    .then(async () => {
       console.log('✅ Migration runner finished');
+
+      // After migrations complete, run medication seed
+      try {
+        const { seedMedications } = require('./seed-medications.js');
+        await seedMedications();
+      } catch (error) {
+        console.error('⚠️  Failed to seed medications:', error.message);
+        console.log('   (This is non-critical, medications can be imported via admin UI)\n');
+      }
+
       process.exit(0);
     })
     .catch((error) => {
