@@ -7,6 +7,7 @@ import { Medication, Prisma } from '@prisma/client';
 export type MedicationFormData = {
   name: string;
   slug: string;
+  brandNames?: string;
   type: string;
   commonlyUsedFor?: string;
   tags?: string[];
@@ -14,6 +15,7 @@ export type MedicationFormData = {
 
 /**
  * Get all medications (with optional pagination)
+ * For client-side fuzzy matching, use getAllMedications() instead
  */
 export async function getMedications(options?: {
   limit?: number;
@@ -28,6 +30,7 @@ export async function getMedications(options?: {
         ? {
             OR: [
               { name: { contains: search, mode: 'insensitive' } },
+              { brandNames: { contains: search, mode: 'insensitive' } },
               { type: { contains: search, mode: 'insensitive' } },
               { commonlyUsedFor: { contains: search, mode: 'insensitive' } },
             ],
@@ -44,6 +47,20 @@ export async function getMedications(options?: {
 }
 
 /**
+ * Get all medications (no pagination) for client-side fuzzy search
+ */
+export async function getAllMedications(): Promise<Medication[]> {
+  try {
+    return await prisma.medication.findMany({
+      orderBy: { name: 'asc' },
+    });
+  } catch (error) {
+    console.error('Error fetching all medications:', error);
+    return [];
+  }
+}
+
+/**
  * Get total count of medications
  */
 export async function getMedicationsCount(search?: string): Promise<number> {
@@ -53,6 +70,7 @@ export async function getMedicationsCount(search?: string): Promise<number> {
         ? {
             OR: [
               { name: { contains: search, mode: 'insensitive' } },
+              { brandNames: { contains: search, mode: 'insensitive' } },
               { type: { contains: search, mode: 'insensitive' } },
               { commonlyUsedFor: { contains: search, mode: 'insensitive' } },
             ],
@@ -143,6 +161,7 @@ export async function createMedication(
         data: {
           name: data.name,
           slug: data.slug,
+          brandNames: data.brandNames || null,
           type: data.type,
           commonlyUsedFor: data.commonlyUsedFor || null,
           tags: data.tags || [],
@@ -222,6 +241,7 @@ export async function updateMedication(
       data: {
         ...(data.name && { name: data.name }),
         ...(data.slug && { slug: data.slug }),
+        ...(data.brandNames !== undefined && { brandNames: data.brandNames }),
         ...(data.type && { type: data.type }),
         ...(data.commonlyUsedFor !== undefined && {
           commonlyUsedFor: data.commonlyUsedFor,

@@ -102,13 +102,13 @@ async function seedMedications() {
       }
       parts.push(current.trim()); // Add last field
 
-      if (parts.length < 2) {
+      if (parts.length < 3) {
         failCount++;
-        errors.push(`Line ${i + 1}: Invalid format (needs at least Name and Type)`);
+        errors.push(`Line ${i + 1}: Invalid format (needs at least Name, Brand Names, and Type)`);
         continue;
       }
 
-      const [name, type, commonlyUsedFor] = parts;
+      const [name, brandNames, type, commonlyUsedFor] = parts;
 
       // Generate slug from name
       const slug = name
@@ -134,12 +134,13 @@ async function seedMedications() {
         // Insert medication
         await client.query(
           `INSERT INTO "Medication" (
-            id, slug, name, type, "commonlyUsedFor", tags, "viewCount", "createdAt", "updatedAt"
-          ) VALUES ($1, $2, $3, $4, $5, $6, $7, NOW(), NOW())`,
+            id, slug, name, "brandNames", type, "commonlyUsedFor", tags, "viewCount", "createdAt", "updatedAt"
+          ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW(), NOW())`,
           [
             id,
             slug,
             name,
+            brandNames && brandNames.trim() ? brandNames.trim() : null,
             type || 'Unknown',
             commonlyUsedFor || null,
             [], // tags

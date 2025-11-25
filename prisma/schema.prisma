@@ -212,6 +212,7 @@ model Medication {
   id              String   @id @default(cuid())
   slug            String   @unique
   name            String
+  brandNames      String?  // Brand names (e.g., "Tylenol", "ProAir, Ventolin")
   type            String   // e.g., "Antibiotic", "Analgesic"
   commonlyUsedFor String?  // Description
   tags            String[] // For fuzzy search
