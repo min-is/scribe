@@ -13,16 +13,77 @@ export type MedicationFormData = {
 };
 
 /**
- * Get all medications
+ * Get all medications (with optional pagination)
  */
-export async function getMedications(): Promise<Medication[]> {
+export async function getMedications(options?: {
+  limit?: number;
+  offset?: number;
+  search?: string;
+}): Promise<Medication[]> {
   try {
+    const { limit, offset, search } = options || {};
+
     return await prisma.medication.findMany({
+      where: search
+        ? {
+            OR: [
+              { name: { contains: search, mode: 'insensitive' } },
+              { type: { contains: search, mode: 'insensitive' } },
+              { commonlyUsedFor: { contains: search, mode: 'insensitive' } },
+            ],
+          }
+        : undefined,
       orderBy: { name: 'asc' },
+      ...(limit && { take: limit }),
+      ...(offset && { skip: offset }),
     });
   } catch (error) {
     console.error('Error fetching medications:', error);
     return [];
+  }
+}
+
+/**
+ * Get total count of medications
+ */
+export async function getMedicationsCount(search?: string): Promise<number> {
+  try {
+    return await prisma.medication.count({
+      where: search
+        ? {
+            OR: [
+              { name: { contains: search, mode: 'insensitive' } },
+              { type: { contains: search, mode: 'insensitive' } },
+              { commonlyUsedFor: { contains: search, mode: 'insensitive' } },
+            ],
+          }
+        : undefined,
+    });
+  } catch (error) {
+    console.error('Error counting medications:', error);
+    return 0;
+  }
+}
+
+/**
+ * Load more medications (for pagination)
+ */
+export async function loadMoreMedications(
+  offset: number,
+  limit: number,
+  search?: string
+): Promise<{ medications: Medication[]; hasMore: boolean }> {
+  try {
+    const medications = await getMedications({ limit: limit + 1, offset, search });
+    const hasMore = medications.length > limit;
+
+    return {
+      medications: hasMore ? medications.slice(0, limit) : medications,
+      hasMore,
+    };
+  } catch (error) {
+    console.error('Error loading more medications:', error);
+    return { medications: [], hasMore: false };
   }
 }
 

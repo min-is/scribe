@@ -1,14 +1,24 @@
 import { Metadata } from 'next/types';
 import MedicationsClient from './MedicationsClient';
-import { getMedications } from '@/medication/actions';
+import { getMedications, getMedicationsCount } from '@/medication/actions';
 
 export const metadata: Metadata = {
   title: 'Medications',
   description: 'Medication reference and lookup tool',
 };
 
-export default async function MedicationsPage() {
-  const medications = await getMedications();
+const INITIAL_LIMIT = 50;
 
-  return <MedicationsClient medications={medications} />;
+export default async function MedicationsPage() {
+  // Load initial batch of medications
+  const medications = await getMedications({ limit: INITIAL_LIMIT });
+  const totalCount = await getMedicationsCount();
+
+  return (
+    <MedicationsClient
+      initialMedications={medications}
+      totalCount={totalCount}
+      initialLimit={INITIAL_LIMIT}
+    />
+  );
 }

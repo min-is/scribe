@@ -4,40 +4,7 @@ import { useState, useMemo } from 'react';
 import { FiSearch, FiPackage } from 'react-icons/fi';
 import { useDebounce } from 'use-debounce';
 import { Medication } from '@prisma/client';
-
-// Fallback medications list with enhanced data
-const FALLBACK_MEDICATIONS = [
-  { name: 'Acetaminophen', brandNames: ['Tylenol'], class: 'Analgesic', uses: 'Pain relief, fever reduction' },
-  { name: 'Ibuprofen', brandNames: ['Advil', 'Motrin'], class: 'NSAID', uses: 'Pain relief, anti-inflammatory' },
-  { name: 'Aspirin', brandNames: ['Bayer', 'Bufferin'], class: 'NSAID', uses: 'Pain relief, antiplatelet' },
-  { name: 'Amoxicillin', brandNames: ['Amoxil'], class: 'Antibiotic (Penicillin)', uses: 'Bacterial infections' },
-  { name: 'Lisinopril', brandNames: ['Prinivil', 'Zestril'], class: 'ACE Inhibitor', uses: 'Hypertension, heart failure' },
-  { name: 'Metformin', brandNames: ['Glucophage'], class: 'Antidiabetic (Biguanide)', uses: 'Type 2 diabetes' },
-  { name: 'Atorvastatin', brandNames: ['Lipitor'], class: 'Statin', uses: 'Cholesterol management' },
-  { name: 'Omeprazole', brandNames: ['Prilosec'], class: 'PPI', uses: 'GERD, acid reflux' },
-  { name: 'Levothyroxine', brandNames: ['Synthroid'], class: 'Thyroid hormone', uses: 'Hypothyroidism' },
-  { name: 'Amlodipine', brandNames: ['Norvasc'], class: 'Calcium channel blocker', uses: 'Hypertension, angina' },
-  { name: 'Metoprolol', brandNames: ['Lopressor', 'Toprol'], class: 'Beta blocker', uses: 'Hypertension, angina' },
-  { name: 'Albuterol', brandNames: ['Ventolin', 'ProAir'], class: 'Bronchodilator', uses: 'Asthma, COPD' },
-  { name: 'Gabapentin', brandNames: ['Neurontin'], class: 'Anticonvulsant', uses: 'Neuropathic pain, seizures' },
-  { name: 'Hydrochlorothiazide', brandNames: ['HCTZ', 'Microzide'], class: 'Diuretic', uses: 'Hypertension, edema' },
-  { name: 'Losartan', brandNames: ['Cozaar'], class: 'ARB', uses: 'Hypertension' },
-  { name: 'Prednisone', brandNames: ['Deltasone'], class: 'Corticosteroid', uses: 'Inflammation, autoimmune conditions' },
-  { name: 'Furosemide', brandNames: ['Lasix'], class: 'Loop diuretic', uses: 'Edema, heart failure' },
-  { name: 'Warfarin', brandNames: ['Coumadin'], class: 'Anticoagulant', uses: 'Blood clot prevention' },
-  { name: 'Clopidogrel', brandNames: ['Plavix'], class: 'Antiplatelet', uses: 'Prevent blood clots' },
-  { name: 'Morphine', brandNames: ['MS Contin'], class: 'Opioid analgesic', uses: 'Severe pain' },
-  { name: 'Fentanyl', brandNames: ['Sublimaze', 'Duragesic'], class: 'Opioid analgesic', uses: 'Severe pain' },
-  { name: 'Epinephrine', brandNames: ['EpiPen', 'Adrenalin'], class: 'Vasopressor', uses: 'Anaphylaxis, cardiac arrest' },
-  { name: 'Nitroglycerin', brandNames: ['Nitrostat'], class: 'Vasodilator', uses: 'Angina, chest pain' },
-  { name: 'Insulin', brandNames: ['Humulin', 'Novolin'], class: 'Hormone', uses: 'Diabetes management' },
-  { name: 'Diphenhydramine', brandNames: ['Benadryl'], class: 'Antihistamine', uses: 'Allergies, sleep aid' },
-  { name: 'Ondansetron', brandNames: ['Zofran'], class: 'Antiemetic', uses: 'Nausea, vomiting' },
-  { name: 'Ciprofloxacin', brandNames: ['Cipro'], class: 'Antibiotic (Fluoroquinolone)', uses: 'Bacterial infections' },
-  { name: 'Azithromycin', brandNames: ['Zithromax', 'Z-Pak'], class: 'Antibiotic (Macrolide)', uses: 'Bacterial infections' },
-  { name: 'Doxycycline', brandNames: ['Vibramycin'], class: 'Antibiotic (Tetracycline)', uses: 'Bacterial infections' },
-  { name: 'Vancomycin', brandNames: ['Vancocin'], class: 'Antibiotic (Glycopeptide)', uses: 'MRSA, C. diff' },
-];
+import { loadMoreMedications } from '@/medication/actions';
 
 type MedicationEntry = {
   name: string;
@@ -47,7 +14,9 @@ type MedicationEntry = {
 };
 
 interface MedicationsClientProps {
-  medications: Medication[];
+  initialMedications: Medication[];
+  totalCount: number;
+  initialLimit: number;
 }
 
 // Enhanced fuzzy matching with Levenshtein-like scoring
@@ -91,25 +60,24 @@ function fuzzyMatch(str: string, pattern: string): number {
   return 0;
 }
 
-export default function MedicationsClient({ medications }: MedicationsClientProps) {
+export default function MedicationsClient({
+  initialMedications,
+  totalCount,
+  initialLimit,
+}: MedicationsClientProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedQuery] = useDebounce(searchQuery, 300);
+  const [medications, setMedications] = useState<Medication[]>(initialMedications);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const [hasMore, setHasMore] = useState(initialMedications.length >= initialLimit);
 
-  // Convert database medications or use fallback
+  // Convert database medications to display format
   const medicationsList: MedicationEntry[] = useMemo(() => {
-    if (medications && medications.length > 0) {
-      return medications.map(med => ({
-        name: med.name,
-        type: med.type,
-        commonlyUsedFor: med.commonlyUsedFor || undefined,
-        tags: med.tags,
-      }));
-    }
-    // Use fallback data
-    return FALLBACK_MEDICATIONS.map(med => ({
+    return medications.map(med => ({
       name: med.name,
-      type: med.class,
-      commonlyUsedFor: `${med.uses}${med.brandNames.length > 0 ? ` (Brand names: ${med.brandNames.join(', ')})` : ''}`,
+      type: med.type,
+      commonlyUsedFor: med.commonlyUsedFor || undefined,
+      tags: med.tags,
     }));
   }, [medications]);
 
@@ -140,6 +108,29 @@ export default function MedicationsClient({ medications }: MedicationsClientProp
       .sort((a, b) => b.score - a.score);
   }, [debouncedQuery, medicationsList]);
 
+  const handleLoadMore = async () => {
+    if (isLoadingMore || !hasMore) return;
+
+    setIsLoadingMore(true);
+    try {
+      const result = await loadMoreMedications(
+        medications.length,
+        initialLimit,
+        debouncedQuery || undefined
+      );
+
+      setMedications(prev => [...prev, ...result.medications]);
+      setHasMore(result.hasMore);
+    } catch (error) {
+      console.error('Failed to load more medications:', error);
+    } finally {
+      setIsLoadingMore(false);
+    }
+  };
+
+  const showingCount = filteredMedications.length;
+  const displayTotalCount = debouncedQuery ? showingCount : totalCount;
+
   return (
     <div className="min-h-screen">
       <div className="max-w-5xl mx-auto px-6 py-12">
@@ -154,7 +145,7 @@ export default function MedicationsClient({ medications }: MedicationsClientProp
             </h1>
           </div>
           <p className="text-lg text-gray-600 dark:text-gray-400 font-light ml-14">
-            Quick reference for common medications - fuzzy search enabled for misspellings
+            Quick reference for medications - fuzzy search enabled for misspellings
           </p>
         </div>
 
@@ -181,7 +172,8 @@ export default function MedicationsClient({ medications }: MedicationsClientProp
         {!debouncedQuery && (
           <div className="mb-6">
             <p className="text-gray-500 dark:text-gray-400 text-sm font-light ml-1">
-              Showing {medicationsList.length} medication{medicationsList.length !== 1 ? 's' : ''}
+              Showing {showingCount} of {displayTotalCount} medication{displayTotalCount !== 1 ? 's' : ''}
+              {hasMore && !debouncedQuery && ' (scroll down to load more)'}
             </p>
           </div>
         )}
@@ -194,61 +186,78 @@ export default function MedicationsClient({ medications }: MedicationsClientProp
                 <FiSearch className="text-gray-400 dark:text-gray-500 text-2xl" />
               </div>
               <p className="text-gray-600 dark:text-gray-400 text-lg font-light mb-2">
-                No medications found
+                {totalCount === 0 ? 'No medications in database' : 'No medications found'}
               </p>
               <p className="text-gray-400 dark:text-gray-500 text-sm">
-                Try a different search term or check your spelling
+                {totalCount === 0
+                  ? 'Import medications via the admin panel to get started'
+                  : 'Try a different search term or check your spelling'}
               </p>
             </div>
           </div>
         ) : (
-          <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 rounded-2xl overflow-hidden shadow-sm">
-            <div className="divide-y divide-gray-200/50 dark:divide-gray-700/50">
-              {filteredMedications.map((med, index) => (
-                <div
-                  key={index}
-                  className="group px-6 py-5 hover:bg-gray-50/50 dark:hover:bg-gray-900/30 transition-all duration-200"
-                >
-                  <div className="flex items-start gap-4">
-                    <div className="flex-1 min-w-0">
-                      {/* Medication Name */}
-                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1.5 tracking-tight">
-                        {med.name}
-                      </h3>
+          <>
+            <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 rounded-2xl overflow-hidden shadow-sm">
+              <div className="divide-y divide-gray-200/50 dark:divide-gray-700/50">
+                {filteredMedications.map((med, index) => (
+                  <div
+                    key={index}
+                    className="group px-6 py-5 hover:bg-gray-50/50 dark:hover:bg-gray-900/30 transition-all duration-200"
+                  >
+                    <div className="flex items-start gap-4">
+                      <div className="flex-1 min-w-0">
+                        {/* Medication Name */}
+                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1.5 tracking-tight">
+                          {med.name}
+                        </h3>
 
-                      {/* Type Badge */}
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
-                          {med.type}
-                        </span>
-                      </div>
-
-                      {/* Description */}
-                      {med.commonlyUsedFor && (
-                        <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed font-light">
-                          {med.commonlyUsedFor}
-                        </p>
-                      )}
-
-                      {/* Tags */}
-                      {med.tags && med.tags.length > 0 && (
-                        <div className="flex flex-wrap gap-1.5 mt-2">
-                          {med.tags.map((tag, tagIdx) => (
-                            <span
-                              key={tagIdx}
-                              className="inline-flex items-center px-2 py-0.5 rounded-md text-xs bg-gray-500/10 text-gray-600 dark:text-gray-400"
-                            >
-                              {tag}
-                            </span>
-                          ))}
+                        {/* Type Badge */}
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
+                            {med.type}
+                          </span>
                         </div>
-                      )}
+
+                        {/* Description */}
+                        {med.commonlyUsedFor && (
+                          <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed font-light">
+                            {med.commonlyUsedFor}
+                          </p>
+                        )}
+
+                        {/* Tags */}
+                        {med.tags && med.tags.length > 0 && (
+                          <div className="flex flex-wrap gap-1.5 mt-2">
+                            {med.tags.map((tag, tagIdx) => (
+                              <span
+                                key={tagIdx}
+                                className="inline-flex items-center px-2 py-0.5 rounded-md text-xs bg-gray-500/10 text-gray-600 dark:text-gray-400"
+                              >
+                                {tag}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
+
+            {/* Load More Button */}
+            {hasMore && !debouncedQuery && (
+              <div className="mt-6 text-center">
+                <button
+                  onClick={handleLoadMore}
+                  disabled={isLoadingMore}
+                  className="px-6 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white rounded-lg font-medium transition-colors disabled:cursor-not-allowed"
+                >
+                  {isLoadingMore ? 'Loading...' : `Load More (${totalCount - showingCount} remaining)`}
+                </button>
+              </div>
+            )}
+          </>
         )}
 
         {/* Info Note */}
