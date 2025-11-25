@@ -4,10 +4,10 @@ import { Command } from 'cmdk';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { clsx } from 'clsx/lite';
-import { PATH_PRACTICE_TYPING, PATH_ADMIN, PATH_ADMIN_CONFIGURATION, PATH_SMARTPHRASES, PATH_SCENARIOS, PATH_PROCEDURES } from '@/app/paths';
+import { PATH_PRACTICE_TYPING, PATH_ADMIN, PATH_ADMIN_CONFIGURATION, PATH_SMARTPHRASES, PATH_SCENARIOS, PATH_PROCEDURES, PATH_EDITOR_MEDICATIONS, PATH_EDITOR_TERMINOLOGY } from '@/app/paths';
 import Modal from './Modal';
 import CommandKItem from '@/cmdk/CommandKItem';
-import { FaUserMd, FaHospital, FaFileAlt, FaKeyboard } from 'react-icons/fa';
+import { FaUserMd, FaHospital, FaFileAlt, FaKeyboard, FaPills, FaBook } from 'react-icons/fa';
 import { HiDocumentText } from 'react-icons/hi';
 import { RiToolsFill } from 'react-icons/ri';
 import { FiActivity } from 'react-icons/fi';
@@ -48,7 +48,7 @@ export default function SearchModal({
   // Define provider preferences section (dynamic)
   const providerPreferencesSection: CommandKSection = useMemo(() => {
     const providerItems = topProviders.map(provider => ({
-      label: `${provider.name}${provider.credentials ? ` - ${provider.credentials}` : ''}`,
+      label: `${provider.name}${provider.credentials ? `, ${provider.credentials}` : ''}`,
       annotation: provider.generalDifficulty
         ? `Difficulty: ${provider.generalDifficulty}/10`
         : undefined,
@@ -102,6 +102,34 @@ export default function SearchModal({
     ],
   }), []);
 
+  const medicationsSection: CommandKSection = useMemo(() => ({
+    heading: 'Medications',
+    accessory: <FaPills size={14} />,
+    items: [
+      {
+        label: 'Medications',
+        annotation: 'Lookup medication information',
+        keywords: ['medications', 'medication', 'drugs', 'pharmacy', 'prescriptions', 'meds'],
+        path: PATH_EDITOR_MEDICATIONS,
+        accessory: <FaPills size={14} className="text-gray-500 dark:text-gray-400" />,
+      },
+    ],
+  }), []);
+
+  const terminologySection: CommandKSection = useMemo(() => ({
+    heading: 'Terminology',
+    accessory: <FaBook size={14} />,
+    items: [
+      {
+        label: 'Terminology',
+        annotation: 'Medical terminology reference',
+        keywords: ['terminology', 'terms', 'medical', 'abbreviations', 'definitions', 'glossary'],
+        path: PATH_EDITOR_TERMINOLOGY,
+        accessory: <FaBook size={14} className="text-gray-500 dark:text-gray-400" />,
+      },
+    ],
+  }), []);
+
   const epicDotPhrasesSection: CommandKSection = useMemo(() => ({
     heading: 'SmartPhrase Library',
     accessory: <HiDocumentText size={14} />,
@@ -148,9 +176,11 @@ export default function SearchModal({
     providerPreferencesSection,
     scenariosSection,
     proceduresSection,
+    medicationsSection,
+    terminologySection,
     epicDotPhrasesSection,
     miscellaneousSection,
-  ], [providerPreferencesSection, scenariosSection, proceduresSection, epicDotPhrasesSection, miscellaneousSection]);
+  ], [providerPreferencesSection, scenariosSection, proceduresSection, medicationsSection, terminologySection, epicDotPhrasesSection, miscellaneousSection]);
 
   // Filter sections based on query
   const filteredSections = useMemo(() => {

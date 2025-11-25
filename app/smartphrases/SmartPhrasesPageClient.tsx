@@ -219,32 +219,6 @@ export default function SmartPhrasesPageClient({
                           </div>
                         )}
                       </div>
-
-                      {/* Right: Copy button */}
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleCopy(phrase);
-                        }}
-                        className={`flex-shrink-0 inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all ${
-                          isCopied
-                            ? 'bg-green-500/20 text-green-600 dark:text-green-400'
-                            : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
-                        }`}
-                        disabled={isCopied}
-                      >
-                        {isCopied ? (
-                          <>
-                            <FiCheck className="text-base" />
-                            Copied
-                          </>
-                        ) : (
-                          <>
-                            <FiCopy className="text-base" />
-                            Copy
-                          </>
-                        )}
-                      </button>
                     </div>
                   </div>
                 );
