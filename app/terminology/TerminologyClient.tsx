@@ -3,109 +3,11 @@
 import { useState, useMemo } from 'react';
 import { FiSearch, FiBookOpen } from 'react-icons/fi';
 import { useDebounce } from 'use-debounce';
+import { Terminology } from '@prisma/client';
 
-type TermEntry = {
-  term: string;
-  definition: string;
-  category: string;
-  examples?: string[];
+type TerminologyClientProps = {
+  terminologies: Terminology[];
 };
-
-// Common medical terminology - can be expanded
-const TERMINOLOGY: TermEntry[] = [
-  // Vital Signs & Measurements
-  { term: 'BP', definition: 'Blood Pressure', category: 'Vital Signs' },
-  { term: 'HR', definition: 'Heart Rate', category: 'Vital Signs' },
-  { term: 'RR', definition: 'Respiratory Rate', category: 'Vital Signs' },
-  { term: 'SpO2', definition: 'Oxygen Saturation', category: 'Vital Signs' },
-  { term: 'T', definition: 'Temperature', category: 'Vital Signs' },
-
-  // Common Abbreviations
-  { term: 'CC', definition: 'Chief Complaint', category: 'Documentation' },
-  { term: 'HPI', definition: 'History of Present Illness', category: 'Documentation' },
-  { term: 'PMH', definition: 'Past Medical History', category: 'Documentation' },
-  { term: 'PSH', definition: 'Past Surgical History', category: 'Documentation' },
-  { term: 'FH', definition: 'Family History', category: 'Documentation' },
-  { term: 'SH', definition: 'Social History', category: 'Documentation' },
-  { term: 'ROS', definition: 'Review of Systems', category: 'Documentation' },
-  { term: 'PE', definition: 'Physical Exam', category: 'Documentation' },
-  { term: 'A&P', definition: 'Assessment and Plan', category: 'Documentation' },
-  { term: 'MDM', definition: 'Medical Decision Making', category: 'Documentation' },
-
-  // Body Systems
-  { term: 'HEENT', definition: 'Head, Eyes, Ears, Nose, Throat', category: 'Physical Exam' },
-  { term: 'CV', definition: 'Cardiovascular', category: 'Physical Exam' },
-  { term: 'Resp', definition: 'Respiratory', category: 'Physical Exam' },
-  { term: 'Abd', definition: 'Abdomen/Abdominal', category: 'Physical Exam' },
-  { term: 'MSK', definition: 'Musculoskeletal', category: 'Physical Exam' },
-  { term: 'Neuro', definition: 'Neurological', category: 'Physical Exam' },
-  { term: 'GU', definition: 'Genitourinary', category: 'Physical Exam' },
-  { term: 'GI', definition: 'Gastrointestinal', category: 'Physical Exam' },
-  { term: 'Derm', definition: 'Dermatological', category: 'Physical Exam' },
-
-  // Cardiac Terms
-  { term: 'MI', definition: 'Myocardial Infarction (Heart Attack)', category: 'Cardiac' },
-  { term: 'CHF', definition: 'Congestive Heart Failure', category: 'Cardiac' },
-  { term: 'A-fib', definition: 'Atrial Fibrillation', category: 'Cardiac' },
-  { term: 'CAD', definition: 'Coronary Artery Disease', category: 'Cardiac' },
-  { term: 'HTN', definition: 'Hypertension (High Blood Pressure)', category: 'Cardiac' },
-  { term: 'STEMI', definition: 'ST-Elevation Myocardial Infarction', category: 'Cardiac' },
-  { term: 'NSTEMI', definition: 'Non-ST-Elevation Myocardial Infarction', category: 'Cardiac' },
-
-  // Respiratory
-  { term: 'SOB', definition: 'Shortness of Breath', category: 'Respiratory' },
-  { term: 'DOE', definition: 'Dyspnea on Exertion', category: 'Respiratory' },
-  { term: 'COPD', definition: 'Chronic Obstructive Pulmonary Disease', category: 'Respiratory' },
-  { term: 'PE', definition: 'Pulmonary Embolism', category: 'Respiratory' },
-  { term: 'ARDS', definition: 'Acute Respiratory Distress Syndrome', category: 'Respiratory' },
-
-  // Neurological
-  { term: 'CVA', definition: 'Cerebrovascular Accident (Stroke)', category: 'Neurological' },
-  { term: 'TIA', definition: 'Transient Ischemic Attack', category: 'Neurological' },
-  { term: 'LOC', definition: 'Loss of Consciousness', category: 'Neurological' },
-  { term: 'AMS', definition: 'Altered Mental Status', category: 'Neurological' },
-  { term: 'GCS', definition: 'Glasgow Coma Scale', category: 'Neurological' },
-  { term: 'CNS', definition: 'Central Nervous System', category: 'Neurological' },
-  { term: 'PNS', definition: 'Peripheral Nervous System', category: 'Neurological' },
-
-  // GI/GU
-  { term: 'N/V', definition: 'Nausea and Vomiting', category: 'GI' },
-  { term: 'GERD', definition: 'Gastroesophageal Reflux Disease', category: 'GI' },
-  { term: 'BM', definition: 'Bowel Movement', category: 'GI' },
-  { term: 'UTI', definition: 'Urinary Tract Infection', category: 'GU' },
-  { term: 'ARF', definition: 'Acute Renal Failure', category: 'GU' },
-  { term: 'CKD', definition: 'Chronic Kidney Disease', category: 'GU' },
-
-  // Labs & Diagnostics
-  { term: 'CBC', definition: 'Complete Blood Count', category: 'Labs' },
-  { term: 'BMP', definition: 'Basic Metabolic Panel', category: 'Labs' },
-  { term: 'CMP', definition: 'Comprehensive Metabolic Panel', category: 'Labs' },
-  { term: 'ABG', definition: 'Arterial Blood Gas', category: 'Labs' },
-  { term: 'CT', definition: 'Computed Tomography', category: 'Imaging' },
-  { term: 'MRI', definition: 'Magnetic Resonance Imaging', category: 'Imaging' },
-  { term: 'CXR', definition: 'Chest X-Ray', category: 'Imaging' },
-  { term: 'EKG/ECG', definition: 'Electrocardiogram', category: 'Diagnostics' },
-  { term: 'US', definition: 'Ultrasound', category: 'Imaging' },
-
-  // Medications
-  { term: 'NSAID', definition: 'Nonsteroidal Anti-Inflammatory Drug', category: 'Medications' },
-  { term: 'ACE-I', definition: 'Angiotensin-Converting Enzyme Inhibitor', category: 'Medications' },
-  { term: 'ARB', definition: 'Angiotensin Receptor Blocker', category: 'Medications' },
-  { term: 'PPI', definition: 'Proton Pump Inhibitor', category: 'Medications' },
-  { term: 'IV', definition: 'Intravenous', category: 'Medications' },
-  { term: 'PO', definition: 'Per Os (By Mouth)', category: 'Medications' },
-  { term: 'PRN', definition: 'Pro Re Nata (As Needed)', category: 'Medications' },
-
-  // General Medical
-  { term: 'Dx', definition: 'Diagnosis', category: 'General' },
-  { term: 'Tx', definition: 'Treatment', category: 'General' },
-  { term: 'Sx', definition: 'Symptoms', category: 'General' },
-  { term: 'Hx', definition: 'History', category: 'General' },
-  { term: 'Pt', definition: 'Patient', category: 'General' },
-  { term: 'WNL', definition: 'Within Normal Limits', category: 'General' },
-  { term: 'NAD', definition: 'No Acute Distress', category: 'General' },
-  { term: 'VSS', definition: 'Vital Signs Stable', category: 'General' },
-];
 
 // Enhanced fuzzy matching with Levenshtein-like scoring
 function fuzzyMatch(str: string, pattern: string): number {
@@ -148,19 +50,19 @@ function fuzzyMatch(str: string, pattern: string): number {
   return 0;
 }
 
-export default function TerminologyClient() {
+export default function TerminologyClient({ terminologies }: TerminologyClientProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedQuery] = useDebounce(searchQuery, 300);
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
 
   // Get unique categories
   const categories = useMemo(() => {
-    const cats = Array.from(new Set(TERMINOLOGY.map(t => t.category)));
+    const cats = Array.from(new Set(terminologies.map(t => t.category)));
     return ['All', ...cats.sort()];
-  }, []);
+  }, [terminologies]);
 
   const filteredTerms = useMemo(() => {
-    let filtered = TERMINOLOGY;
+    let filtered = terminologies;
 
     // Filter by category
     if (selectedCategory !== 'All') {
@@ -193,16 +95,16 @@ export default function TerminologyClient() {
     }
 
     return filtered;
-  }, [debouncedQuery, selectedCategory]);
+  }, [debouncedQuery, selectedCategory, terminologies]);
 
   // Get category counts
   const categoryCounts = useMemo(() => {
-    const counts: Record<string, number> = { All: TERMINOLOGY.length };
-    TERMINOLOGY.forEach(t => {
+    const counts: Record<string, number> = { All: terminologies.length };
+    terminologies.forEach(t => {
       counts[t.category] = (counts[t.category] || 0) + 1;
     });
     return counts;
-  }, []);
+  }, [terminologies]);
 
   return (
     <div className="min-h-screen">
