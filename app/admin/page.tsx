@@ -91,6 +91,18 @@ export default function AdminPage() {
           </a>
 
           <a
+            href="/admin/terminology"
+            className="group bg-zinc-900 border border-zinc-800 rounded-xl p-6 hover:bg-zinc-800/50 hover:border-zinc-700 transition-all duration-150 block"
+          >
+            <h2 className="text-lg font-semibold text-zinc-100 mb-2 group-hover:text-white transition-colors">
+              Terminology
+            </h2>
+            <p className="text-sm text-zinc-400 leading-relaxed">
+              Manage medical terminology entries
+            </p>
+          </a>
+
+          <a
             href="/admin/animated-messages"
             className="group bg-zinc-900 border border-zinc-800 rounded-xl p-6 hover:bg-zinc-800/50 hover:border-zinc-700 transition-all duration-150 block"
           >

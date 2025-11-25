@@ -1,0 +1,145 @@
+Name,Type,Commonly Used For
+Acetaminophen,Analgesic,Pain relief and fever reduction
+Ibuprofen,NSAID,Pain relief and anti-inflammatory
+Aspirin,NSAID,Pain relief and antiplatelet therapy
+Naproxen,NSAID,Pain and inflammation relief
+Celecoxib,NSAID (COX-2 Inhibitor),Arthritis and pain management
+Morphine,Opioid Analgesic,Severe pain management
+Fentanyl,Opioid Analgesic,Severe acute pain and anesthesia
+Hydrocodone,Opioid Analgesic,Moderate to severe pain
+Oxycodone,Opioid Analgesic,Moderate to severe pain
+Tramadol,Opioid Analgesic,Moderate pain relief
+Amoxicillin,Antibiotic (Penicillin),Bacterial infections
+Azithromycin,Antibiotic (Macrolide),Respiratory and other bacterial infections
+Ciprofloxacin,Antibiotic (Fluoroquinolone),Urinary tract and other bacterial infections
+Doxycycline,Antibiotic (Tetracycline),Bacterial infections and acne
+Cephalexin,Antibiotic (Cephalosporin),Skin and respiratory infections
+Vancomycin,Antibiotic (Glycopeptide),MRSA and serious Gram-positive infections
+Clindamycin,Antibiotic (Lincosamide),Skin and anaerobic infections
+Metronidazole,Antibiotic (Nitroimidazole),Anaerobic bacterial and protozoal infections
+Levofloxacin,Antibiotic (Fluoroquinolone),Respiratory and urinary infections
+Meropenem,Antibiotic (Carbapenem),Severe bacterial infections
+Lisinopril,ACE Inhibitor,Hypertension and heart failure
+Enalapril,ACE Inhibitor,Hypertension and heart failure
+Ramipril,ACE Inhibitor,Hypertension and cardiovascular protection
+Losartan,ARB (Angiotensin Receptor Blocker),Hypertension
+Valsartan,ARB,Hypertension and heart failure
+Amlodipine,Calcium Channel Blocker,Hypertension and angina
+Diltiazem,Calcium Channel Blocker,Hypertension and atrial fibrillation
+Nifedipine,Calcium Channel Blocker,Hypertension
+Metoprolol,Beta Blocker,Hypertension and heart failure
+Atenolol,Beta Blocker,Hypertension and angina
+Carvedilol,Beta Blocker,Heart failure and hypertension
+Propranolol,Beta Blocker,Hypertension and tremor
+Hydrochlorothiazide,Thiazide Diuretic,Hypertension and edema
+Furosemide,Loop Diuretic,Edema and heart failure
+Spironolactone,Potassium-Sparing Diuretic,Heart failure and hypertension
+Atorvastatin,Statin,Cholesterol management
+Simvastatin,Statin,Cholesterol management
+Rosuvastatin,Statin,High cholesterol
+Pravastatin,Statin,Cholesterol management
+Metformin,Antidiabetic (Biguanide),Type 2 diabetes
+Glipizide,Antidiabetic (Sulfonylurea),Type 2 diabetes
+Insulin Glargine,Long-Acting Insulin,Diabetes management
+Insulin Lispro,Rapid-Acting Insulin,Diabetes management
+Insulin Regular,Short-Acting Insulin,Diabetes management
+Sitagliptin,Antidiabetic (DPP-4 Inhibitor),Type 2 diabetes
+Empagliflozin,Antidiabetic (SGLT2 Inhibitor),Type 2 diabetes and cardiovascular protection
+Levothyroxine,Thyroid Hormone,Hypothyroidism
+Methimazole,Antithyroid Agent,Hyperthyroidism
+Omeprazole,Proton Pump Inhibitor,GERD and acid reflux
+Pantoprazole,Proton Pump Inhibitor,GERD and peptic ulcers
+Esomeprazole,Proton Pump Inhibitor,GERD and erosive esophagitis
+Famotidine,H2 Receptor Antagonist,Acid reflux and peptic ulcers
+Ranitidine,H2 Receptor Antagonist,Acid reflux (Note: Recalled in many countries)
+Albuterol,Beta-2 Agonist (Bronchodilator),Asthma and COPD
+Ipratropium,Anticholinergic Bronchodilator,COPD and asthma
+Fluticasone,Inhaled Corticosteroid,Asthma and allergic rhinitis
+Montelukast,Leukotriene Receptor Antagonist,Asthma and allergies
+Prednisone,Corticosteroid,Inflammation and autoimmune conditions
+Methylprednisolone,Corticosteroid,Severe inflammation
+Dexamethasone,Corticosteroid,Severe inflammation and cerebral edema
+Hydrocortisone,Corticosteroid,Adrenal insufficiency and inflammation
+Warfarin,Anticoagulant (Vitamin K Antagonist),Blood clot prevention
+Heparin,Anticoagulant,Acute thrombosis treatment
+Enoxaparin,Low Molecular Weight Heparin,DVT and PE prevention and treatment
+Apixaban,Direct Oral Anticoagulant (DOAC),Stroke prevention in atrial fibrillation
+Rivaroxaban,Direct Oral Anticoagulant,DVT and PE treatment
+Dabigatran,Direct Oral Anticoagulant,Stroke prevention in atrial fibrillation
+Clopidogrel,Antiplatelet,Prevent blood clots after MI or stroke
+Aspirin,Antiplatelet,Cardiovascular protection
+Diphenhydramine,Antihistamine (1st Generation),Allergies and sleep aid
+Cetirizine,Antihistamine (2nd Generation),Allergies
+Loratadine,Antihistamine (2nd Generation),Allergies
+Fexofenadine,Antihistamine (2nd Generation),Allergies
+Ondansetron,Antiemetic (5-HT3 Antagonist),Nausea and vomiting
+Metoclopramide,Antiemetic (Prokinetic),Nausea and gastroparesis
+Promethazine,Antiemetic/Antihistamine,Nausea and allergies
+Epinephrine,Vasopressor/Bronchodilator,Anaphylaxis and cardiac arrest
+Norepinephrine,Vasopressor,Septic shock and hypotension
+Dopamine,Vasopressor/Inotrope,Shock and heart failure
+Dobutamine,Inotrope,Heart failure and cardiogenic shock
+Nitroglycerin,Vasodilator,Angina and heart failure
+Hydralazine,Vasodilator,Hypertension
+Amiodarone,Antiarrhythmic (Class III),Atrial fibrillation and ventricular arrhythmias
+Digoxin,Cardiac Glycoside,Heart failure and atrial fibrillation
+Adenosine,Antiarrhythmic,Supraventricular tachycardia
+Lidocaine,Antiarrhythmic/Local Anesthetic,Ventricular arrhythmias and local anesthesia
+Phenytoin,Anticonvulsant,Seizures
+Levetiracetam,Anticonvulsant,Seizures
+Valproic Acid,Anticonvulsant,Seizures and bipolar disorder
+Carbamazepine,Anticonvulsant,Seizures and neuropathic pain
+Gabapentin,Anticonvulsant,Neuropathic pain and seizures
+Pregabalin,Anticonvulsant,Neuropathic pain and fibromyalgia
+Sertraline,SSRI Antidepressant,Depression and anxiety
+Fluoxetine,SSRI Antidepressant,Depression and OCD
+Escitalopram,SSRI Antidepressant,Depression and anxiety
+Paroxetine,SSRI Antidepressant,Depression and anxiety
+Venlafaxine,SNRI Antidepressant,Depression and anxiety
+Duloxetine,SNRI Antidepressant,Depression and neuropathic pain
+Bupropion,Atypical Antidepressant,Depression and smoking cessation
+Mirtazapine,Atypical Antidepressant,Depression and appetite stimulation
+Amitriptyline,Tricyclic Antidepressant,Depression and neuropathic pain
+Lorazepam,Benzodiazepine,Anxiety and seizures
+Diazepam,Benzodiazepine,Anxiety and muscle spasms
+Alprazolam,Benzodiazepine,Anxiety and panic disorder
+Clonazepam,Benzodiazepine,Seizures and anxiety
+Zolpidem,Sedative-Hypnotic,Insomnia
+Eszopiclone,Sedative-Hypnotic,Insomnia
+Haloperidol,Typical Antipsychotic,Psychosis and agitation
+Quetiapine,Atypical Antipsychotic,Schizophrenia and bipolar disorder
+Risperidone,Atypical Antipsychotic,Schizophrenia and bipolar disorder
+Olanzapine,Atypical Antipsychotic,Schizophrenia and bipolar disorder
+Aripiprazole,Atypical Antipsychotic,Schizophrenia and depression adjunct
+Lithium,Mood Stabilizer,Bipolar disorder
+Doxorubicin,Chemotherapy (Anthracycline),Various cancers
+Cisplatin,Chemotherapy (Platinum),Testicular and ovarian cancer
+Paclitaxel,Chemotherapy (Taxane),Breast and ovarian cancer
+Methotrexate,Chemotherapy/Immunosuppressant,Cancer and rheumatoid arthritis
+Cyclophosphamide,Chemotherapy (Alkylating Agent),Lymphoma and autoimmune diseases
+Fluorouracil,Chemotherapy (Antimetabolite),Colorectal and breast cancer
+Imatinib,Targeted Therapy (Tyrosine Kinase Inhibitor),Chronic myeloid leukemia
+Rituximab,Monoclonal Antibody,Lymphoma and autoimmune diseases
+Trastuzumab,Monoclonal Antibody,HER2-positive breast cancer
+Pembrolizumab,Immunotherapy (PD-1 Inhibitor),Various cancers
+Cyclosporine,Immunosuppressant,Organ transplant rejection
+Tacrolimus,Immunosuppressant,Organ transplant rejection
+Mycophenolate,Immunosuppressant,Organ transplant rejection
+Azathioprine,Immunosuppressant,Autoimmune diseases and transplant
+Hydroxychloroquine,Antimalarial/Immunomodulator,Lupus and rheumatoid arthritis
+Colchicine,Anti-inflammatory,Gout
+Allopurinol,Xanthine Oxidase Inhibitor,Gout and hyperuricemia
+Naloxone,Opioid Antagonist,Opioid overdose reversal
+Flumazenil,Benzodiazepine Antagonist,Benzodiazepine overdose reversal
+Atropine,Anticholinergic,Bradycardia and organophosphate poisoning
+Midazolam,Benzodiazepine,Sedation and seizures
+Propofol,Anesthetic Agent,General anesthesia and sedation
+Ketamine,Dissociative Anesthetic,Anesthesia and pain management
+Succinylcholine,Neuromuscular Blocker,Rapid sequence intubation
+Rocuronium,Neuromuscular Blocker,Intubation and surgery
+Neostigmine,Acetylcholinesterase Inhibitor,Reverse neuromuscular blockade
+Vasopressin,Antidiuretic Hormone,Diabetes insipidus and septic shock
+Octreotide,Somatostatin Analog,GI bleeding and acromegaly
+Sildenafil,PDE5 Inhibitor,Erectile dysfunction and pulmonary hypertension
+Tamsulosin,Alpha Blocker,Benign prostatic hyperplasia
+Finasteride,5-Alpha Reductase Inhibitor,Benign prostatic hyperplasia and hair loss
