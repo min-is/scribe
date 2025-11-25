@@ -580,6 +580,41 @@ WHERE type = 'PROVIDER'
   AND "deletedAt" IS NULL;
     `,
   },
+  {
+    name: '20251125000000_add_terminology_model',
+    sql: `
+-- CreateTable Terminology (only if not exists)
+CREATE TABLE IF NOT EXISTS "Terminology" (
+    "id" TEXT NOT NULL,
+    "slug" TEXT NOT NULL,
+    "term" TEXT NOT NULL,
+    "definition" TEXT NOT NULL,
+    "category" TEXT NOT NULL,
+    "examples" TEXT[],
+    "viewCount" INTEGER NOT NULL DEFAULT 0,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "Terminology_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateIndexes for Terminology
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_indexes WHERE indexname = 'Terminology_slug_key') THEN
+        CREATE UNIQUE INDEX "Terminology_slug_key" ON "Terminology"("slug");
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM pg_indexes WHERE indexname = 'Terminology_term_idx') THEN
+        CREATE INDEX "Terminology_term_idx" ON "Terminology"("term");
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM pg_indexes WHERE indexname = 'Terminology_category_idx') THEN
+        CREATE INDEX "Terminology_category_idx" ON "Terminology"("category");
+    END IF;
+END $$;
+    `,
+  },
 ];
 
 async function runMigrations() {
