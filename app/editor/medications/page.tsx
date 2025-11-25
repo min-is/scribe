@@ -1,5 +1,6 @@
 import { Metadata } from 'next/types';
 import MedicationsClient from './MedicationsClient';
+import { getMedications } from '@/medication/actions';
 
 export const metadata: Metadata = {
   title: 'Medications - Editor',
@@ -7,5 +8,7 @@ export const metadata: Metadata = {
 };
 
 export default async function EditorMedicationsPage() {
-  return <MedicationsClient />;
+  const medications = await getMedications();
+
+  return <MedicationsClient medications={medications} />;
 }
