@@ -615,6 +615,21 @@ BEGIN
 END $$;
     `,
   },
+  {
+    name: '20251125000000_add_brand_names_to_medications',
+    sql: `
+-- Add brandNames column to Medication table (only if not exists)
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.columns
+        WHERE table_name = 'Medication' AND column_name = 'brandNames'
+    ) THEN
+        ALTER TABLE "Medication" ADD COLUMN "brandNames" TEXT;
+    END IF;
+END $$;
+    `,
+  },
 ];
 
 async function runMigrations() {
