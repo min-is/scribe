@@ -1,5 +1,5 @@
 import { Metadata } from 'next/types';
-import MedicationsClient from './MedicationsClient';
+import MedicationsClient from '../../admin/medications/MedicationsClient';
 import { getMedications } from '@/medication/actions';
 
 export const metadata: Metadata = {

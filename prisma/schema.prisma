@@ -231,6 +231,26 @@ model Medication {
   @@index([type])
 }
 
+model Terminology {
+  id         String   @id @default(cuid())
+  slug       String   @unique
+  term       String   // e.g., "BP", "HEENT"
+  definition String   // Full definition
+  category   String   // e.g., "Vital Signs", "Documentation"
+  examples   String[] // Example usage (optional)
+
+  // Analytics
+  viewCount  Int      @default(0)
+
+  // Metadata
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([slug])
+  @@index([term])
+  @@index([category])
+}
+
 model AnimatedMessage {
   id        String   @id @default(cuid())
   message   String
