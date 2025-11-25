@@ -3,9 +3,9 @@ import { prisma } from '@/lib/prisma';
 import ProceduresPageClient from './ProceduresPageClient';
 
 export const metadata: Metadata = {
-  title: 'Medical Procedures - Medical Scribe Dashboard',
+  title: 'Procedures',
   description:
-    'Browse step-by-step guides for medical procedures with indications, contraindications, and equipment',
+    'Browse step-by-step guides for documenting ED procedures',
 };
 
 export default async function ProceduresPage() {

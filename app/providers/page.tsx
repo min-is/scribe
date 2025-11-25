@@ -3,9 +3,9 @@ import { prisma } from '@/lib/prisma';
 import ProvidersPageClient from './ProvidersPageClient';
 
 export const metadata: Metadata = {
-  title: 'Provider Preferences - Medical Scribe Dashboard',
+  title: 'Provider Preferences',
   description:
-    'Browse provider profiles, preferences, and difficulty ratings for medical scribes',
+    'Browse provider documentation preferences and expectations',
 };
 
 export default async function ProvidersPage() {

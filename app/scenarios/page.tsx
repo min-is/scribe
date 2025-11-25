@@ -3,9 +3,9 @@ import { prisma } from '@/lib/prisma';
 import ScenariosPageClient from './ScenariosPageClient';
 
 export const metadata: Metadata = {
-  title: 'Clinical Scenarios - Medical Scribe Dashboard',
+  title: 'Scenarios',
   description:
-    'Browse clinical scenario walkthroughs for emergency and routine medical situations',
+    'Browse clinical scenario walkthroughs for ED events',
 };
 
 export default async function ScenariosPage() {

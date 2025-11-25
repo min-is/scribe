@@ -3,9 +3,9 @@ import { prisma } from '@/lib/prisma';
 import SmartPhrasesPageClient from './SmartPhrasesPageClient';
 
 export const metadata: Metadata = {
-  title: 'SmartPhrase Library - Medical Scribe Dashboard',
+  title: 'SmartPhrase Library',
   description:
-    'Browse and search EPIC SmartPhrases (.phrases) for clinical documentation',
+    'Browse and search for EPIC SmartPhrases (.phrases) for documentation efficiency',
 };
 
 export default async function SmartPhrasesPage() {
