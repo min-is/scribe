@@ -187,7 +187,7 @@ export default function MedicationsClient({
             </h1>
           </div>
           <p className="text-lg text-gray-600 dark:text-gray-400 font-light ml-14">
-            Quick reference for all {allMedications.length.toLocaleString()} medications - search by name, brand, type, or usage
+            Quick reference for all {allMedications.length.toLocaleString()} medications - search by name, brand, type
           </p>
         </div>
 
@@ -308,7 +308,7 @@ export default function MedicationsClient({
         {/* Info Note */}
         <div className="mt-8 bg-blue-50/50 dark:bg-blue-900/10 backdrop-blur-xl border border-blue-200/50 dark:border-blue-800/50 rounded-2xl p-5">
           <p className="text-sm text-gray-600 dark:text-gray-400 font-light">
-            <span className="font-medium text-gray-900 dark:text-gray-200">💡 Tip:</span> Search supports phonetic matching - spell medications how they sound! Try &quot;methadoan&quot; → Methadone, &quot;elikwis&quot; → Eliquis (Apixaban), or &quot;jardians&quot; → Jardiance (Empagliflozin). Search works across medication names, brand names, types, and uses.
+            <span className="font-medium text-gray-900 dark:text-gray-200">💡 Tip:</span> Search supports phonetic matching - you can spell medications how they sound if you're unsure about the spelling!
           </p>
         </div>
       </div>

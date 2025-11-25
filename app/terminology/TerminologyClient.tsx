@@ -120,7 +120,7 @@ export default function TerminologyClient({ terminologies }: TerminologyClientPr
             </h1>
           </div>
           <p className="text-lg text-gray-600 dark:text-gray-400 font-light ml-14">
-            Common medical abbreviations and terms for clinical documentation
+            Common medical abbreviations and terms for ED documentation
           </p>
         </div>
 

@@ -228,7 +228,7 @@ export default function TerminologyClient() {
             <FiSearch className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 text-xl pointer-events-none" />
             <input
               type="text"
-              placeholder="Search terminology (e.g., 'BP', 'heart', 'respiratory')..."
+              placeholder="Search terminology (e.g., 'LAFB', 'Rovsing's sign', 'Psoas sign')..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 rounded-2xl pl-14 pr-6 py-4 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50 dark:focus:ring-purple-400/50 focus:border-transparent transition-all shadow-sm hover:shadow-md font-light text-base"
@@ -330,7 +330,7 @@ export default function TerminologyClient() {
         {/* Info Note */}
         <div className="mt-8 bg-purple-50/50 dark:bg-purple-900/10 backdrop-blur-xl border border-purple-200/50 dark:border-purple-800/50 rounded-2xl p-5">
           <p className="text-sm text-gray-600 dark:text-gray-400 font-light">
-            <span className="font-medium text-gray-900 dark:text-gray-200">💡 Tip:</span> Use the category filters to narrow down your search, or type keywords to find specific terms. The search supports fuzzy matching for easier lookups.
+            <span className="font-medium text-gray-900 dark:text-gray-200">💡 Tip:</span> Use the category filters to narrow down your search, or type keywords to find specific terms.
           </p>
         </div>
       </div>
