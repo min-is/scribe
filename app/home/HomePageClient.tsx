@@ -66,22 +66,22 @@ export default function HomePageClient({ initialContent }: HomePageClientProps) 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             <ActionButton
               title="Provider Preferences"
-              description="View provider profiles"
+              description="View provider preferences"
               onClick={() => handleSectionClick(PageType.PROVIDER)}
             />
             <ActionButton
               title="Procedures"
-              description="Browse protocols"
+              description="Browse procedure documentation"
               onClick={() => handleSectionClick(PageType.PROCEDURE)}
             />
             <ActionButton
               title="Smart Phrases"
-              description="EPIC templates"
+              description="Efficient .phrases"
               onClick={() => handleSectionClick(PageType.SMARTPHRASE)}
             />
             <ActionButton
               title="Scenarios"
-              description="Emergency protocols"
+              description="Documentation for various scenarios"
               onClick={() => handleSectionClick(PageType.SCENARIO)}
             />
             <ActionButton
@@ -91,7 +91,7 @@ export default function HomePageClient({ initialContent }: HomePageClientProps) 
             />
             <ActionButton
               title="Medications"
-              description="Drug reference library"
+              description="Extensive medication dictionary"
               onClick={() => handleSectionClick(PageType.MEDICATION)}
             />
           </div>
