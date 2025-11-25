@@ -103,6 +103,7 @@ export default function MedicationsClient({
 }: MedicationsClientProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedQuery] = useDebounce(searchQuery, 300);
+  const [displayLimit, setDisplayLimit] = useState(100);
 
   // Filter and rank medications using fuzzy matching
   const filteredMedications = useMemo(() => {
@@ -160,6 +161,18 @@ export default function MedicationsClient({
     }));
   }, [filteredMedications]);
 
+  // Limit displayed medications for performance (only when not searching)
+  const displayedMedications = useMemo(() => {
+    if (debouncedQuery.trim()) {
+      // Show all search results
+      return medicationsList;
+    }
+    // Limit display when showing all medications
+    return medicationsList.slice(0, displayLimit);
+  }, [medicationsList, displayLimit, debouncedQuery]);
+
+  const hasMore = !debouncedQuery.trim() && medicationsList.length > displayLimit;
+
   return (
     <div className="min-h-screen">
       <div className="max-w-5xl mx-auto px-6 py-12">
@@ -201,13 +214,13 @@ export default function MedicationsClient({
         {!debouncedQuery && (
           <div className="mb-6">
             <p className="text-gray-500 dark:text-gray-400 text-sm font-light ml-1">
-              Showing all {medicationsList.length} medication{medicationsList.length !== 1 ? 's' : ''}
+              Showing {displayedMedications.length.toLocaleString()} of {medicationsList.length.toLocaleString()} medication{medicationsList.length !== 1 ? 's' : ''}
             </p>
           </div>
         )}
 
         {/* Medications List */}
-        {medicationsList.length === 0 ? (
+        {displayedMedications.length === 0 ? (
           <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 rounded-2xl p-16 text-center shadow-sm">
             <div className="max-w-sm mx-auto">
               <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -226,7 +239,7 @@ export default function MedicationsClient({
         ) : (
           <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 rounded-2xl overflow-hidden shadow-sm">
             <div className="divide-y divide-gray-200/50 dark:divide-gray-700/50">
-              {medicationsList.map((med, index) => (
+              {displayedMedications.map((med, index) => (
                 <div
                   key={index}
                   className="group px-6 py-5 hover:bg-gray-50/50 dark:hover:bg-gray-900/30 transition-all duration-200"
@@ -247,7 +260,7 @@ export default function MedicationsClient({
 
                       {/* Type Badge */}
                       <div className="flex items-center gap-2 mb-2">
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20">
                           {med.type}
                         </span>
                       </div>
@@ -277,6 +290,18 @@ export default function MedicationsClient({
                 </div>
               ))}
             </div>
+          </div>
+        )}
+
+        {/* Load More Button */}
+        {hasMore && (
+          <div className="mt-6 flex justify-center">
+            <button
+              onClick={() => setDisplayLimit(prev => prev + 100)}
+              className="px-6 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors font-medium shadow-sm"
+            >
+              Load More ({(medicationsList.length - displayLimit).toLocaleString()} remaining)
+            </button>
           </div>
         )}
 
