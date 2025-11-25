@@ -83,8 +83,24 @@ async function seedMedications() {
       const line = lines[i].trim();
       if (!line) continue;
 
-      // Parse CSV (simple comma split)
-      const parts = line.split(',').map(p => p.trim());
+      // Parse CSV properly (handles quoted fields with commas)
+      const parts = [];
+      let current = '';
+      let inQuotes = false;
+
+      for (let j = 0; j < line.length; j++) {
+        const char = line[j];
+
+        if (char === '"') {
+          inQuotes = !inQuotes;
+        } else if (char === ',' && !inQuotes) {
+          parts.push(current.trim());
+          current = '';
+        } else {
+          current += char;
+        }
+      }
+      parts.push(current.trim()); // Add last field
 
       if (parts.length < 2) {
         failCount++;
