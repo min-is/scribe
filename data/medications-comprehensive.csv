@@ -1,145 +1,1109 @@
 Name,Type,Commonly Used For
-Acetaminophen,Analgesic,Pain relief and fever reduction
-Ibuprofen,NSAID,Pain relief and anti-inflammatory
-Aspirin,NSAID,Pain relief and antiplatelet therapy
-Naproxen,NSAID,Pain and inflammation relief
-Celecoxib,NSAID (COX-2 Inhibitor),Arthritis and pain management
-Morphine,Opioid Analgesic,Severe pain management
-Fentanyl,Opioid Analgesic,Severe acute pain and anesthesia
-Hydrocodone,Opioid Analgesic,Moderate to severe pain
-Oxycodone,Opioid Analgesic,Moderate to severe pain
-Tramadol,Opioid Analgesic,Moderate pain relief
-Amoxicillin,Antibiotic (Penicillin),Bacterial infections
-Azithromycin,Antibiotic (Macrolide),Respiratory and other bacterial infections
-Ciprofloxacin,Antibiotic (Fluoroquinolone),Urinary tract and other bacterial infections
-Doxycycline,Antibiotic (Tetracycline),Bacterial infections and acne
-Cephalexin,Antibiotic (Cephalosporin),Skin and respiratory infections
-Vancomycin,Antibiotic (Glycopeptide),MRSA and serious Gram-positive infections
-Clindamycin,Antibiotic (Lincosamide),Skin and anaerobic infections
-Metronidazole,Antibiotic (Nitroimidazole),Anaerobic bacterial and protozoal infections
-Levofloxacin,Antibiotic (Fluoroquinolone),Respiratory and urinary infections
-Meropenem,Antibiotic (Carbapenem),Severe bacterial infections
-Lisinopril,ACE Inhibitor,Hypertension and heart failure
-Enalapril,ACE Inhibitor,Hypertension and heart failure
-Ramipril,ACE Inhibitor,Hypertension and cardiovascular protection
-Losartan,ARB (Angiotensin Receptor Blocker),Hypertension
-Valsartan,ARB,Hypertension and heart failure
-Amlodipine,Calcium Channel Blocker,Hypertension and angina
-Diltiazem,Calcium Channel Blocker,Hypertension and atrial fibrillation
-Nifedipine,Calcium Channel Blocker,Hypertension
-Metoprolol,Beta Blocker,Hypertension and heart failure
-Atenolol,Beta Blocker,Hypertension and angina
-Carvedilol,Beta Blocker,Heart failure and hypertension
-Propranolol,Beta Blocker,Hypertension and tremor
-Hydrochlorothiazide,Thiazide Diuretic,Hypertension and edema
-Furosemide,Loop Diuretic,Edema and heart failure
-Spironolactone,Potassium-Sparing Diuretic,Heart failure and hypertension
-Atorvastatin,Statin,Cholesterol management
-Simvastatin,Statin,Cholesterol management
-Rosuvastatin,Statin,High cholesterol
-Pravastatin,Statin,Cholesterol management
-Metformin,Antidiabetic (Biguanide),Type 2 diabetes
-Glipizide,Antidiabetic (Sulfonylurea),Type 2 diabetes
-Insulin Glargine,Long-Acting Insulin,Diabetes management
-Insulin Lispro,Rapid-Acting Insulin,Diabetes management
-Insulin Regular,Short-Acting Insulin,Diabetes management
-Sitagliptin,Antidiabetic (DPP-4 Inhibitor),Type 2 diabetes
-Empagliflozin,Antidiabetic (SGLT2 Inhibitor),Type 2 diabetes and cardiovascular protection
-Levothyroxine,Thyroid Hormone,Hypothyroidism
-Methimazole,Antithyroid Agent,Hyperthyroidism
-Omeprazole,Proton Pump Inhibitor,GERD and acid reflux
-Pantoprazole,Proton Pump Inhibitor,GERD and peptic ulcers
-Esomeprazole,Proton Pump Inhibitor,GERD and erosive esophagitis
-Famotidine,H2 Receptor Antagonist,Acid reflux and peptic ulcers
-Ranitidine,H2 Receptor Antagonist,Acid reflux (Note: Recalled in many countries)
-Albuterol,Beta-2 Agonist (Bronchodilator),Asthma and COPD
-Ipratropium,Anticholinergic Bronchodilator,COPD and asthma
-Fluticasone,Inhaled Corticosteroid,Asthma and allergic rhinitis
-Montelukast,Leukotriene Receptor Antagonist,Asthma and allergies
-Prednisone,Corticosteroid,Inflammation and autoimmune conditions
-Methylprednisolone,Corticosteroid,Severe inflammation
-Dexamethasone,Corticosteroid,Severe inflammation and cerebral edema
-Hydrocortisone,Corticosteroid,Adrenal insufficiency and inflammation
-Warfarin,Anticoagulant (Vitamin K Antagonist),Blood clot prevention
-Heparin,Anticoagulant,Acute thrombosis treatment
-Enoxaparin,Low Molecular Weight Heparin,DVT and PE prevention and treatment
+Abacavir,Antiretroviral (NRTI),HIV infection treatment and prevention
+Abaloparatide,Parathyroid Hormone Analog,Osteoporosis prevention and treatment
+Abatacept,T-Cell Costimulation Blocker,Rheumatoid arthritis and inflammatory joint disease
+Abciximab,GP IIb/IIIa Inhibitor,Acute coronary syndrome during cardiac procedures
+Abemaciclib,CDK4/6 Inhibitor,"Breast cancer treatment, often hormone receptor positive"
+Abiraterone,CYP17 Inhibitor,Advanced or metastatic prostate cancer
+Abobotulinumtoxina,Neurotoxin,Medical spasticity and cosmetic wrinkle reduction
+Abrocitinib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Acalabrutinib,BTK Inhibitor,"B-cell lymphomas, leukemias, and related malignancies"
+Acamprosate,GABA Analog,Maintenance of alcohol abstinence in recovery
+Acarbose,Alpha-Glucosidase Inhibitor,Type 2 diabetes mellitus blood glucose control
+Acebutolol,Beta Blocker,"Hypertension, angina, and cardiac arrhythmias"
+Acetaminophen,Analgesic,Mild to moderate pain and fever reduction
+Acetazolamide,Carbonic Anhydrase Inhibitor,"Glaucoma, altitude sickness, and edema"
+Acetylcysteine,Mucolytic/Antidote,Acetaminophen overdose and mucolytic therapy
+Acitretin,Retinoid,Severe recalcitrant psoriasis
+Aclidinium,Anticholinergic Bronchodilator,Chronic obstructive pulmonary disease maintenance
+Acyclovir,Antiviral,"Herpes simplex, varicella-zoster, and related viral infections"
+Adagrasib,Enzyme Inhibitor,Targeted cancer therapy and tumor growth inhibition
+Adalimumab,TNF Inhibitor,Autoimmune and chronic inflammatory conditions
+Adapalene,Retinoid,Mild to moderate acne vulgaris treatment
+Adefovir,Antiviral,Viral infections including herpes and hepatitis
+Adenosine,Antiarrhythmic,Acute termination of supraventricular tachycardia
+Aducanumab,Monoclonal Antibody,Targeted cancer therapy and tumor growth inhibition
+Afatinib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Agalsidase Beta,Enzyme Replacement Therapy,Enzyme replacement for inherited metabolic disorders
+Albendazole,Anthelmintic,Intestinal and systemic parasitic infections
+Albuterol,Beta-2 Agonist (Bronchodilator),Asthma and chronic obstructive pulmonary disease
+Alcaftadine,Antihistamine,Seasonal and perennial allergic symptoms
+Alectinib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Alemtuzumab,Monoclonal Antibody,"Rheumatoid arthritis, psoriasis, and other autoimmune disorders"
+Alendronate,Bisphosphonate,Osteoporosis prevention and treatment
+Alfentanil,Opioid Analgesic,Moderate to severe acute and chronic pain
+Alfuzosin,Alpha Blocker,Benign prostatic hyperplasia and hypertension
+Alglucosidase Alfa,Enzyme Replacement Therapy,Enzyme replacement for inherited metabolic disorders
+Alirocumab,Monoclonal Antibody,Targeted cancer therapy and tumor growth inhibition
+Alitretinoin,Retinoid,"Acne, psoriasis, and other keratinization disorders"
+Allopurinol,Xanthine Oxidase Inhibitor,Chronic gout and elevated uric acid levels
+Alogliptin,DPP-4 Inhibitor,Type 2 diabetes mellitus blood glucose control
+Alosetron,5-HT3 Antagonist,"Nausea and vomiting, including chemotherapy-induced"
+Alpelisib,Enzyme Inhibitor,Targeted cancer therapy and tumor growth inhibition
+Alprazolam,Benzodiazepine,"Generalized anxiety, panic disorder, and acute anxiety"
+Alteplase,Thrombolytic,Acute ischemic stroke and pulmonary embolism thrombolysis
+Amantadine,Antiviral/Antiparkinsonian,Parkinson's disease motor symptom management
+Amcinonide,Corticosteroid,Inflammatory conditions and immune-mediated disorders
+Amikacin,Aminoglycoside,Severe or complicated bacterial infections
+Amiloride,Potassium-Sparing Diuretic,High blood pressure and fluid retention
+Aminophylline,Methylxanthine,Asthma and chronic obstructive pulmonary disease
+Amiodarone,Antiarrhythmic (Class III),Life-threatening ventricular and atrial arrhythmias
+Amitriptyline,Tricyclic Antidepressant,"Depression, anxiety, and chronic neuropathic pain"
+Amivantamab,Monoclonal Antibody,Targeted cancer therapy and tumor growth inhibition
+Amlodipine,Calcium Channel Blocker,High blood pressure and chronic stable angina
+Amoxapine,Tricyclic Antidepressant,Major depressive disorder treatment
+Amoxicillin,Antibiotic (Penicillin),Susceptible bacterial infections
+Amphetamine,CNS Stimulant,ADHD and excessive daytime sleepiness
+Amphotericin B,Antifungal,Invasive and life-threatening fungal infections
+Ampicillin,Penicillin Antibiotic,Susceptible bacterial infections
+Anagrelide,Platelet-Reducing Agent,Essential thrombocythemia platelet reduction
+Anakinra,IL-1 Receptor Antagonist,Rheumatoid arthritis and inflammatory joint disease
+Anastrozole,Aromatase Inhibitor,"Breast cancer treatment, often hormone receptor positive"
+Anidulafungin,Echinocandin Antifungal,"Invasive aspergillosis, candidiasis, and other serious mycoses"
+Anifrolumab,Monoclonal Antibody,Targeted cancer therapy and tumor growth inhibition
+Ansuvimab,Monoclonal Antibody,Targeted cancer therapy and tumor growth inhibition
 Apixaban,Direct Oral Anticoagulant (DOAC),Stroke prevention in atrial fibrillation
-Rivaroxaban,Direct Oral Anticoagulant,DVT and PE treatment
-Dabigatran,Direct Oral Anticoagulant,Stroke prevention in atrial fibrillation
-Clopidogrel,Antiplatelet,Prevent blood clots after MI or stroke
-Aspirin,Antiplatelet,Cardiovascular protection
-Diphenhydramine,Antihistamine (1st Generation),Allergies and sleep aid
-Cetirizine,Antihistamine (2nd Generation),Allergies
-Loratadine,Antihistamine (2nd Generation),Allergies
-Fexofenadine,Antihistamine (2nd Generation),Allergies
-Ondansetron,Antiemetic (5-HT3 Antagonist),Nausea and vomiting
-Metoclopramide,Antiemetic (Prokinetic),Nausea and gastroparesis
-Promethazine,Antiemetic/Antihistamine,Nausea and allergies
-Epinephrine,Vasopressor/Bronchodilator,Anaphylaxis and cardiac arrest
-Norepinephrine,Vasopressor,Septic shock and hypotension
-Dopamine,Vasopressor/Inotrope,Shock and heart failure
-Dobutamine,Inotrope,Heart failure and cardiogenic shock
-Nitroglycerin,Vasodilator,Angina and heart failure
-Hydralazine,Vasodilator,Hypertension
-Amiodarone,Antiarrhythmic (Class III),Atrial fibrillation and ventricular arrhythmias
-Digoxin,Cardiac Glycoside,Heart failure and atrial fibrillation
-Adenosine,Antiarrhythmic,Supraventricular tachycardia
-Lidocaine,Antiarrhythmic/Local Anesthetic,Ventricular arrhythmias and local anesthesia
-Phenytoin,Anticonvulsant,Seizures
-Levetiracetam,Anticonvulsant,Seizures
-Valproic Acid,Anticonvulsant,Seizures and bipolar disorder
-Carbamazepine,Anticonvulsant,Seizures and neuropathic pain
-Gabapentin,Anticonvulsant,Neuropathic pain and seizures
-Pregabalin,Anticonvulsant,Neuropathic pain and fibromyalgia
-Sertraline,SSRI Antidepressant,Depression and anxiety
-Fluoxetine,SSRI Antidepressant,Depression and OCD
-Escitalopram,SSRI Antidepressant,Depression and anxiety
-Paroxetine,SSRI Antidepressant,Depression and anxiety
-Venlafaxine,SNRI Antidepressant,Depression and anxiety
-Duloxetine,SNRI Antidepressant,Depression and neuropathic pain
-Bupropion,Atypical Antidepressant,Depression and smoking cessation
-Mirtazapine,Atypical Antidepressant,Depression and appetite stimulation
-Amitriptyline,Tricyclic Antidepressant,Depression and neuropathic pain
-Lorazepam,Benzodiazepine,Anxiety and seizures
-Diazepam,Benzodiazepine,Anxiety and muscle spasms
-Alprazolam,Benzodiazepine,Anxiety and panic disorder
-Clonazepam,Benzodiazepine,Seizures and anxiety
-Zolpidem,Sedative-Hypnotic,Insomnia
-Eszopiclone,Sedative-Hypnotic,Insomnia
-Haloperidol,Typical Antipsychotic,Psychosis and agitation
-Quetiapine,Atypical Antipsychotic,Schizophrenia and bipolar disorder
-Risperidone,Atypical Antipsychotic,Schizophrenia and bipolar disorder
-Olanzapine,Atypical Antipsychotic,Schizophrenia and bipolar disorder
+Apomorphine,Dopamine Agonist,Sudden return of Parkinson's symptoms
+Apremilast,PDE4 Inhibitor,Moderate to severe plaque psoriasis
+Aprepitant,NK1 Receptor Antagonist,Prevention of chemotherapy-induced nausea and vomiting
+Arformoterol,Long-Acting Beta-2 Agonist,Asthma and chronic obstructive pulmonary disease
+Argatroban,Direct Thrombin Inhibitor,Heparin-induced thrombocytopenia anticoagulation
 Aripiprazole,Atypical Antipsychotic,Schizophrenia and depression adjunct
-Lithium,Mood Stabilizer,Bipolar disorder
-Doxorubicin,Chemotherapy (Anthracycline),Various cancers
-Cisplatin,Chemotherapy (Platinum),Testicular and ovarian cancer
-Paclitaxel,Chemotherapy (Taxane),Breast and ovarian cancer
-Methotrexate,Chemotherapy/Immunosuppressant,Cancer and rheumatoid arthritis
-Cyclophosphamide,Chemotherapy (Alkylating Agent),Lymphoma and autoimmune diseases
-Fluorouracil,Chemotherapy (Antimetabolite),Colorectal and breast cancer
-Imatinib,Targeted Therapy (Tyrosine Kinase Inhibitor),Chronic myeloid leukemia
-Rituximab,Monoclonal Antibody,Lymphoma and autoimmune diseases
-Trastuzumab,Monoclonal Antibody,HER2-positive breast cancer
-Pembrolizumab,Immunotherapy (PD-1 Inhibitor),Various cancers
-Cyclosporine,Immunosuppressant,Organ transplant rejection
-Tacrolimus,Immunosuppressant,Organ transplant rejection
-Mycophenolate,Immunosuppressant,Organ transplant rejection
-Azathioprine,Immunosuppressant,Autoimmune diseases and transplant
-Hydroxychloroquine,Antimalarial/Immunomodulator,Lupus and rheumatoid arthritis
-Colchicine,Anti-inflammatory,Gout
-Allopurinol,Xanthine Oxidase Inhibitor,Gout and hyperuricemia
-Naloxone,Opioid Antagonist,Opioid overdose reversal
-Flumazenil,Benzodiazepine Antagonist,Benzodiazepine overdose reversal
+Aripiprazole Lauroxil,Atypical Antipsychotic,"Schizophrenia, bipolar mania, and psychotic episodes"
+Arsenic Trioxide,Antineoplastic,Acute promyelocytic leukemia
+Articaine,Local Anesthetic,Local infiltration and regional nerve block anesthesia
+Asciminib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Asenapine,Atypical Antipsychotic,"Schizophrenia, bipolar disorder, and psychosis"
+Asfotase Alfa,Enzyme Replacement Therapy,Enzyme replacement for inherited metabolic disorders
+Aspirin,Antiplatelet,Cardiovascular protection
+Aspirin,NSAID,Pain relief and antiplatelet therapy
+Atazanavir,Protease Inhibitor,HIV infection treatment and prevention
+Atenolol,Beta Blocker,High blood pressure and chronic stable angina
+Atezolizumab,Monoclonal Antibody,"Rheumatoid arthritis, psoriasis, and other autoimmune disorders"
+Atogepant,CGRP Receptor Antagonist,Acute treatment and prevention of migraine headaches
+Atomoxetine,SNRI,Attention-deficit/hyperactivity disorder
+Atorvastatin,Statin,High cholesterol management and cardiovascular risk reduction
+Atovaquone,Antiprotozoal,Pneumocystis pneumonia prevention and malaria
+Atracurium,Neuromuscular Blocker,Skeletal muscle relaxation during surgical procedures
 Atropine,Anticholinergic,Bradycardia and organophosphate poisoning
-Midazolam,Benzodiazepine,Sedation and seizures
-Propofol,Anesthetic Agent,General anesthesia and sedation
-Ketamine,Dissociative Anesthetic,Anesthesia and pain management
-Succinylcholine,Neuromuscular Blocker,Rapid sequence intubation
-Rocuronium,Neuromuscular Blocker,Intubation and surgery
-Neostigmine,Acetylcholinesterase Inhibitor,Reverse neuromuscular blockade
-Vasopressin,Antidiuretic Hormone,Diabetes insipidus and septic shock
-Octreotide,Somatostatin Analog,GI bleeding and acromegaly
-Sildenafil,PDE5 Inhibitor,Erectile dysfunction and pulmonary hypertension
-Tamsulosin,Alpha Blocker,Benign prostatic hyperplasia
+Avalglucosidase Alfa,Enzyme Replacement Therapy,Enzyme replacement for inherited metabolic disorders
+Avanafil,PDE5 Inhibitor,ED and high blood pressure in lungs
+Avapritinib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Avatrombopag,Thrombopoietin Receptor Agonist,Low platelet count in chronic ITP and liver disease
+Avelumab,Monoclonal Antibody,Targeted cancer therapy and tumor growth inhibition
+Axatilimab,Monoclonal Antibody,Immune modulation in autoimmune and inflammatory conditions
+Axitinib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Azacitidine,Hypomethylating Agent,Myelodysplastic syndromes (pre-leukemia)
+Azathioprine,Immunosuppressant,Autoimmune diseases and transplant
+Azelaic Acid,Topical Agent,Acne vulgaris and inflammatory rosacea
+Azelastine,Antihistamine,Seasonal and perennial allergic symptoms
+Azithromycin,Antibiotic (Macrolide),Respiratory and other bacterial infections
+Aztreonam,Monobactam Antibiotic,Infections from gram-negative bacteria
+Baclofen,Muscle Relaxant,"Spasticity from MS, spinal cord injury, or cerebral palsy"
+Baricitinib,JAK Inhibitor,Rheumatoid arthritis and inflammatory joint disease
+Basiliximab,Monoclonal Antibody,Targeted cancer therapy and tumor growth inhibition
+Beclomethasone Dipropionate,Corticosteroid,Inflammatory conditions and immune-mediated disorders
+Belimumab,Monoclonal Antibody,Cancer treatment in specific malignancies
+Benazepril,ACE Inhibitor,High blood pressure management
+Bendamustine,Alkylating Agent,Chronic lymphocytic leukemia and lymphoma
+Benralizumab,Monoclonal Antibody,"Rheumatoid arthritis, psoriasis, and other autoimmune disorders"
+Benzonatate,Antitussive,Symptomatic relief of nonproductive cough
+Benzoyl Peroxide,Topical Antimicrobial,Mild to moderate acne vulgaris treatment
+Benztropine,Anticholinergic,Parkinson's and drug-induced movement disorders
+Besifloxacin,Fluoroquinolone Antibiotic,Susceptible bacterial infections
+Betamethasone,Corticosteroid,Acute and chronic inflammatory conditions
+Betamethasone Dipropionate,Corticosteroid,Inflammatory conditions and immune-mediated disorders
+Betaxolol,Beta Blocker,"Hypertension, angina, and cardiac arrhythmias"
+Bevacizumab,VEGF Inhibitor,Multiple cancer types per oncology protocols
+Bexagliflozin,SGLT2 Inhibitor,Type 2 diabetes with heart failure and renal benefits
+Bexarotene,Retinoid,"Acne, psoriasis, and other keratinization disorders"
+Bezlotoxumab,Monoclonal Antibody,Targeted cancer therapy and tumor growth inhibition
+Bicalutamide,Antiandrogen,Advanced or metastatic prostate cancer
+Bimatoprost,Prostaglandin Analog,Open-angle glaucoma and ocular hypertension
+Bimekizumab,Monoclonal Antibody,"Rheumatoid arthritis, psoriasis, and other autoimmune disorders"
+Binimetinib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Bisoprolol,Beta Blocker,Chronic heart failure with reduced ejection fraction
+Bivalirudin,Direct Thrombin Inhibitor,Blood clot prevention during cardiac catheterization procedures
+Bleomycin,Antitumor Antibiotic,Multiple cancer types per oncology protocols
+Blinatumomab,Monoclonal Antibody,Targeted cancer therapy and tumor growth inhibition
+Bortezomib,Proteasome Inhibitor,Multiple myeloma and plasma cell disorders
+Bosentan,Endothelin Antagonist,High blood pressure in lung arteries
+Bosutinib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Botulinum Toxin Type B,Neurotoxin,Medical spasticity and cosmetic wrinkle reduction
+Brensocatib,Enzyme Inhibitor,Targeted cancer therapy and tumor growth inhibition
+Brentuximab Vedotin,Antibody-Drug Conjugate,Cancer treatment in specific malignancies
+Brexpiprazole,Proton Pump Inhibitor,Acid reflux and stomach/duodenal ulcers
+Brigatinib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Brimonidine,Alpha-2 Agonist,Open-angle glaucoma and ocular hypertension
+Brincidofovir,Antiviral,Viral infections including herpes and hepatitis
+Brivaracetam,Anticonvulsant,Partial-onset and generalized seizures
+Brodalumab,Monoclonal Antibody,Targeted cancer therapy and tumor growth inhibition
+Brolucizumab,Monoclonal Antibody,"Rheumatoid arthritis, psoriasis, and other autoimmune disorders"
+Bromocriptine,Dopamine Agonist,Parkinson's disease motor symptom management
+Brompheniramine,Antihistamine,Seasonal and perennial allergic symptoms
+Budesonide,Corticosteroid,"Asthma, Crohn's disease, and ulcerative colitis"
+Bumetanide,Loop Diuretic,Peripheral edema and fluid retention
+Bupivacaine,Local Anesthetic,Regional nerve block and epidural anesthesia
+Buprenorphine,Partial Opioid Agonist,Opioid use disorder treatment and chronic pain
+Bupropion,Atypical Antidepressant,Depression treatment that aids quitting smoking
+Burosumab,Monoclonal Antibody,Targeted cancer therapy and tumor growth inhibition
+Buspirone,Anxiolytic,Anxiety disorders and panic attacks
+Busulfan,Alkylating Agent,Chronic myeloid leukemia treatment
+Butorphanol,Opioid Analgesic,Moderate to severe acute and chronic pain
+Cabazitaxel,Taxane Chemotherapy,Cancer treatment in specific malignancies
+Cabergoline,Dopamine Agonist,Elevated prolactin hormone levels
+Cabotegravir,Integrase Inhibitor,HIV infection treatment and prevention
+Cabozantinib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Caffeine,CNS Stimulant,Breathing pauses in premature babies
+Calcitonin Salmon,Hormone,Osteoporosis prevention and treatment
+Calcitriol,Active Vitamin D,Hypocalcemia and chronic kidney disease bone disorders
+Canagliflozin,SGLT2 Inhibitor,Type 2 diabetes mellitus blood glucose control
+Canakinumab,Monoclonal Antibody,Targeted cancer therapy and tumor growth inhibition
+Candesartan Cilexetil,ARB,High blood pressure management
+Cannabidiol,Cannabinoid,Partial-onset and generalized seizures
+Capecitabine,Antimetabolite,Colorectal and breast cancer
+Capivasertib,Enzyme Inhibitor,Targeted cancer therapy and tumor growth inhibition
+Caplacizumab,Monoclonal Antibody,"Rheumatoid arthritis, psoriasis, and other autoimmune disorders"
+Capmatinib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Captopril,ACE Inhibitor,High blood pressure management
+Carbamazepine,Anticonvulsant,Seizures and neuropathic pain
+Carbidopa,Decarboxylase Inhibitor,Enhanced levodopa therapy for Parkinson's
+Carbinoxamine,Antihistamine,Seasonal and perennial allergic symptoms
+Carboplatin,Platinum Chemotherapy,Multiple cancer types per oncology protocols
+Carfilzomib,Proteasome Inhibitor,Multiple myeloma and plasma cell disorders
+Cariprazine,Atypical Antipsychotic,"Schizophrenia, bipolar disorder, and psychosis"
+Carisoprodol,Muscle Relaxant,Acute musculoskeletal pain and muscle spasm
+Carmustine,Alkylating Agent,Primary and metastatic brain cancer
+Carteolol,Beta Blocker,"Hypertension, angina, and cardiac arrhythmias"
+Carvedilol,Beta Blocker,Congestive heart failure and hypertension management
+Casimersen,Antisense Oligonucleotide,Targeted therapy for inherited conditions
+Caspofungin,Echinocandin,"Invasive aspergillosis, candidiasis, and other serious mycoses"
+Cefaclor,Cephalosporin Antibiotic,Susceptible bacterial infections
+Cefazolin,Cephalosporin,Prevention of infection during surgery
+Cefdinir,Cephalosporin,"Pneumonia, bronchitis, and other lung infections"
+Cefepime,Cephalosporin,Severe or complicated bacterial infections
+Cefiderocol Sulfate Tosylate,Cephalosporin Antibiotic,Susceptible bacterial infections
+Cefixime,Cephalosporin Antibiotic,Susceptible bacterial infections
+Cefotetan,Cephalosporin Antibiotic,Susceptible bacterial infections
+Cefoxitin,Cephalosporin Antibiotic,Susceptible bacterial infections
+Cefpodoxime Proxetil,Cephalosporin Antibiotic,Susceptible bacterial infections
+Cefprozil,Cephalosporin Antibiotic,Susceptible bacterial infections
+Ceftaroline Fosamil,Cephalosporin Antibiotic,Susceptible bacterial infections
+Ceftazidime,Cephalosporin Antibiotic,Susceptible bacterial infections
+Ceftobiprole Medocaril,Cephalosporin Antibiotic,Susceptible bacterial infections
+Ceftriaxone,Cephalosporin,Severe or complicated bacterial infections
+Cefuroxime,Cephalosporin Antibiotic,Susceptible bacterial infections
+Cefuroxime Axetil,Cephalosporin Antibiotic,Susceptible bacterial infections
+Celecoxib,NSAID (COX-2 Inhibitor),Arthritis and pain management
+Cemiplimab,Monoclonal Antibody,Immune modulation in autoimmune and inflammatory conditions
+Cephalexin,Antibiotic (Cephalosporin),Skin and respiratory infections
+Ceritinib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Cerliponase Alfa,Enzyme Replacement Therapy,Enzyme replacement for inherited metabolic disorders
+Certolizumab Pegol,Interleukin Inhibitor,"Rheumatoid arthritis, psoriasis, and other autoimmune disorders"
+Cetirizine,Antihistamine (2nd Generation),Seasonal and perennial allergic symptoms
+Cetuximab,EGFR Inhibitor,Colorectal and H&N cancer
+Chlorambucil,Alkylating Agent,Cancer treatment in specific malignancies
+Chloroprocaine,Local Anesthetic,Local infiltration and regional nerve block anesthesia
+Chloroquine,Antimalarial,Malaria treatment and prophylaxis
+Chlorothiazide,Thiazide Diuretic,High blood pressure and fluid retention
+Chlorpheniramine,Antihistamine,Seasonal and perennial allergic symptoms
+Chlorpromazine,Typical Antipsychotic,Acute and chronic psychotic symptoms
+Chlorthalidone,Thiazide-Like Diuretic,High blood pressure management
+Chlorzoxazone,Muscle Relaxant,Acute muscle spasm and chronic spasticity
+Cholestyramine,Bile Acid Sequestrant,High cholesterol and cardiovascular risk reduction
+Choline C-11,Radiopharmaceutical,Nuclear medicine imaging and targeted radionuclide therapy
+Ciclesonide,Corticosteroid,Inflammatory conditions and immune-mediated disorders
+Cidofovir,Antiviral,Sight-threatening CMV eye infection in AIDS
+Cilostazol,PDE3 Inhibitor,Leg pain from peripheral artery disease
+Cimetidine,H2 Antagonist,Peptic ulcer disease and gastric acid reduction
+Cinacalcet,Calcimimetic,Overactive parathyroid glands
+Cipaglucosidase Alfa,Enzyme Replacement Therapy,Enzyme replacement for inherited metabolic disorders
+Ciprofloxacin,Antibiotic (Fluoroquinolone),Urinary tract and other bacterial infections
+Cisatracurium,Neuromuscular Blocker,Skeletal muscle relaxation during surgical procedures
+Cisplatin,Chemotherapy (Platinum),Testicular and ovarian cancer
+Cladribine,Purine Analog,Hairy cell leukemia and multiple sclerosis
+Clarithromycin,Macrolide Antibiotic,Susceptible bacterial infections
+Clemastine,Antihistamine,Seasonal and perennial allergic symptoms
+Clesrovimab,Monoclonal Antibody,Targeted cancer therapy and tumor growth inhibition
+Clevidipine,Calcium Channel Blocker,High blood pressure and chronic stable angina
+Clindamycin,Antibiotic (Lincosamide),Skin and anaerobic infections
+Clobazam,Benzodiazepine,Epilepsy and seizure disorder management
+Clobetasol,Topical Corticosteroid,Serious inflammatory dermatoses
+Clofarabine,Antimetabolite,Cancer treatment in specific malignancies
+Clomiphene,SERM,Stimulating ovulation for fertility
+Clomipramine,TCA,Obsessive-compulsive disorder treatment
+Clonazepam,Benzodiazepine,Seizure disorders and panic disorder
+Clonidine,Alpha-2 Agonist,Hypertension and ADHD in children and adults
+Clopidogrel,Antiplatelet,Prevent blood clots after MI or stroke
+Clotrimazole,Antifungal,Systemic and superficial fungal infections
+Clozapine,Atypical Antipsychotic,Schizophrenia not responding to other antipsychotics
+Cobimetinib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Cocaine,Local Anesthetic,Local infiltration and regional nerve block anesthesia
+Codeine,Opioid,Minor pain relief and cough suppression
+Colchicine,Anti-inflammatory,Gout flare treatment and prevention
+Colesevelam,Bile Acid Sequestrant,High cholesterol and cardiovascular risk reduction
+Colestipol,Bile Acid Sequestrant,High cholesterol and cardiovascular risk reduction
+Colistimethate,Polymyxin,Multidrug-resistant gram-negative bacterial infections
+Concizumab,Monoclonal Antibody,"Rheumatoid arthritis, psoriasis, and other autoimmune disorders"
+Cosibelimab,Monoclonal Antibody,Immune modulation in autoimmune and inflammatory conditions
+Crizanlizumab,Monoclonal Antibody,"Rheumatoid arthritis, psoriasis, and other autoimmune disorders"
+Crizotinib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Crofelemer,Antidiarrheal,Acute and chronic diarrhea management
+Crovalimab,Monoclonal Antibody,Immune modulation in autoimmune and inflammatory conditions
+Cyclobenzaprine,Muscle Relaxant,Acute musculoskeletal pain and muscle spasm
+Cyclophosphamide,Chemotherapy (Alkylating Agent),Lymphoma and autoimmune diseases
+Cyclosporine,Immunosuppressant,Organ transplant rejection
+Cyproheptadine,Antihistamine,Seasonal and perennial allergic symptoms
+Cytarabine,Antimetabolite,Acute myeloid and lymphoblastic leukemias
+Dabigatran,Direct Oral Anticoagulant,Stroke prevention in atrial fibrillation
+Dabrafenib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Dacarbazine,Alkylating Agent,Metastatic melanoma and skin cancer
+Daclizumab,Monoclonal Antibody,"Rheumatoid arthritis, psoriasis, and other autoimmune disorders"
+Dacomitinib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Dactinomycin,Antibiotic,Susceptible bacterial infections
+Danicopan,Complement Inhibitor,PNH and other complement disorders
+Dantrolene,Muscle Relaxant,Malignant hyperthermia and severe muscle spasticity
+Dapagliflozin,SGLT2 Inhibitor,Type 2 diabetes with cardiovascular and renal protection
+Dapsone,Antibiotic,Leprosy and dermatitis herpetiformis
+Daptomycin,Lipopeptide Antibiotic,Serious gram-positive bacterial infections including MRSA
+Daratumumab,CD38 Antibody,Multiple myeloma and plasma cell disorders
+Darbepoetin Alfa,ESA,Anemia associated with chronic kidney disease or chemotherapy
+Darunavir,Protease Inhibitor,HIV infection treatment and viral suppression
+Darunavir Ethanolate,Protease Inhibitor,HIV infection treatment and prevention
+Dasatinib,BCR-ABL Inhibitor,Chronic myeloid leukemia treatment
+Datopotamab Deruxtecan,Antibody-Drug Conjugate,Cancer treatment in specific malignancies
+Daunorubicin,Anthracycline,Cancer treatment in specific malignancies
+Daxibotulinumtoxina,Neurotoxin,Medical spasticity and cosmetic wrinkle reduction
+Decitabine,Antimetabolite,Cancer treatment in specific malignancies
+Deferasirox,Iron Chelator,Excess iron from transfusions
+Deferiprone,Chelating Agent,Heavy metal poisoning or accumulation
+Deferoxamine,Iron Chelator,Acute iron poisoning and chronic transfusional iron overload
+Delgocitinib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Denosumab,RANKL Inhibitor,Osteoporosis prevention and treatment
+Desipramine,TCA,Major depressive disorder treatment
+Desloratadine,Antihistamine,Seasonal and perennial allergic symptoms
+Desmopressin,Vasopressin Analog,Excessive urination from hormone deficiency
+Desonide,Corticosteroid,Inflammatory conditions and immune-mediated disorders
+Desoximetasone,Corticosteroid,Inflammatory conditions and immune-mediated disorders
+Desvenlafaxine,SNRI,Major depressive disorder treatment
+Deucravacitinib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Deuruxolitinib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Dexamethasone,Corticosteroid,Severe inflammation and cerebral edema
+Dexchlorpheniramine,Antihistamine,Seasonal and perennial allergic symptoms
+Dexlansoprazole,PPI,Gastroesophageal reflux disease and acid-related disorders
+Dexmedetomidine,Alpha-2 Agonist,Sedation in mechanically ventilated ICU patients
+Dextroamphetamine,CNS Stimulant,Attention-deficit/hyperactivity disorder
+Diazepam,Benzodiazepine,Anxiety and muscle spasms
+Diclofenac,NSAID,"Pain, inflammation, and musculoskeletal conditions"
+Dicloxacillin,Penicillin Antibiotic,Susceptible bacterial infections
+Diflorasone,Corticosteroid,Inflammatory conditions and immune-mediated disorders
+Digoxin,Cardiac Glycoside,Heart failure and atrial fibrillation
+Diltiazem,Calcium Channel Blocker,Hypertension and atrial fibrillation
+Dimenhydrinate,Antihistamine,Seasonal and perennial allergic symptoms
+Dimercaprol,Chelating Agent,Heavy metal poisoning or accumulation
+Dinutuximab,Monoclonal Antibody,Targeted cancer therapy and tumor growth inhibition
+Diphenhydramine,Antihistamine (1st Generation),"Allergic reactions, motion sickness, and sleep aid"
+Dipyridamole,Antiplatelet,Stroke prevention following TIA or stroke
+Dobutamine,Inotrope,Heart failure and cardiogenic shock
+Docetaxel,Taxane,Multiple cancer types per oncology protocols
+Dofetilide,Class III Antiarrhythmic,Atrial fibrillation rate and rhythm control
+Dolutegravir,Integrase Inhibitor,HIV infection treatment and viral suppression
+Donanemab,Monoclonal Antibody,Targeted cancer therapy and tumor growth inhibition
+Donepezil,Cholinesterase Inhibitor,Mild to moderate Alzheimer's disease dementia
+Donidalorsen,Antisense Oligonucleotide,Targeted therapy for inherited conditions
+Dopamine,Vasopressor/Inotrope,Cardiogenic shock and acute decompensated heart failure
+Doravirine,NNRTI,HIV infection treatment and prevention
+Dornase Alfa,Enzyme Replacement Therapy,Enzyme replacement for inherited metabolic disorders
+Dorzolamide,Carbonic Anhydrase Inhibitor,Open-angle glaucoma and ocular hypertension
+Dostarlimab,Monoclonal Antibody,Immune modulation in autoimmune and inflammatory conditions
+Doxazosin,Alpha Blocker,Benign prostatic hyperplasia and hypertension
+Doxepin,TCA,Depression with sleep difficulties
+Doxorubicin,Chemotherapy (Anthracycline),Multiple cancer types per oncology protocols
+Doxycycline,Antibiotic (Tetracycline),Bacterial infections and acne
+Doxylamine,Antihistamine,Seasonal and perennial allergic symptoms
+Dronabinol,Cannabinoid,Chemotherapy-induced nausea and AIDS-related anorexia
+Dronedarone,Antiarrhythmic,Atrial fibrillation rate and rhythm control
+Dulaglutide,GLP-1 Receptor Agonist,Blood sugar control with significant weight loss benefits
+Duloxetine,SNRI Antidepressant,"Depression, anxiety, and chronic neuropathic pain"
+Dupilumab,IL-4/13 Inhibitor,Eczema and allergic asthma
+Durvalumab,PD-L1 Inhibitor,Multiple cancer types per oncology protocols
+Dutasteride,5-ARI,Benign prostatic hyperplasia urinary symptoms
+Duvelisib,Enzyme Inhibitor,Targeted cancer therapy and tumor growth inhibition
+Eculizumab,Monoclonal Antibody,"Rheumatoid arthritis, psoriasis, and other autoimmune disorders"
+Efavirenz,NNRTI,HIV infection treatment and viral suppression
+Efbemalenograstim Alfa,Colony-Stimulating Factor,Chemotherapy-induced neutropenia prevention
+Efinaconazole,Azole Antifungal,Systemic and superficial fungal infections
+Eflapegrastim,Colony-Stimulating Factor,Chemotherapy-induced neutropenia prevention
+Elosulfase Alfa,Enzyme Replacement Therapy,Enzyme replacement for inherited metabolic disorders
+Elotuzumab,Monoclonal Antibody,"Rheumatoid arthritis, psoriasis, and other autoimmune disorders"
+Elranatamab,Monoclonal Antibody,Targeted cancer therapy and tumor growth inhibition
+Eltrombopag,TPO Agonist,Low platelet count in chronic ITP and liver disease
+Eluxadoline,Antidiarrheal,Acute and chronic diarrhea management
+Emapalumab,Monoclonal Antibody,Targeted cancer therapy and tumor growth inhibition
+Emicizumab,Monoclonal Antibody,"Rheumatoid arthritis, psoriasis, and other autoimmune disorders"
+Empagliflozin,Antidiabetic (SGLT2 Inhibitor),Type 2 diabetes and cardiovascular protection
+Emtricitabine,NRTI,HIV infection treatment and viral suppression
+Enalapril,ACE Inhibitor,High blood pressure and congestive heart failure
+Enasidenib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Encorafenib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Enfortumab Vedotin,Antibody-Drug Conjugate,Cancer treatment in specific malignancies
+Enoxaparin,Low Molecular Weight Heparin,DVT and PE prevention and treatment
+Ensartinib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Entacapone,COMT Inhibitor,Parkinson's disease and movement disorders
+Entecavir,Antiviral,Chronic hepatitis B viral infection
+Entrectinib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Enzalutamide,Antiandrogen,Advanced or metastatic prostate cancer
+Epcoritamab,Monoclonal Antibody,Targeted cancer therapy and tumor growth inhibition
+Epinastine,Antihistamine,Seasonal and perennial allergic symptoms
+Epinephrine,Vasopressor/Bronchodilator,Anaphylaxis and cardiac arrest
+Epirubicin,Anthracycline,"Breast cancer treatment, often hormone receptor positive"
+Eplerenone,MRA,Chronic heart failure with reduced ejection fraction
+Eplontersen,Antisense Oligonucleotide,Targeted therapy for inherited conditions
+Eptifibatide,GP IIb/IIIa Inhibitor,Acute coronary syndrome and myocardial infarction
+Eptinezumab,Monoclonal Antibody,"Rheumatoid arthritis, psoriasis, and other autoimmune disorders"
+Erdafitinib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Erenumab,Monoclonal Antibody,Targeted cancer therapy and tumor growth inhibition
+Erlotinib,EGFR Inhibitor,Non-small cell lung cancer treatment
+Ertapenem,Carbapenem,Susceptible bacterial infections
+Ertugliflozin,SGLT2 Inhibitor,Type 2 diabetes with heart failure and renal benefits
+Erythromycin,Macrolide,Susceptible bacterial infections
+Erythromycin Ethylsuccinate,Antibiotic,Susceptible bacterial infections
+Erythromycin Lactobionate,Antibiotic,Susceptible bacterial infections
+Escitalopram,SSRI Antidepressant,Major depressive disorder and generalized anxiety
+Esketamine,NMDA Antagonist,Depression not responding to standard antidepressants
+Eslicarbazepine,Anticonvulsant,Epilepsy and seizure disorder management
+Esmolol,Beta Blocker,Acute supraventricular tachycardia and perioperative hypertension
+Esomeprazole,Proton Pump Inhibitor,GERD and erosive esophagitis
+Estazolam,Benzodiazepine,"Anxiety disorders, insomnia, and procedural sedation"
+Estradiol,Estrogen,Hot flashes and other menopause symptoms
+Eszopiclone,Sedative-Hypnotic,Short-term treatment of insomnia
+Etanercept,TNF Inhibitor,"Rheumatoid arthritis, psoriasis, and related conditions"
+Eteplirsen,Antisense Oligonucleotide,Targeted therapy for inherited conditions
+Ethacrynate,Loop Diuretic,"Fluid overload, pulmonary edema, and heart failure"
+Ethacrynic Acid,Loop Diuretic,"Fluid overload, pulmonary edema, and heart failure"
+Ethambutol,Antimycobacterial,Active tuberculosis as part of combination therapy
+Ethosuximide,Anticonvulsant,Brief staring spells in childhood epilepsy
+Etodolac,NSAID,Acute and chronic pain management
+Etomidate,Anesthetic,Rapid sequence intubation facilitation
+Etoposide,Topoisomerase Inhibitor,Multiple cancer types per oncology protocols
+Etravirine,NNRTI,HIV infection treatment and viral suppression
+Everolimus,mTOR Inhibitor,Cancer treatment and transplant rejection prevention
+Evinacumab,Monoclonal Antibody,Targeted cancer therapy and tumor growth inhibition
+Evolocumab,PCSK9 Inhibitor,High cholesterol and cardiovascular risk reduction
+Exemestane,Aromatase Inhibitor,"Breast cancer treatment, often hormone receptor positive"
+Ezetimibe,Cholesterol Absorption Inhibitor,High cholesterol and cardiovascular risk reduction
+Fam-Trastuzumab Deruxtecan,Antibody-Drug Conjugate,Cancer treatment in specific malignancies
+Famciclovir,Antiviral,"Herpes simplex, varicella-zoster, and related viral infections"
+Famotidine,H2 Receptor Antagonist,Acid reflux and peptic ulcers
+Faricimab,Monoclonal Antibody,Targeted cancer therapy and tumor growth inhibition
+Febuxostat,XO Inhibitor,Gout flare treatment and prevention
+Fedratinib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Felodipine,CCB,High blood pressure management
+Fenofibrate,Fibrate,Severe hypertriglyceridemia and mixed dyslipidemia
+Fentanyl,Opioid Analgesic,Severe acute pain and anesthesia
+Ferric,Iron Supplement,Iron deficiency anemia treatment and iron supplementation
+Ferric Carboxymaltose,IV Iron,Iron deficiency anemia treatment and iron supplementation
+Ferric Derisomaltose,Iron Supplement,Iron deficiency anemia treatment and iron supplementation
+Ferric Hexacyanoferrate,Iron Supplement,Iron deficiency anemia treatment and iron supplementation
+Ferric Maltol,Iron Supplement,Iron deficiency anemia treatment and iron supplementation
+Ferric Oxyhydroxide,Iron Supplement,Iron deficiency anemia treatment and iron supplementation
+Ferrous,Iron Supplement,Iron deficiency anemia treatment and iron supplementation
+Ferumoxytol,Iron Supplement,Iron deficiency anemia treatment and iron supplementation
+Fexofenadine,Antihistamine (2nd Generation),Seasonal and perennial allergic symptoms
+Fidaxomicin,Macrocyclic Antibiotic,Clostridioides difficile-associated diarrhea
+Filgrastim,G-CSF,Chemotherapy-induced neutropenia prevention
 Finasteride,5-Alpha Reductase Inhibitor,Benign prostatic hyperplasia and hair loss
+Fingolimod,S1P Modulator,Relapsing-remitting multiple sclerosis
+Fitusiran,siRNA Therapy,RNA interference therapy for genetic conditions
+Flecainide,Class Ic Antiarrhythmic,Atrial fibrillation rate and rhythm control
+Florbetaben F-18,Radiopharmaceutical,Nuclear medicine imaging and targeted radionuclide therapy
+Florbetapir F-18,Radiopharmaceutical,Nuclear medicine imaging and targeted radionuclide therapy
+Flortaucipir F-18,Radiopharmaceutical,Nuclear medicine imaging and targeted radionuclide therapy
+Fluciclovine F-18,Radiopharmaceutical,Nuclear medicine imaging and targeted radionuclide therapy
+Fluconazole,Azole Antifungal,Systemic and superficial fungal infections
+Fludarabine,Purine Analog,Chronic lymphocytic leukemia treatment
+Fludrocortisone,Mineralocorticoid,Inadequate adrenal hormone production
+Flumazenil,Benzodiazepine Antagonist,Benzodiazepine overdose reversal
+Flunisolide,Corticosteroid,Asthma prevention and maintenance therapy
+Fluocinolone Acetonide,Corticosteroid,Inflammatory conditions and immune-mediated disorders
+Fluocinonide,Topical Corticosteroid,Inflammatory skin conditions
+Fluorodopa F-18,Radiopharmaceutical,Nuclear medicine imaging and targeted radionuclide therapy
+Fluoroestradiol F-18,Radiopharmaceutical,Nuclear medicine imaging and targeted radionuclide therapy
+Fluorouracil,Chemotherapy (Antimetabolite),Colorectal and breast cancer
+Fluoxetine,SSRI Antidepressant,"Depression, obsessive-compulsive disorder, and anxiety"
+Fluphenazine,Typical Antipsychotic,Schizophrenia and psychotic disorders
+Flurazepam,Benzodiazepine,"Anxiety disorders, insomnia, and procedural sedation"
+Flurpiridaz F-18,Radiopharmaceutical,Nuclear medicine imaging and targeted radionuclide therapy
+Flutemetamol F-18,Radiopharmaceutical,Nuclear medicine imaging and targeted radionuclide therapy
+Fluticasone,Inhaled Corticosteroid,Asthma and nasal allergies
+Fluvastatin,Statin,High cholesterol and cardiovascular risk reduction
+Fluvoxamine,SSRI,Obsessive-compulsive disorder treatment
+Folic Acid,Vitamin,Folic acid deficiency and neural tube defect prevention
+Fomepizole,ADH Inhibitor,Methanol and ethylene glycol poisoning
+Fondaparinux,Factor Xa Inhibitor,Venous thromboembolism treatment and prevention
+Formoterol,LABA,Asthma and chronic obstructive pulmonary disease
+Fosamprenavir,Protease Inhibitor,HIV infection treatment and prevention
+Fosfomycin,Antibiotic,Susceptible bacterial infections
+Fosfomycin Tromethamine,Antibiotic,Susceptible bacterial infections
+Fosinopril,ACE Inhibitor,High blood pressure management
+Fosphenytoin,Anticonvulsant,Emergency treatment of prolonged seizures
+Fostamatinib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Fremanezumab,Monoclonal Antibody,"Rheumatoid arthritis, psoriasis, and other autoimmune disorders"
+Frovatriptan,Triptan,Acute migraine headache treatment
+Fruquintinib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Fulvestrant,ER Antagonist,"Breast cancer treatment, often hormone receptor positive"
+Furosemide,Loop Diuretic,"Fluid overload, pulmonary edema, and heart failure"
+Futibatinib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Gabapentin,Anticonvulsant,"Neuropathic pain, fibromyalgia, and seizure disorders"
+Gadobutrol,MRI Contrast Agent,Contrast-enhanced magnetic resonance imaging
+Gadodiamide,MRI Contrast Agent,Contrast-enhanced magnetic resonance imaging
+Gadopiclenol,MRI Contrast Agent,Contrast-enhanced magnetic resonance imaging
+Gadoterate Meglumine,MRI Contrast Agent,Contrast-enhanced magnetic resonance imaging
+Gadoteridol,MRI Contrast Agent,Contrast-enhanced magnetic resonance imaging
+Gadoxetate,MRI Contrast Agent,Contrast-enhanced magnetic resonance imaging
+Galcanezumab,Monoclonal Antibody,"Rheumatoid arthritis, psoriasis, and other autoimmune disorders"
+Ganciclovir,Antiviral,Cytomegalovirus infection treatment and prevention
+Garadacimab,Monoclonal Antibody,Targeted cancer therapy and tumor growth inhibition
+Gatifloxacin,Fluoroquinolone Antibiotic,Susceptible bacterial infections
+Gefitinib,EGFR Inhibitor,Non-small cell lung cancer treatment
+Gemcitabine,Antimetabolite,Multiple cancer types per oncology protocols
+Gemfibrozil,Fibrate,Severe hypertriglyceridemia and mixed dyslipidemia
+Gemtuzumab Ozogamicin,Antibody-Drug Conjugate,Cancer treatment in specific malignancies
+Gentamicin,Aminoglycoside,Severe or complicated bacterial infections
+Gepirone,Iron Supplement,Iron deficiency anemia treatment and iron supplementation
+Gilteritinib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Givosiran,siRNA Therapy,RNA interference therapy for genetic conditions
+Glasdegib,Enzyme Inhibitor,Targeted cancer therapy and tumor growth inhibition
+Glimepiride,Sulfonylurea,Type 2 diabetes mellitus blood glucose control
+Glipizide,Antidiabetic (Sulfonylurea),Type 2 diabetes mellitus blood glucose control
+Glofitamab,Monoclonal Antibody,Targeted cancer therapy and tumor growth inhibition
+Glucagon,Hormone,Emergency treatment of dangerously low blood sugar
+Glucarpidase,Enzyme Replacement Therapy,Enzyme replacement for inherited metabolic disorders
+Glyburide,Sulfonylurea,Type 2 diabetes mellitus blood glucose control
+Glycopyrrolate,Anticholinergic,Chronic drooling (sialorrhea) and COPD maintenance
+Golimumab,TNF Inhibitor,Rheumatoid arthritis and inflammatory bowel disease
+Golodirsen,Antisense Oligonucleotide,Targeted therapy for inherited conditions
+Goserelin,GnRH Agonist,Advanced or metastatic prostate cancer
+Granisetron,5-HT3 Antagonist,"Nausea, vomiting, and motion sickness"
+Guaifenesin,Expectorant,Symptomatic relief of nonproductive cough
+Guanfacine,Alpha-2 Agonist,Attention-deficit/hyperactivity disorder
+Guselkumab,Monoclonal Antibody,Targeted cancer therapy and tumor growth inhibition
+Halcinonide,Corticosteroid,Inflammatory conditions and immune-mediated disorders
+Haloperidol,Typical Antipsychotic,Acute psychosis with severe agitation
+Heparin,Anticoagulant,Acute thrombosis treatment
+Hyaluronidase,Enzyme Replacement Therapy,Enzyme replacement for inherited metabolic disorders
+Hyaluronidase Recombinant Human,Enzyme Replacement Therapy,Enzyme replacement for inherited metabolic disorders
+Hydralazine,Vasodilator,High blood pressure management
+Hydrochlorothiazide,Thiazide Diuretic,High blood pressure and fluid retention
+Hydrocodone,Opioid Analgesic,Moderate to severe acute and chronic pain
+Hydrocortisone,Corticosteroid,Adrenal insufficiency and inflammation
+Hydromorphone,Opioid,Severe pain requiring opioid analgesia
+Hydroxychloroquine,Antimalarial/Immunomodulator,Lupus and rheumatoid arthritis
+Hydroxyurea,Antineoplastic,Sickle cell and myeloproliferative
+Hydroxyzine,Antihistamine,Anxiety disorders and pruritus from allergic conditions
+Ibalizumab,Monoclonal Antibody,"Rheumatoid arthritis, psoriasis, and other autoimmune disorders"
+Ibandronate,Bisphosphonate,Osteoporosis prevention and treatment
+Ibrutinib,BTK Inhibitor,Chronic lymphocytic leukemia and lymphoma
+Ibuprofen,NSAID,"Pain, fever, and inflammation reduction"
+Idarubicin,Anthracycline,Acute myeloid leukemia treatment
+Idarucizumab,Monoclonal Antibody,"Rheumatoid arthritis, psoriasis, and other autoimmune disorders"
+Idelalisib,Enzyme Inhibitor,Targeted cancer therapy and tumor growth inhibition
+Ifosfamide,Alkylating Agent,Soft tissue and bone sarcomas
+Iloperidone,Atypical Antipsychotic,Schizophrenia and psychotic disorders
+Iloprost,Prostaglandin Analog,Open-angle glaucoma and ocular hypertension
+Imatinib,Targeted Therapy (Tyrosine Kinase Inhibitor),Chronic myeloid leukemia and GIST tumors
+Imipramine,TCA,Major depressive disorder treatment
+Imiquimod,Immune Modifier,Genital warts and precancerous skin lesions
+Inavolisib,Enzyme Inhibitor,Targeted cancer therapy and tumor growth inhibition
+Inclisiran,siRNA Therapy,RNA interference therapy for genetic conditions
+Incobotulinumtoxina,Neurotoxin,Medical spasticity and cosmetic wrinkle reduction
+Indapamide,Thiazide-Like Diuretic,High blood pressure management
+Indium In-111 Oxyquinoline,Radiopharmaceutical,Nuclear medicine imaging and targeted radionuclide therapy
+Indium In-111 Pentetate,Radiopharmaceutical,Nuclear medicine imaging and targeted radionuclide therapy
+Indium In-111 Pentetreotide Kit,Radiopharmaceutical,Nuclear medicine imaging and targeted radionuclide therapy
+Indomethacin,NSAID,Pain relief and closing heart defect in newborns
+Inebilizumab,Monoclonal Antibody,"Rheumatoid arthritis, psoriasis, and other autoimmune disorders"
+Infliximab,TNF Inhibitor,Rheumatoid arthritis and inflammatory bowel disease
+Inotuzumab Ozogamicin,Antibody-Drug Conjugate,Cancer treatment in specific malignancies
+Insulin Aspart,Rapid-Acting Insulin,Blood glucose control in diabetes mellitus
+Insulin Aspart Recombinant,Rapid-Acting Insulin,Blood glucose control in diabetes mellitus
+Insulin Degludec,Long-Acting Insulin,Blood glucose control in diabetes mellitus
+Insulin Detemir,Long-Acting Insulin,Blood glucose control in diabetes mellitus
+Insulin Detemir Recombinant,Long-Acting Insulin,Blood glucose control in diabetes mellitus
+Insulin Glargine,Long-Acting Insulin,Blood glucose control in diabetes mellitus
+Insulin Glargine Recombinant,Long-Acting Insulin,Blood glucose control in diabetes mellitus
+Insulin Glulisine Recombinant,Rapid-Acting Insulin,Blood glucose control in diabetes mellitus
+Insulin Human,Insulin,Blood glucose control in diabetes mellitus
+Insulin Lispro,Rapid-Acting Insulin,Blood glucose control in diabetes mellitus
+Insulin Lispro Recombinant,Rapid-Acting Insulin,Blood glucose control in diabetes mellitus
+Insulin Recombinant Human,Insulin,Blood glucose control in diabetes mellitus
+Insulin Regular,Short-Acting Insulin,Blood glucose control in diabetes mellitus
+Insulin Susp Isophane Recombinant Human,Intermediate-Acting Insulin,Blood glucose control in diabetes mellitus
+Interferon Alfa-2b,Interferon Alpha,Chronic hepatitis B/C and certain malignancies
+Interferon Alfa-N3,Interferon Alpha,Chronic hepatitis B/C and certain malignancies
+Interferon Beta-1a,Interferon Beta,Relapsing-remitting multiple sclerosis
+Interferon Beta-1b,Interferon Beta,Relapsing-remitting multiple sclerosis
+Interferon Gamma-1b,Interferon Gamma,Chronic granulomatous disease
+Ipilimumab,CTLA-4 Inhibitor,Metastatic melanoma and skin cancer
+Ipratropium,Anticholinergic Bronchodilator,COPD maintenance and asthma exacerbations
+Iptacopan,Complement Inhibitor,PNH and other complement disorders
+Irbesartan,ARB,High blood pressure management
+Irbesartan: Hydrochlorothiazide,Thiazide Diuretic,High blood pressure and fluid retention
+Irinotecan,Topoisomerase I Inhibitor,Metastatic colorectal cancer treatment
+Iron Dextran,IV Iron,Iron deficiency anemia treatment and iron supplementation
+Iron Sucrose,IV Iron,Iron deficiency anemia treatment and iron supplementation
+Isatuximab,Monoclonal Antibody,Targeted cancer therapy and tumor growth inhibition
+Islelizumab,Monoclonal Antibody,"Rheumatoid arthritis, psoriasis, and other autoimmune disorders"
+Isoniazid,Antimycobacterial,Active tuberculosis as part of combination therapy
+Isosorbide Dinitrate,Nitrate,Chronic stable angina and chest pain prevention
+Isosorbide Mononitrate,Nitrate,Chronic stable angina and chest pain prevention
+Isotretinoin,Retinoid,Severe nodular acne unresponsive to other treatments
+Isradipine,CCB,High blood pressure management
+Itraconazole,Azole Antifungal,Systemic and superficial fungal infections
+Ivabradine,Funny Channel Blocker,Chronic heart failure with reduced ejection fraction
+Ivermectin,Antiparasitic,Intestinal and systemic parasitic infections
+Ivosidenib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Ixabepilone,Epothilone,"Breast cancer treatment, often hormone receptor positive"
+Ixazomib,Enzyme Inhibitor,Targeted cancer therapy and tumor growth inhibition
+Ixekizumab,Monoclonal Antibody,"Rheumatoid arthritis, psoriasis, and other autoimmune disorders"
+Ketamine,Dissociative Anesthetic,Anesthesia and pain management
+Ketoconazole,Azole Antifungal,Systemic and superficial fungal infections
+Ketoprofen,NSAID,Acute and chronic pain management
+Ketotifen,Antihistamine,Seasonal and perennial allergic symptoms
+Labetalol,Alpha/Beta Blocker,High blood pressure management
+Lacosamide,Anticonvulsant,Epilepsy and seizure disorder management
+Lactitol,Laxative,Chronic idiopathic constipation treatment
+Lactulose,Osmotic Laxative,Constipation and hepatic encephalopathy
+Lamivudine,NRTI,HIV infection and chronic hepatitis B
+Lamotrigine,Anticonvulsant,Epilepsy and mood stabilization
+Lanadelumab,Monoclonal Antibody,Targeted cancer therapy and tumor growth inhibition
+Landiolol,Beta Blocker,"Hypertension, angina, and cardiac arrhythmias"
+Lansoprazole,PPI,Gastroesophageal reflux disease and acid-related disorders
+Laronidase,Enzyme Replacement Therapy,Enzyme replacement for inherited metabolic disorders
+Larotrectinib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Latanoprost,PG Analog,Open-angle glaucoma and ocular hypertension
+Latanoprostene Bunod,Prostaglandin Analog,Open-angle glaucoma and ocular hypertension
+Lazertinib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Lebrikizumab,Monoclonal Antibody,"Rheumatoid arthritis, psoriasis, and other autoimmune disorders"
+Lecanemab,Monoclonal Antibody,Targeted cancer therapy and tumor growth inhibition
+Leflunomide,DMARD,Rheumatoid arthritis and inflammatory arthritis
+Lenalidomide,Immunomodulator,Multiple myeloma and plasma cell disorders
+Leniolisib,Enzyme Inhibitor,Targeted cancer therapy and tumor growth inhibition
+Lenvatinib,Multi-TKI,Differentiated thyroid and hepatocellular carcinoma
+Letermovir,Antiviral,Viral infections including herpes and hepatitis
+Letibotulinumtoxina,Neurotoxin,Medical spasticity and cosmetic wrinkle reduction
+Letrozole,Aromatase Inhibitor,"Breast cancer treatment, often hormone receptor positive"
+Leucovorin,Folate Analog,Protecting cells from methotrexate toxicity
+Leuprolide,GnRH Agonist,Advanced or metastatic prostate cancer
+Levalbuterol,Beta-2 Agonist,Asthma and chronic obstructive pulmonary disease
+Levetiracetam,Anticonvulsant,Epilepsy and seizure disorder management
+Levobunolol,Beta Blocker,"Hypertension, angina, and cardiac arrhythmias"
+Levocetirizine,Antihistamine,Seasonal and perennial allergic symptoms
+Levodopa,Dopamine Precursor,Parkinson's disease and movement disorders
+Levofloxacin,Antibiotic (Fluoroquinolone),Respiratory and urinary infections
+Levoketoconazole,Azole Antifungal,Systemic and superficial fungal infections
+Levomilnacipran,SNRI Antidepressant,"Depression, anxiety, and chronic neuropathic pain"
+Levonorgestrel,Progestin,Hormonal contraception and pregnancy prevention
+Levorphanol,Opioid Analgesic,Moderate to severe acute and chronic pain
+Levothyroxine,Thyroid Hormone,Primary hypothyroidism hormone replacement
+Lidocaine,Antiarrhythmic/Local Anesthetic,Ventricular arrhythmias and local anesthesia
+Linaclotide,GC-C Agonist,Constipation-predominant irritable bowel syndrome
+Linagliptin,DPP-4 Inhibitor,Type 2 diabetes mellitus blood glucose control
+Lincomycin,Antibiotic,Susceptible bacterial infections
+Linezolid,Oxazolidinone,Methicillin-resistant staph and vancomycin-resistant enterococcus
+Linvoseltamab,Monoclonal Antibody,Targeted cancer therapy and tumor growth inhibition
+Liothyronine,Thyroid Hormone (T3),Primary hypothyroidism hormone replacement
+Liraglutide,GLP-1 Agonist,Type 2 diabetes and chronic weight management
+Lisinopril,ACE Inhibitor,High blood pressure and congestive heart failure
+Lithium,Mood Stabilizer,Bipolar disorder mood stabilization
+Lixisenatide,GLP-1 Receptor Agonist,Blood sugar control with significant weight loss benefits
+Lomustine,Alkylating Agent,Cancer treatment in specific malignancies
+Lonafarnib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Loncastuximab Tesirine,Antibody-Drug Conjugate,Cancer treatment in specific malignancies
+Loperamide,Antidiarrheal,Acute and chronic diarrhea management
+Loratadine,Antihistamine (2nd Generation),Seasonal and perennial allergic symptoms
+Lorazepam,Benzodiazepine,Anxiety disorders and seizure management
+Lorlatinib,ALK Inhibitor,ALK-positive non-small cell lung cancer
+Losartan,ARB (Angiotensin Receptor Blocker),High blood pressure management
+Lovastatin,Statin,High cholesterol and cardiovascular risk reduction
+Lubiprostone,Chloride Channel Activator,Chronic idiopathic constipation treatment
+Luliconazole,Azole Antifungal,Systemic and superficial fungal infections
+Lumasiran,siRNA Therapy,RNA interference therapy for genetic conditions
+Lurasidone,Atypical Antipsychotic,Schizophrenia and bipolar depression
+Lusutrombopag,Thrombopoietin Receptor Agonist,Low platelet count in chronic ITP and liver disease
+Lutetium Lu 177 Dotatate,Radiopharmaceutical,Nuclear medicine imaging and targeted radionuclide therapy
+Lutetium Lu-177 Vipivotide Tetraxetan,Radiopharmaceutical,Nuclear medicine imaging and targeted radionuclide therapy
+Magnesium,Mineral,Low magnesium and pregnancy-related seizures
+Mannitol,Osmotic Diuretic,Increased intracranial pressure and cerebral edema
+Maraviroc,CCR5 Antagonist,HIV infection treatment and viral suppression
+Margetuximab,Monoclonal Antibody,Targeted cancer therapy and tumor growth inhibition
+Marstacimab,Monoclonal Antibody,Targeted cancer therapy and tumor growth inhibition
+Mebendazole,Anthelmintic,Intestinal helminth and roundworm infections
+Meclizine,Antihistamine,"Motion sickness, vertigo, and vestibular disorders"
+Medroxyprogesterone,Progestin,"Contraception, endometriosis, and menstrual irregularities"
+Mefloquine,Antimalarial,Malaria treatment and prophylaxis
+Megestrol,Progestin,Anorexia and cachexia-related weight loss
+Meloxicam,NSAID,"Osteoarthritis, rheumatoid arthritis, and pain relief"
+Melphalan,Alkylating Agent,Multiple myeloma and plasma cell disorders
+Memantine,NMDA Antagonist,Alzheimer's disease cognitive symptom management
+Meperidine,Opioid,Acute and chronic pain management
+Mepivacaine,Local Anesthetic,Local infiltration and regional nerve block anesthesia
+Mepolizumab,Monoclonal Antibody,"Rheumatoid arthritis, psoriasis, and other autoimmune disorders"
+Mercaptopurine,Antimetabolite,Acute lymphoblastic leukemia treatment
+Meropenem,Antibiotic (Carbapenem),Severe bacterial infections
+Mesalamine,5-ASA,Inflammatory bowel disease including Crohn's and ulcerative colitis
+Metaproterenol,Short-Acting Beta-2 Agonist,Asthma and chronic obstructive pulmonary disease
+Metaxalone,Muscle Relaxant,Acute muscle spasm and chronic spasticity
+Metformin,Antidiabetic (Biguanide),Type 2 diabetes mellitus blood glucose control
+Methadone,Opioid,Opioid use disorder treatment and chronic pain
+Methimazole,Antithyroid Agent,Hyperthyroidism and Graves' disease
+Methocarbamol,Muscle Relaxant,Acute musculoskeletal pain and muscle spasm
+Methotrexate,Chemotherapy/Immunosuppressant,Cancer and rheumatoid arthritis
+Methoxy Polyethylene Glycol-Epoetin Beta,Erythropoiesis-Stimulating Agent,Anemia associated with chronic kidney disease or chemotherapy
+Methyldopa,Alpha Agonist,Hypertension in pregnancy
+Methylphenidate,CNS Stimulant,Attention-deficit/hyperactivity disorder
+Methylprednisolone,Corticosteroid,Severe inflammatory and allergic conditions
+Metoclopramide,Antiemetic (Prokinetic),Nausea and delayed stomach emptying
+Metolazone,Thiazide-Like Diuretic,High blood pressure and fluid retention
+Metoprolol,Beta Blocker,High blood pressure and congestive heart failure
+Metronidazole,Antibiotic (Nitroimidazole),Anaerobic bacterial and protozoal infections
+Micafungin,Echinocandin,"Invasive aspergillosis, candidiasis, and other serious mycoses"
+Miconazole,Azole Antifungal,Systemic and superficial fungal infections
+Midazolam,Benzodiazepine,Procedural sedation and seizure control
+Midodrine,Alpha Agonist,Dizziness from blood pressure drop on standing
+Mifepristone,Progesterone Antagonist,Medical termination of pregnancy and Cushing's syndrome
+Milnacipran,SNRI Antidepressant,"Depression, anxiety, and chronic neuropathic pain"
+Minocycline,Tetracycline,Bacterial infections and acne
+Minoxidil,Vasodilator,Hair loss and hypertension
+Mirabegron,Beta-3 Agonist,Urinary urgency and frequency
+Mirdametinib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Mirikizumab,Monoclonal Antibody,"Rheumatoid arthritis, psoriasis, and other autoimmune disorders"
+Mirtazapine,Atypical Antidepressant,Depression and appetite stimulation
+Misoprostol,PGE1 Analog,NSAID-induced gastric ulcer prevention and cervical ripening
+Mitomycin,Antitumor Antibiotic,Multiple cancer types per oncology protocols
+Mitoxantrone,Anthracycline,Cancer treatment in specific malignancies
+Modafinil,Wakefulness Agent,Narcolepsy and shift work sleep disorder
+Moexipril,ACE Inhibitor,High blood pressure and congestive heart failure
+Mogamulizumab,Monoclonal Antibody,"Rheumatoid arthritis, psoriasis, and other autoimmune disorders"
+Momelotinib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Montelukast,Leukotriene Receptor Antagonist,"Asthma, allergic rhinitis, and allergy symptoms"
+Morphine,Opioid Analgesic,Severe acute and chronic pain management
+Mosunetuzumab,Monoclonal Antibody,"Rheumatoid arthritis, psoriasis, and other autoimmune disorders"
+Moxifloxacin,Fluoroquinolone,Susceptible bacterial infections
+Mupirocin,Topical Antibiotic,Bacterial skin and soft tissue infections
+Mycophenolate,Immunosuppressant,Organ transplant rejection
+Nabumetone,NSAID,"Osteoarthritis, rheumatoid arthritis, and pain relief"
+Nadolol,Beta Blocker,High blood pressure management
+Nafcillin,Penicillin,Staph bacteria skin and tissue infections
+Nalbuphine,Opioid Agonist-Antagonist,Acute and chronic pain management
+Naloxone,Opioid Antagonist,Reversing life-threatening opioid effects
+Naltrexone,Opioid Antagonist,OUD and alcohol dependence
+Naproxen,NSAID,Pain and inflammation relief
+Naratriptan,Triptan,Acute migraine headache treatment
+Natalizumab,Integrin Inhibitor,Multiple sclerosis and Crohn's disease
+Natamycin,Antibiotic,Susceptible bacterial infections
+Naxitamab,Monoclonal Antibody,Targeted cancer therapy and tumor growth inhibition
+Nebivolol,Beta Blocker,High blood pressure management
+Necitumumab,Monoclonal Antibody,Cancer treatment in specific malignancies
+Nedosiran,siRNA Therapy,RNA interference therapy for genetic conditions
+Nelarabine,Antimetabolite,Cancer treatment in specific malignancies
+Nelfinavir,Protease Inhibitor,HIV infection treatment and prevention
+Nemolizumab,Monoclonal Antibody,"Rheumatoid arthritis, psoriasis, and other autoimmune disorders"
+Neomycin,Aminoglycoside,Topical treatment of susceptible infections
+Neostigmine,Acetylcholinesterase Inhibitor,Reverse neuromuscular blockade
+Neratinib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Niacin,Vitamin B3,Mixed dyslipidemia and hypertriglyceridemia
+Nicardipine,CCB,High blood pressure management
+Nifedipine,Calcium Channel Blocker,High blood pressure management
+Nilotinib,BCR-ABL Inhibitor,Chronic myeloid leukemia treatment
+Nimodipine,CCB,Blood vessel narrowing after brain hemorrhage
+Nintedanib,TKI,Idiopathic pulmonary fibrosis and systemic sclerosis-ILD
+Nipocalimab,Monoclonal Antibody,Immune modulation in autoimmune and inflammatory conditions
+Nirsevimab,Monoclonal Antibody,Targeted cancer therapy and tumor growth inhibition
+Nisoldipine,Calcium Channel Blocker,High blood pressure and chronic stable angina
+Nitazoxanide,Antiprotozoal,Acute and chronic diarrhea management
+Nitrofurantoin,Antibiotic,Uncomplicated urinary tract infections
+Nitroglycerin,Vasodilator,"Acute angina, hypertensive emergencies, and heart failure"
+Nivolumab,PD-1 Inhibitor,Multiple cancer types per oncology protocols
+Norepinephrine,Vasopressor,Septic shock and hypotension
+Nortriptyline,TCA,Major depressive disorder treatment
+Nusinersen,Antisense Oligonucleotide,Targeted therapy for inherited conditions
+Obiltoxaximab,Monoclonal Antibody,Targeted cancer therapy and tumor growth inhibition
+Obinutuzumab,Monoclonal Antibody,"Rheumatoid arthritis, psoriasis, and other autoimmune disorders"
+Ocrelizumab,Monoclonal Antibody,"Rheumatoid arthritis, psoriasis, and other autoimmune disorders"
+Octreotide,Somatostatin Analog,GI bleeding and acromegaly
+Ofatumumab,Monoclonal Antibody,Cancer treatment in specific malignancies
+Ofloxacin,Fluoroquinolone,Susceptible bacterial infections
+Olanzapine,Atypical Antipsychotic,"Schizophrenia, bipolar mania, and psychotic episodes"
+Olanzapine Pamoate,Atypical Antipsychotic,"Schizophrenia, bipolar mania, and psychotic episodes"
+Olaparib,PARP Inhibitor,Cancer with DNA repair deficiency
+Olaratumab,Monoclonal Antibody,Cancer treatment in specific malignancies
+Olezarsen,Antisense Oligonucleotide,Targeted therapy for inherited conditions
+Olipudase Alfa,Enzyme Replacement Therapy,Enzyme replacement for inherited metabolic disorders
+Olodaterol,Long-Acting Beta-2 Agonist,Asthma and chronic obstructive pulmonary disease
+Olopatadine,Antihistamine,"Itchy, watery eyes from allergies"
+Olutasidenib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Omalizumab,Anti-IgE Antibody,Difficult-to-control asthma requiring biologic therapy
+Omeprazole,Proton Pump Inhibitor,Gastroesophageal reflux disease and peptic ulcers
+Onabotulinumtoxina,Neurotoxin,Medical spasticity and cosmetic wrinkle reduction
+Ondansetron,Antiemetic (5-HT3 Antagonist),"Nausea and vomiting, including chemotherapy-induced"
+Orlistat,Lipase Inhibitor,Weight management for obesity
+Orphenadrine,Muscle Relaxant,Acute muscle spasm and chronic spasticity
+Oseltamivir,Neuraminidase Inhibitor,Influenza A and B treatment and prevention
+Osimertinib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Oteseconazole,Azole Antifungal,Systemic and superficial fungal infections
+Oxacillin,Penicillin Antibiotic,Susceptible bacterial infections
+Oxaliplatin,Platinum Chemotherapy,Metastatic colorectal cancer treatment
+Oxazepam,Benzodiazepine,Anxiety disorders and panic attacks
+Oxcarbazepine,Anticonvulsant,Epilepsy and seizure disorder management
+Oxybutynin,Antimuscarinic,Urinary urgency and frequency
+Oxycodone,Opioid Analgesic,Moderate to severe acute and chronic pain
+Oxymorphone,Opioid,Severe pain requiring opioid analgesia
+Oxytocin,Hormone,Starting or augmenting labor
+Ozanimod,S1P Receptor Modulator,Multiple sclerosis or ulcerative colitis
+Paclitaxel,Chemotherapy (Taxane),Breast and ovarian cancer
+Pacritinib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Palbociclib,CDK4/6 Inhibitor,"Breast cancer treatment, often hormone receptor positive"
+Paliperidone,Atypical Antipsychotic,Schizophrenia and psychotic disorders
+Palivizumab,Monoclonal Antibody,"Rheumatoid arthritis, psoriasis, and other autoimmune disorders"
+Palonosetron,5-HT3 Antagonist,Nausea and vomiting from cancer chemotherapy
+Pamidronate,Bisphosphonate,Osteoporosis and bone disorders
+Pancuronium,Neuromuscular Blocker,Skeletal muscle relaxation during surgical procedures
+Panitumumab,Monoclonal Antibody,Cancer treatment in specific malignancies
+Pantoprazole,Proton Pump Inhibitor,Acid reflux and stomach/duodenal ulcers
+Paromomycin,Antibiotic,Susceptible bacterial infections
+Paroxetine,SSRI Antidepressant,Major depressive disorder and generalized anxiety
+Patisiran,siRNA Therapy,RNA interference therapy for genetic conditions
+Pazopanib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Pegcetacoplan,Complement Inhibitor,PNH and other complement disorders
+Pegfilgrastim,G-CSF,Low neutrophils from cancer treatment
+Peginterferon Alfa-2a,Interferon Alpha,Chronic hepatitis B/C and certain malignancies
+Peginterferon Alfa-2b,Interferon Alpha,Chronic hepatitis B/C and certain malignancies
+Peginterferon Beta-1a,Interferon Beta,Relapsing-remitting multiple sclerosis
+Pegunigalsidase Alfa,Enzyme Replacement Therapy,Enzyme replacement for inherited metabolic disorders
+Pembrolizumab,Immunotherapy (PD-1 Inhibitor),Multiple cancer types per oncology protocols
+Pemetrexed,Antimetabolite,Lung cancer and asbestos-related cancer
+Pemigatinib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Penciclovir,Antiviral,Viral infections including herpes and hepatitis
+Penicillamine,Chelating Agent,Copper metabolism disorder and arthritis
+Penicillin V,Antibiotic,Susceptible bacterial infections
+Penpulimab,Monoclonal Antibody,Immune modulation in autoimmune and inflammatory conditions
+Pentobarbital,Barbiturate,Calming and relaxation for procedures
+Pentostatin,Statin,High cholesterol and cardiovascular risk reduction
+Pentoxifylline,Hemorrheologic Agent,Leg pain from peripheral artery disease
+Permethrin,Pediculicide/Scabicide,Head lice and scabies skin infestations
+Perphenazine,Typical Antipsychotic,Schizophrenia and psychotic disorders
+Pertuzumab,Monoclonal Antibody,"Rheumatoid arthritis, psoriasis, and other autoimmune disorders"
+Pexidartinib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Phenelzine,MAOI,Major depressive disorder treatment
+Phenobarbital,Barbiturate,Epilepsy and seizure disorder management
+Phentermine,CNS Stimulant,Short-term adjunct therapy for obesity management
+Phenylephrine,Alpha Agonist,Nasal congestion and hypotension
+Phenytoin,Anticonvulsant,Epilepsy and seizure disorder management
+Phytonadione,Vitamin K,Conditions causing excessive bleeding
+Piflufolastat F-18,Radiopharmaceutical,Nuclear medicine imaging and targeted radionuclide therapy
+Pilocarpine,Cholinergic Agonist,Glaucoma and xerostomia in Sjogren's syndrome
+Pimozide,Typical Antipsychotic,Severe Tourette syndrome refractory to other treatments
+Pindolol,Beta Blocker,"Hypertension, angina, and cardiac arrhythmias"
+Pioglitazone,TZD,Type 2 diabetes mellitus blood glucose control
+Piperacillin,Penicillin,Susceptible bacterial infections
+Pirfenidone,Antifibrotic,Idiopathic pulmonary fibrosis (lung scarring)
+Piroxicam,NSAID,"Osteoarthritis, rheumatoid arthritis, and pain relief"
+Pirtobrutinib,BTK Inhibitor,"B-cell lymphomas, leukemias, and related malignancies"
+Pitavastatin,Statin,High cholesterol and cardiovascular risk reduction
+Pitavastatin Magnesium,Statin,High cholesterol and cardiovascular risk reduction
+Pivmecillinam,Antibiotic,Susceptible bacterial infections
+Plazomicin,Antibiotic,Susceptible bacterial infections
+Plecanatide,Laxative,Chronic idiopathic constipation treatment
+Plozasiran,siRNA Therapy,RNA interference therapy for genetic conditions
+Polatuzumab Vedotin,Antibody-Drug Conjugate,Cancer treatment in specific malignancies
+Pomalidomide,Immunomodulatory Drug,Myeloma and myelodysplastic syndromes
+Ponatinib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Ponesimod,S1P Receptor Modulator,Multiple sclerosis or ulcerative colitis
+Posaconazole,Azole Antifungal,"Invasive aspergillosis, candidiasis, and other serious mycoses"
+Pozelimab,Monoclonal Antibody,Immune modulation in autoimmune and inflammatory conditions
+Prabotulinumtoxina,Neurotoxin,Medical spasticity and cosmetic wrinkle reduction
+Pralsetinib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Pramipexole,Dopamine Agonist,Parkinson's disease and restless legs syndrome
+Prasugrel,Antiplatelet,Acute coronary syndrome and myocardial infarction
+Pravastatin,Statin,High cholesterol management and cardiovascular risk reduction
+Praziquantel,Anthelmintic,Schistosomiasis and tapeworms
+Prazosin,Alpha Blocker,Hypertension and PTSD nightmares
+Prednisolone,Corticosteroid,Acute and chronic inflammatory conditions
+Prednisone,Corticosteroid,Inflammation and autoimmune conditions
+Pregabalin,Anticonvulsant,Neuropathic pain and fibromyalgia
+Prilocaine,Local Anesthetic,Local infiltration and regional nerve block anesthesia
+Primaquine,Antimalarial,Malaria treatment and prophylaxis
+Primidone,Anticonvulsant,Seizures and essential tremor
+Probenecid,Uricosuric,Gout flare treatment and prevention
+Procainamide,Class Ia Antiarrhythmic,Cardiac arrhythmias and rhythm disturbances
+Prochlorperazine,Antiemetic/Antipsychotic,"Severe nausea, vomiting, and psychotic disorders"
+Progesterone,Hormone,Menstrual and pregnancy support
+Promethazine,Antiemetic/Antihistamine,"Nausea, vomiting, motion sickness, and allergic conditions"
+Propafenone,Class Ic Antiarrhythmic,Atrial fibrillation rate and rhythm control
+Proparacaine,Local Anesthetic,Local infiltration and regional nerve block anesthesia
+Propofol,Anesthetic Agent,General anesthesia and sedation
+Propranolol,Beta Blocker,"Hypertension, essential tremor, and migraine prevention"
+Propylthiouracil,Antithyroid,Hyperthyroidism and Graves' disease
+Protamine,Heparin Reversal,Neutralizing heparin anticoagulation
+Prucalopride,Laxative,Chronic idiopathic constipation treatment
+Pseudoephedrine,Decongestant,Nasal and sinus congestion from colds and allergies
+Pyrazinamide,Antimycobacterial,Active tuberculosis as part of combination therapy
+Pyridostigmine,AChE Inhibitor,Autoimmune neuromuscular weakness
+Pyrimethamine,Antimalarial/Antiprotozoal,Toxoplasmosis treatment and prophylaxis
+Quazepam,Benzodiazepine,"Anxiety disorders, insomnia, and procedural sedation"
+Quetiapine,Atypical Antipsychotic,"Schizophrenia, bipolar mania, and psychotic episodes"
+Quinapril,ACE Inhibitor,Hypertension and chronic heart failure
+Quinidine,Class Ia Antiarrhythmic,Cardiac arrhythmias and rhythm disturbances
+Quinine,Antimalarial,Malaria treatment and prophylaxis
+Quizartinib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Rabeprazole,PPI,Gastroesophageal reflux disease and acid-related disorders
+Radium Ra-223 Dichloride,Radiopharmaceutical,Nuclear medicine imaging and targeted radionuclide therapy
+Raloxifene,SERM,Osteoporosis prevention and treatment
+Raltegravir,Integrase Inhibitor,HIV infection treatment and viral suppression
+Ramelteon,Melatonin Agonist,Short-term treatment of insomnia
+Ramipril,ACE Inhibitor,Hypertension and cardiovascular protection
+Ramucirumab,Monoclonal Antibody,Targeted cancer therapy and tumor growth inhibition
+Ranibizumab,VEGF Inhibitor,Wet age-related macular degeneration
+Ranitidine,H2 Receptor Antagonist,Acid reflux (Note: Recalled in many countries)
+Ranolazine,Antianginal,Long-term management of stable angina
+Rasagiline,MAO-B Inhibitor,Parkinson's disease and movement disorders
+Ravulizumab,Monoclonal Antibody,"Rheumatoid arthritis, psoriasis, and other autoimmune disorders"
+Raxibacumab,Monoclonal Antibody,Targeted cancer therapy and tumor growth inhibition
+Regorafenib,Multi-TKI,Colorectal cancer and gastrointestinal stromal tumors
+Remibrutinib,BTK Inhibitor,"B-cell lymphomas, leukemias, and related malignancies"
+Remifentanil,Opioid,General anesthesia induction and maintenance
+Remimazolam,Benzodiazepine,"Anxiety disorders, insomnia, and procedural sedation"
+Repaglinide,Meglitinide,Type 2 diabetes mellitus blood glucose control
+Repotrectinib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Reslizumab,Monoclonal Antibody,"Rheumatoid arthritis, psoriasis, and other autoimmune disorders"
+Retifanlimab,Monoclonal Antibody,Immune modulation in autoimmune and inflammatory conditions
+Revefenacin,Anticholinergic Bronchodilator,Chronic obstructive pulmonary disease maintenance
+Revumenib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Rezafungin,Echinocandin Antifungal,"Invasive aspergillosis, candidiasis, and other serious mycoses"
+Ribavirin,Antiviral,Chronic hepatitis C viral infection
+Ribociclib,Enzyme Inhibitor,Targeted cancer therapy and tumor growth inhibition
+Rifabutin,Antimycobacterial,Mycobacterium avium complex and tuberculosis
+Rifampin,Antimycobacterial,Active tuberculosis as part of combination therapy
+Rifaximin,Antibiotic,Infectious diarrhea and liver disease complications
+Rilpivirine,NNRTI,HIV infection treatment and prevention
+Riluzole,Glutamate Antagonist,Amyotrophic lateral sclerosis disease progression
+Rilzabrutinib,BTK Inhibitor,"B-cell lymphomas, leukemias, and related malignancies"
+Rimantadine,Antiviral,Influenza A virus infection prophylaxis
+Rimegepant,CGRP Receptor Antagonist,Acute treatment and prevention of migraine headaches
+Ripretinib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Risankizumab,Monoclonal Antibody,"Rheumatoid arthritis, psoriasis, and other autoimmune disorders"
+Risedronate,Bisphosphonate,Osteoporosis prevention and treatment
+Risperidone,Atypical Antipsychotic,"Schizophrenia, bipolar mania, and psychotic episodes"
+Ritonavir,Protease Inhibitor,HIV treatment as pharmacokinetic booster
+Rituximab,Monoclonal Antibody,Lymphoma and autoimmune diseases
+Rivaroxaban,Direct Oral Anticoagulant,"Deep vein thrombosis, pulmonary embolism, and stroke prevention"
+Rivastigmine,Cholinesterase Inhibitor,Dementia-related cognitive decline
+Rizatriptan,Triptan,Acute migraine headache treatment
+Rocuronium,Neuromuscular Blocker,Neuromuscular blockade for intubation and surgery
+Rolapitant,NK1 Receptor Antagonist,Prevention of chemotherapy-induced nausea and vomiting
+Romiplostim,Thrombopoietin Receptor Agonist,Low platelet count in chronic ITP and liver disease
+Romosozumab,Monoclonal Antibody,"Rheumatoid arthritis, psoriasis, and other autoimmune disorders"
+Ropeginterferon Alfa-2b,Interferon Alpha,Chronic hepatitis B/C and certain malignancies
+Ropinirole,Dopamine Agonist,Parkinson's disease and restless legs syndrome
+Ropivacaine,Local Anesthetic,Regional nerve block and epidural anesthesia
+Rosiglitazone,TZD,Type 2 diabetes mellitus blood glucose control
+Rosuvastatin,Statin,Elevated cholesterol treatment
+Rosuvastatin Zinc,Statin,High cholesterol and cardiovascular risk reduction
+Rotigotine,Dopamine Agonist,Parkinson's disease motor symptom management
+Rozanolixizumab,Monoclonal Antibody,"Rheumatoid arthritis, psoriasis, and other autoimmune disorders"
+Rubidium Chloride Rb-82,Radiopharmaceutical,Nuclear medicine imaging and targeted radionuclide therapy
+Rufinamide,Anticonvulsant,Severe childhood epilepsy syndrome
+Ruxolitinib,JAK Inhibitor,Primary myelofibrosis and related myeloproliferative neoplasms
+Sacituzumab Govitecan,Antibody-Drug Conjugate,Cancer treatment in specific malignancies
+Safinamide,MAO-B Inhibitor,Parkinson's disease and movement disorders
+Sargramostim,Colony-Stimulating Factor,Chemotherapy-induced neutropenia prevention
+Sarilumab,Monoclonal Antibody,Targeted cancer therapy and tumor growth inhibition
+Satralizumab,Monoclonal Antibody,"Rheumatoid arthritis, psoriasis, and other autoimmune disorders"
+Saxagliptin,DPP-4 Inhibitor,Type 2 diabetes mellitus blood glucose control
+Sebelipase Alfa,Enzyme Replacement Therapy,Enzyme replacement for inherited metabolic disorders
+Secukinumab,IL-17A Inhibitor,Moderate to severe plaque psoriasis
+Selegiline,MAO-B Inhibitor,Parkinson's disease and movement disorders
+Selpercatinib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Selumetinib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Semaglutide,GLP-1 Agonist,Type 2 diabetes and chronic weight management
+Sertraline,SSRI Antidepressant,Major depressive disorder and generalized anxiety
+Sevabertinib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Sevelamer,Phosphate Binder,Hyperphosphatemia in chronic kidney disease
+Sevoflurane,Inhalation Anesthetic,Induction and maintenance of general anesthesia
+Sildenafil,PDE5 Inhibitor,ED and high blood pressure in lungs
+Silodosin,Alpha Blocker,Benign prostatic hyperplasia and hypertension
+Siltuximab,Monoclonal Antibody,Targeted cancer therapy and tumor growth inhibition
+Simvastatin,Statin,High cholesterol management and cardiovascular risk reduction
+Siponimod,S1P Receptor Modulator,Multiple sclerosis or ulcerative colitis
+Sirolimus,mTOR Inhibitor,Prevention of organ transplant rejection
+Sitagliptin,Antidiabetic (DPP-4 Inhibitor),Type 2 diabetes mellitus blood glucose control
+Sodium Ferric Gluconate Complex,Iron Supplement,Iron deficiency anemia treatment and iron supplementation
+Sodium Fluoride F-18,Radiopharmaceutical,Nuclear medicine imaging and targeted radionuclide therapy
+Sodium Polystyrene Sulfonate,Potassium Binder,Dangerously high blood potassium
+Sofosbuvir,NS5B Inhibitor,Chronic hepatitis C viral infection
+Sofpironium,Iron Supplement,Iron deficiency anemia treatment and iron supplementation
+Solifenacin,Antimuscarinic,Urinary urgency and frequency
+Somatropin,Growth Hormone,Inadequate growth hormone production
+Sonidegib,Enzyme Inhibitor,Targeted cancer therapy and tumor growth inhibition
+Sotagliflozin,SGLT2 Inhibitor,Type 2 diabetes with heart failure and renal benefits
+Sotalol,Beta Blocker/Class III,Cardiac arrhythmias and rhythm disturbances
+Sotorasib,Enzyme Inhibitor,Targeted cancer therapy and tumor growth inhibition
+Spesolimab,Monoclonal Antibody,Immune modulation in autoimmune and inflammatory conditions
+Spironolactone,Potassium-Sparing Diuretic,Congestive heart failure and hypertension management
+Stavudine,NRTI,HIV infection treatment and viral suppression
+Streptomycin,Aminoglycoside,Active tuberculosis as part of combination therapy
+Strontium Chloride Sr-89,Radiopharmaceutical,Nuclear medicine imaging and targeted radionuclide therapy
+Succimer,Chelating Agent,Heavy metal poisoning or accumulation
+Succinylcholine,Neuromuscular Blocker,Rapid sequence intubation
+Sucralfate,GI Protectant,Peptic ulcer disease and gastric acid reduction
+Sufentanil,Opioid,General anesthesia induction and maintenance
+Sulfadiazine,Sulfonamide,Susceptible bacterial infections
+Sulfasalazine,DMARD/5-ASA,Rheumatoid arthritis and inflammatory bowel disease
+Sulindac,NSAID,"Pain, inflammation, and musculoskeletal conditions"
+Sumatriptan,Triptan,Acute migraine headache treatment
+Sunvozertinib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Suvorexant,Orexin Antagonist,Short-term treatment of insomnia
+Tacrolimus,Immunosuppressant,Organ transplant rejection
+Tadalafil,PDE5 Inhibitor,Erectile dysfunction and pulmonary arterial hypertension
+Tafasitamab,Monoclonal Antibody,Targeted cancer therapy and tumor growth inhibition
+Tafluprost,Prostaglandin Analog,Open-angle glaucoma and ocular hypertension
+Taliglucerase Alfa,Enzyme Replacement Therapy,Enzyme replacement for inherited metabolic disorders
+Talquetamab,Monoclonal Antibody,Targeted cancer therapy and tumor growth inhibition
+Tamoxifen,SERM,"Breast cancer treatment, often hormone receptor positive"
+Tamsulosin,Alpha Blocker,Benign prostatic hyperplasia
+Tapentadol,Opioid,Moderate to severe acute and chronic pain
+Tarlatamab,Monoclonal Antibody,Targeted cancer therapy and tumor growth inhibition
+Tazarotene,Retinoid,"Acne, psoriasis, and other keratinization disorders"
+Tbo-Filgrastim,Colony-Stimulating Factor,Chemotherapy-induced neutropenia prevention
+Teclistamab,Monoclonal Antibody,Targeted cancer therapy and tumor growth inhibition
+Teduglutide,GLP-1 Receptor Agonist,Blood sugar control with significant weight loss benefits
+Telisotuzumab Vedotin,Antibody-Drug Conjugate,Cancer treatment in specific malignancies
+Telmisartan,ARB (Angiotensin Receptor Blocker),High blood pressure management
+Temazepam,Benzodiazepine,Short-term treatment of insomnia
+Temozolomide,Alkylating Agent,Primary and metastatic brain cancer
+Tenecteplase,Thrombolytic,Emergency treatment during heart attack
+Teplizumab,Monoclonal Antibody,"Rheumatoid arthritis, psoriasis, and other autoimmune disorders"
+Tepotinib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Teprotumumab,Monoclonal Antibody,Cancer treatment in specific malignancies
+Terazosin,Alpha Blocker,Benign prostatic hyperplasia and hypertension
+Terbinafine,Antifungal,Systemic and superficial fungal infections
+Terbutaline,Beta-2 Agonist,Acute bronchospasm and preterm labor prevention
+Terconazole,Azole Antifungal,Systemic and superficial fungal infections
+Teriparatide,PTH Analog,Osteoporosis prevention and treatment
+Testosterone,Androgen,Male hypogonadism and testosterone deficiency
+Tetracaine,Local Anesthetic,Local infiltration and regional nerve block anesthesia
+Tetracycline,Antibiotic,Susceptible bacterial infections
+Tezepelumab,Monoclonal Antibody,Targeted cancer therapy and tumor growth inhibition
+Thalidomide,Immunomodulatory Drug,Myeloma and myelodysplastic syndromes
+Thallous Chloride Tl-201,Radiopharmaceutical,Nuclear medicine imaging and targeted radionuclide therapy
+Theophylline,Methylxanthine,Asthma and chronic obstructive pulmonary disease
+Thiamine,Vitamin B1,"Vitamin B1 deficiency (beriberi, Wernicke's)"
+Thioguanine,Antimetabolite,Acute myeloid leukemia and other leukemias
+Thioridazine,Typical Antipsychotic,Schizophrenia and psychotic disorders
+Tiagabine,Anticonvulsant,Epilepsy and seizure disorder management
+Ticagrelor,P2Y12 Inhibitor,Acute coronary syndrome and myocardial infarction
+Tigecycline,Glycylcycline,Serious multi-site or resistant infections
+Tildrakizumab,Monoclonal Antibody,"Rheumatoid arthritis, psoriasis, and other autoimmune disorders"
+Timolol,Beta Blocker,Eye pressure and blood pressure management
+Tinidazole,Antiprotozoal,Intestinal and systemic parasitic infections
+Tioconazole,Azole Antifungal,Systemic and superficial fungal infections
+Tiotropium,Anticholinergic,Chronic obstructive pulmonary disease maintenance
+Tipranavir,Protease Inhibitor,HIV infection treatment and viral suppression
+Tirofiban,GP IIb/IIIa Inhibitor,Acute coronary syndrome and myocardial infarction
+Tirzepatide,GIP/GLP-1 Agonist,Type 2 diabetes and chronic weight management
+Tislelizumab,Monoclonal Antibody,"Rheumatoid arthritis, psoriasis, and other autoimmune disorders"
+Tisotumab Vedotin,Antibody-Drug Conjugate,Cancer treatment in specific malignancies
+Tivozanib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Tizanidine,Muscle Relaxant,"Spasticity from MS, spinal cord injury, or cerebral palsy"
+Tobramycin,Aminoglycoside,Severe or complicated bacterial infections
+Tocilizumab,IL-6 Inhibitor,Rheumatoid arthritis and COVID-19 cytokine storm
+Tofacitinib,JAK Inhibitor,Rheumatoid arthritis and ulcerative colitis
+Tofersen,Antisense Oligonucleotide,Targeted therapy for inherited conditions
+Tolcapone,COMT Inhibitor,Parkinson's disease and movement disorders
+Tolterodine,Antimuscarinic,Urinary urgency and frequency
+Tolvaptan,Vasopressin Antagonist,Low sodium and polycystic kidney disease
+Topiramate,Anticonvulsant,Epilepsy and migraine prophylaxis
+Topotecan,Topoisomerase I Inhibitor,"Ovarian cancer, small cell lung cancer, and cervical cancer"
+Toripalimab,Monoclonal Antibody,Immune modulation in autoimmune and inflammatory conditions
+Torsemide,Loop Diuretic,"Fluid overload, edema, and heart failure"
+Tovorafenib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Tralokinumab,Monoclonal Antibody,Targeted cancer therapy and tumor growth inhibition
+Tramadol,Opioid Analgesic,Moderate to moderately severe pain management
+Trametinib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Trandolapril,ACE Inhibitor,High blood pressure management
+Tranexamic Acid,Antifibrinolytic,Control of abnormal bleeding
+Tranylcypromine,MAOI,Major depressive disorder treatment
+Trastuzumab,Monoclonal Antibody,Breast cancer overexpressing HER2 protein
+Travoprost,PG Analog,Open-angle glaucoma and ocular hypertension
+Trazodone,Atypical Antidepressant,Depression with sleep difficulties
+Tremelimumab,Monoclonal Antibody,Cancer treatment in specific malignancies
+Treosulfan,Alkylating Agent,Cancer treatment in specific malignancies
+Tretinoin,Retinoid,Severe acne and acute promyelocytic leukemia
+Triamcinolone Acetonide,Corticosteroid,Inflammatory conditions and immune-mediated disorders
+Triamterene,Potassium-Sparing Diuretic,Peripheral edema and fluid retention
+Triazolam,Benzodiazepine,Short-term treatment of insomnia
+Trientine,Chelating Agent,Heavy metal poisoning or accumulation
+Trifarotene,Retinoid,"Acne, psoriasis, and other keratinization disorders"
+Trifluoperazine,Typical Antipsychotic,Schizophrenia and psychotic disorders
+Trihexyphenidyl,Anticholinergic,Parkinson's and drug-induced movement disorders
+Trilaciclib,Enzyme Inhibitor,Targeted cancer therapy and tumor growth inhibition
+Trimethoprim,Antibiotic,Uncomplicated urinary tract infections
+Trimipramine,TCA,Major depressive disorder treatment
+Tropicamide,Mydriatic,Pupil dilation for eye exams
+Tucatinib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Ublituximab,Monoclonal Antibody,Targeted cancer therapy and tumor growth inhibition
+Ubrogepant,CGRP Receptor Antagonist,Acute treatment and prevention of migraine headaches
+Umeclidinium,Anticholinergic Bronchodilator,Chronic obstructive pulmonary disease maintenance
+Upadacitinib,JAK Inhibitor,Rheumatoid arthritis and ulcerative colitis
+Ursodiol,Bile Acid,Gallstones and primary biliary cholangitis
+Ustekinumab,IL-12/23 Inhibitor,"Plaque psoriasis, Crohn's disease, and ulcerative colitis"
+Valacyclovir,Antiviral,"Herpes simplex, varicella-zoster, and related viral infections"
+Valganciclovir,Antiviral,Cytomegalovirus infection treatment and prevention
+Valproic Acid,Anticonvulsant,Seizure control and bipolar mood episodes
+Valsartan,ARB,High blood pressure and congestive heart failure
+Vancomycin,Antibiotic (Glycopeptide),MRSA and serious Gram-positive infections
+Vandetanib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Vardenafil,PDE5 Inhibitor,Erectile dysfunction treatment
+Varenicline,Nicotine Receptor Agonist,Smoking cessation aid and nicotine dependence
+Vasopressin,Antidiuretic Hormone,Diabetes insipidus and septic shock
+Vecuronium,Neuromuscular Blocker,Neuromuscular blockade during surgery and intubation
+Vedolizumab,Integrin Inhibitor,Inflammatory bowel disease including Crohn's and ulcerative colitis
+Velaglucerase Alfa,Enzyme Replacement Therapy,Enzyme replacement for inherited metabolic disorders
+Velmanase Alfa,Enzyme Replacement Therapy,Enzyme replacement for inherited metabolic disorders
+Vemurafenib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Venlafaxine,SNRI Antidepressant,Major depressive disorder and generalized anxiety
+Verapamil,CCB,High blood pressure and irregular heart rhythms
+Vestronidase Alfa,Enzyme Replacement Therapy,Enzyme replacement for inherited metabolic disorders
+Vigabatrin,Anticonvulsant,Infantile spasms and refractory complex partial seizures
+Vilazodone,SSRI/5-HT1A Agonist,Major depressive disorder treatment
+Viltolarsen,Antisense Oligonucleotide,Targeted therapy for inherited conditions
+Vimseltinib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Vinblastine,Vinca Alkaloid,Multiple cancer types per oncology protocols
+Vincristine,Vinca Alkaloid,Multiple cancer types per oncology protocols
+Vinorelbine,Vinca Alkaloid,Non-small cell lung cancer treatment
+Vismodegib,Hedgehog Inhibitor,Advanced basal cell carcinoma
+Vorasidenib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Voriconazole,Azole Antifungal,"Invasive aspergillosis, candidiasis, and other serious mycoses"
+Vortioxetine,Multimodal Antidepressant,Major depressive disorder treatment
+Vutrisiran,siRNA Therapy,RNA interference therapy for genetic conditions
+Warfarin,Anticoagulant (Vitamin K Antagonist),Prevention of blood clots in high-risk patients
+Xenon Xe-129 Hyperpolarized,Radiopharmaceutical,Nuclear medicine imaging and targeted radionuclide therapy
+Xenon Xe-133,Radiopharmaceutical,Nuclear medicine imaging and targeted radionuclide therapy
+Zafirlukast,Leukotriene Antagonist,Asthma prevention and maintenance therapy
+Zaleplon,Sedative-Hypnotic,Short-term treatment of insomnia
+Zanamivir,Neuraminidase Inhibitor,Influenza A and B treatment and prevention
+Zanidatamab,Monoclonal Antibody,Targeted cancer therapy and tumor growth inhibition
+Zanubrutinib,BTK Inhibitor,"B-cell lymphomas, leukemias, and related malignancies"
+Zavegepant,CGRP Receptor Antagonist,Acute treatment and prevention of migraine headaches
+Zenocutuzumab,Monoclonal Antibody,"Rheumatoid arthritis, psoriasis, and other autoimmune disorders"
+Zidovudine,NRTI,HIV infection treatment and viral suppression
+Ziftomenib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Zileuton,5-Lipoxygenase Inhibitor,Asthma prevention and maintenance therapy
+Ziprasidone,Atypical Antipsychotic,"Schizophrenia, bipolar disorder, and psychosis"
+Zolbetuximab,Monoclonal Antibody,Targeted cancer therapy and tumor growth inhibition
+Zoledronic Acid,Bisphosphonate,"Osteoporosis, bone metastases, and hypercalcemia"
+Zolmitriptan,Triptan,Acute migraine headache treatment
+Zolpidem,Sedative-Hypnotic,Short-term treatment of insomnia
+Zongertinib,Kinase Inhibitor,Cancer treatment in specific malignancies
+Zonisamide,Anticonvulsant,Epilepsy and seizure disorder management
