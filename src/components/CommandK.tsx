@@ -11,9 +11,9 @@ export default function CommandK() {
   const [topProviders, setTopProviders] = useState<Provider[]>([]);
 
   useEffect(() => {
-    // Fetch top providers for search modal
+    // Fetch top providers for search modal (top 5 hardest)
     const fetchTopProviders = async () => {
-      const providers = await getTopProviders(10);
+      const providers = await getTopProviders();
       setTopProviders(providers);
     };
 

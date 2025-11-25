@@ -66,6 +66,12 @@ export async function GET(request: NextRequest) {
         textContent: true,
         viewCount: true,
         updatedAt: true,
+        provider: {
+          select: {
+            name: true,
+            credentials: true,
+          },
+        },
       },
       orderBy: [
         { viewCount: 'desc' },
@@ -94,10 +100,18 @@ export async function GET(request: NextRequest) {
         }
       }
 
+      // For providers, include credentials in the title
+      let title = page.title;
+      if (page.provider && page.provider.credentials) {
+        title = `${page.provider.name}, ${page.provider.credentials}`;
+      }
+
       return {
         ...page,
+        title,
         snippet,
         textContent: undefined, // Don't send full text to client
+        provider: undefined, // Don't send provider object to client
       };
     });
 
