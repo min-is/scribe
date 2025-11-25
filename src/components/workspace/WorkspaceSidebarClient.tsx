@@ -94,10 +94,10 @@ export function WorkspaceSidebar() {
         </Link>
 
         <Link
-          href="/editor/medications"
+          href="/medications"
           className={clsx(
             'flex items-center gap-3 px-3 py-2 text-sm transition-all border-b-2',
-            isActive('/editor/medications')
+            isActive('/medications')
               ? 'border-white dark:border-white text-main font-semibold'
               : 'border-transparent text-dim hover:text-main hover:border-white/30 dark:hover:border-white/30'
           )}
@@ -106,10 +106,10 @@ export function WorkspaceSidebar() {
         </Link>
 
         <Link
-          href="/editor/terminology"
+          href="/terminology"
           className={clsx(
             'flex items-center gap-3 px-3 py-2 text-sm transition-all border-b-2',
-            isActive('/editor/terminology')
+            isActive('/terminology')
               ? 'border-white dark:border-white text-main font-semibold'
               : 'border-transparent text-dim hover:text-main hover:border-white/30 dark:hover:border-white/30'
           )}
