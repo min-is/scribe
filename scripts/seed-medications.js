@@ -47,15 +47,32 @@ async function seedMedications() {
       return;
     }
 
-    // Check if we already have medications
+    // Check if we need to re-seed due to missing brandNames
     const countResult = await client.query('SELECT COUNT(*) FROM "Medication"');
     const count = parseInt(countResult.rows[0].count);
 
-    if (count > 0) {
-      console.log(`ℹ️  Medication table already has ${count} records`);
+    // Check if any existing medications are missing brandNames
+    const missingBrandNames = await client.query(`
+      SELECT COUNT(*) FROM "Medication"
+      WHERE "brandNames" IS NULL
+    `);
+    const missingCount = parseInt(missingBrandNames.rows[0].count);
+
+    if (count > 0 && missingCount === 0) {
+      console.log(`ℹ️  Medication table already has ${count} records with brand names`);
       console.log('   Skipping seed (delete existing records to re-seed)\n');
       client.release();
       return;
+    }
+
+    // If we have medications but they're missing brandNames, clear and re-seed
+    if (count > 0 && missingCount > 0) {
+      console.log(`⚠️  Found ${missingCount} medications without brand names`);
+      console.log('   Clearing existing medications to re-seed with brand names...\n');
+
+      // Delete in transaction to ensure clean state
+      await client.query('DELETE FROM "Medication"');
+      console.log('   ✓ Cleared existing medications\n');
     }
 
     // Read CSV file
