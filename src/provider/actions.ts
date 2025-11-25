@@ -61,14 +61,18 @@ export async function getProviderBySlug(
 }
 
 /**
- * Get top providers by popularity (viewCount + searchClickCount)
+ * Get top providers by difficulty (hardest providers to work with)
  */
-export async function getTopProviders(limit: number = 10): Promise<Provider[]> {
+export async function getTopProviders(limit: number = 5): Promise<Provider[]> {
   try {
     const providers = await prisma.provider.findMany({
+      where: {
+        generalDifficulty: {
+          not: null,
+        },
+      },
       orderBy: [
-        { viewCount: 'desc' },
-        { searchClickCount: 'desc' },
+        { generalDifficulty: 'desc' },
         { name: 'asc' },
       ],
       take: limit,
