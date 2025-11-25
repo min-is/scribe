@@ -17,8 +17,8 @@ interface MedicationsClientProps {
   allMedications: Medication[];
 }
 
-// Enhanced fuzzy matching with Levenshtein-like scoring
-// This function allows phonetic/misspelled searches (e.g., "Methadoan" finds "Methadone")
+// Enhanced fuzzy matching with phonetic support
+// This function allows phonetic/misspelled searches (e.g., "Methadoan" finds "Methadone", "Elikwis" finds "Eliquis")
 function fuzzyMatch(str: string, pattern: string): number {
   const strLower = str.toLowerCase();
   const patternLower = pattern.toLowerCase();
@@ -32,16 +32,46 @@ function fuzzyMatch(str: string, pattern: string): number {
   // Contains pattern gets high score
   if (strLower.includes(patternLower)) return 80;
 
-  // Fuzzy character-by-character matching for phonetic searches
+  // Phonetic character mapping for common substitutions
+  const phoneticMap: Record<string, string[]> = {
+    'f': ['ph'],
+    'k': ['c', 'q'],
+    's': ['c', 'z'],
+    'i': ['y', 'e'],
+    'u': ['oo'],
+    'z': ['s'],
+  };
+
+  // Helper: Check if two characters are phonetically similar
+  function arePhoneticallySimilar(c1: string, c2: string): boolean {
+    if (c1 === c2) return true;
+    return phoneticMap[c1]?.includes(c2) || phoneticMap[c2]?.includes(c1) || false;
+  }
+
+  // Fuzzy character-by-character matching with phonetic support
   let score = 0;
   let patternIdx = 0;
   let consecutiveMatches = 0;
+  let phoneticMatches = 0;
 
   for (let i = 0; i < strLower.length && patternIdx < patternLower.length; i++) {
-    if (strLower[i] === patternLower[patternIdx]) {
-      score += 2;
+    const strChar = strLower[i];
+    const patternChar = patternLower[patternIdx];
+
+    if (strChar === patternChar) {
+      // Exact character match
+      score += 3;
       consecutiveMatches++;
       // Bonus for consecutive matches (helps with phonetic spelling)
+      if (consecutiveMatches > 1) {
+        score += consecutiveMatches * 1.5;
+      }
+      patternIdx++;
+    } else if (arePhoneticallySimilar(strChar, patternChar)) {
+      // Phonetic match (slightly lower score than exact)
+      score += 2.5;
+      consecutiveMatches++;
+      phoneticMatches++;
       if (consecutiveMatches > 1) {
         score += consecutiveMatches;
       }
@@ -51,9 +81,18 @@ function fuzzyMatch(str: string, pattern: string): number {
     }
   }
 
-  // All characters found - even if not consecutive
+  // All characters found (exact or phonetic) - be more lenient with scoring
   if (patternIdx === patternLower.length) {
-    return Math.min((score / strLower.length) * 60, 60);
+    // Calculate match percentage
+    const matchPercentage = score / (strLower.length * 2);
+
+    // Higher ceiling for fuzzy matches (75 instead of 60)
+    // This allows phonetic matches to rank higher
+    const fuzzyScore = Math.min(matchPercentage * 100, 75);
+
+    // Bonus if most matches were exact (not just phonetic)
+    const exactMatchRatio = (patternLower.length - phoneticMatches) / patternLower.length;
+    return fuzzyScore + (exactMatchRatio * 5);
   }
 
   return 0;
@@ -77,7 +116,24 @@ export default function MedicationsClient({
     // Score each medication
     const scored = allMedications.map(med => {
       const nameScore = fuzzyMatch(med.name, query);
-      const brandNamesScore = med.brandNames ? fuzzyMatch(med.brandNames, query) * 0.95 : 0; // Brand names almost as important as name
+
+      // For brand names, check both the full string and individual brand names
+      let brandNamesScore = 0;
+      if (med.brandNames) {
+        // Try matching against full brand names string
+        brandNamesScore = fuzzyMatch(med.brandNames, query);
+
+        // Also try each individual brand name (split by comma)
+        const individualBrands = med.brandNames.split(',').map(b => b.trim());
+        for (const brand of individualBrands) {
+          const individualScore = fuzzyMatch(brand, query);
+          brandNamesScore = Math.max(brandNamesScore, individualScore);
+        }
+
+        // Brand names are almost as important as medication name
+        brandNamesScore *= 0.98;
+      }
+
       const typeScore = fuzzyMatch(med.type, query) * 0.5;
       const usageScore = med.commonlyUsedFor ? fuzzyMatch(med.commonlyUsedFor, query) * 0.7 : 0;
 
@@ -128,7 +184,7 @@ export default function MedicationsClient({
             <FiSearch className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 text-xl pointer-events-none" />
             <input
               type="text"
-              placeholder="Search medications (e.g., 'Methadone', 'Tylenol', 'beta blocker', 'pain')..."
+              placeholder="Search medications (e.g., 'Methadone', 'Eliquis', 'beta blocker', 'pain')..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 rounded-2xl pl-14 pr-6 py-4 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 dark:focus:ring-blue-400/50 focus:border-transparent transition-all shadow-sm hover:shadow-md font-light text-base"
@@ -227,7 +283,7 @@ export default function MedicationsClient({
         {/* Info Note */}
         <div className="mt-8 bg-blue-50/50 dark:bg-blue-900/10 backdrop-blur-xl border border-blue-200/50 dark:border-blue-800/50 rounded-2xl p-5">
           <p className="text-sm text-gray-600 dark:text-gray-400 font-light">
-            <span className="font-medium text-gray-900 dark:text-gray-200">💡 Tip:</span> Search supports fuzzy matching - you don&apos;t need to spell medications exactly. Try phonetic spelling (e.g., &quot;methadoan&quot; finds &quot;Methadone&quot;). Search works across medication names, brand names, types, and uses.
+            <span className="font-medium text-gray-900 dark:text-gray-200">💡 Tip:</span> Search supports phonetic matching - spell medications how they sound! Try &quot;methadoan&quot; → Methadone, &quot;elikwis&quot; → Eliquis (Apixaban), or &quot;jardians&quot; → Jardiance (Empagliflozin). Search works across medication names, brand names, types, and uses.
           </p>
         </div>
       </div>
