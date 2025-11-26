@@ -179,7 +179,7 @@ export default function MedicationsClient({
         {/* Header */}
         <div className="mb-10">
           <div className="flex items-center gap-3 mb-3">
-            <div className="p-2.5 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-2xl shadow-lg shadow-blue-500/20">
+            <div className="p-2.5 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-2xl shadow-lg shadow-blue-500/20 flex items-center justify-center">
               <FiActivity className="text-white text-2xl" />
             </div>
             <h1 className="text-4xl font-semibold tracking-tight text-gray-900 dark:text-white">
@@ -189,6 +189,13 @@ export default function MedicationsClient({
           <p className="text-lg text-gray-600 dark:text-gray-400 font-light ml-14">
             Quick reference for 1100+ medications - search by name, brand, type
           </p>
+
+          {/* Tip Section */}
+          <div className="mt-4 ml-14 bg-blue-50/50 dark:bg-blue-900/10 backdrop-blur-xl border border-blue-200/50 dark:border-blue-800/50 rounded-2xl p-5">
+            <p className="text-sm text-gray-600 dark:text-gray-400 font-light">
+              <span className="font-medium text-gray-900 dark:text-gray-200">💡 Tip:</span> You can phonetically spell the medication if you do not know the exact spelling (ex: amldpie = amlodipine)
+            </p>
+          </div>
         </div>
 
         {/* Search Bar */}
@@ -197,7 +204,7 @@ export default function MedicationsClient({
             <FiSearch className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 text-xl pointer-events-none" />
             <input
               type="text"
-              placeholder="Search medications (e.g., 'Methadone', 'Eliquis', 'beta blocker', 'pain')..."
+              placeholder="Search by title, category, or description..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 rounded-2xl pl-14 pr-6 py-4 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 dark:focus:ring-blue-400/50 focus:border-transparent transition-all shadow-sm hover:shadow-md font-light text-base"
@@ -303,12 +310,6 @@ export default function MedicationsClient({
           </div>
         )}
 
-        {/* Info Note */}
-        <div className="mt-8 bg-blue-50/50 dark:bg-blue-900/10 backdrop-blur-xl border border-blue-200/50 dark:border-blue-800/50 rounded-2xl p-5">
-          <p className="text-sm text-gray-600 dark:text-gray-400 font-light">
-            <span className="font-medium text-gray-900 dark:text-gray-200">💡 Tip:</span> Search supports phonetic matching - you can spell medications how they sound if you're unsure about the spelling!
-          </p>
-        </div>
       </div>
     </div>
   );
