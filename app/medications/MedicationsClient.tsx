@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { FiSearch, FiPackage } from 'react-icons/fi';
+import { FiSearch, FiActivity } from 'react-icons/fi';
 import { useDebounce } from 'use-debounce';
 import { Medication } from '@prisma/client';
 
@@ -180,14 +180,14 @@ export default function MedicationsClient({
         <div className="mb-10">
           <div className="flex items-center gap-3 mb-3">
             <div className="p-2.5 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-2xl shadow-lg shadow-blue-500/20">
-              <FiPackage className="text-white text-2xl" />
+              <FiActivity className="text-white text-2xl" />
             </div>
             <h1 className="text-4xl font-semibold tracking-tight text-gray-900 dark:text-white">
               Medications
             </h1>
           </div>
           <p className="text-lg text-gray-600 dark:text-gray-400 font-light ml-14">
-            Quick reference for all {allMedications.length.toLocaleString()} medications - search by name, brand, type
+            Quick reference for 1100+ medications - search by name, brand, type
           </p>
         </div>
 

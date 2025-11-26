@@ -50,23 +50,26 @@ export default function AppViewSwitcher({
         className,
       )}
     >
-      <Switcher>
-        {/* Show spinner if admin is suspected to be logged in */}
-        {(isUserSignedInEager && !isUserSignedIn) &&
-          <SwitcherItem
-            icon={<Spinner />}
-            isInteractive={false}
-            noPadding
-          />}
-        {isUserSignedIn &&
-          <SwitcherItem
-            icon={<AdminAppMenu
-              isOpen={isAdminMenuOpen}
-              setIsOpen={setIsAdminMenuOpen}
+      {/* Only show admin switcher if there's content to display */}
+      {(isUserSignedInEager || isUserSignedIn) && (
+        <Switcher>
+          {/* Show spinner if admin is suspected to be logged in */}
+          {(isUserSignedInEager && !isUserSignedIn) &&
+            <SwitcherItem
+              icon={<Spinner />}
+              isInteractive={false}
+              noPadding
             />}
-            noPadding
-          />}
-      </Switcher>
+          {isUserSignedIn &&
+            <SwitcherItem
+              icon={<AdminAppMenu
+                isOpen={isAdminMenuOpen}
+                setIsOpen={setIsAdminMenuOpen}
+              />}
+              noPadding
+            />}
+        </Switcher>
+      )}
       <Switcher type="borderless">
         <SwitcherItem
           icon={<IconSearch includeTitle={false} />}

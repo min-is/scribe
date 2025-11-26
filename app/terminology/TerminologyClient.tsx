@@ -232,7 +232,7 @@ export default function TerminologyClient({ terminologies }: TerminologyClientPr
         {/* Info Note */}
         <div className="mt-8 bg-purple-50/50 dark:bg-purple-900/10 backdrop-blur-xl border border-purple-200/50 dark:border-purple-800/50 rounded-2xl p-5">
           <p className="text-sm text-gray-600 dark:text-gray-400 font-light">
-            <span className="font-medium text-gray-900 dark:text-gray-200">💡 Tip:</span> Use the category filters to narrow down your search, or type keywords to find specific terms. The search supports fuzzy matching for easier lookups.
+            <span className="font-medium text-gray-900 dark:text-gray-200">💡 Tip:</span> Use the category filters to narrow down your search, or type keywords to find specific terms.
           </p>
         </div>
       </div>
