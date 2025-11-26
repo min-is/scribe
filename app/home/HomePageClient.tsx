@@ -59,7 +59,7 @@ export default function HomePageClient({ initialContent }: HomePageClientProps) 
         </div>
 
         {/* Quick Actions and Calendar Section */}
-        <div className="mb-10 grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-8">
+        <div className="mb-10 grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-8">
           {/* Quick Actions - Left Column */}
           <div>
             <h2 className="text-xl font-semibold text-main mb-4 flex items-center gap-2">

@@ -79,7 +79,7 @@ export default function Nav({
                 'grow text-right min-w-0',
                 'hidden xs:block',
                 'translate-y-[-1px]',
-                'pr-4',
+                'pr-8',
               )}>
                 <div className="truncate overflow-hidden select-none font-mono">
                   {renderLink(navTitleOrDomain, PATH_ROOT)}

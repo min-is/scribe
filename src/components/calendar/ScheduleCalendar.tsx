@@ -112,7 +112,7 @@ function ScheduleCalendar() {
                 <Lock className="w-6 h-6 text-zinc-600 dark:text-zinc-400" />
               </div>
               <h3 className="text-base font-semibold text-zinc-900 dark:text-zinc-100 mb-1">
-                Enter Passcode
+                Scribe/Provider Calendar
               </h3>
               <p className="text-xs text-zinc-600 dark:text-zinc-400">
                 Protected content
