@@ -189,13 +189,6 @@ export default function MedicationsClient({
           <p className="text-lg text-gray-600 dark:text-gray-400 font-light ml-14">
             Quick reference for 1100+ medications - search by name, brand, type
           </p>
-
-          {/* Tip Section */}
-          <div className="mt-4 ml-14 bg-blue-50/50 dark:bg-blue-900/10 backdrop-blur-xl border border-blue-200/50 dark:border-blue-800/50 rounded-2xl p-5">
-            <p className="text-sm text-gray-600 dark:text-gray-400 font-light">
-              <span className="font-medium text-gray-900 dark:text-gray-200">💡 Tip:</span> You can phonetically spell the medication if you do not know the exact spelling (ex: amldpie = amlodipine)
-            </p>
-          </div>
         </div>
 
         {/* Search Bar */}
@@ -204,7 +197,7 @@ export default function MedicationsClient({
             <FiSearch className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500 text-xl pointer-events-none" />
             <input
               type="text"
-              placeholder="Search by title, category, or description..."
+              placeholder="Search medications by name, brand, or type..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 rounded-2xl pl-14 pr-6 py-4 text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500/50 dark:focus:ring-blue-400/50 focus:border-transparent transition-all shadow-sm hover:shadow-md font-light text-base"
@@ -254,11 +247,11 @@ export default function MedicationsClient({
                   <div className="flex items-start gap-4">
                     <div className="flex-1 min-w-0">
                       {/* Medication Name and Type */}
-                      <div className="flex items-center justify-between gap-3 mb-1.5">
+                      <div className="flex items-center gap-3 mb-1.5 flex-wrap">
                         <h3 className="text-lg font-semibold text-gray-900 dark:text-white tracking-tight">
                           {med.name}
                         </h3>
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20 whitespace-nowrap flex-shrink-0">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-500/10 text-orange-600 dark:text-orange-400 border border-orange-500/20">
                           {med.type}
                         </span>
                       </div>
