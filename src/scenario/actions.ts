@@ -12,7 +12,7 @@ export type Scenario = {
   title: string;
   category: string;
   description: string | null;
-  content: string;
+  content: any; // TipTap JSON content
   tags: string[];
   viewCount: number;
   createdAt: Date;
@@ -24,7 +24,7 @@ export type ScenarioFormData = {
   title: string;
   category: string;
   description?: string;
-  content: string;
+  content: any; // TipTap JSON content
   tags: string[];
 };
 
@@ -97,7 +97,7 @@ export async function searchScenarios(
          LOWER(slug) LIKE $1 OR
          LOWER(title) LIKE $1 OR
          LOWER(description) LIKE $1 OR
-         LOWER(content) LIKE $1 OR
+         LOWER(content::text) LIKE $1 OR
          EXISTS (SELECT 1 FROM unnest(tags) tag WHERE LOWER(tag) LIKE $1)
        ORDER BY "viewCount" DESC, title ASC`,
       [lowerQuery]
@@ -212,7 +212,7 @@ export async function createScenario(
     const result = await query<Scenario>(
       `INSERT INTO "Scenario" (
         id, slug, title, category, description, content, tags, "viewCount", "createdAt", "updatedAt"
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+      ) VALUES ($1, $2, $3, $4, $5, $6::jsonb, $7, $8, $9, $10)
       RETURNING *`,
       [
         id,
@@ -220,7 +220,7 @@ export async function createScenario(
         data.title,
         data.category,
         data.description || null,
-        data.content,
+        JSON.stringify(data.content),
         data.tags,
         0,
         now,
@@ -289,7 +289,7 @@ export async function updateScenario(
          title = COALESCE($3, title),
          category = COALESCE($4, category),
          description = COALESCE($5, description),
-         content = COALESCE($6, content),
+         content = COALESCE($6::jsonb, content),
          tags = COALESCE($7, tags),
          "updatedAt" = $8
        WHERE id = $1
@@ -300,7 +300,7 @@ export async function updateScenario(
         data.title,
         data.category,
         data.description,
-        data.content,
+        data.content ? JSON.stringify(data.content) : null,
         data.tags,
         now,
       ]

@@ -630,6 +630,110 @@ BEGIN
 END $$;
     `,
   },
+  {
+    name: '20251126000000_convert_scenarios_procedures_to_rich_text',
+    sql: `
+-- Convert Scenario content from TEXT to JSONB for rich text editor
+DO $$
+BEGIN
+    -- First, check if we need to migrate existing data
+    IF EXISTS (
+        SELECT 1 FROM information_schema.columns
+        WHERE table_name = 'Scenario' AND column_name = 'content' AND data_type = 'text'
+    ) THEN
+        -- Add a temporary column for JSONB
+        ALTER TABLE "Scenario" ADD COLUMN "content_new" JSONB;
+
+        -- Convert existing text content to TipTap JSON format
+        UPDATE "Scenario" SET "content_new" = jsonb_build_object(
+            'type', 'doc',
+            'content', jsonb_build_array(
+                jsonb_build_object(
+                    'type', 'paragraph',
+                    'content', jsonb_build_array(
+                        jsonb_build_object(
+                            'type', 'text',
+                            'text', "content"
+                        )
+                    )
+                )
+            )
+        ) WHERE "content" IS NOT NULL AND "content" != '';
+
+        -- Drop old column and rename new one
+        ALTER TABLE "Scenario" DROP COLUMN "content";
+        ALTER TABLE "Scenario" RENAME COLUMN "content_new" TO "content";
+
+        -- Make it NOT NULL with a default empty doc
+        ALTER TABLE "Scenario" ALTER COLUMN "content" SET DEFAULT '{"type":"doc","content":[]}'::jsonb;
+        UPDATE "Scenario" SET "content" = '{"type":"doc","content":[]}'::jsonb WHERE "content" IS NULL;
+        ALTER TABLE "Scenario" ALTER COLUMN "content" SET NOT NULL;
+    END IF;
+END $$;
+
+-- Convert Procedure steps from TEXT to JSONB and remove unwanted fields
+DO $$
+BEGIN
+    -- Convert steps field
+    IF EXISTS (
+        SELECT 1 FROM information_schema.columns
+        WHERE table_name = 'Procedure' AND column_name = 'steps' AND data_type = 'text'
+    ) THEN
+        -- Add temporary column for JSONB
+        ALTER TABLE "Procedure" ADD COLUMN "steps_new" JSONB;
+
+        -- Convert existing text to TipTap JSON format
+        UPDATE "Procedure" SET "steps_new" = jsonb_build_object(
+            'type', 'doc',
+            'content', jsonb_build_array(
+                jsonb_build_object(
+                    'type', 'paragraph',
+                    'content', jsonb_build_array(
+                        jsonb_build_object(
+                            'type', 'text',
+                            'text', "steps"
+                        )
+                    )
+                )
+            )
+        ) WHERE "steps" IS NOT NULL AND "steps" != '';
+
+        -- Drop old column and rename new one
+        ALTER TABLE "Procedure" DROP COLUMN "steps";
+        ALTER TABLE "Procedure" RENAME COLUMN "steps_new" TO "steps";
+
+        -- Make it NOT NULL with a default empty doc
+        ALTER TABLE "Procedure" ALTER COLUMN "steps" SET DEFAULT '{"type":"doc","content":[]}'::jsonb;
+        UPDATE "Procedure" SET "steps" = '{"type":"doc","content":[]}'::jsonb WHERE "steps" IS NULL;
+        ALTER TABLE "Procedure" ALTER COLUMN "steps" SET NOT NULL;
+    END IF;
+
+    -- Remove indications field if it exists
+    IF EXISTS (
+        SELECT 1 FROM information_schema.columns
+        WHERE table_name = 'Procedure' AND column_name = 'indications'
+    ) THEN
+        ALTER TABLE "Procedure" DROP COLUMN "indications";
+    END IF;
+
+    -- Remove contraindications field if it exists
+    IF EXISTS (
+        SELECT 1 FROM information_schema.columns
+        WHERE table_name = 'Procedure' AND column_name = 'contraindications'
+    ) THEN
+        ALTER TABLE "Procedure" DROP COLUMN "contraindications";
+    END IF;
+
+    -- Remove equipment field if it exists
+    IF EXISTS (
+        SELECT 1 FROM information_schema.columns
+        WHERE table_name = 'Procedure' AND column_name = 'equipment'
+    ) THEN
+        ALTER TABLE "Procedure" DROP COLUMN "equipment";
+    END IF;
+END $$;
+    `,
+  },
 ];
 
 async function runMigrations() {

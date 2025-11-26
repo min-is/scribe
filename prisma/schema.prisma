@@ -72,7 +72,7 @@ model Scenario {
   title       String              // Display name (e.g., "Code Blue Response")
   category    String              // Category (e.g., "Emergency", "Cardiac", "Neuro")
   description String?             // Brief overview
-  content     String              // Detailed walkthrough/steps in markdown or plain text
+  content     Json                // TipTap rich text content (JSON format)
   tags        String[]            // Additional searchable tags
 
   // Analytics
@@ -96,11 +96,8 @@ model Procedure {
   title       String              // Display name (e.g., "Lumbar Puncture")
   category    String              // Category (e.g., "Neurology", "Emergency", "ICU")
   description String?             // Brief overview
-  indications String?             // When to perform this procedure
-  contraindications String?       // When NOT to perform this procedure
-  equipment   String?             // Required equipment/supplies
-  steps       String              // Step-by-step instructions
-  complications String?           // Potential complications
+  steps       Json                // TipTap rich text content for procedure steps (JSON format)
+  complications String?           // Potential complications (kept for backward compatibility)
   tags        String[]            // Additional searchable tags
 
   // Analytics

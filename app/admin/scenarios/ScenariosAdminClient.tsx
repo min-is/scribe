@@ -11,6 +11,7 @@ import {
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { FiEdit, FiTrash2, FiPlus, FiX } from 'react-icons/fi';
+import TipTapEditor from '@/components/editor/TipTapEditor';
 
 type ScenariosAdminClientProps = {
   scenarios: Scenario[];
@@ -33,7 +34,7 @@ export default function ScenariosAdminClient({
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('');
   const [description, setDescription] = useState('');
-  const [content, setContent] = useState('');
+  const [content, setContent] = useState<any>({ type: 'doc', content: [] });
   const [tags, setTags] = useState('');
 
   const resetForm = () => {
@@ -41,7 +42,7 @@ export default function ScenariosAdminClient({
     setTitle('');
     setCategory('');
     setDescription('');
-    setContent('');
+    setContent({ type: 'doc', content: [] });
     setTags('');
     setEditingScenario(null);
     setShowForm(false);
@@ -110,7 +111,8 @@ export default function ScenariosAdminClient({
     setTitle(scenario.title);
     setCategory(scenario.category);
     setDescription(scenario.description || '');
-    setContent(scenario.content);
+    // Content is now JSON from TipTap
+    setContent(scenario.content || { type: 'doc', content: [] });
     setTags(scenario.tags.join(', '));
     setShowForm(true);
   };
@@ -245,13 +247,11 @@ export default function ScenariosAdminClient({
                   Walkthrough/Steps
                   <span className="text-red-500 ml-1">*</span>
                 </label>
-                <textarea
-                  value={content}
-                  onChange={(e) => setContent(e.target.value)}
+                <TipTapEditor
+                  content={content}
+                  onChange={setContent}
                   placeholder="Detailed step-by-step walkthrough of this scenario..."
-                  required
-                  rows={12}
-                  className="w-full bg-content border border-main rounded-lg px-4 py-2 text-main placeholder:text-dim focus:outline-none focus:ring-2 focus:ring-blue-500/50 font-mono text-sm"
+                  editable={true}
                 />
               </div>
 

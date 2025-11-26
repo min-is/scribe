@@ -8,6 +8,7 @@ import {
   FiX,
 } from 'react-icons/fi';
 import { useDebounce } from 'use-debounce';
+import { EditorRenderer } from '@/components/editor/EditorRenderer';
 
 interface ScenariosPageClientProps {
   scenarios: Scenario[];
@@ -253,9 +254,9 @@ export default function ScenariosPageClient({
                   <h4 className="text-gray-900 dark:text-white font-semibold text-base mb-3">
                     Scenario Walkthrough
                   </h4>
-                  <pre className="text-gray-700 dark:text-gray-300 text-sm whitespace-pre-wrap font-mono leading-relaxed">
-                    {selectedScenario.content}
-                  </pre>
+                  <div className="prose dark:prose-invert max-w-none">
+                    <EditorRenderer content={selectedScenario.content} />
+                  </div>
                 </div>
 
                 {/* Tags */}
