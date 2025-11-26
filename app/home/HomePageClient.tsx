@@ -142,20 +142,18 @@ function ActionButton({
   return (
     <button
       onClick={onClick}
-      className="relative bg-white/50 dark:bg-zinc-800/50 backdrop-blur-sm border border-zinc-200/50 dark:border-zinc-700/50 rounded-xl px-4 py-3 hover:bg-white dark:hover:bg-zinc-800 hover:border-blue-500/30 hover:shadow-[0_2px_8px_rgba(59,130,246,0.1)] dark:hover:shadow-[0_2px_8px_rgba(59,130,246,0.2)] transition-all duration-200 group text-left w-full active:scale-[0.98]"
+      className="relative bg-white/50 dark:bg-zinc-800/50 backdrop-blur-sm border border-zinc-200/50 dark:border-zinc-700/50 rounded-xl py-2.5 pl-3 pr-10 hover:bg-white dark:hover:bg-zinc-800 hover:border-emerald-500/30 hover:shadow-[0_2px_8px_rgba(16,185,129,0.1)] dark:hover:shadow-[0_2px_8px_rgba(16,185,129,0.2)] transition-all duration-200 group text-left w-full active:scale-[0.98]"
     >
-      <div className="flex items-center justify-between gap-3">
-        <div className="flex-1 min-w-0">
-          <div className="font-medium text-zinc-900 dark:text-zinc-100 text-sm mb-0.5 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-            {title}
-          </div>
-          <div className="text-xs text-zinc-500 dark:text-zinc-400">{description}</div>
+      <div className="flex flex-col">
+        <div className="font-medium text-zinc-900 dark:text-zinc-100 text-sm mb-0.5 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+          {title}
         </div>
-        <div className="text-zinc-400 dark:text-zinc-500 group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M6 12L10 8L6 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        </div>
+        <div className="text-xs text-zinc-500 dark:text-zinc-400">{description}</div>
+      </div>
+      <div className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 dark:text-zinc-500 group-hover:text-emerald-500 dark:group-hover:text-emerald-400 transition-colors">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6 12L10 8L6 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
       </div>
     </button>
   );
