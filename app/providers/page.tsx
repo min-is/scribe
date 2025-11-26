@@ -29,11 +29,14 @@ export default async function ProvidersPage() {
     });
   }
 
-  // Serialize data for client component (convert Dates to strings)
+  // Serialize data for client component (convert Dates to strings and Json to plain objects)
   const providers = providersRaw.map(provider => ({
     ...provider,
     createdAt: provider.createdAt.toISOString(),
     updatedAt: provider.updatedAt.toISOString(),
+    // Serialize Json fields to plain objects to avoid React error #310
+    wikiContent: provider.wikiContent ? JSON.parse(JSON.stringify(provider.wikiContent)) : null,
+    preferences: provider.preferences ? JSON.parse(JSON.stringify(provider.preferences)) : null,
   }));
 
   return <ProvidersPageClient providers={providers as any} />;

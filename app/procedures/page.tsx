@@ -10,9 +10,9 @@ export const metadata: Metadata = {
 
 export default async function ProceduresPage() {
   // Fetch procedures with their associated pages (if table exists)
-  let procedures;
+  let proceduresRaw;
   try {
-    procedures = await prisma.procedure.findMany({
+    proceduresRaw = await prisma.procedure.findMany({
       orderBy: { title: 'asc' },
       include: {
         page: {
@@ -24,10 +24,19 @@ export default async function ProceduresPage() {
     });
   } catch (error) {
     // Fallback if Page table doesn't exist yet
-    procedures = await prisma.procedure.findMany({
+    proceduresRaw = await prisma.procedure.findMany({
       orderBy: { title: 'asc' },
     });
   }
+
+  // Serialize data for client component (convert Dates to strings and Json to plain objects)
+  const procedures = proceduresRaw.map(procedure => ({
+    ...procedure,
+    createdAt: procedure.createdAt.toISOString(),
+    updatedAt: procedure.updatedAt.toISOString(),
+    // Serialize Json fields to plain objects to avoid React error #310
+    steps: procedure.steps ? JSON.parse(JSON.stringify(procedure.steps)) : null,
+  }));
 
   // Get unique categories
   const categories = Array.from(new Set(procedures.map(p => p.category).filter(Boolean))) as string[];
