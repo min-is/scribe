@@ -125,22 +125,52 @@ export async function GET() {
       let position = generateJitteredKeyBetween(null, null);
 
       for (const procedure of procedures) {
-        const content = {
-          type: 'doc',
-          content: [
-            {
-              type: 'paragraph',
-              content: [{ type: 'text', text: procedure.description || procedure.title }],
-            },
-          ],
-        };
+        let content;
+        let textContent;
+
+        // Handle both legacy string steps and new JSON steps
+        if (typeof procedure.steps === 'string') {
+          // Legacy format: plain text string
+          content = {
+            type: 'doc',
+            content: [
+              {
+                type: 'paragraph',
+                content: [{ type: 'text', text: procedure.steps }],
+              },
+            ],
+          };
+          textContent = procedure.steps;
+        } else if (
+          procedure.steps &&
+          typeof procedure.steps === 'object' &&
+          'type' in procedure.steps &&
+          procedure.steps.type === 'doc'
+        ) {
+          // New format: TipTap JSON - validate it's a proper JSONContent object
+          content = procedure.steps as JSONContent;
+          textContent = tipTapToPlainText(content);
+        } else {
+          // Fallback for null or invalid steps - use description
+          const fallbackText = procedure.description || procedure.title;
+          content = {
+            type: 'doc',
+            content: [
+              {
+                type: 'paragraph',
+                content: [{ type: 'text', text: fallbackText }],
+              },
+            ],
+          };
+          textContent = fallbackText;
+        }
 
         await prisma.page.create({
           data: {
             slug: procedure.slug,
             title: procedure.title,
             content,
-            textContent: procedure.description || procedure.title,
+            textContent: textContent || procedure.title,
             type: PageType.PROCEDURE,
             position,
             icon: '📋',
@@ -228,10 +258,27 @@ export async function GET() {
             ],
           };
           textContent = scenario.content;
+        } else if (
+          scenario.content &&
+          typeof scenario.content === 'object' &&
+          'type' in scenario.content &&
+          scenario.content.type === 'doc'
+        ) {
+          // New format: TipTap JSON - validate it's a proper JSONContent object
+          content = scenario.content as JSONContent;
+          textContent = tipTapToPlainText(content);
         } else {
-          // New format: TipTap JSON
-          content = scenario.content;
-          textContent = tipTapToPlainText(scenario.content);
+          // Fallback for null or invalid content
+          content = {
+            type: 'doc',
+            content: [
+              {
+                type: 'paragraph',
+                content: [{ type: 'text', text: scenario.title }],
+              },
+            ],
+          };
+          textContent = scenario.title;
         }
 
         await prisma.page.create({
