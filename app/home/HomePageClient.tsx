@@ -7,6 +7,7 @@ import { useState } from 'react';
 import SectionSearchModal from '@/components/search/SectionSearchModal';
 import { PageType } from '@prisma/client';
 import TypewriterText from '@/components/TypewriterText';
+import ScheduleCalendar from '@/components/calendar/ScheduleCalendar';
 
 type HomePageClientProps = {
   initialContent: {
@@ -95,6 +96,11 @@ export default function HomePageClient({ initialContent }: HomePageClientProps) 
               onClick={() => handleSectionClick(PageType.MEDICATION)}
             />
           </div>
+        </div>
+
+        {/* Schedule Calendar */}
+        <div className="mb-10">
+          <ScheduleCalendar />
         </div>
 
         {/* Getting Started */}

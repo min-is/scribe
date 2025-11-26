@@ -141,10 +141,10 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
       disabled={disabled}
       title={title}
       className={clsx(
-        'p-2 rounded-md transition-all',
-        active && 'bg-primary text-white shadow-soft',
-        disabled && 'opacity-40 cursor-not-allowed',
-        !active && !disabled && 'text-dim hover:bg-dim hover:text-main'
+        'p-2.5 rounded-lg transition-all duration-200',
+        active && 'bg-blue-500/10 text-blue-600 dark:text-blue-400',
+        disabled && 'opacity-30 cursor-not-allowed',
+        !active && !disabled && 'text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-zinc-100'
       )}
       type="button"
     >
@@ -153,14 +153,14 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
   );
 
   const ToolbarGroup = ({ children }: { children: React.ReactNode }) => (
-    <div className="flex gap-0.5 px-2 py-1 bg-extra-dim rounded-lg">
+    <div className="flex gap-1 px-1.5 py-1.5 bg-zinc-50 dark:bg-zinc-900/50 rounded-xl border border-zinc-200 dark:border-zinc-800">
       {children}
     </div>
   );
 
   return (
-    <div className="border-b border-main bg-main sticky top-0 z-10 shadow-soft">
-      <div className="flex flex-wrap gap-2 p-3">
+    <div className="border-b border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 sticky top-0 z-10 backdrop-blur-xl bg-opacity-90 dark:bg-opacity-90">
+      <div className="flex flex-wrap gap-2.5 p-4">
         {/* Text Formatting */}
         <ToolbarGroup>
           <ToolbarButton
@@ -346,14 +346,14 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 
       {/* Link Dialog */}
       {isLinkDialogOpen && (
-        <div className="p-3 border-t border-main bg-dim">
+        <div className="p-4 border-t border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/30">
           <div className="flex gap-2 items-center">
             <input
               type="url"
               value={linkUrl}
               onChange={(e) => setLinkUrl(e.target.value)}
               placeholder="Enter URL..."
-              className="flex-1 px-3 py-2 border border-main rounded-md bg-main text-main text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="flex-1 px-4 py-2.5 border border-zinc-300 dark:border-zinc-700 rounded-lg bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
               autoFocus
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
@@ -365,7 +365,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
             />
             <button
               onClick={addLink}
-              className="px-4 py-2 bg-gray-900 dark:bg-gray-100 text-white dark:text-black rounded-md hover:opacity-90 transition-opacity text-sm"
+              className="px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
             >
               Add
             </button>
@@ -374,13 +374,13 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
                 editor.chain().focus().unsetLink().run();
                 setIsLinkDialogOpen(false);
               }}
-              className="px-4 py-2 border border-main rounded-md hover:bg-dim transition-colors text-sm"
+              className="px-4 py-2.5 border border-zinc-300 dark:border-zinc-700 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors text-sm text-zinc-700 dark:text-zinc-300"
             >
               Remove
             </button>
             <button
               onClick={() => setIsLinkDialogOpen(false)}
-              className="px-4 py-2 border border-main rounded-md hover:bg-dim transition-colors text-sm"
+              className="px-4 py-2.5 border border-zinc-300 dark:border-zinc-700 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors text-sm text-zinc-700 dark:text-zinc-300"
             >
               Cancel
             </button>
@@ -390,14 +390,14 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 
       {/* Image Dialog */}
       {isImageDialogOpen && (
-        <div className="p-3 border-t border-main bg-dim">
+        <div className="p-4 border-t border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/30">
           <div className="flex gap-2 items-center">
             <input
               type="url"
               value={imageUrl}
               onChange={(e) => setImageUrl(e.target.value)}
               placeholder="Enter image URL..."
-              className="flex-1 px-3 py-2 border border-main rounded-md bg-main text-main text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="flex-1 px-4 py-2.5 border border-zinc-300 dark:border-zinc-700 rounded-lg bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
               autoFocus
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
@@ -409,13 +409,13 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
             />
             <button
               onClick={addImage}
-              className="px-4 py-2 bg-gray-900 dark:bg-gray-100 text-white dark:text-black rounded-md hover:opacity-90 transition-opacity text-sm"
+              className="px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
             >
               Insert
             </button>
             <button
               onClick={() => setIsImageDialogOpen(false)}
-              className="px-4 py-2 border border-main rounded-md hover:bg-dim transition-colors text-sm"
+              className="px-4 py-2.5 border border-zinc-300 dark:border-zinc-700 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors text-sm text-zinc-700 dark:text-zinc-300"
             >
               Cancel
             </button>
@@ -425,14 +425,14 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 
       {/* YouTube Dialog */}
       {isYoutubeDialogOpen && (
-        <div className="p-3 border-t border-main bg-dim">
+        <div className="p-4 border-t border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/30">
           <div className="flex gap-2 items-center">
             <input
               type="url"
               value={youtubeUrl}
               onChange={(e) => setYoutubeUrl(e.target.value)}
               placeholder="Enter YouTube URL..."
-              className="flex-1 px-3 py-2 border border-main rounded-md bg-main text-main text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="flex-1 px-4 py-2.5 border border-zinc-300 dark:border-zinc-700 rounded-lg bg-white dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
               autoFocus
               onKeyDown={(e) => {
                 if (e.key === 'Enter') {
@@ -444,13 +444,13 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
             />
             <button
               onClick={addYoutube}
-              className="px-4 py-2 bg-gray-900 dark:bg-gray-100 text-white dark:text-black rounded-md hover:opacity-90 transition-opacity text-sm"
+              className="px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
             >
               Embed
             </button>
             <button
               onClick={() => setIsYoutubeDialogOpen(false)}
-              className="px-4 py-2 border border-main rounded-md hover:bg-dim transition-colors text-sm"
+              className="px-4 py-2.5 border border-zinc-300 dark:border-zinc-700 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors text-sm text-zinc-700 dark:text-zinc-300"
             >
               Cancel
             </button>
@@ -460,8 +460,8 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 
       {/* Color Picker */}
       {isColorPickerOpen && (
-        <div className="p-3 border-t border-main bg-dim">
-          <div className="mb-2 text-sm font-medium text-main">Text Color</div>
+        <div className="p-4 border-t border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/30">
+          <div className="mb-3 text-sm font-medium text-zinc-900 dark:text-zinc-100">Text Color</div>
           <div className="grid grid-cols-10 gap-2">
             {textColors.map((color) => (
               <button
@@ -469,7 +469,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
                 onClick={() => {
                   editor.chain().focus().setColor(color.value).run();
                 }}
-                className="w-8 h-8 rounded-md border-2 border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500 transition-all hover:scale-110"
+                className="w-9 h-9 rounded-lg border-2 border-zinc-300 dark:border-zinc-600 hover:border-zinc-400 dark:hover:border-zinc-500 transition-all hover:scale-110 shadow-sm"
                 style={{ backgroundColor: color.value }}
                 title={color.name}
               />
@@ -481,13 +481,13 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
                 editor.chain().focus().unsetColor().run();
                 setIsColorPickerOpen(false);
               }}
-              className="px-3 py-1.5 border border-main rounded-md hover:bg-dim transition-colors text-sm text-main"
+              className="px-4 py-2 border border-zinc-300 dark:border-zinc-700 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors text-sm text-zinc-700 dark:text-zinc-300"
             >
               Remove Color
             </button>
             <button
               onClick={() => setIsColorPickerOpen(false)}
-              className="px-3 py-1.5 border border-main rounded-md hover:bg-dim transition-colors text-sm text-main"
+              className="px-4 py-2 border border-zinc-300 dark:border-zinc-700 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors text-sm text-zinc-700 dark:text-zinc-300"
             >
               Close
             </button>
@@ -615,7 +615,7 @@ export default function TipTapEditor({
   }, [editor, content]);
 
   return (
-    <div className={clsx('border border-main rounded-lg overflow-hidden bg-main', className)}>
+    <div className={clsx('border border-zinc-200 dark:border-zinc-800 rounded-xl overflow-hidden bg-white dark:bg-zinc-950 shadow-sm', className)}>
       {editable && editor && <MenuBar editor={editor} />}
       <EditorContent editor={editor} />
     </div>

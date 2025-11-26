@@ -35,7 +35,6 @@ export default function ScenariosAdminClient({
   const [category, setCategory] = useState('');
   const [description, setDescription] = useState('');
   const [content, setContent] = useState<any>({ type: 'doc', content: [] });
-  const [tags, setTags] = useState('');
 
   const resetForm = () => {
     setSlug('');
@@ -43,7 +42,6 @@ export default function ScenariosAdminClient({
     setCategory('');
     setDescription('');
     setContent({ type: 'doc', content: [] });
-    setTags('');
     setEditingScenario(null);
     setShowForm(false);
   };
@@ -52,18 +50,13 @@ export default function ScenariosAdminClient({
     e.preventDefault();
     setIsSubmitting(true);
 
-    const tagsArray = tags
-      .split(',')
-      .map((t) => t.trim())
-      .filter((t) => t.length > 0);
-
     const data: ScenarioFormData = {
       slug,
       title,
       category,
       description: description || undefined,
       content,
-      tags: tagsArray,
+      tags: [],
     };
 
     try {
@@ -113,7 +106,6 @@ export default function ScenariosAdminClient({
     setDescription(scenario.description || '');
     // Content is now JSON from TipTap
     setContent(scenario.content || { type: 'doc', content: [] });
-    setTags(scenario.tags.join(', '));
     setShowForm(true);
   };
 
@@ -210,20 +202,6 @@ export default function ScenariosAdminClient({
                       <option key={cat} value={cat} />
                     ))}
                   </datalist>
-                </div>
-
-                {/* Tags */}
-                <div>
-                  <label className="block text-main font-medium mb-2">
-                    Tags (comma-separated)
-                  </label>
-                  <input
-                    type="text"
-                    value={tags}
-                    onChange={(e) => setTags(e.target.value)}
-                    placeholder="emergency, cardiac, resuscitation"
-                    className="w-full bg-content border border-main rounded-lg px-4 py-2 text-main placeholder:text-dim focus:outline-none focus:ring-2 focus:ring-blue-500/50"
-                  />
                 </div>
               </div>
 

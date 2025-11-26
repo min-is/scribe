@@ -36,7 +36,6 @@ export default function ProceduresAdminClient({
   const [description, setDescription] = useState('');
   const [steps, setSteps] = useState<any>({ type: 'doc', content: [] });
   const [complications, setComplications] = useState('');
-  const [tags, setTags] = useState('');
 
   const resetForm = () => {
     setSlug('');
@@ -45,7 +44,6 @@ export default function ProceduresAdminClient({
     setDescription('');
     setSteps({ type: 'doc', content: [] });
     setComplications('');
-    setTags('');
     setEditingProcedure(null);
     setShowForm(false);
   };
@@ -54,11 +52,6 @@ export default function ProceduresAdminClient({
     e.preventDefault();
     setIsSubmitting(true);
 
-    const tagsArray = tags
-      .split(',')
-      .map((t) => t.trim())
-      .filter((t) => t.length > 0);
-
     const data: ProcedureFormData = {
       slug,
       title,
@@ -66,7 +59,7 @@ export default function ProceduresAdminClient({
       description: description || undefined,
       steps,
       complications: complications || undefined,
-      tags: tagsArray,
+      tags: [],
     };
 
     try {
@@ -117,7 +110,6 @@ export default function ProceduresAdminClient({
     // Steps is now JSON from TipTap
     setSteps(procedure.steps || { type: 'doc', content: [] });
     setComplications(procedure.complications || '');
-    setTags(procedure.tags.join(', '));
     setShowForm(true);
   };
 
@@ -214,20 +206,6 @@ export default function ProceduresAdminClient({
                       <option key={cat} value={cat} />
                     ))}
                   </datalist>
-                </div>
-
-                {/* Tags */}
-                <div>
-                  <label className="block text-main font-medium mb-2">
-                    Tags (comma-separated)
-                  </label>
-                  <input
-                    type="text"
-                    value={tags}
-                    onChange={(e) => setTags(e.target.value)}
-                    placeholder="neurology, diagnostic, CSF"
-                    className="w-full bg-content border border-main rounded-lg px-4 py-2 text-main placeholder:text-dim focus:outline-none focus:ring-2 focus:ring-blue-500/50"
-                  />
                 </div>
               </div>
 
