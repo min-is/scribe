@@ -10,9 +10,9 @@ export const metadata: Metadata = {
 
 export default async function ProvidersPage() {
   // Fetch providers with their associated pages (if table exists)
-  let providers;
+  let providersRaw;
   try {
-    providers = await prisma.provider.findMany({
+    providersRaw = await prisma.provider.findMany({
       orderBy: { name: 'asc' },
       include: {
         page: {
@@ -24,10 +24,17 @@ export default async function ProvidersPage() {
     });
   } catch (error) {
     // Fallback if Page table doesn't exist yet
-    providers = await prisma.provider.findMany({
+    providersRaw = await prisma.provider.findMany({
       orderBy: { name: 'asc' },
     });
   }
+
+  // Serialize data for client component (convert Dates to strings)
+  const providers = providersRaw.map(provider => ({
+    ...provider,
+    createdAt: provider.createdAt.toISOString(),
+    updatedAt: provider.updatedAt.toISOString(),
+  }));
 
   return <ProvidersPageClient providers={providers as any} />;
 }

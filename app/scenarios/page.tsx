@@ -10,9 +10,9 @@ export const metadata: Metadata = {
 
 export default async function ScenariosPage() {
   // Fetch scenarios with their associated pages (if table exists)
-  let scenarios;
+  let scenariosRaw;
   try {
-    scenarios = await prisma.scenario.findMany({
+    scenariosRaw = await prisma.scenario.findMany({
       orderBy: { title: 'asc' },
       include: {
         page: {
@@ -24,10 +24,17 @@ export default async function ScenariosPage() {
     });
   } catch (error) {
     // Fallback if Page table doesn't exist yet
-    scenarios = await prisma.scenario.findMany({
+    scenariosRaw = await prisma.scenario.findMany({
       orderBy: { title: 'asc' },
     });
   }
+
+  // Serialize data for client component (convert Dates to strings)
+  const scenarios = scenariosRaw.map(scenario => ({
+    ...scenario,
+    createdAt: scenario.createdAt.toISOString(),
+    updatedAt: scenario.updatedAt.toISOString(),
+  }));
 
   // Get unique categories
   const categories = Array.from(new Set(scenarios.map(s => s.category).filter(Boolean))) as string[];

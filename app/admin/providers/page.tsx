@@ -7,9 +7,16 @@ export const metadata: Metadata = {
 };
 
 export default async function ProvidersPage() {
-  const providers = await prisma.provider.findMany({
+  const providersRaw = await prisma.provider.findMany({
     orderBy: { name: 'asc' },
   });
 
-  return <ProvidersClient providers={providers} />;
+  // Serialize data for client component (convert Dates to strings)
+  const providers = providersRaw.map(provider => ({
+    ...provider,
+    createdAt: provider.createdAt.toISOString(),
+    updatedAt: provider.updatedAt.toISOString(),
+  }));
+
+  return <ProvidersClient providers={providers as any} />;
 }
