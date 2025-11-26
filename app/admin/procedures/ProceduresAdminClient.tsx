@@ -11,6 +11,7 @@ import {
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { FiEdit, FiTrash2, FiPlus, FiX, FiEye } from 'react-icons/fi';
+import TipTapEditor from '@/components/editor/TipTapEditor';
 
 type ProceduresAdminClientProps = {
   procedures: Procedure[];
@@ -33,10 +34,7 @@ export default function ProceduresAdminClient({
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('');
   const [description, setDescription] = useState('');
-  const [indications, setIndications] = useState('');
-  const [contraindications, setContraindications] = useState('');
-  const [equipment, setEquipment] = useState('');
-  const [steps, setSteps] = useState('');
+  const [steps, setSteps] = useState<any>({ type: 'doc', content: [] });
   const [complications, setComplications] = useState('');
   const [tags, setTags] = useState('');
 
@@ -45,10 +43,7 @@ export default function ProceduresAdminClient({
     setTitle('');
     setCategory('');
     setDescription('');
-    setIndications('');
-    setContraindications('');
-    setEquipment('');
-    setSteps('');
+    setSteps({ type: 'doc', content: [] });
     setComplications('');
     setTags('');
     setEditingProcedure(null);
@@ -69,9 +64,6 @@ export default function ProceduresAdminClient({
       title,
       category,
       description: description || undefined,
-      indications: indications || undefined,
-      contraindications: contraindications || undefined,
-      equipment: equipment || undefined,
       steps,
       complications: complications || undefined,
       tags: tagsArray,
@@ -122,10 +114,8 @@ export default function ProceduresAdminClient({
     setTitle(procedure.title);
     setCategory(procedure.category);
     setDescription(procedure.description || '');
-    setIndications(procedure.indications || '');
-    setContraindications(procedure.contraindications || '');
-    setEquipment(procedure.equipment || '');
-    setSteps(procedure.steps);
+    // Steps is now JSON from TipTap
+    setSteps(procedure.steps || { type: 'doc', content: [] });
     setComplications(procedure.complications || '');
     setTags(procedure.tags.join(', '));
     setShowForm(true);
@@ -255,61 +245,17 @@ export default function ProceduresAdminClient({
                 />
               </div>
 
-              {/* Indications */}
-              <div>
-                <label className="block text-main font-medium mb-2">
-                  Indications (when to perform)
-                </label>
-                <textarea
-                  value={indications}
-                  onChange={(e) => setIndications(e.target.value)}
-                  placeholder="List indications for this procedure..."
-                  rows={3}
-                  className="w-full bg-content border border-main rounded-lg px-4 py-2 text-main placeholder:text-dim focus:outline-none focus:ring-2 focus:ring-blue-500/50 font-mono text-sm"
-                />
-              </div>
-
-              {/* Contraindications */}
-              <div>
-                <label className="block text-main font-medium mb-2">
-                  Contraindications (when NOT to perform)
-                </label>
-                <textarea
-                  value={contraindications}
-                  onChange={(e) => setContraindications(e.target.value)}
-                  placeholder="List contraindications for this procedure..."
-                  rows={3}
-                  className="w-full bg-content border border-main rounded-lg px-4 py-2 text-main placeholder:text-dim focus:outline-none focus:ring-2 focus:ring-blue-500/50 font-mono text-sm"
-                />
-              </div>
-
-              {/* Equipment */}
-              <div>
-                <label className="block text-main font-medium mb-2">
-                  Equipment/Supplies
-                </label>
-                <textarea
-                  value={equipment}
-                  onChange={(e) => setEquipment(e.target.value)}
-                  placeholder="List required equipment and supplies..."
-                  rows={3}
-                  className="w-full bg-content border border-main rounded-lg px-4 py-2 text-main placeholder:text-dim focus:outline-none focus:ring-2 focus:ring-blue-500/50 font-mono text-sm"
-                />
-              </div>
-
               {/* Steps */}
               <div>
                 <label className="block text-main font-medium mb-2">
                   Procedure Steps
                   <span className="text-red-500 ml-1">*</span>
                 </label>
-                <textarea
-                  value={steps}
-                  onChange={(e) => setSteps(e.target.value)}
-                  placeholder="Detailed step-by-step instructions..."
-                  required
-                  rows={8}
-                  className="w-full bg-content border border-main rounded-lg px-4 py-2 text-main placeholder:text-dim focus:outline-none focus:ring-2 focus:ring-blue-500/50 font-mono text-sm"
+                <TipTapEditor
+                  content={steps}
+                  onChange={setSteps}
+                  placeholder="Detailed step-by-step instructions with rich formatting and images..."
+                  editable={true}
                 />
               </div>
 

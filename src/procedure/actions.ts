@@ -12,10 +12,7 @@ export type Procedure = {
   title: string;
   category: string;
   description: string | null;
-  indications: string | null;
-  contraindications: string | null;
-  equipment: string | null;
-  steps: string;
+  steps: any; // TipTap JSON content
   complications: string | null;
   tags: string[];
   viewCount: number;
@@ -28,10 +25,7 @@ export type ProcedureFormData = {
   title: string;
   category: string;
   description?: string;
-  indications?: string;
-  contraindications?: string;
-  equipment?: string;
-  steps: string;
+  steps: any; // TipTap JSON content
   complications?: string;
   tags: string[];
 };
@@ -219,9 +213,8 @@ export async function createProcedure(
 
     const result = await query<Procedure>(
       `INSERT INTO "Procedure" (
-        id, slug, title, category, description, indications, contraindications,
-        equipment, steps, complications, tags, "viewCount", "createdAt", "updatedAt"
-      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
+        id, slug, title, category, description, steps, complications, tags, "viewCount", "createdAt", "updatedAt"
+      ) VALUES ($1, $2, $3, $4, $5, $6::jsonb, $7, $8, $9, $10, $11)
       RETURNING *`,
       [
         id,
@@ -229,10 +222,7 @@ export async function createProcedure(
         data.title,
         data.category,
         data.description || null,
-        data.indications || null,
-        data.contraindications || null,
-        data.equipment || null,
-        data.steps,
+        JSON.stringify(data.steps),
         data.complications || null,
         data.tags,
         0,
@@ -302,13 +292,10 @@ export async function updateProcedure(
          title = COALESCE($3, title),
          category = COALESCE($4, category),
          description = COALESCE($5, description),
-         indications = COALESCE($6, indications),
-         contraindications = COALESCE($7, contraindications),
-         equipment = COALESCE($8, equipment),
-         steps = COALESCE($9, steps),
-         complications = COALESCE($10, complications),
-         tags = COALESCE($11, tags),
-         "updatedAt" = $12
+         steps = COALESCE($6::jsonb, steps),
+         complications = COALESCE($7, complications),
+         tags = COALESCE($8, tags),
+         "updatedAt" = $9
        WHERE id = $1
        RETURNING *`,
       [
@@ -317,10 +304,7 @@ export async function updateProcedure(
         data.title,
         data.category,
         data.description,
-        data.indications,
-        data.contraindications,
-        data.equipment,
-        data.steps,
+        data.steps ? JSON.stringify(data.steps) : null,
         data.complications,
         data.tags,
         now,

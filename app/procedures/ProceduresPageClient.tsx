@@ -13,6 +13,7 @@ import {
   FiX,
 } from 'react-icons/fi';
 import { useDebounce } from 'use-debounce';
+import { EditorRenderer } from '@/components/editor/EditorRenderer';
 
 interface ProceduresPageClientProps {
   procedures: Procedure[];
@@ -253,54 +254,15 @@ export default function ProceduresPageClient({
               </div>
 
               <div className="space-y-6">
-                {/* Indications */}
-                {selectedProcedure.indications && (
-                  <div className="bg-green-50 dark:bg-green-900/10 border border-green-200 dark:border-green-800 rounded-2xl p-6">
-                    <h4 className="text-gray-900 dark:text-white font-semibold text-base mb-3 flex items-center gap-2">
-                      <FiCheckCircle className="text-green-600 dark:text-green-400" />
-                      Indications
-                    </h4>
-                    <pre className="text-gray-700 dark:text-gray-300 text-sm whitespace-pre-wrap font-mono leading-relaxed">
-                      {selectedProcedure.indications}
-                    </pre>
-                  </div>
-                )}
-
-                {/* Contraindications */}
-                {selectedProcedure.contraindications && (
-                  <div className="bg-red-50 dark:bg-red-900/10 border border-red-200 dark:border-red-800 rounded-2xl p-6">
-                    <h4 className="text-gray-900 dark:text-white font-semibold text-base mb-3 flex items-center gap-2">
-                      <FiAlertCircle className="text-red-600 dark:text-red-400" />
-                      Contraindications
-                    </h4>
-                    <pre className="text-gray-700 dark:text-gray-300 text-sm whitespace-pre-wrap font-mono leading-relaxed">
-                      {selectedProcedure.contraindications}
-                    </pre>
-                  </div>
-                )}
-
-                {/* Equipment */}
-                {selectedProcedure.equipment && (
-                  <div className="bg-blue-50 dark:bg-blue-900/10 border border-blue-200 dark:border-blue-800 rounded-2xl p-6">
-                    <h4 className="text-gray-900 dark:text-white font-semibold text-base mb-3 flex items-center gap-2">
-                      <FiTool className="text-blue-600 dark:text-blue-400" />
-                      Equipment/Supplies
-                    </h4>
-                    <pre className="text-gray-700 dark:text-gray-300 text-sm whitespace-pre-wrap font-mono leading-relaxed">
-                      {selectedProcedure.equipment}
-                    </pre>
-                  </div>
-                )}
-
                 {/* Steps */}
                 <div className="bg-purple-50 dark:bg-purple-900/10 border border-purple-200 dark:border-purple-800 rounded-2xl p-6">
                   <h4 className="text-gray-900 dark:text-white font-semibold text-base mb-3 flex items-center gap-2">
                     <FiList className="text-purple-600 dark:text-purple-400" />
                     Procedure Steps
                   </h4>
-                  <pre className="text-gray-700 dark:text-gray-300 text-sm whitespace-pre-wrap font-mono leading-relaxed">
-                    {selectedProcedure.steps}
-                  </pre>
+                  <div className="prose dark:prose-invert max-w-none">
+                    <EditorRenderer content={selectedProcedure.steps} />
+                  </div>
                 </div>
 
                 {/* Complications */}
