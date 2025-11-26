@@ -27,11 +27,30 @@ export default async function PageViewPage({ params }: PageProps) {
     where: { slug, deletedAt: null },
     include: {
       parent: {
-        select: { id: true, title: true, slug: true, icon: true },
+        select: {
+          id: true,
+          title: true,
+          slug: true,
+          icon: true,
+          createdAt: true,
+          updatedAt: true,
+          deletedAt: true,
+          content: true,
+        },
       },
       children: {
         where: { deletedAt: null },
-        select: { id: true, title: true, slug: true, icon: true, type: true },
+        select: {
+          id: true,
+          title: true,
+          slug: true,
+          icon: true,
+          type: true,
+          createdAt: true,
+          updatedAt: true,
+          deletedAt: true,
+          content: true,
+        },
         orderBy: { position: 'asc' },
       },
     },
