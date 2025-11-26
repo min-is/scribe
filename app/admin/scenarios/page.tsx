@@ -12,11 +12,13 @@ export default async function ScenariosAdminPage() {
     orderBy: { title: 'asc' },
   });
 
-  // Serialize data for client component (convert Dates to strings)
+  // Serialize data for client component (convert Dates to strings and Json to plain objects)
   const scenarios = scenariosRaw.map(scenario => ({
     ...scenario,
     createdAt: scenario.createdAt.toISOString(),
     updatedAt: scenario.updatedAt.toISOString(),
+    // Serialize Json fields to plain objects to avoid React error #310
+    content: scenario.content ? JSON.parse(JSON.stringify(scenario.content)) : null,
   }));
 
   // Get unique categories

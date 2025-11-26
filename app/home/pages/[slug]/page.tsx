@@ -65,17 +65,25 @@ export async function generateMetadata({ params }: PageViewProps): Promise<Metad
 
 export default async function PageView({ params }: PageViewProps) {
   const { slug } = await params;
-  const page = await getPage(slug);
+  const pageRaw = await getPage(slug);
 
-  if (!page) {
+  if (!pageRaw) {
     notFound();
   }
 
   // PROVIDER pages MUST have an associated provider
   // If providerId is null, this is an orphaned page that should not be accessible
-  if (page.type === 'PROVIDER' && !page.provider) {
+  if (pageRaw.type === 'PROVIDER' && !pageRaw.provider) {
     notFound();
   }
+
+  // Serialize Page data to avoid React error #310 when passing to client components
+  const page = {
+    ...pageRaw,
+    updatedAt: pageRaw.updatedAt.toISOString(),
+    // Serialize Json content field to plain object
+    content: pageRaw.content ? JSON.parse(JSON.stringify(pageRaw.content)) : null,
+  };
 
   // Extract TipTap content from old wiki format if needed
   let displayContent = page.content;
