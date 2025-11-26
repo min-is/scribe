@@ -45,7 +45,7 @@ export default function ProvidersPageClient({
             Providers
           </h1>
           <p className="text-lg text-gray-600 dark:text-gray-400 font-light max-w-2xl mx-auto">
-            Discover provider profiles, preferences, and expertise levels
+            Discover provider preferences and documentation expectations
           </p>
         </div>
 

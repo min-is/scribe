@@ -112,7 +112,7 @@ export default function SmartPhrasesPageClient({
             SmartPhrase Library
           </h1>
           <p className="text-lg text-gray-600 dark:text-gray-400 font-light max-w-2xl mx-auto">
-            Browse and search EPIC SmartPhrases (.phrases) for clinical documentation
+            Browse and search SmartPhrases (.phrases) for more efficient documentation
           </p>
         </div>
 

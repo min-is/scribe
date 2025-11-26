@@ -91,10 +91,10 @@ export default function ProceduresPageClient({
         {/* Header Section */}
         <div className="mb-12 text-center">
           <h1 className="text-5xl font-semibold tracking-tight text-gray-900 dark:text-white mb-3">
-            Medical Procedures
+            ED Procedures
           </h1>
           <p className="text-lg text-gray-600 dark:text-gray-400 font-light max-w-2xl mx-auto">
-            Step-by-step guides for medical procedures with indications, contraindications, and equipment
+            Documentation guide for ED procedures
           </p>
         </div>
 
