@@ -44,7 +44,7 @@ import {
   Palette,
 } from 'lucide-react';
 import { clsx } from 'clsx/lite';
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 
 interface TipTapEditorProps {
   content?: any;
@@ -505,6 +505,16 @@ export default function TipTapEditor({
   editable = true,
   className,
 }: TipTapEditorProps) {
+  // Memoize the onChange callback to keep it stable across renders
+  const handleUpdate = useCallback(
+    ({ editor }: { editor: Editor }) => {
+      if (onChange) {
+        onChange(editor.getJSON());
+      }
+    },
+    [onChange]
+  );
+
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -561,13 +571,8 @@ export default function TipTapEditor({
       Callout,
       Collapsible,
     ],
-    content,
     editable,
-    onUpdate: ({ editor }) => {
-      if (onChange) {
-        onChange(editor.getJSON());
-      }
-    },
+    onUpdate: handleUpdate,
     editorProps: {
       attributes: {
         class: clsx(
@@ -598,9 +603,20 @@ export default function TipTapEditor({
     },
   });
 
+  // Handle content updates properly via useEffect
+  useEffect(() => {
+    if (editor && content !== undefined) {
+      const currentContent = editor.getJSON();
+      // Only update if content is different to avoid unnecessary re-renders
+      if (JSON.stringify(currentContent) !== JSON.stringify(content)) {
+        editor.commands.setContent(content);
+      }
+    }
+  }, [editor, content]);
+
   return (
     <div className={clsx('border border-main rounded-lg overflow-hidden bg-main', className)}>
-      {editable && <MenuBar editor={editor} />}
+      {editable && editor && <MenuBar editor={editor} />}
       <EditorContent editor={editor} />
     </div>
   );
