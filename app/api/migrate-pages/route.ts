@@ -212,22 +212,34 @@ export async function GET() {
       let position = generateJitteredKeyBetween(null, null);
 
       for (const scenario of scenarios) {
-        const content = {
-          type: 'doc',
-          content: [
-            {
-              type: 'paragraph',
-              content: [{ type: 'text', text: scenario.content }],
-            },
-          ],
-        };
+        let content;
+        let textContent;
+
+        // Handle both legacy string content and new JSON content
+        if (typeof scenario.content === 'string') {
+          // Legacy format: plain text string
+          content = {
+            type: 'doc',
+            content: [
+              {
+                type: 'paragraph',
+                content: [{ type: 'text', text: scenario.content }],
+              },
+            ],
+          };
+          textContent = scenario.content;
+        } else {
+          // New format: TipTap JSON
+          content = scenario.content;
+          textContent = tipTapToPlainText(scenario.content);
+        }
 
         await prisma.page.create({
           data: {
             slug: scenario.slug,
             title: scenario.title,
             content,
-            textContent: scenario.content,
+            textContent: textContent || scenario.title,
             type: PageType.SCENARIO,
             position,
             icon: '🚨',
