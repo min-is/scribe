@@ -246,10 +246,15 @@ export default function MedicationsClient({
                 >
                   <div className="flex items-start gap-4">
                     <div className="flex-1 min-w-0">
-                      {/* Medication Name */}
-                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1.5 tracking-tight">
-                        {med.name}
-                      </h3>
+                      {/* Medication Name and Type */}
+                      <div className="flex items-center justify-between gap-3 mb-1.5">
+                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white tracking-tight">
+                          {med.name}
+                        </h3>
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20 whitespace-nowrap flex-shrink-0">
+                          {med.type}
+                        </span>
+                      </div>
 
                       {/* Brand Names */}
                       {med.brandNames && (
@@ -257,13 +262,6 @@ export default function MedicationsClient({
                           Brand name{med.brandNames.includes(',') ? 's' : ''}: {med.brandNames}
                         </p>
                       )}
-
-                      {/* Type Badge */}
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20">
-                          {med.type}
-                        </span>
-                      </div>
 
                       {/* Description */}
                       {med.commonlyUsedFor && (
