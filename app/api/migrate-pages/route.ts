@@ -3,6 +3,7 @@ import { PrismaClient, PageType } from '@prisma/client';
 import { generateJitteredKeyBetween } from 'fractional-indexing-jittered';
 import { wikiContentToTipTap, tipTapToPlainText } from '@/lib/utils/content-transformers';
 import { parseWikiContent } from '@/lib/utils/type-guards';
+import { JSONContent } from '@tiptap/core';
 
 const prisma = new PrismaClient();
 
