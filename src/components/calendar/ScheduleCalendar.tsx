@@ -3,7 +3,7 @@
 import { useState, useMemo, memo } from 'react';
 import { Calendar, Lock } from 'lucide-react';
 
-const PASSCODE = '1234'; // TODO: Move to environment variable or secure storage
+const PASSCODE = '5150'; // TODO: Move to environment variable or secure storage
 
 function ScheduleCalendar() {
   const [isUnlocked, setIsUnlocked] = useState(false);
@@ -11,12 +11,15 @@ function ScheduleCalendar() {
   const [error, setError] = useState(false);
   const [currentDate] = useState(new Date());
 
-  const handlePasscodeSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (passcode === PASSCODE) {
+  const handlePasscodeChange = (value: string) => {
+    setPasscode(value);
+
+    // Auto-unlock when correct passcode is entered
+    if (value === PASSCODE) {
       setIsUnlocked(true);
       setError(false);
-    } else {
+    } else if (value.length === 4) {
+      // Show error if 4 digits entered but incorrect
       setError(true);
       setPasscode('');
       // Reset error after animation
@@ -116,12 +119,12 @@ function ScheduleCalendar() {
               </p>
             </div>
 
-            <form onSubmit={handlePasscodeSubmit} className="space-y-3">
+            <div className="space-y-3">
               <div>
                 <input
                   type="password"
                   value={passcode}
-                  onChange={(e) => setPasscode(e.target.value)}
+                  onChange={(e) => handlePasscodeChange(e.target.value)}
                   placeholder="••••"
                   maxLength={4}
                   className={`
@@ -140,13 +143,7 @@ function ScheduleCalendar() {
                   </p>
                 )}
               </div>
-              <button
-                type="submit"
-                className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium text-sm"
-              >
-                Unlock
-              </button>
-            </form>
+            </div>
           </div>
         </div>
       </div>
@@ -156,28 +153,16 @@ function ScheduleCalendar() {
   // Unlocked Calendar View
   return (
     <div className="max-w-2xl mx-auto bg-white dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4">
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-blue-500/10 rounded-full flex items-center justify-center">
-            <Calendar className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-          </div>
-          <div>
-            <h3 className="text-base font-semibold text-zinc-900 dark:text-zinc-100">
-              {monthName}
-            </h3>
-            <p className="text-xs text-zinc-600 dark:text-zinc-400">Your schedule at a glance</p>
-          </div>
+      <div className="flex items-center gap-2 mb-4">
+        <div className="w-8 h-8 bg-blue-500/10 rounded-full flex items-center justify-center">
+          <Calendar className="w-4 h-4 text-blue-600 dark:text-blue-400" />
         </div>
-        <button
-          onClick={() => {
-            setIsUnlocked(false);
-            setPasscode('');
-          }}
-          className="p-1.5 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors"
-          title="Lock calendar"
-        >
-          <Lock className="w-4 h-4" />
-        </button>
+        <div>
+          <h3 className="text-base font-semibold text-zinc-900 dark:text-zinc-100">
+            {monthName}
+          </h3>
+          <p className="text-xs text-zinc-600 dark:text-zinc-400">Your schedule at a glance</p>
+        </div>
       </div>
 
       {/* Calendar Grid */}

@@ -58,49 +58,52 @@ export default function HomePageClient({ initialContent }: HomePageClientProps) 
           </div>
         </div>
 
-        {/* Quick Actions */}
-        <div className="mb-10">
-          <h2 className="text-xl font-semibold text-main mb-4 flex items-center gap-2">
-            <Star size={20} className="text-dim" />
-            Quick Actions
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-            <ActionButton
-              title="Provider Preferences"
-              description="View provider preferences"
-              onClick={() => handleSectionClick(PageType.PROVIDER)}
-            />
-            <ActionButton
-              title="Procedures"
-              description="Browse procedure documentation"
-              onClick={() => handleSectionClick(PageType.PROCEDURE)}
-            />
-            <ActionButton
-              title="Smart Phrases"
-              description="Efficient .phrases"
-              onClick={() => handleSectionClick(PageType.SMARTPHRASE)}
-            />
-            <ActionButton
-              title="Scenarios"
-              description="Documentation for various scenarios"
-              onClick={() => handleSectionClick(PageType.SCENARIO)}
-            />
-            <ActionButton
-              title="Physician Directory"
-              description="Hospital physician lookup"
-              onClick={() => handleSectionClick(PageType.PHYSICIAN_DIRECTORY)}
-            />
-            <ActionButton
-              title="Medications"
-              description="Extensive medication dictionary"
-              onClick={() => handleSectionClick(PageType.MEDICATION)}
-            />
+        {/* Quick Actions and Calendar Section */}
+        <div className="mb-10 grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Quick Actions - Left Column */}
+          <div>
+            <h2 className="text-xl font-semibold text-main mb-4 flex items-center gap-2">
+              <Star size={20} className="text-dim" />
+              Quick Actions
+            </h2>
+            <div className="flex flex-col gap-3">
+              <ActionButton
+                title="Provider Preferences"
+                description="View provider preferences"
+                onClick={() => handleSectionClick(PageType.PROVIDER)}
+              />
+              <ActionButton
+                title="Procedures"
+                description="Browse procedure documentation"
+                onClick={() => handleSectionClick(PageType.PROCEDURE)}
+              />
+              <ActionButton
+                title="Smart Phrases"
+                description="Efficient .phrases"
+                onClick={() => handleSectionClick(PageType.SMARTPHRASE)}
+              />
+              <ActionButton
+                title="Scenarios"
+                description="Documentation for various scenarios"
+                onClick={() => handleSectionClick(PageType.SCENARIO)}
+              />
+              <ActionButton
+                title="Physician Directory"
+                description="Hospital physician lookup"
+                onClick={() => handleSectionClick(PageType.PHYSICIAN_DIRECTORY)}
+              />
+              <ActionButton
+                title="Medications"
+                description="Extensive medication dictionary"
+                onClick={() => handleSectionClick(PageType.MEDICATION)}
+              />
+            </div>
           </div>
-        </div>
 
-        {/* Schedule Calendar */}
-        <div className="mb-10">
-          <ScheduleCalendar />
+          {/* Schedule Calendar - Right Column */}
+          <div>
+            <ScheduleCalendar />
+          </div>
         </div>
 
         {/* Getting Started */}
