@@ -212,8 +212,8 @@ export async function GET() {
       let position = generateJitteredKeyBetween(null, null);
 
       for (const scenario of scenarios) {
-        let content;
-        let textContent;
+        let content: JSONContent;
+        let textContent: string;
 
         // Handle both legacy string content and new JSON content
         if (typeof scenario.content === 'string') {
@@ -228,10 +228,28 @@ export async function GET() {
             ],
           };
           textContent = scenario.content;
+        } else if (
+          scenario.content &&
+          typeof scenario.content === 'object' &&
+          'type' in scenario.content &&
+          scenario.content.type === 'doc'
+        ) {
+          // New format: TipTap JSON - validate it's a proper JSONContent object
+          const validatedContent = scenario.content as JSONContent;
+          content = validatedContent;
+          textContent = tipTapToPlainText(validatedContent);
         } else {
-          // New format: TipTap JSON
-          content = scenario.content;
-          textContent = tipTapToPlainText(scenario.content);
+          // Fallback for null or invalid content
+          content = {
+            type: 'doc',
+            content: [
+              {
+                type: 'paragraph',
+                content: [{ type: 'text', text: scenario.title }],
+              },
+            ],
+          };
+          textContent = scenario.title;
         }
 
         await prisma.page.create({
