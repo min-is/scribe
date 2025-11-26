@@ -243,17 +243,25 @@ async function migrateProcedures() {
   let position = generateJitteredKeyBetween(null, null);
 
   for (const procedure of procedures) {
-    const contentText = [
-      procedure.description ? `## Overview\n${procedure.description}` : '',
-      procedure.indications ? `## Indications\n${procedure.indications}` : '',
-      procedure.contraindications ? `## Contraindications\n${procedure.contraindications}` : '',
-      procedure.equipment ? `## Equipment\n${procedure.equipment}` : '',
-      procedure.steps ? `## Steps\n${procedure.steps}` : '',
-      procedure.complications ? `## Complications\n${procedure.complications}` : '',
-    ].filter(Boolean).join('\n\n');
+    // Steps is now stored as TipTap JSON, use it directly if it's JSON, otherwise convert
+    let content;
+    let textContent;
 
-    const content = textToTipTap(contentText, procedure.title);
-    const textContent = extractTextFromTipTap(content);
+    if (typeof procedure.steps === 'object' && procedure.steps !== null) {
+      // Already TipTap JSON format
+      content = procedure.steps;
+      textContent = extractTextFromTipTap(content);
+    } else {
+      // Legacy text format - convert to TipTap
+      const contentText = [
+        procedure.description ? `## Overview\n${procedure.description}` : '',
+        procedure.steps ? `## Steps\n${procedure.steps}` : '',
+        procedure.complications ? `## Complications\n${procedure.complications}` : '',
+      ].filter(Boolean).join('\n\n');
+
+      content = textToTipTap(contentText, procedure.title);
+      textContent = extractTextFromTipTap(content);
+    }
 
     await prisma.page.create({
       data: {
