@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   description: 'Create, edit, and delete medical procedures',
 };
 
+// Force dynamic rendering to prevent build-time database access
+export const dynamic = 'force-dynamic';
+
 export default async function ProceduresAdminPage() {
   const proceduresRaw = await prisma.procedure.findMany({
     orderBy: { title: 'asc' },

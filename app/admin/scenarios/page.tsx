@@ -7,6 +7,9 @@ export const metadata: Metadata = {
   description: 'Create, edit, and delete clinical scenarios',
 };
 
+// Force dynamic rendering to prevent build-time database access
+export const dynamic = 'force-dynamic';
+
 export default async function ScenariosAdminPage() {
   const scenariosRaw = await prisma.scenario.findMany({
     orderBy: { title: 'asc' },
