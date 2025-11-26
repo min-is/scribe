@@ -3,6 +3,7 @@ import { PrismaClient, PageType } from '@prisma/client';
 import { generateJitteredKeyBetween } from 'fractional-indexing-jittered';
 import { wikiContentToTipTap, tipTapToPlainText } from '@/lib/utils/content-transformers';
 import { parseWikiContent } from '@/lib/utils/type-guards';
+import { JSONContent } from '@tiptap/core';
 
 const prisma = new PrismaClient();
 
@@ -212,8 +213,8 @@ export async function GET() {
       let position = generateJitteredKeyBetween(null, null);
 
       for (const scenario of scenarios) {
-        let content;
-        let textContent;
+        let content: JSONContent;
+        let textContent: string;
 
         // Handle both legacy string content and new JSON content
         if (typeof scenario.content === 'string') {
@@ -230,8 +231,9 @@ export async function GET() {
           textContent = scenario.content;
         } else {
           // New format: TipTap JSON
-          content = scenario.content;
-          textContent = tipTapToPlainText(scenario.content);
+          // Assert as JSONContent since Prisma's Json type is broader
+          content = scenario.content as JSONContent;
+          textContent = tipTapToPlainText(content);
         }
 
         await prisma.page.create({
