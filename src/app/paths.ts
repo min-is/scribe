@@ -23,9 +23,6 @@ export const PATH_EDITOR_PROCEDURES     = `${PATH_EDITOR}/procedures`;
 export const PATH_EDITOR_MEDICATIONS    = `${PATH_EDITOR}/medications`;
 export const PATH_EDITOR_TERMINOLOGY    = `${PATH_EDITOR}/terminology`;
 
-// Practice paths
-export const PATH_PRACTICE_TYPING       = '/practice/typing';
-
 // SmartPhrase paths
 export const PATH_SMARTPHRASES          = '/smartphrases';
 export const PATH_ADMIN_SMARTPHRASES    = `${PATH_ADMIN}/smartphrases`;

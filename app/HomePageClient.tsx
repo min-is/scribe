@@ -21,19 +21,7 @@ export default function HomePageClient() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
             {/* Provider Schedules */}
             <div
-              className="bg-medium border border-main rounded-lg p-6 space-y-4 transition-all duration-300 cursor-pointer overflow-hidden"
-              style={{
-                boxShadow: '0 0 0 0 transparent',
-                transition: 'all 0.3s ease',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.boxShadow = '0 0 20px rgba(255, 255, 255, 0.3), 0 0 40px rgba(255, 255, 255, 0.2), 0 0 60px rgba(255, 255, 255, 0.1)';
-                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.4)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.boxShadow = '0 0 0 0 transparent';
-                e.currentTarget.style.borderColor = '';
-              }}
+              className="bg-medium border border-main rounded-lg p-6 space-y-4 transition-all duration-300 cursor-pointer overflow-hidden hover:shadow-[0_0_20px_rgba(255,255,255,0.3),0_0_40px_rgba(255,255,255,0.2),0_0_60px_rgba(255,255,255,0.1)] hover:border-[rgba(255,255,255,0.4)]"
             >
               <h2 className="text-2xl font-semibold text-main">
                 Provider Schedules
@@ -49,19 +37,7 @@ export default function HomePageClient() {
             {/* Provider Preferences */}
             <Link
               href="/providers"
-              className="bg-medium border border-main rounded-lg p-6 space-y-4 transition-all duration-300 block group overflow-hidden"
-              style={{
-                boxShadow: '0 0 0 0 transparent',
-                transition: 'all 0.3s ease',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.boxShadow = '0 0 20px rgba(255, 255, 255, 0.3), 0 0 40px rgba(255, 255, 255, 0.2), 0 0 60px rgba(255, 255, 255, 0.1)';
-                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.4)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.boxShadow = '0 0 0 0 transparent';
-                e.currentTarget.style.borderColor = '';
-              }}
+              className="bg-medium border border-main rounded-lg p-6 space-y-4 transition-all duration-300 block group overflow-hidden hover:shadow-[0_0_20px_rgba(255,255,255,0.3),0_0_40px_rgba(255,255,255,0.2),0_0_60px_rgba(255,255,255,0.1)] hover:border-[rgba(255,255,255,0.4)]"
             >
               <h2 className="text-2xl font-semibold text-main group-hover:text-gray-100 dark:group-hover:text-white transition-colors">
                 Provider Preferences
@@ -91,19 +67,7 @@ export default function HomePageClient() {
             {/* Smartphrase Library */}
             <Link
               href="/smartphrases"
-              className="bg-medium border border-main rounded-lg p-6 space-y-4 transition-all duration-300 block group overflow-hidden"
-              style={{
-                boxShadow: '0 0 0 0 transparent',
-                transition: 'all 0.3s ease',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.boxShadow = '0 0 20px rgba(255, 255, 255, 0.3), 0 0 40px rgba(255, 255, 255, 0.2), 0 0 60px rgba(255, 255, 255, 0.1)';
-                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.4)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.boxShadow = '0 0 0 0 transparent';
-                e.currentTarget.style.borderColor = '';
-              }}
+              className="bg-medium border border-main rounded-lg p-6 space-y-4 transition-all duration-300 block group overflow-hidden hover:shadow-[0_0_20px_rgba(255,255,255,0.3),0_0_40px_rgba(255,255,255,0.2),0_0_60px_rgba(255,255,255,0.1)] hover:border-[rgba(255,255,255,0.4)]"
             >
               <h2 className="text-2xl font-semibold text-main group-hover:text-gray-100 dark:group-hover:text-white transition-colors">
                 Smartphrase Library
@@ -133,19 +97,7 @@ export default function HomePageClient() {
             {/* Scenarios */}
             <Link
               href="/scenarios"
-              className="bg-medium border border-main rounded-lg p-6 space-y-4 transition-all duration-300 block group overflow-hidden"
-              style={{
-                boxShadow: '0 0 0 0 transparent',
-                transition: 'all 0.3s ease',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.boxShadow = '0 0 20px rgba(255, 255, 255, 0.3), 0 0 40px rgba(255, 255, 255, 0.2), 0 0 60px rgba(255, 255, 255, 0.1)';
-                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.4)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.boxShadow = '0 0 0 0 transparent';
-                e.currentTarget.style.borderColor = '';
-              }}
+              className="bg-medium border border-main rounded-lg p-6 space-y-4 transition-all duration-300 block group overflow-hidden hover:shadow-[0_0_20px_rgba(255,255,255,0.3),0_0_40px_rgba(255,255,255,0.2),0_0_60px_rgba(255,255,255,0.1)] hover:border-[rgba(255,255,255,0.4)]"
             >
               <h2 className="text-2xl font-semibold text-main group-hover:text-gray-100 dark:group-hover:text-white transition-colors">
                 Scenarios
@@ -175,19 +127,7 @@ export default function HomePageClient() {
             {/* Procedures */}
             <Link
               href="/procedures"
-              className="bg-medium border border-main rounded-lg p-6 space-y-4 transition-all duration-300 block group overflow-hidden"
-              style={{
-                boxShadow: '0 0 0 0 transparent',
-                transition: 'all 0.3s ease',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.boxShadow = '0 0 20px rgba(255, 255, 255, 0.3), 0 0 40px rgba(255, 255, 255, 0.2), 0 0 60px rgba(255, 255, 255, 0.1)';
-                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.4)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.boxShadow = '0 0 0 0 transparent';
-                e.currentTarget.style.borderColor = '';
-              }}
+              className="bg-medium border border-main rounded-lg p-6 space-y-4 transition-all duration-300 block group overflow-hidden hover:shadow-[0_0_20px_rgba(255,255,255,0.3),0_0_40px_rgba(255,255,255,0.2),0_0_60px_rgba(255,255,255,0.1)] hover:border-[rgba(255,255,255,0.4)]"
             >
               <h2 className="text-2xl font-semibold text-main group-hover:text-gray-100 dark:group-hover:text-white transition-colors">
                 Procedures

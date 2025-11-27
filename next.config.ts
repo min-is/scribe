@@ -51,6 +51,12 @@ const nextConfig: NextConfig = {
     remotePatterns,
     minimumCacheTTL: 31536000,
   },
+  // Performance optimizations
+  compress: true,
+  poweredByHeader: false,
+  reactStrictMode: true,
+  // Enable SWC minification for better performance
+  swcMinify: true,
 };
 
 module.exports = process.env.ANALYZE === 'true'

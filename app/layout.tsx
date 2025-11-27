@@ -72,6 +72,8 @@ export default function RootLayout({
       <body className={clsx(
         // Center on large screens
         '3xl:flex flex-col items-center',
+        // Performance optimizations
+        'overflow-y-scroll',
       )}>
         <AppStateProvider>
           <AppTextProvider>
