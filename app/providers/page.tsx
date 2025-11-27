@@ -8,35 +8,58 @@ export const metadata: Metadata = {
     'Browse provider documentation preferences and expectations',
 };
 
+// Enable Incremental Static Regeneration - revalidate every hour
+export const revalidate = 3600;
+
 export default async function ProvidersPage() {
-  // Fetch providers with their associated pages (if table exists)
+  // Fetch providers with only the fields needed for the list view
+  // Excludes large JSON blobs (wikiContent, preferences, noteTemplate, noteSmartPhrase)
   let providersRaw;
   try {
     providersRaw = await prisma.provider.findMany({
-      orderBy: { name: 'asc' },
-      include: {
+      select: {
+        id: true,
+        slug: true,
+        name: true,
+        credentials: true,
+        icon: true,
+        generalDifficulty: true,
+        viewCount: true,
+        createdAt: true,
+        updatedAt: true,
         page: {
           select: {
             slug: true,
           },
         },
       },
+      orderBy: { name: 'asc' },
+      take: 200, // Limit to 200 providers (add pagination later if needed)
     });
   } catch (error) {
     // Fallback if Page table doesn't exist yet
     providersRaw = await prisma.provider.findMany({
+      select: {
+        id: true,
+        slug: true,
+        name: true,
+        credentials: true,
+        icon: true,
+        generalDifficulty: true,
+        viewCount: true,
+        createdAt: true,
+        updatedAt: true,
+      },
       orderBy: { name: 'asc' },
+      take: 200,
     });
   }
 
-  // Serialize data for client component (convert Dates to strings and Json to plain objects)
+  // Serialize data for client component (convert Dates to strings)
   const providers = providersRaw.map(provider => ({
     ...provider,
     createdAt: provider.createdAt.toISOString(),
     updatedAt: provider.updatedAt.toISOString(),
-    // Serialize Json fields to plain objects to avoid React error #310
-    wikiContent: provider.wikiContent ? JSON.parse(JSON.stringify(provider.wikiContent)) : null,
-    preferences: provider.preferences ? JSON.parse(JSON.stringify(provider.preferences)) : null,
   }));
 
   return <ProvidersPageClient providers={providers as any} />;

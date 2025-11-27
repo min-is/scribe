@@ -2,12 +2,29 @@ import { Metadata } from 'next';
 import { prisma } from '@/lib/prisma';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import TipTapEditor from '@/components/editor/TipTapEditor';
+import dynamic from 'next/dynamic';
 import { Edit, Trash2, Eye } from 'lucide-react';
 import { PageViewTracker } from '@/components/pages/PageViewTracker';
 import { cache } from 'react';
 
-export const dynamic = 'force-dynamic';
+// Lazy load TipTapEditor to reduce initial bundle size
+const TipTapEditor = dynamic(
+  () => import('@/components/editor/TipTapEditor'),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="animate-pulse">
+        <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-4"></div>
+        <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-full mb-3"></div>
+        <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-5/6 mb-3"></div>
+        <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-4/6"></div>
+      </div>
+    ),
+  }
+);
+
+// Enable Incremental Static Regeneration - revalidate every 30 minutes
+export const revalidate = 1800;
 
 interface PageViewProps {
   params: Promise<{ slug: string }>;
