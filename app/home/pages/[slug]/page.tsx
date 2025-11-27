@@ -85,56 +85,17 @@ export default async function PageView({ params }: PageViewProps) {
     content: pageRaw.content ? JSON.parse(JSON.stringify(pageRaw.content)) : null,
   };
 
-  // Extract TipTap content from old wiki format if needed
-  let displayContent = page.content;
-
-  // Check if content is in old wiki format with sections
-  if (typeof displayContent === 'object' && displayContent !== null) {
-    const contentObj = displayContent as any;
-
-    // Old format: { sections: [...], metadata: {...}, media: [...] }
-    if (contentObj.sections && Array.isArray(contentObj.sections)) {
-      if (contentObj.sections.length > 0) {
-        // Has sections - extract first section content
-        const firstSection = contentObj.sections[0];
-        if (firstSection.content && firstSection.content.type === 'doc') {
-          displayContent = firstSection.content;
-        }
-      } else {
-        // Empty sections - create empty TipTap document
-        displayContent = {
-          type: 'doc',
-          content: [
-            {
-              type: 'paragraph',
-              content: [],
-            },
-          ],
-        };
-      }
-    }
-    // Migration format: stringified JSON in a paragraph
-    else if (contentObj.type === 'doc' && contentObj.content && Array.isArray(contentObj.content)) {
-      const firstNode = contentObj.content[0];
-      if (firstNode?.type === 'paragraph' && firstNode.content?.[0]?.text) {
-        const text = firstNode.content[0].text;
-        // Try to parse as JSON if it looks like the old wiki format
-        if (text.startsWith('{') && text.includes('sections')) {
-          try {
-            const parsed = JSON.parse(text);
-            if (parsed.sections && Array.isArray(parsed.sections) && parsed.sections.length > 0) {
-              const firstSection = parsed.sections[0];
-              if (firstSection.content && firstSection.content.type === 'doc') {
-                displayContent = firstSection.content;
-              }
-            }
-          } catch {
-            // Keep original content if parsing fails
-          }
-        }
-      }
-    }
-  }
+  // Use page.content directly - it's already synced by provider actions
+  // If content is null or empty, use a default empty TipTap document
+  const displayContent = page.content || {
+    type: 'doc',
+    content: [
+      {
+        type: 'paragraph',
+        content: [],
+      },
+    ],
+  };
 
   return (
     <div className="h-full flex flex-col bg-main">
