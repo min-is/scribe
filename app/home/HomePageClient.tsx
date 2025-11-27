@@ -106,13 +106,6 @@ export default function HomePageClient({ initialContent }: HomePageClientProps) 
           </div>
         </div>
 
-        {/* Getting Started */}
-        <div className="bg-blue-50 dark:bg-blue-900/10 border border-blue-200 dark:border-blue-800 rounded-xl p-6">
-          <h3 className="text-lg font-semibold text-main mb-3">Getting Started</h3>
-          <div className="space-y-2 text-sm text-medium whitespace-pre-line">
-            {initialContent.gettingStartedText}
-          </div>
-        </div>
       </div>
 
       {/* Section Search Modal */}
