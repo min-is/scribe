@@ -8,35 +8,39 @@ export const metadata: Metadata = {
     'Browse provider documentation preferences and expectations',
 };
 
+// Enable Incremental Static Regeneration - revalidate every 1 hour
+export const revalidate = 3600;
+
 export default async function ProvidersPage() {
-  // Fetch providers with their associated pages (if table exists)
-  let providersRaw;
-  try {
-    providersRaw = await prisma.provider.findMany({
-      orderBy: { name: 'asc' },
-      include: {
-        page: {
-          select: {
-            slug: true,
-          },
+  // Fetch providers with only the fields needed for the list view
+  // Exclude large JSON fields (wikiContent, preferences, noteTemplate, noteSmartPhrase)
+  // to reduce database load and improve performance
+  const providersRaw = await prisma.provider.findMany({
+    select: {
+      id: true,
+      slug: true,
+      name: true,
+      credentials: true,
+      icon: true,
+      generalDifficulty: true,
+      viewCount: true,
+      createdAt: true,
+      updatedAt: true,
+      page: {
+        select: {
+          slug: true,
         },
       },
-    });
-  } catch (error) {
-    // Fallback if Page table doesn't exist yet
-    providersRaw = await prisma.provider.findMany({
-      orderBy: { name: 'asc' },
-    });
-  }
+    },
+    orderBy: { name: 'asc' },
+    take: 200, // Limit to 200 providers for now (can add pagination later)
+  });
 
-  // Serialize data for client component (convert Dates to strings and Json to plain objects)
+  // Serialize data for client component (convert Dates to strings)
   const providers = providersRaw.map(provider => ({
     ...provider,
     createdAt: provider.createdAt.toISOString(),
     updatedAt: provider.updatedAt.toISOString(),
-    // Serialize Json fields to plain objects to avoid React error #310
-    wikiContent: provider.wikiContent ? JSON.parse(JSON.stringify(provider.wikiContent)) : null,
-    preferences: provider.preferences ? JSON.parse(JSON.stringify(provider.preferences)) : null,
   }));
 
   return <ProvidersPageClient providers={providers as any} />;
