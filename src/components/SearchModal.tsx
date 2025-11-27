@@ -4,10 +4,10 @@ import { Command } from 'cmdk';
 import { ReactNode, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { clsx } from 'clsx/lite';
-import { PATH_PRACTICE_TYPING, PATH_ADMIN, PATH_ADMIN_CONFIGURATION, PATH_SMARTPHRASES, PATH_SCENARIOS, PATH_PROCEDURES, PATH_EDITOR_MEDICATIONS, PATH_EDITOR_TERMINOLOGY } from '@/app/paths';
+import { PATH_ADMIN, PATH_ADMIN_CONFIGURATION, PATH_SMARTPHRASES, PATH_SCENARIOS, PATH_PROCEDURES, PATH_EDITOR_MEDICATIONS, PATH_EDITOR_TERMINOLOGY } from '@/app/paths';
 import Modal from './Modal';
 import CommandKItem from '@/cmdk/CommandKItem';
-import { FaUserMd, FaHospital, FaFileAlt, FaKeyboard, FaPills, FaBook } from 'react-icons/fa';
+import { FaUserMd, FaHospital, FaFileAlt, FaPills, FaBook } from 'react-icons/fa';
 import { HiDocumentText } from 'react-icons/hi';
 import { RiToolsFill } from 'react-icons/ri';
 import { FiActivity } from 'react-icons/fi';
@@ -148,13 +148,6 @@ export default function SearchModal({
     heading: 'Miscellaneous',
     accessory: <FaFileAlt size={14} />,
     items: [
-      {
-        label: 'Typing Practice',
-        annotation: 'Improve your speed',
-        keywords: ['typing', 'practice', 'medical', 'terms', 'speed', 'wpm', 'trainer', 'keyboard'],
-        path: PATH_PRACTICE_TYPING,
-        accessory: <FaKeyboard size={14} className="text-gray-500 dark:text-gray-400" />,
-      },
       {
         label: 'App Configuration',
         annotation: 'Dashboard settings',

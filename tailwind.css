@@ -104,17 +104,6 @@
     10%, 30%, 50%, 70%, 90% { transform: translateX(-8px); }
     20%, 40%, 60%, 80% { transform: translateX(8px); }
   }
-
-  /* Typing Trainer Dynamic Theme Colors (set via JavaScript) */
-  --typing-bg: #0a0a0a;
-  --typing-text: #d1d0c5;
-  --typing-subtext: #646669;
-  --typing-primary: #e2b714;
-  --typing-secondary: #d1d0c5;
-  --typing-error: #ca4754;
-  --typing-caret: #e2b714;
-  --typing-correct: #d1d0c5;
-  --typing-incorrect: #ca4754;
 }
 
 /* Text Primitives */
@@ -461,5 +450,30 @@
   .component-surface-frosted {
     @apply
       text-black bg-neutral-200/95 rounded-lg
+  }
+}
+
+/* Performance Optimizations for Scrolling */
+* {
+  /* Enable GPU acceleration for transforms and opacity */
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Optimize scrolling performance */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Use containment for better performance */
+body {
+  contain: layout style paint;
+}
+
+/* Optimize animations and transitions */
+@media (prefers-reduced-motion: no-preference) {
+  * {
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   }
 }

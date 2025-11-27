@@ -1,7 +1,7 @@
 'use client';
 
 import MoreMenu from '@/components/more/MoreMenu';
-import { PATH_ADMIN_CONFIGURATION, PATH_PRACTICE_TYPING } from '@/app/paths';
+import { PATH_ADMIN_CONFIGURATION } from '@/app/paths';
 import { useAppState } from '@/state/AppState';
 import { IoArrowDown, IoArrowUp } from 'react-icons/io5';
 import { clsx } from 'clsx/lite';
@@ -9,7 +9,6 @@ import AdminAppInfoIcon from './AdminAppInfoIcon';
 import { signOutAction } from '@/auth/actions';
 import { ComponentProps, useMemo } from 'react';
 import IconSignOut from '@/components/icons/IconSignOut';
-import IconKeyboard from '@/components/icons/IconKeyboard';
 import MoreMenuItem from '@/components/more/MoreMenuItem';
 import { useAppText } from '@/i18n/state/client';
 
@@ -38,10 +37,6 @@ export default function AdminAppMenu({
       className="translate-x-[-0.5px] translate-y-[0.5px]"
     />,
     href: PATH_ADMIN_CONFIGURATION,
-  }, {
-    label: 'Typing Practice',
-    icon: <IconKeyboard size={15} />,
-    href: PATH_PRACTICE_TYPING,
   }], [appText]);
 
   const sectionSignOut: ComponentProps<typeof MoreMenuItem>[] =
