@@ -2,12 +2,15 @@ import { Metadata } from 'next';
 import { prisma } from '@/lib/prisma';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import TipTapEditor from '@/components/editor/TipTapEditor';
-import { Edit, Trash2, Eye } from 'lucide-react';
+import TipTapEditorClient from '@/components/editor/TipTapEditorClient';
+import { Eye } from 'lucide-react';
 import { PageViewTracker } from '@/components/pages/PageViewTracker';
 import { cache } from 'react';
 
 export const dynamic = 'force-dynamic';
+
+// Enable Incremental Static Regeneration - revalidate every 30 minutes
+export const revalidate = 1800;
 
 interface PageViewProps {
   params: Promise<{ slug: string }>;
@@ -136,7 +139,7 @@ export default async function PageView({ params }: PageViewProps) {
 
           {/* Content */}
           <div className="mb-12 prose-body">
-            <TipTapEditor
+            <TipTapEditorClient
               content={displayContent}
               editable={false}
               className="prose-body"
