@@ -111,12 +111,9 @@ function ScheduleCalendar() {
               <div className="inline-flex items-center justify-center w-12 h-12 bg-zinc-100 dark:bg-zinc-800 rounded-full mb-3">
                 <Lock className="w-6 h-6 text-zinc-600 dark:text-zinc-400" />
               </div>
-              <h3 className="text-base font-semibold text-zinc-900 dark:text-zinc-100 mb-1">
+              <h3 className="text-base font-semibold text-zinc-900 dark:text-zinc-100">
                 Scribe/Provider Calendar
               </h3>
-              <p className="text-xs text-zinc-600 dark:text-zinc-400">
-                Protected content
-              </p>
             </div>
 
             <div className="space-y-3">
@@ -128,7 +125,7 @@ function ScheduleCalendar() {
                   placeholder="••••"
                   maxLength={4}
                   className={`
-                    w-full px-4 py-2 text-center text-xl tracking-widest font-medium
+                    w-32 mx-auto block px-4 py-2 text-center text-xl tracking-widest font-medium
                     bg-zinc-100 dark:bg-zinc-800 border-2 rounded-lg
                     text-zinc-900 dark:text-zinc-100
                     placeholder:text-zinc-400 dark:placeholder:text-zinc-600
