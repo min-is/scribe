@@ -33,6 +33,9 @@ model Provider {
   // New Page relationship
   page          Page?
 
+  // Shift relationship
+  shifts        Shift[] @relation("ProviderShifts")
+
   // Metadata
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -288,4 +291,59 @@ model User {
 enum UserRole {
   ADMIN
   EDITOR
+}
+
+// ============================================================================
+// SHIFT SCHEDULING MODELS - ShiftGen Integration
+// ============================================================================
+
+model Shift {
+  id        String   @id @default(cuid())
+  date      DateTime @db.Date
+
+  // Zone information (A, B, C, PA, etc.)
+  zone      String   // Zone identifier (formerly "label" in Discord bot)
+
+  // Shift timing (stored as strings in HHMM format)
+  startTime String   // e.g., "0800", "1400"
+  endTime   String   // e.g., "1600", "2200"
+
+  // Site information
+  site      String   // e.g., "St Joseph Scribe", "Physician", "MLP"
+
+  // Relations to Scribe and Provider
+  scribeId     String?
+  scribe       Scribe?    @relation("ScribeShifts", fields: [scribeId], references: [id], onDelete: SetNull)
+
+  providerId   String?
+  provider     Provider?  @relation("ProviderShifts", fields: [providerId], references: [id], onDelete: SetNull)
+
+  // Metadata
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Prevent duplicate shift entries
+  @@unique([date, zone, startTime, scribeId, providerId])
+
+  // Indexes for query performance
+  @@index([date])
+  @@index([scribeId, date])
+  @@index([providerId, date])
+  @@index([site])
+}
+
+model Scribe {
+  id               String   @id @default(cuid())
+  name             String   @unique
+  standardizedName String?  // Standardized name from name mapper
+
+  // Relationship to shifts
+  shifts           Shift[]  @relation("ScribeShifts")
+
+  // Metadata
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([name])
+  @@index([standardizedName])
 }
