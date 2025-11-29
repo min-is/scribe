@@ -30,8 +30,9 @@ model Provider {
   viewCount        Int @default(0)  // Profile view tracking
   searchClickCount Int @default(0)  // Search click tracking
 
-  // New Page relationship
+  // Relationships
   page          Page?
+  shifts        Shift[]  @relation("ProviderShifts")
 
   // Metadata
   createdAt DateTime @default(now())
@@ -288,4 +289,43 @@ model User {
 enum UserRole {
   ADMIN
   EDITOR
+}
+
+model Scribe {
+  id               String   @id @default(cuid())
+  name             String   @unique
+  standardizedName String?  // Standardized name from name mapper
+
+  // Relationships
+  shifts           Shift[]  @relation("ScribeShifts")
+
+  // Metadata
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([name])
+}
+
+model Shift {
+  id        String   @id @default(cuid())
+  date      DateTime @db.Date
+  zone      String   // Zone identifier (A, B, C, PA, etc.)
+  startTime String   // e.g., "0800"
+  endTime   String   // e.g., "1600"
+  site      String   // Site name
+
+  // Relationships
+  scribeId     String?
+  scribe       Scribe?   @relation("ScribeShifts", fields: [scribeId], references: [id], onDelete: SetNull)
+  providerId   String?
+  provider     Provider? @relation("ProviderShifts", fields: [providerId], references: [id], onDelete: SetNull)
+
+  // Metadata
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([date, zone, startTime, scribeId, providerId])
+  @@index([date])
+  @@index([scribeId, date])
+  @@index([providerId, date])
 }

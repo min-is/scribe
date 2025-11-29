@@ -734,6 +734,90 @@ BEGIN
 END $$;
     `,
   },
+  {
+    name: '20251129000000_add_shift_and_scribe_tables',
+    sql: `
+-- CreateTable Scribe (only if not exists)
+CREATE TABLE IF NOT EXISTS "Scribe" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "standardizedName" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "Scribe_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable Shift (only if not exists)
+CREATE TABLE IF NOT EXISTS "Shift" (
+    "id" TEXT NOT NULL,
+    "date" DATE NOT NULL,
+    "zone" TEXT NOT NULL,
+    "startTime" TEXT NOT NULL,
+    "endTime" TEXT NOT NULL,
+    "site" TEXT NOT NULL,
+    "scribeId" TEXT,
+    "providerId" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "Shift_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateIndexes for Scribe
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_indexes WHERE indexname = 'Scribe_name_key') THEN
+        CREATE UNIQUE INDEX "Scribe_name_key" ON "Scribe"("name");
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM pg_indexes WHERE indexname = 'Scribe_name_idx') THEN
+        CREATE INDEX "Scribe_name_idx" ON "Scribe"("name");
+    END IF;
+END $$;
+
+-- CreateIndexes for Shift
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_indexes WHERE indexname = 'Shift_date_idx') THEN
+        CREATE INDEX "Shift_date_idx" ON "Shift"("date");
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM pg_indexes WHERE indexname = 'Shift_scribeId_date_idx') THEN
+        CREATE INDEX "Shift_scribeId_date_idx" ON "Shift"("scribeId", "date");
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM pg_indexes WHERE indexname = 'Shift_providerId_date_idx') THEN
+        CREATE INDEX "Shift_providerId_date_idx" ON "Shift"("providerId", "date");
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM pg_indexes WHERE indexname = 'Shift_date_zone_startTime_scribeId_providerId_key') THEN
+        CREATE UNIQUE INDEX "Shift_date_zone_startTime_scribeId_providerId_key"
+        ON "Shift"("date", "zone", "startTime", "scribeId", "providerId");
+    END IF;
+END $$;
+
+-- AddForeignKeys for Shift (only if not exists)
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.table_constraints
+        WHERE constraint_name = 'Shift_scribeId_fkey' AND table_name = 'Shift'
+    ) THEN
+        ALTER TABLE "Shift" ADD CONSTRAINT "Shift_scribeId_fkey"
+        FOREIGN KEY ("scribeId") REFERENCES "Scribe"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+    END IF;
+
+    IF NOT EXISTS (
+        SELECT 1 FROM information_schema.table_constraints
+        WHERE constraint_name = 'Shift_providerId_fkey' AND table_name = 'Shift'
+    ) THEN
+        ALTER TABLE "Shift" ADD CONSTRAINT "Shift_providerId_fkey"
+        FOREIGN KEY ("providerId") REFERENCES "Provider"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+    END IF;
+END $$;
+    `,
+  },
 ];
 
 async function runMigrations() {
