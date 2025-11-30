@@ -55,8 +55,7 @@ const nextConfig: NextConfig = {
   compress: true,
   poweredByHeader: false,
   reactStrictMode: true,
-  // Enable SWC minification for better performance
-  swcMinify: true,
+  // Note: swcMinify is enabled by default in Next.js 13+ and has been removed
 };
 
 module.exports = process.env.ANALYZE === 'true'

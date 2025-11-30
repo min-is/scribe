@@ -3,7 +3,7 @@
  * Standalone schedule viewer for the website
  */
 
-// Types
+// Types (safe for client and server)
 export type {
   ShiftWithRelations,
   TimePeriod,
@@ -15,7 +15,7 @@ export type {
   ApiResponse,
 } from './types';
 
-// Constants and utilities
+// Constants and utilities (safe for client and server)
 export {
   ZONE_CONFIGS,
   TIME_PERIODS,
@@ -31,7 +31,7 @@ export {
   isValidTimeFormat,
 } from './constants';
 
-// Database operations
+// Database operations (safe for server-side only, but exported for API routes)
 export {
   getShiftsForDate,
   getShiftsInRange,
@@ -50,11 +50,9 @@ export {
   getShiftsByProvider,
 } from './db';
 
-// Scraping and sync
-export { ShiftGenScraper } from './scraper';
-export { ScheduleParser } from './parser';
-export type { RawShiftData } from './parser';
-export { NameMapper } from './name-mapper';
-export { ShiftGenSyncService } from './sync';
-export type { SyncResult } from './sync';
-export { SITES_TO_FETCH, BASE_URL } from './config';
+// Server-only exports (contain Node.js dependencies like 'fs')
+// Import these directly from their modules in API routes:
+// import { ShiftGenScraper } from '@/lib/shiftgen/scraper'
+// import { ScheduleParser } from '@/lib/shiftgen/parser'
+// import { NameMapper } from '@/lib/shiftgen/name-mapper'
+// import { ShiftGenSyncService } from '@/lib/shiftgen/sync'

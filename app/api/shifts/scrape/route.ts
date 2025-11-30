@@ -6,7 +6,8 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { ShiftGenSyncService, SyncResult } from '@/lib/shiftgen';
+import { ShiftGenSyncService } from '@/lib/shiftgen/sync';
+import type { SyncResult } from '@/lib/shiftgen/sync';
 
 export async function POST(request: NextRequest) {
   try {
