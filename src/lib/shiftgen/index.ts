@@ -44,7 +44,17 @@ export {
   deleteShift,
   deleteShiftsForDate,
   findOrCreateScribe,
+  upsertShift,
   getAllScribes,
   getShiftsByScribe,
   getShiftsByProvider,
 } from './db';
+
+// Scraping and sync
+export { ShiftGenScraper } from './scraper';
+export { ScheduleParser } from './parser';
+export type { RawShiftData } from './parser';
+export { NameMapper } from './name-mapper';
+export { ShiftGenSyncService } from './sync';
+export type { SyncResult } from './sync';
+export { SITES_TO_FETCH, BASE_URL } from './config';

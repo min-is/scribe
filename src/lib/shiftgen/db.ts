@@ -245,6 +245,66 @@ export async function findOrCreateScribe(name: string, standardizedName?: string
 }
 
 /**
+ * Upsert shift (create or update)
+ */
+export async function upsertShift(data: {
+  date: Date;
+  zone: string;
+  startTime: string;
+  endTime: string;
+  site: string;
+  scribeId?: string | null;
+  providerId?: string | null;
+}): Promise<{ created: boolean; updated: boolean; shift: ShiftWithRelations }> {
+  // Try to find existing shift
+  const existing = await prisma.shift.findFirst({
+    where: {
+      date: data.date,
+      zone: data.zone,
+      startTime: data.startTime,
+      scribeId: data.scribeId || null,
+      providerId: data.providerId || null,
+    },
+  });
+
+  if (existing) {
+    // Update existing shift
+    const updated = await prisma.shift.update({
+      where: { id: existing.id },
+      data: {
+        endTime: data.endTime,
+        site: data.site,
+      },
+      include: {
+        scribe: true,
+        provider: true,
+      },
+    });
+
+    return {
+      created: false,
+      updated: true,
+      shift: updated,
+    };
+  } else {
+    // Create new shift
+    const created = await prisma.shift.create({
+      data,
+      include: {
+        scribe: true,
+        provider: true,
+      },
+    });
+
+    return {
+      created: true,
+      updated: false,
+      shift: created,
+    };
+  }
+}
+
+/**
  * Get all scribes
  */
 export async function getAllScribes() {
