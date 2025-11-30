@@ -67,9 +67,9 @@ After scraping completes, check:
 
 ### What It Does
 
-- Automatically scrapes ShiftGen every 12 hours
+- Automatically scrapes ShiftGen once per day
 - Updates database with new/modified shifts
-- Runs at 12:00 AM and 12:00 PM UTC
+- Runs at 12:00 AM UTC (midnight)
 
 ### Setup
 
@@ -79,7 +79,7 @@ After scraping completes, check:
      "crons": [
        {
          "path": "/api/cron/scrape-shifts",
-         "schedule": "0 */12 * * *"
+         "schedule": "0 0 * * *"
        }
      ]
    }
@@ -87,7 +87,7 @@ After scraping completes, check:
 
 2. **Enable Vercel Cron**:
    - Deploy your project
-   - Vercel automatically enables cron jobs on Pro plans
+   - Vercel automatically enables cron jobs on all plans (Hobby: 2 jobs, once per day)
    - Check Vercel Dashboard → Your Project → Cron Jobs
 
 3. **Set `CRON_SECRET`** environment variable (required for security)
@@ -151,11 +151,12 @@ Check cron execution logs:
 ### Problem: Cron job not running
 
 **Vercel Cron Requirements**:
-- Only available on **Pro** plans
+- Available on all plans (**Hobby**: 2 cron jobs, once per day; **Pro/Enterprise**: more frequent)
 - Requires `CRON_SECRET` environment variable
 - Check Vercel Dashboard → Cron Jobs to verify setup
+- On Hobby tier, ensure schedule is once per day (e.g., `0 0 * * *`)
 
-**Alternative**: Use GitHub Actions to trigger scrape endpoint
+**Alternative**: Use GitHub Actions for more frequent scraping (if needed)
 
 ---
 
