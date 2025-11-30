@@ -63,17 +63,33 @@ After scraping completes, check:
 
 ---
 
-## Automated Scheduling (Vercel Cron)
+## Automated Scheduling Options
 
-### What It Does
+### Option 1: Manual Scraping (Free Tier - Current Setup)
 
+**What It Does**:
+- Scrape shifts on-demand via admin portal
+- No automated scheduling
+- Works on Vercel's free (Hobby) tier
+
+**How to Use**:
+1. Visit `https://yoursite.com/admin/shifts`
+2. Enter passcode: `5150`
+3. Click "Trigger Manual Scrape"
+4. Wait for results
+
+**When to Scrape**: Manually trigger whenever you need updated shift data (recommended: daily or as needed)
+
+### Option 2: Vercel Cron Jobs (Pro Plan Required - $20/month)
+
+**What It Does**:
 - Automatically scrapes ShiftGen every 12 hours
 - Updates database with new/modified shifts
 - Runs at 12:00 AM and 12:00 PM UTC
 
-### Setup
-
-1. **Cron configuration** is already in `vercel.json`:
+**Setup**:
+1. **Upgrade to Vercel Pro** ($20/month)
+2. **Add cron configuration** to `vercel.json`:
    ```json
    {
      "crons": [
@@ -84,19 +100,45 @@ After scraping completes, check:
      ]
    }
    ```
-
-2. **Enable Vercel Cron**:
-   - Deploy your project
-   - Vercel automatically enables cron jobs on Pro plans
-   - Check Vercel Dashboard → Your Project → Cron Jobs
-
 3. **Set `CRON_SECRET`** environment variable (required for security)
+4. **Deploy** - Vercel automatically enables cron jobs
+5. **Monitor** via Vercel Dashboard → Your Project → Cron Jobs
 
-### Monitoring
+### Option 3: GitHub Actions (Free Alternative)
 
-Check cron execution logs:
-- Vercel Dashboard → Your Project → Deployments → Functions
-- Look for `/api/cron/scrape-shifts` invocations
+**What It Does**:
+- Automatically scrapes using GitHub's free scheduled workflows
+- No Vercel Pro subscription required
+- Runs on your schedule (e.g., every 12 hours)
+
+**Setup**:
+1. Create `.github/workflows/scrape-shifts.yml`:
+   ```yaml
+   name: Scrape Shifts
+   on:
+     schedule:
+       - cron: '0 */12 * * *'  # Every 12 hours
+     workflow_dispatch:  # Allow manual trigger
+
+   jobs:
+     scrape:
+       runs-on: ubuntu-latest
+       steps:
+         - name: Trigger scrape
+           run: |
+             curl -X GET "${{ secrets.VERCEL_URL }}/api/cron/scrape-shifts" \
+               -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}"
+   ```
+
+2. **Add secrets** to GitHub repository:
+   - `VERCEL_URL`: Your site URL (e.g., `https://yoursite.vercel.app`)
+   - `CRON_SECRET`: Same value as in Vercel environment variables
+
+3. **Commit and push** the workflow file
+
+**Monitoring**:
+- GitHub → Your Repository → Actions
+- View workflow run history and logs
 
 ---
 
@@ -151,11 +193,13 @@ Check cron execution logs:
 ### Problem: Cron job not running
 
 **Vercel Cron Requirements**:
-- Only available on **Pro** plans
+- Only available on **Pro** plans ($20/month or higher)
 - Requires `CRON_SECRET` environment variable
 - Check Vercel Dashboard → Cron Jobs to verify setup
 
-**Alternative**: Use GitHub Actions to trigger scrape endpoint
+**Free Alternatives**:
+1. **Manual scraping**: Use admin portal at `/admin/shifts`
+2. **GitHub Actions**: Set up free automated scraping (see Option 3 above)
 
 ---
 
