@@ -297,6 +297,23 @@ export async function findOrCreateScribe(name: string, standardizedName?: string
 }
 
 /**
+ * Create or find provider by name
+ */
+export async function findOrCreateProvider(name: string) {
+  let provider = await findProviderByName(name);
+
+  if (!provider) {
+    provider = await prisma.provider.create({
+      data: {
+        name,
+      },
+    });
+  }
+
+  return provider;
+}
+
+/**
  * Upsert shift (create or update)
  */
 export async function upsertShift(data: {
