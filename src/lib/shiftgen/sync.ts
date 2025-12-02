@@ -242,9 +242,13 @@ export class ShiftGenSyncService {
       providerId = provider.id;
     }
 
-    // Upsert shift
+    // Upsert shift (shift.date is in YYYY-MM-DD format from parser)
+    // Parse it properly to avoid timezone issues
+    const [year, month, day] = shift.date.split('-').map(Number);
+    const shiftDate = new Date(Date.UTC(year, month - 1, day, 0, 0, 0, 0));
+
     const result = await upsertShift({
-      date: new Date(shift.date),
+      date: shiftDate,
       zone: shift.label || 'Unknown',
       startTime: normalizedStartTime,
       endTime: normalizedEndTime,

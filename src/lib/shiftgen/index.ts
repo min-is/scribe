@@ -34,6 +34,8 @@ export {
   isShiftActive,
   isValidDateFormat,
   isValidTimeFormat,
+  parseDateStringToUTC,
+  normalizeDateToUTC,
 } from './constants';
 
 // Database operations (safe for server-side only, but exported for API routes)

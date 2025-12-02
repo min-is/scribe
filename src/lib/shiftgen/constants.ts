@@ -309,3 +309,30 @@ export function isValidDateFormat(dateStr: string): boolean {
 export function isValidTimeFormat(timeStr: string): boolean {
   return /^\d{4}$/.test(timeStr);
 }
+
+/**
+ * Normalize a date string (YYYY-MM-DD) to a Date object at UTC midnight
+ * This ensures consistent date handling across timezone boundaries
+ */
+export function parseDateStringToUTC(dateStr: string): Date {
+  if (!isValidDateFormat(dateStr)) {
+    throw new Error(`Invalid date format: ${dateStr}. Expected: YYYY-MM-DD`);
+  }
+
+  const [year, month, day] = dateStr.split('-').map(Number);
+  // Create date in UTC to avoid timezone issues
+  return new Date(Date.UTC(year, month - 1, day, 0, 0, 0, 0));
+}
+
+/**
+ * Normalize a Date object to UTC midnight
+ * This strips time components and ensures consistent date-only comparisons
+ */
+export function normalizeDateToUTC(date: Date): Date {
+  return new Date(Date.UTC(
+    date.getUTCFullYear(),
+    date.getUTCMonth(),
+    date.getUTCDate(),
+    0, 0, 0, 0
+  ));
+}

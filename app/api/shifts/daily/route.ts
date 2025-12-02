@@ -4,7 +4,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { getDailyScheduleByZone, isValidDateFormat, ApiResponse, DailySchedule } from '@/lib/shiftgen';
+import { getDailyScheduleByZone, isValidDateFormat, parseDateStringToUTC, ApiResponse, DailySchedule } from '@/lib/shiftgen';
 
 export async function GET(request: NextRequest) {
   try {
@@ -29,7 +29,8 @@ export async function GET(request: NextRequest) {
       return NextResponse.json(response, { status: 400 });
     }
 
-    const date = new Date(dateParam);
+    // Use parseDateStringToUTC to avoid timezone issues
+    const date = parseDateStringToUTC(dateParam);
     const schedule = await getDailyScheduleByZone(date);
 
     const response: ApiResponse<DailySchedule> = {
