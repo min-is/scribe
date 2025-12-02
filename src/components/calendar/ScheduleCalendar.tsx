@@ -2,7 +2,7 @@
 
 import { useState, useMemo, memo, useEffect } from 'react';
 import { Calendar, Lock, X } from 'lucide-react';
-import { getZoneStyles, formatShiftTime } from '@/lib/shiftgen';
+import { getZoneStyles, formatShiftTime, getZoneGroupLabel, type ZoneGroupedShifts } from '@/lib/shiftgen';
 import type { DailySchedule, ShiftWithRelations } from '@/lib/shiftgen';
 
 const PASSCODE = '5150'; // TODO: Move to environment variable or secure storage
@@ -62,10 +62,17 @@ function DailyModal({ date, dailySchedule, onClose }: DailyModalProps) {
     year: 'numeric',
   });
 
-  const hasShifts =
-    dailySchedule.shifts.morning.length > 0 ||
-    dailySchedule.shifts.afternoon.length > 0 ||
-    dailySchedule.shifts.night.length > 0;
+  // Check if using zone-based grouping
+  const shifts = dailySchedule.shifts as ZoneGroupedShifts;
+  const isZoneBased = 'zone1' in shifts;
+
+  const hasShifts = isZoneBased
+    ? (shifts.zone1?.length > 0 ||
+       shifts.zone2?.length > 0 ||
+       shifts.zones34?.length > 0 ||
+       shifts.zones56?.length > 0 ||
+       shifts.overflowPit?.length > 0)
+    : false;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
@@ -95,46 +102,71 @@ function DailyModal({ date, dailySchedule, onClose }: DailyModalProps) {
               <p className="text-zinc-600 dark:text-zinc-400">No shifts scheduled for this day</p>
             </div>
           ) : (
-            <div className="space-y-6">
-              {/* Morning */}
-              {dailySchedule.shifts.morning.length > 0 && (
+            <div className="space-y-4">
+              {/* Zone 1 */}
+              {shifts.zone1 && shifts.zone1.length > 0 && (
                 <div>
-                  <h4 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 mb-3 flex items-center gap-2">
-                    <span className="text-lg">☀️</span>
-                    Morning Shifts
+                  <h4 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 mb-2 px-1">
+                    {getZoneGroupLabel('zone1')}
                   </h4>
                   <div className="space-y-2">
-                    {dailySchedule.shifts.morning.map((shift) => (
+                    {shifts.zone1.map((shift) => (
                       <ShiftCard key={shift.id} shift={shift} />
                     ))}
                   </div>
                 </div>
               )}
 
-              {/* Afternoon */}
-              {dailySchedule.shifts.afternoon.length > 0 && (
+              {/* Zone 2 */}
+              {shifts.zone2 && shifts.zone2.length > 0 && (
                 <div>
-                  <h4 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 mb-3 flex items-center gap-2">
-                    <span className="text-lg">🌤️</span>
-                    Afternoon Shifts
+                  <h4 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 mb-2 px-1">
+                    {getZoneGroupLabel('zone2')}
                   </h4>
                   <div className="space-y-2">
-                    {dailySchedule.shifts.afternoon.map((shift) => (
+                    {shifts.zone2.map((shift) => (
                       <ShiftCard key={shift.id} shift={shift} />
                     ))}
                   </div>
                 </div>
               )}
 
-              {/* Night */}
-              {dailySchedule.shifts.night.length > 0 && (
+              {/* Zones 3/4 */}
+              {shifts.zones34 && shifts.zones34.length > 0 && (
                 <div>
-                  <h4 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 mb-3 flex items-center gap-2">
-                    <span className="text-lg">🌙</span>
-                    Night Shifts
+                  <h4 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 mb-2 px-1">
+                    {getZoneGroupLabel('zones34')}
                   </h4>
                   <div className="space-y-2">
-                    {dailySchedule.shifts.night.map((shift) => (
+                    {shifts.zones34.map((shift) => (
+                      <ShiftCard key={shift.id} shift={shift} />
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Zones 5/6 */}
+              {shifts.zones56 && shifts.zones56.length > 0 && (
+                <div>
+                  <h4 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 mb-2 px-1">
+                    {getZoneGroupLabel('zones56')}
+                  </h4>
+                  <div className="space-y-2">
+                    {shifts.zones56.map((shift) => (
+                      <ShiftCard key={shift.id} shift={shift} />
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Overflow/PIT */}
+              {shifts.overflowPit && shifts.overflowPit.length > 0 && (
+                <div>
+                  <h4 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 mb-2 px-1">
+                    {getZoneGroupLabel('overflowPit')}
+                  </h4>
+                  <div className="space-y-2">
+                    {shifts.overflowPit.map((shift) => (
                       <ShiftCard key={shift.id} shift={shift} />
                     ))}
                   </div>

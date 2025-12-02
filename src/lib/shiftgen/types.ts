@@ -14,12 +14,17 @@ export type ShiftWithRelations = Shift & {
 };
 
 /**
- * Time period for grouping shifts
+ * Time period for grouping shifts (deprecated, keeping for backwards compatibility)
  */
 export type TimePeriod = 'morning' | 'afternoon' | 'night';
 
 /**
- * Shifts grouped by time period
+ * Zone-based grouping for ED zones
+ */
+export type ZoneGroup = 'zone1' | 'zone2' | 'zones34' | 'zones56' | 'overflowPit';
+
+/**
+ * Shifts grouped by time period (deprecated)
  */
 export type GroupedShifts = {
   morning: ShiftWithRelations[];
@@ -28,11 +33,22 @@ export type GroupedShifts = {
 };
 
 /**
+ * Shifts grouped by ED zone
+ */
+export type ZoneGroupedShifts = {
+  zone1: ShiftWithRelations[];      // A, E, I
+  zone2: ShiftWithRelations[];      // B, F, X
+  zones34: ShiftWithRelations[];    // C, G
+  zones56: ShiftWithRelations[];    // D, H, PA
+  overflowPit: ShiftWithRelations[]; // PIT
+};
+
+/**
  * Daily schedule with summary
  */
 export type DailySchedule = {
   date: Date;
-  shifts: GroupedShifts;
+  shifts: GroupedShifts | ZoneGroupedShifts;
   summary: {
     totalShifts: number;
     uniqueScribes: number;

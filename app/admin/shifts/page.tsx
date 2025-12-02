@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { Lock, RefreshCw, Calendar, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Lock, RefreshCw, Calendar, CheckCircle, XCircle, AlertCircle, Trash2, Database } from 'lucide-react';
 
 const ADMIN_PASSCODE = '5150'; // Same as calendar passcode
 
@@ -14,12 +14,22 @@ interface SyncResult {
   timestamp: string;
 }
 
+interface DbStats {
+  totalShifts: number;
+  totalScribes: number;
+  totalProviders: number;
+  oldestShiftDate: string | null;
+  newestShiftDate: string | null;
+}
+
 export default function AdminShiftsPage() {
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [passcode, setPasscode] = useState('');
   const [error, setError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<SyncResult | null>(null);
+  const [dbStats, setDbStats] = useState<DbStats | null>(null);
+  const [dbOperation, setDbOperation] = useState<string | null>(null);
 
   const handlePasscodeChange = (value: string) => {
     setPasscode(value);
@@ -31,6 +41,25 @@ export default function AdminShiftsPage() {
       setError(true);
       setPasscode('');
       setTimeout(() => setError(false), 500);
+    }
+  };
+
+  // Fetch DB stats when unlocked
+  useEffect(() => {
+    if (isUnlocked) {
+      fetchDbStats();
+    }
+  }, [isUnlocked]);
+
+  const fetchDbStats = async () => {
+    try {
+      const response = await fetch('/api/admin/db/stats');
+      const data = await response.json();
+      if (data.success) {
+        setDbStats(data.data);
+      }
+    } catch (err) {
+      console.error('Failed to fetch DB stats:', err);
     }
   };
 
@@ -55,6 +84,7 @@ export default function AdminShiftsPage() {
 
       const data = await response.json();
       setResult(data);
+      fetchDbStats(); // Refresh stats
     } catch (err) {
       setResult({
         success: false,
@@ -66,6 +96,69 @@ export default function AdminShiftsPage() {
       });
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleCleanDuplicates = async () => {
+    if (!confirm('Are you sure you want to clean duplicate shifts?')) {
+      return;
+    }
+
+    setDbOperation('Cleaning duplicates...');
+    try {
+      const response = await fetch('/api/admin/db/clean-duplicates', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${ADMIN_PASSCODE}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        alert(`Successfully cleaned ${data.data.deleted} duplicate shift(s)`);
+        fetchDbStats(); // Refresh stats
+      } else {
+        alert(`Error: ${data.error}`);
+      }
+    } catch (err) {
+      alert(`Error: ${err instanceof Error ? err.message : 'Unknown error'}`);
+    } finally {
+      setDbOperation(null);
+    }
+  };
+
+  const handleResetDatabase = async () => {
+    const confirmation = prompt(
+      'WARNING: This will delete ALL shifts! Type "RESET" to confirm:'
+    );
+
+    if (confirmation !== 'RESET') {
+      return;
+    }
+
+    setDbOperation('Resetting database...');
+    try {
+      const response = await fetch('/api/admin/db/reset', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${ADMIN_PASSCODE}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ confirm: 'RESET' }),
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        alert(`Successfully deleted ${data.data.deletedShifts} shift(s)`);
+        fetchDbStats(); // Refresh stats
+      } else {
+        alert(`Error: ${data.error}`);
+      }
+    } catch (err) {
+      alert(`Error: ${err instanceof Error ? err.message : 'Unknown error'}`);
+    } finally {
+      setDbOperation(null);
     }
   };
 
@@ -82,7 +175,7 @@ export default function AdminShiftsPage() {
                 Admin Portal
               </h1>
               <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                Shift Management & Scraper Control
+                Shift Management & Database Control
               </p>
             </div>
 
@@ -134,9 +227,82 @@ export default function AdminShiftsPage() {
                 Shift Admin Portal
               </h1>
               <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                Manage shift data and trigger scraping operations
+                Manage shift data, trigger scraping, and maintain the database
               </p>
             </div>
+          </div>
+        </div>
+
+        {/* Database Stats */}
+        {dbStats && (
+          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6">
+            <div className="flex items-center gap-2 mb-4">
+              <Database className="w-5 h-5 text-zinc-600 dark:text-zinc-400" />
+              <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
+                Database Statistics
+              </h2>
+            </div>
+            <div className="grid grid-cols-3 gap-4">
+              <div className="p-4 bg-zinc-50 dark:bg-zinc-800 rounded-lg">
+                <div className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
+                  {dbStats.totalShifts}
+                </div>
+                <div className="text-xs text-zinc-600 dark:text-zinc-400">Total Shifts</div>
+              </div>
+              <div className="p-4 bg-zinc-50 dark:bg-zinc-800 rounded-lg">
+                <div className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
+                  {dbStats.totalScribes}
+                </div>
+                <div className="text-xs text-zinc-600 dark:text-zinc-400">Scribes</div>
+              </div>
+              <div className="p-4 bg-zinc-50 dark:bg-zinc-800 rounded-lg">
+                <div className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
+                  {dbStats.totalProviders}
+                </div>
+                <div className="text-xs text-zinc-600 dark:text-zinc-400">Providers</div>
+              </div>
+            </div>
+            {dbStats.oldestShiftDate && dbStats.newestShiftDate && (
+              <div className="mt-4 text-xs text-zinc-600 dark:text-zinc-400">
+                Date range: {new Date(dbStats.oldestShiftDate).toLocaleDateString()} - {new Date(dbStats.newestShiftDate).toLocaleDateString()}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Database Management */}
+        <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6">
+          <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100 mb-4">
+            Database Management
+          </h2>
+
+          <div className="space-y-3">
+            <button
+              onClick={handleCleanDuplicates}
+              disabled={!!dbOperation}
+              className="w-full px-4 py-3 bg-amber-600 hover:bg-amber-700 disabled:bg-zinc-400
+                       text-white font-medium rounded-lg transition-colors
+                       flex items-center justify-center gap-2"
+            >
+              <Trash2 className="w-5 h-5" />
+              {dbOperation === 'Cleaning duplicates...' ? 'Cleaning...' : 'Clean Duplicate Shifts'}
+            </button>
+
+            <button
+              onClick={handleResetDatabase}
+              disabled={!!dbOperation}
+              className="w-full px-4 py-3 bg-red-600 hover:bg-red-700 disabled:bg-zinc-400
+                       text-white font-medium rounded-lg transition-colors
+                       flex items-center justify-center gap-2"
+            >
+              <Database className="w-5 h-5" />
+              {dbOperation === 'Resetting database...' ? 'Resetting...' : 'Reset Database (Delete All)'}
+            </button>
+
+            <p className="text-xs text-zinc-600 dark:text-zinc-400">
+              <strong>Clean Duplicates:</strong> Removes duplicate shift entries with identical date, zone, time, and assignments.<br />
+              <strong>Reset Database:</strong> Deletes ALL shifts (requires confirmation). Use before a full refresh.
+            </p>
           </div>
         </div>
 
@@ -149,14 +315,11 @@ export default function AdminShiftsPage() {
           <div className="space-y-4">
             <div className="p-4 bg-blue-50 dark:bg-blue-900/10 border border-blue-200 dark:border-blue-800 rounded-lg">
               <h3 className="text-sm font-medium text-blue-900 dark:text-blue-100 mb-2">
-                How It Works
+                Automatic Scraping
               </h3>
-              <ul className="text-sm text-blue-800 dark:text-blue-200 space-y-1">
-                <li>• Logs into legacy.shiftgen.com</li>
-                <li>• Fetches schedules from 3 sites (Scribe, Physician, MLP)</li>
-                <li>• Parses calendar data and extracts shifts</li>
-                <li>• Syncs to database with provider matching</li>
-              </ul>
+              <p className="text-sm text-blue-800 dark:text-blue-200">
+                Vercel cron job runs daily at midnight UTC (check vercel.json). No manual action needed for regular updates.
+              </p>
             </div>
 
             <button
@@ -241,46 +404,6 @@ export default function AdminShiftsPage() {
             </div>
           </div>
         )}
-
-        {/* Setup Instructions */}
-        <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl p-6">
-          <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100 mb-4">
-            Required Environment Variables
-          </h2>
-
-          <div className="space-y-3">
-            <div className="p-3 bg-zinc-50 dark:bg-zinc-800 rounded-lg">
-              <code className="text-sm text-zinc-900 dark:text-zinc-100">
-                SHIFTGEN_USERNAME
-              </code>
-              <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-1">
-                Your ShiftGen account email
-              </p>
-            </div>
-            <div className="p-3 bg-zinc-50 dark:bg-zinc-800 rounded-lg">
-              <code className="text-sm text-zinc-900 dark:text-zinc-100">
-                SHIFTGEN_PASSWORD
-              </code>
-              <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-1">
-                Your ShiftGen account password
-              </p>
-            </div>
-            <div className="p-3 bg-zinc-50 dark:bg-zinc-800 rounded-lg">
-              <code className="text-sm text-zinc-900 dark:text-zinc-100">
-                SHIFTGEN_API_KEY
-              </code>
-              <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-1">
-                Secure API key for scraper endpoint (generate with: <code>openssl rand -base64 32</code>)
-              </p>
-            </div>
-          </div>
-
-          <div className="mt-4 p-4 bg-blue-50 dark:bg-blue-900/10 border border-blue-200 dark:border-blue-800 rounded-lg">
-            <p className="text-sm text-blue-900 dark:text-blue-100">
-              <strong>Note:</strong> Set these in Vercel Dashboard → Settings → Environment Variables
-            </p>
-          </div>
-        </div>
       </div>
     </div>
   );

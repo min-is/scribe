@@ -8,6 +8,8 @@ export type {
   ShiftWithRelations,
   TimePeriod,
   GroupedShifts,
+  ZoneGroupedShifts,
+  ZoneGroup,
   DailySchedule,
   CurrentShifts,
   ZoneConfig,
@@ -21,6 +23,9 @@ export {
   TIME_PERIODS,
   getZoneConfig,
   getZoneStyles,
+  getZoneGroupForShift,
+  getZoneGroupLabel,
+  getShiftOrderInZone,
   parseTime,
   formatTime,
   formatShiftTime,
@@ -37,6 +42,7 @@ export {
   getShiftsInRange,
   getCurrentShifts,
   getDailySchedule,
+  getDailyScheduleByZone,
   findScribeByName,
   findProviderByName,
   createShift,
@@ -48,6 +54,9 @@ export {
   getAllScribes,
   getShiftsByScribe,
   getShiftsByProvider,
+  cleanDuplicateShifts,
+  resetDatabase,
+  getDatabaseStats,
 } from './db';
 
 // Server-only exports (contain Node.js dependencies like 'fs')

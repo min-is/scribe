@@ -1,10 +1,10 @@
 /**
  * GET /api/shifts/daily?date=YYYY-MM-DD
- * Get daily schedule with time period grouping
+ * Get daily schedule with zone-based grouping
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { getDailySchedule, isValidDateFormat, ApiResponse, DailySchedule } from '@/lib/shiftgen';
+import { getDailyScheduleByZone, isValidDateFormat, ApiResponse, DailySchedule } from '@/lib/shiftgen';
 
 export async function GET(request: NextRequest) {
   try {
@@ -30,7 +30,7 @@ export async function GET(request: NextRequest) {
     }
 
     const date = new Date(dateParam);
-    const schedule = await getDailySchedule(date);
+    const schedule = await getDailyScheduleByZone(date);
 
     const response: ApiResponse<DailySchedule> = {
       success: true,
