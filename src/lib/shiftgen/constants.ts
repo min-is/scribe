@@ -10,10 +10,11 @@ import { ZoneConfig } from './types';
  * Replaces Discord bot's color emoji system with subtle design
  */
 export const ZONE_CONFIGS: Record<string, ZoneConfig> = {
+  // Zone 1: A, E, I
   A: {
     id: 'A',
     label: 'Zone 1',
-    description: 'Zone 1 (Blue)',
+    description: 'Zone 1 - A Shift',
     color: 'blue',
     styles: {
       border: 'border-l-4 border-blue-500/30',
@@ -22,10 +23,35 @@ export const ZONE_CONFIGS: Record<string, ZoneConfig> = {
       badge: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-200',
     },
   },
+  E: {
+    id: 'E',
+    label: 'Zone 1',
+    description: 'Zone 1 - E Shift',
+    color: 'blue',
+    styles: {
+      border: 'border-l-4 border-blue-500/30',
+      bg: 'bg-blue-500/5 hover:bg-blue-500/10',
+      text: 'text-blue-900 dark:text-blue-100',
+      badge: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-200',
+    },
+  },
+  I: {
+    id: 'I',
+    label: 'Zone 1',
+    description: 'Zone 1 - I Shift',
+    color: 'blue',
+    styles: {
+      border: 'border-l-4 border-blue-500/30',
+      bg: 'bg-blue-500/5 hover:bg-blue-500/10',
+      text: 'text-blue-900 dark:text-blue-100',
+      badge: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-200',
+    },
+  },
+  // Zone 2: B, F, X
   B: {
     id: 'B',
     label: 'Zone 2',
-    description: 'Zone 2 (Red)',
+    description: 'Zone 2 - B Shift',
     color: 'red',
     styles: {
       border: 'border-l-4 border-red-500/30',
@@ -34,10 +60,35 @@ export const ZONE_CONFIGS: Record<string, ZoneConfig> = {
       badge: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-200',
     },
   },
+  F: {
+    id: 'F',
+    label: 'Zone 2',
+    description: 'Zone 2 - F Shift',
+    color: 'red',
+    styles: {
+      border: 'border-l-4 border-red-500/30',
+      bg: 'bg-red-500/5 hover:bg-red-500/10',
+      text: 'text-red-900 dark:text-red-100',
+      badge: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-200',
+    },
+  },
+  X: {
+    id: 'X',
+    label: 'Zone 2',
+    description: 'Zone 2 - X Shift',
+    color: 'red',
+    styles: {
+      border: 'border-l-4 border-red-500/30',
+      bg: 'bg-red-500/5 hover:bg-red-500/10',
+      text: 'text-red-900 dark:text-red-100',
+      badge: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-200',
+    },
+  },
+  // Zones 3/4: C, G
   C: {
     id: 'C',
-    label: 'Zone 3/4',
-    description: 'Zone 3/4 (Amber)',
+    label: 'Zones 3/4',
+    description: 'Zones 3/4 - C Shift',
     color: 'amber',
     styles: {
       border: 'border-l-4 border-amber-500/30',
@@ -46,10 +97,23 @@ export const ZONE_CONFIGS: Record<string, ZoneConfig> = {
       badge: 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-200',
     },
   },
-  PA: {
-    id: 'PA',
-    label: 'PA/NP',
-    description: 'PA/NP (Emerald)',
+  G: {
+    id: 'G',
+    label: 'Zones 3/4',
+    description: 'Zones 3/4 - G Shift',
+    color: 'amber',
+    styles: {
+      border: 'border-l-4 border-amber-500/30',
+      bg: 'bg-amber-500/5 hover:bg-amber-500/10',
+      text: 'text-amber-900 dark:text-amber-100',
+      badge: 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-200',
+    },
+  },
+  // Zones 5/6: D, H, PA
+  D: {
+    id: 'D',
+    label: 'Zones 5/6',
+    description: 'Zones 5/6 - D Shift',
     color: 'emerald',
     styles: {
       border: 'border-l-4 border-emerald-500/30',
@@ -58,10 +122,35 @@ export const ZONE_CONFIGS: Record<string, ZoneConfig> = {
       badge: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-200',
     },
   },
-  FT: {
-    id: 'FT',
-    label: 'Fast Track',
-    description: 'Fast Track (Purple)',
+  H: {
+    id: 'H',
+    label: 'Zones 5/6',
+    description: 'Zones 5/6 - H Shift',
+    color: 'emerald',
+    styles: {
+      border: 'border-l-4 border-emerald-500/30',
+      bg: 'bg-emerald-500/5 hover:bg-emerald-500/10',
+      text: 'text-emerald-900 dark:text-emerald-100',
+      badge: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-200',
+    },
+  },
+  PA: {
+    id: 'PA',
+    label: 'Zones 5/6',
+    description: 'Zones 5/6 - PA Shift',
+    color: 'emerald',
+    styles: {
+      border: 'border-l-4 border-emerald-500/30',
+      bg: 'bg-emerald-500/5 hover:bg-emerald-500/10',
+      text: 'text-emerald-900 dark:text-emerald-100',
+      badge: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-200',
+    },
+  },
+  // Overflow/PIT
+  PIT: {
+    id: 'PIT',
+    label: 'Overflow/PIT',
+    description: 'Overflow/PIT',
     color: 'purple',
     styles: {
       border: 'border-l-4 border-purple-500/30',
@@ -94,6 +183,56 @@ export function getZoneConfig(zoneId: string): ZoneConfig {
 export function getZoneStyles(zoneId: string) {
   const config = getZoneConfig(zoneId);
   return config.styles;
+}
+
+/**
+ * Map shift zone to zone group for grouping
+ */
+export function getZoneGroupForShift(zone: string): 'zone1' | 'zone2' | 'zones34' | 'zones56' | 'overflowPit' {
+  const zoneUpper = zone.toUpperCase();
+
+  if (['A', 'E', 'I'].includes(zoneUpper)) {
+    return 'zone1';
+  } else if (['B', 'F', 'X'].includes(zoneUpper)) {
+    return 'zone2';
+  } else if (['C', 'G'].includes(zoneUpper)) {
+    return 'zones34';
+  } else if (['D', 'H', 'PA'].includes(zoneUpper)) {
+    return 'zones56';
+  } else if (zoneUpper === 'PIT') {
+    return 'overflowPit';
+  }
+
+  // Default to zone1 for unknown zones
+  return 'zone1';
+}
+
+/**
+ * Get display label for zone group
+ */
+export function getZoneGroupLabel(group: 'zone1' | 'zone2' | 'zones34' | 'zones56' | 'overflowPit'): string {
+  const labels = {
+    zone1: 'Zone 1',
+    zone2: 'Zone 2',
+    zones34: 'Zones 3/4',
+    zones56: 'Zones 5/6',
+    overflowPit: 'Overflow/PIT',
+  };
+  return labels[group];
+}
+
+/**
+ * Get shift order within zone (for sorting)
+ */
+export function getShiftOrderInZone(zone: string): number {
+  const order: Record<string, number> = {
+    A: 0, E: 1, I: 2,       // Zone 1
+    B: 0, F: 1, X: 2,       // Zone 2
+    C: 0, G: 1,             // Zones 3/4
+    D: 0, H: 1, PA: 2,      // Zones 5/6
+    PIT: 0,                 // Overflow/PIT
+  };
+  return order[zone.toUpperCase()] ?? 99;
 }
 
 /**

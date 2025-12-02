@@ -7,11 +7,12 @@ import { prisma } from '@/lib/prisma';
 import {
   ShiftWithRelations,
   GroupedShifts,
+  ZoneGroupedShifts,
   DailySchedule,
   CurrentShifts,
   ShiftFilters,
 } from './types';
-import { getShiftTimePeriod, isShiftActive } from './constants';
+import { getShiftTimePeriod, isShiftActive, getZoneGroupForShift, getShiftOrderInZone } from './constants';
 
 /**
  * Get all shifts for a specific date
@@ -90,7 +91,7 @@ export async function getCurrentShifts(): Promise<CurrentShifts> {
 }
 
 /**
- * Get daily schedule with time period grouping
+ * Get daily schedule with time period grouping (deprecated - use getDailyScheduleByZone)
  */
 export async function getDailySchedule(date: Date): Promise<DailySchedule> {
   const shifts = await getShiftsForDate(date);
@@ -105,6 +106,57 @@ export async function getDailySchedule(date: Date): Promise<DailySchedule> {
   shifts.forEach((shift) => {
     const period = getShiftTimePeriod(shift.startTime);
     grouped[period].push(shift);
+  });
+
+  // Calculate summary
+  const uniqueScribes = new Set(
+    shifts.filter((s) => s.scribeId).map((s) => s.scribeId)
+  ).size;
+  const uniqueProviders = new Set(
+    shifts.filter((s) => s.providerId).map((s) => s.providerId)
+  ).size;
+  const zonesCovered = Array.from(new Set(shifts.map((s) => s.zone))).sort();
+
+  return {
+    date,
+    shifts: grouped,
+    summary: {
+      totalShifts: shifts.length,
+      uniqueScribes,
+      uniqueProviders,
+      zonesCovered,
+    },
+  };
+}
+
+/**
+ * Get daily schedule with zone-based grouping
+ */
+export async function getDailyScheduleByZone(date: Date): Promise<DailySchedule> {
+  const shifts = await getShiftsForDate(date);
+
+  // Group by zone
+  const grouped: ZoneGroupedShifts = {
+    zone1: [],
+    zone2: [],
+    zones34: [],
+    zones56: [],
+    overflowPit: [],
+  };
+
+  shifts.forEach((shift) => {
+    const zoneGroup = getZoneGroupForShift(shift.zone);
+    grouped[zoneGroup].push(shift);
+  });
+
+  // Sort shifts within each zone group by shift order and start time
+  Object.keys(grouped).forEach((key) => {
+    const zoneKey = key as keyof ZoneGroupedShifts;
+    grouped[zoneKey].sort((a, b) => {
+      const orderDiff = getShiftOrderInZone(a.zone) - getShiftOrderInZone(b.zone);
+      if (orderDiff !== 0) return orderDiff;
+      return a.startTime.localeCompare(b.startTime);
+    });
   });
 
   // Calculate summary
@@ -361,4 +413,79 @@ export async function getShiftsByProvider(providerId: string, startDate?: Date, 
       { startTime: 'asc' },
     ],
   });
+}
+
+/**
+ * Clean duplicate shifts from database
+ * Removes shifts with identical date, zone, startTime, scribeId, and providerId
+ */
+export async function cleanDuplicateShifts(): Promise<{ deleted: number }> {
+  const allShifts = await prisma.shift.findMany({
+    orderBy: [
+      { date: 'asc' },
+      { zone: 'asc' },
+      { startTime: 'asc' },
+      { createdAt: 'asc' }, // Keep the oldest one
+    ],
+  });
+
+  const seen = new Set<string>();
+  const duplicateIds: string[] = [];
+
+  for (const shift of allShifts) {
+    const key = `${shift.date.toISOString()}-${shift.zone}-${shift.startTime}-${shift.scribeId || 'null'}-${shift.providerId || 'null'}`;
+
+    if (seen.has(key)) {
+      duplicateIds.push(shift.id);
+    } else {
+      seen.add(key);
+    }
+  }
+
+  if (duplicateIds.length > 0) {
+    await prisma.shift.deleteMany({
+      where: {
+        id: {
+          in: duplicateIds,
+        },
+      },
+    });
+  }
+
+  return { deleted: duplicateIds.length };
+}
+
+/**
+ * Reset database - delete all shifts (careful!)
+ */
+export async function resetDatabase(): Promise<{ deletedShifts: number }> {
+  const result = await prisma.shift.deleteMany({});
+  return { deletedShifts: result.count };
+}
+
+/**
+ * Get database statistics
+ */
+export async function getDatabaseStats() {
+  const [totalShifts, totalScribes, totalProviders, oldestShift, newestShift] = await Promise.all([
+    prisma.shift.count(),
+    prisma.scribe.count(),
+    prisma.provider.count(),
+    prisma.shift.findFirst({
+      orderBy: { date: 'asc' },
+      select: { date: true },
+    }),
+    prisma.shift.findFirst({
+      orderBy: { date: 'desc' },
+      select: { date: true },
+    }),
+  ]);
+
+  return {
+    totalShifts,
+    totalScribes,
+    totalProviders,
+    oldestShiftDate: oldestShift?.date || null,
+    newestShiftDate: newestShift?.date || null,
+  };
 }
