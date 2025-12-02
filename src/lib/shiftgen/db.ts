@@ -297,15 +297,36 @@ export async function findOrCreateScribe(name: string, standardizedName?: string
 }
 
 /**
+ * Generate a URL-friendly slug from a provider name
+ */
+function generateProviderSlug(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-') // Replace non-alphanumeric characters with hyphens
+    .replace(/^-+|-+$/g, ''); // Remove leading/trailing hyphens
+}
+
+/**
  * Create or find provider by name
  */
 export async function findOrCreateProvider(name: string) {
   let provider = await findProviderByName(name);
 
   if (!provider) {
+    const baseSlug = generateProviderSlug(name);
+    let slug = baseSlug;
+    let counter = 1;
+
+    // Ensure slug uniqueness by appending a counter if needed
+    while (await prisma.provider.findUnique({ where: { slug } })) {
+      slug = `${baseSlug}-${counter}`;
+      counter++;
+    }
+
     provider = await prisma.provider.create({
       data: {
         name,
+        slug,
       },
     });
   }
