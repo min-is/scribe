@@ -89,8 +89,11 @@ export class ShiftGenSyncService {
           console.log(`    Parsed ${shifts.length} shift(s)`);
           result.shiftsScraped += shifts.length;
 
-          // Save to database
-          for (const shift of shifts) {
+          // Match scribes with providers and save to database
+          const matchedShifts = this.matchScribesWithProviders(shifts);
+          console.log(`    Matched into ${matchedShifts.length} shift(s) with providers`);
+
+          for (const shift of matchedShifts) {
             try {
               const syncShiftResult = await this.syncShiftToDatabase(shift);
               if (syncShiftResult.created) {
@@ -126,13 +129,93 @@ export class ShiftGenSyncService {
   }
 
   /**
+   * Match scribes with their providers based on date, zone, and time
+   * Following the same logic as the Discord bot
+   */
+  private matchScribesWithProviders(shifts: RawShiftData[]): RawShiftData[] {
+    const matchedShifts: RawShiftData[] = [];
+    const processedIndices = new Set<number>();
+
+    for (let i = 0; i < shifts.length; i++) {
+      const shift = shifts[i];
+
+      // Only process scribe shifts
+      if (shift.role !== 'Scribe' || processedIndices.has(i)) {
+        continue;
+      }
+
+      const isPaShift = shift.label === 'PA';
+      let matchingProvider: RawShiftData | null = null;
+
+      // Find matching provider
+      for (let j = 0; j < shifts.length; j++) {
+        const other = shifts[j];
+
+        if (other.date !== shift.date) continue;
+
+        if (isPaShift && other.role === 'MLP') {
+          // For PA shifts, match MLPs by time overlap
+          if (this.timesOverlapOrClose(shift.time, other.time)) {
+            matchingProvider = other;
+            processedIndices.add(j);
+            break;
+          }
+        } else if (other.role === 'Physician') {
+          // For regular shifts, match physicians by exact zone+time match
+          if (other.time === shift.time && other.label === shift.label) {
+            matchingProvider = other;
+            processedIndices.add(j);
+            break;
+          }
+        }
+      }
+
+      // Create matched shift with both scribe and provider
+      matchedShifts.push({
+        ...shift,
+        providerName: matchingProvider?.person,
+        providerRole: matchingProvider?.role,
+      });
+
+      processedIndices.add(i);
+    }
+
+    return matchedShifts;
+  }
+
+  /**
+   * Check if two shift times overlap or start within tolerance
+   * For PA matching: scribe 1000-1830 should match MLP 1000-2000
+   */
+  private timesOverlapOrClose(time1: string, time2: string, toleranceMinutes: number = 60): boolean {
+    try {
+      const [start1, end1] = time1.split('-');
+      const [start2, end2] = time2.split('-');
+
+      const toMinutes = (time: string): number => {
+        const padded = time.padStart(4, '0');
+        const h = parseInt(padded.substring(0, 2));
+        const m = parseInt(padded.substring(2, 4));
+        return h * 60 + m;
+      };
+
+      const s1 = toMinutes(start1);
+      const s2 = toMinutes(start2);
+
+      return Math.abs(s1 - s2) <= toleranceMinutes;
+    } catch {
+      return false;
+    }
+  }
+
+  /**
    * Sync a single shift to the database
    */
   private async syncShiftToDatabase(
-    shift: RawShiftData
+    shift: RawShiftData & { providerName?: string; providerRole?: string }
   ): Promise<{ created: boolean; updated: boolean }> {
-    // Standardize name
-    const standardizedName = this.nameMapper.standardizeName(shift.person, shift.role);
+    // Standardize scribe name
+    const scribeStandardizedName = this.nameMapper.standardizeName(shift.person, shift.role);
 
     // Parse time
     const [startTime, endTime] = shift.time.split('-');
@@ -144,15 +227,18 @@ export class ShiftGenSyncService {
     const normalizedStartTime = startTime.padStart(4, '0');
     const normalizedEndTime = endTime.padStart(4, '0');
 
-    // Find or create scribe/provider
-    let scribeId: string | null = null;
-    let providerId: string | null = null;
+    // Find or create scribe
+    const scribe = await findOrCreateScribe(shift.person, scribeStandardizedName);
+    const scribeId = scribe.id;
 
-    if (shift.role === 'Scribe') {
-      const scribe = await findOrCreateScribe(shift.person, standardizedName);
-      scribeId = scribe.id;
-    } else if (shift.role === 'Physician' || shift.role === 'MLP') {
-      const provider = await findProviderByName(standardizedName);
+    // Find provider if matched
+    let providerId: string | null = null;
+    if (shift.providerName && shift.providerRole) {
+      const providerStandardizedName = this.nameMapper.standardizeName(
+        shift.providerName,
+        shift.providerRole
+      );
+      const provider = await findProviderByName(providerStandardizedName);
       providerId = provider?.id || null;
     }
 

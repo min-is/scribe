@@ -308,24 +308,26 @@ export async function upsertShift(data: {
   scribeId?: string | null;
   providerId?: string | null;
 }): Promise<{ created: boolean; updated: boolean; shift: ShiftWithRelations }> {
-  // Try to find existing shift
+  // Try to find existing shift by date, zone, and startTime only
+  // This allows us to update a shift with provider info even if it was created with just scribe info
   const existing = await prisma.shift.findFirst({
     where: {
       date: data.date,
       zone: data.zone,
       startTime: data.startTime,
       scribeId: data.scribeId || null,
-      providerId: data.providerId || null,
     },
   });
 
   if (existing) {
-    // Update existing shift
+    // Update existing shift (including provider if provided)
     const updated = await prisma.shift.update({
       where: { id: existing.id },
       data: {
         endTime: data.endTime,
         site: data.site,
+        scribeId: data.scribeId,
+        providerId: data.providerId,
       },
       include: {
         scribe: true,
