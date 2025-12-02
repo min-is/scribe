@@ -7,6 +7,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import {
   getShiftsInRange,
   isValidDateFormat,
+  parseDateStringToUTC,
   ApiResponse,
   ShiftWithRelations,
   ShiftFilters,
@@ -36,8 +37,9 @@ export async function GET(request: NextRequest) {
       return NextResponse.json(response, { status: 400 });
     }
 
-    const startDate = new Date(startDateParam);
-    const endDate = new Date(endDateParam);
+    // Use parseDateStringToUTC to avoid timezone issues
+    const startDate = parseDateStringToUTC(startDateParam);
+    const endDate = parseDateStringToUTC(endDateParam);
 
     // Optional filters
     const filters: ShiftFilters = {};

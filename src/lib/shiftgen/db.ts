@@ -74,8 +74,14 @@ export async function getShiftsInRange(
  * Get currently active shifts
  */
 export async function getCurrentShifts(): Promise<CurrentShifts> {
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  // Get today's date in UTC to avoid timezone issues
+  const now = new Date();
+  const today = new Date(Date.UTC(
+    now.getUTCFullYear(),
+    now.getUTCMonth(),
+    now.getUTCDate(),
+    0, 0, 0, 0
+  ));
 
   const allShiftsToday = await getShiftsForDate(today);
 
