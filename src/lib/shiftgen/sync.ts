@@ -8,7 +8,7 @@ import { ShiftGenScraper } from './scraper';
 import { ScheduleParser, RawShiftData } from './parser';
 import { NameMapper } from './name-mapper';
 import { SITES_TO_FETCH, SITE_CHANGE_DELAY, PAGE_LOAD_DELAY } from './config';
-import { findOrCreateScribe, findProviderByName, upsertShift } from './db';
+import { findOrCreateScribe, findOrCreateProvider, upsertShift } from './db';
 
 export interface SyncResult {
   success: boolean;
@@ -231,15 +231,15 @@ export class ShiftGenSyncService {
     const scribe = await findOrCreateScribe(shift.person, scribeStandardizedName);
     const scribeId = scribe.id;
 
-    // Find provider if matched
+    // Find or create provider if matched
     let providerId: string | null = null;
     if (shift.providerName && shift.providerRole) {
       const providerStandardizedName = this.nameMapper.standardizeName(
         shift.providerName,
         shift.providerRole
       );
-      const provider = await findProviderByName(providerStandardizedName);
-      providerId = provider?.id || null;
+      const provider = await findOrCreateProvider(providerStandardizedName);
+      providerId = provider.id;
     }
 
     // Upsert shift

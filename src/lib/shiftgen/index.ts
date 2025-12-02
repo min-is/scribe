@@ -50,6 +50,7 @@ export {
   deleteShift,
   deleteShiftsForDate,
   findOrCreateScribe,
+  findOrCreateProvider,
   upsertShift,
   getAllScribes,
   getShiftsByScribe,
