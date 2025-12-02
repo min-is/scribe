@@ -342,6 +342,7 @@ export async function findOrCreateProvider(name: string) {
 
 /**
  * Upsert shift (create or update)
+ * Uses the unique constraint (date, zone, startTime) to prevent duplicates
  */
 export async function upsertShift(data: {
   date: Date;
@@ -352,26 +353,27 @@ export async function upsertShift(data: {
   scribeId?: string | null;
   providerId?: string | null;
 }): Promise<{ created: boolean; updated: boolean; shift: ShiftWithRelations }> {
-  // Try to find existing shift by date, zone, and startTime only
-  // This allows us to update a shift with provider info even if it was created with just scribe info
+  // Try to find existing shift by the unique constraint: date, zone, startTime
   const existing = await prisma.shift.findFirst({
     where: {
       date: data.date,
       zone: data.zone,
       startTime: data.startTime,
-      scribeId: data.scribeId || null,
     },
   });
 
   if (existing) {
-    // Update existing shift (including provider if provided)
+    // Update existing shift with new information
+    // Only update fields if they have values (don't overwrite with null)
     const updated = await prisma.shift.update({
       where: { id: existing.id },
       data: {
         endTime: data.endTime,
         site: data.site,
-        scribeId: data.scribeId,
-        providerId: data.providerId,
+        // Only update scribeId if provided
+        ...(data.scribeId && { scribeId: data.scribeId }),
+        // Only update providerId if provided
+        ...(data.providerId && { providerId: data.providerId }),
       },
       include: {
         scribe: true,
