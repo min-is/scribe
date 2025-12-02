@@ -13,6 +13,8 @@ export interface RawShiftData {
   person: string;    // Name
   role: string;      // Scribe, Physician, or MLP
   site: string;      // Site name
+  providerName?: string;  // Provider name (populated during matching)
+  providerRole?: string;  // Provider role (populated during matching)
 }
 
 export class ScheduleParser {
