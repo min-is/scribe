@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Calendar, Lock, X } from 'lucide-react';
-import { getZoneStyles, formatShiftTime, getZoneGroupLabel } from '@/lib/shiftgen';
+import { getZoneStyles, formatShiftTime, getZoneGroupLabel, type ZoneGroup } from '@/lib/shiftgen';
 
 const PASSCODE = '5150'; // TODO: Move to environment variable or secure storage
 
@@ -15,7 +15,7 @@ interface RailwayShiftData {
 }
 
 interface RailwayZoneGroups {
-  [zoneGroup: string]: RailwayShiftData[];
+  [K in ZoneGroup]?: RailwayShiftData[];
 }
 
 interface RailwayDailyData {
@@ -79,12 +79,22 @@ function DailyModal({ date, dailyData, onClose }: DailyModalProps) {
     year: 'numeric',
   });
 
-  const zoneEntries = Object.entries(dailyData.zones);
-  const totalShifts = zoneEntries.reduce((sum, [_, shifts]) => sum + shifts.length, 0);
+  // Define zone groups in order for display
+  const zoneGroups: ZoneGroup[] = ['zone1', 'zone2', 'zones34', 'zones56', 'overflowPit'];
+
+  // Filter to only zones with shifts
+  const zonesWithShifts = zoneGroups
+    .map(zoneGroup => ({
+      group: zoneGroup,
+      shifts: dailyData.zones[zoneGroup] || []
+    }))
+    .filter(({ shifts }) => shifts.length > 0);
+
+  const totalShifts = zonesWithShifts.reduce((sum, { shifts }) => sum + shifts.length, 0);
   const hasShifts = totalShifts > 0;
 
   // Count unique scribes and providers
-  const allShifts = zoneEntries.flatMap(([_, shifts]) => shifts);
+  const allShifts = zonesWithShifts.flatMap(({ shifts }) => shifts);
   const uniqueScribes = new Set(allShifts.map(s => s.scribe)).size;
   const uniqueProviders = new Set(
     allShifts.map(s => s.provider).filter(Boolean)
@@ -119,17 +129,17 @@ function DailyModal({ date, dailyData, onClose }: DailyModalProps) {
             </div>
           ) : (
             <div className="space-y-4">
-              {zoneEntries.map(([zoneGroup, shifts]) => (
-                <div key={zoneGroup}>
+              {zonesWithShifts.map(({ group, shifts }) => (
+                <div key={group}>
                   <h4 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 mb-2 px-1">
-                    {getZoneGroupLabel(zoneGroup)}
+                    {getZoneGroupLabel(group)}
                   </h4>
                   <div className="space-y-2">
                     {shifts.map((shift, idx) => (
                       <ShiftCard
                         key={`${shift.label}-${shift.time}-${idx}`}
                         shift={shift}
-                        zoneGroup={zoneGroup}
+                        zoneGroup={group}
                       />
                     ))}
                   </div>
@@ -153,7 +163,7 @@ function DailyModal({ date, dailyData, onClose }: DailyModalProps) {
                   </div>
                   <div>
                     <div className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
-                      {zoneEntries.length}
+                      {zonesWithShifts.length}
                     </div>
                     <div className="text-xs text-zinc-600 dark:text-zinc-400">Zones</div>
                   </div>
