@@ -7,7 +7,7 @@ import { useState } from 'react';
 import SectionSearchModal from '@/components/search/SectionSearchModal';
 import { PageType } from '@prisma/client';
 import TypewriterText from '@/components/TypewriterText';
-import ScheduleCalendar from '@/components/calendar/ScheduleCalendar';
+import RailwayScheduleCalendar from '@/components/calendar/RailwayScheduleCalendar';
 
 type HomePageClientProps = {
   initialContent: {
@@ -102,7 +102,7 @@ export default function HomePageClient({ initialContent }: HomePageClientProps) 
 
           {/* Schedule Calendar - Right Column */}
           <div>
-            <ScheduleCalendar />
+            <RailwayScheduleCalendar />
           </div>
         </div>
 
