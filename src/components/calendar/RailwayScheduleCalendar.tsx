@@ -70,8 +70,6 @@ interface DailyModalProps {
 }
 
 function DailyModal({ date, dailyData, onClose }: DailyModalProps) {
-  if (!dailyData || !dailyData.zones) return null;
-
   const dateStr = date.toLocaleDateString('en-US', {
     weekday: 'long',
     month: 'long',
@@ -82,13 +80,15 @@ function DailyModal({ date, dailyData, onClose }: DailyModalProps) {
   // Define zone groups in order for display
   const zoneGroups: ZoneGroup[] = ['zone1', 'zone2', 'zones34', 'zones56', 'overflowPit'];
 
-  // Filter to only zones with shifts
-  const zonesWithShifts = zoneGroups
-    .map(zoneGroup => ({
-      group: zoneGroup,
-      shifts: dailyData.zones[zoneGroup] || []
-    }))
-    .filter(({ shifts }) => shifts.length > 0);
+  // Filter to only zones with shifts (handle case when dailyData is null)
+  const zonesWithShifts = dailyData?.zones
+    ? zoneGroups
+        .map(zoneGroup => ({
+          group: zoneGroup,
+          shifts: dailyData.zones[zoneGroup] || []
+        }))
+        .filter(({ shifts }) => shifts.length > 0)
+    : [];
 
   const totalShifts = zonesWithShifts.reduce((sum, { shifts }) => sum + shifts.length, 0);
   const hasShifts = totalShifts > 0;
@@ -260,21 +260,25 @@ export default function RailwayScheduleCalendar() {
 
     const fetchDailySchedule = async () => {
       setLoading(true);
+      setDailyData(null); // Reset data when fetching new date
       try {
         const dateStr = selectedDate.toISOString().split('T')[0];
         const response = await fetch(`/api/railway-shifts/daily?date=${dateStr}`);
 
         if (!response.ok) {
           console.error('Failed to fetch daily schedule');
+          // Set empty data object to show modal with "no shifts" message
+          setDailyData({ success: false, date: dateStr, zones: {} });
           return;
         }
 
         const data = await response.json();
-        if (data.success) {
-          setDailyData(data);
-        }
+        setDailyData(data);
       } catch (error) {
         console.error('Error fetching daily schedule:', error);
+        // Set empty data object to show modal with error message
+        const dateStr = selectedDate.toISOString().split('T')[0];
+        setDailyData({ success: false, date: dateStr, zones: {} });
       } finally {
         setLoading(false);
       }
