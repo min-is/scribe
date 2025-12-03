@@ -364,17 +364,25 @@ export async function upsertShift(data: {
 
   if (existing) {
     // Update existing shift with new information
-    // Only update fields if they have values (don't overwrite with null)
+    // Build update data object
+    const updateData: any = {
+      endTime: data.endTime,
+      site: data.site,
+    };
+
+    // Update scribeId if provided (including explicit null to clear it)
+    if (data.scribeId !== undefined) {
+      updateData.scribeId = data.scribeId;
+    }
+
+    // Update providerId if provided (including explicit null to clear it)
+    if (data.providerId !== undefined) {
+      updateData.providerId = data.providerId;
+    }
+
     const updated = await prisma.shift.update({
       where: { id: existing.id },
-      data: {
-        endTime: data.endTime,
-        site: data.site,
-        // Only update scribeId if provided
-        ...(data.scribeId && { scribeId: data.scribeId }),
-        // Only update providerId if provided
-        ...(data.providerId && { providerId: data.providerId }),
-      },
+      data: updateData,
       include: {
         scribe: true,
         provider: true,
