@@ -214,6 +214,10 @@ export default function RailwayScheduleCalendar() {
   const today = new Date().getDate();
   const currentMonth = new Date().getMonth() === month;
 
+  // Helper arrays for rendering calendar
+  const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+  const emptyDays = Array.from({ length: startingDayOfWeek }, (_, i) => i);
+
   // Fetch month shifts when unlocked
   useEffect(() => {
     if (!isUnlocked) return;
@@ -278,19 +282,6 @@ export default function RailwayScheduleCalendar() {
 
     fetchDailySchedule();
   }, [selectedDate]);
-
-  // Generate calendar days
-  const year = currentDate.getFullYear();
-  const month = currentDate.getMonth();
-  const firstDay = new Date(year, month, 1);
-  const lastDay = new Date(year, month + 1, 0);
-  const daysInMonth = lastDay.getDate();
-  const startDayOfWeek = firstDay.getDay(); // 0 = Sunday
-
-  const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
-  const emptyDays = Array.from({ length: startDayOfWeek }, (_, i) => i);
-
-  const monthName = currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
 
   const handleDayClick = (day: number) => {
     const date = new Date(year, month, day);
@@ -432,11 +423,10 @@ export default function RailwayScheduleCalendar() {
             ))}
           </div>
           <div className="grid grid-cols-7 gap-1">
-            {Array.from({ length: startingDayOfWeek }).map((_, i) => (
+            {emptyDays.map((i) => (
               <div key={`empty-${i}`} className="aspect-square" />
             ))}
-            {Array.from({ length: daysInMonth }).map((_, i) => {
-              const day = i + 1;
+            {days.map((day) => {
               const isToday = currentMonth && day === today;
               const hasSchedule = monthShifts.has(day);
               const shiftCount = monthShifts.get(day) || 0;
