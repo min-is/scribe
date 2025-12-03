@@ -1,28 +1,38 @@
 'use client';
 
-import { useState, useMemo, memo, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Calendar, Lock, X } from 'lucide-react';
-import { getZoneStyles, formatShiftTime, getZoneGroupLabel, type ZoneGroup } from '@/lib/shiftgen';
+import { getZoneStyles, formatShiftTime, getZoneGroupLabel } from '@/lib/shiftgen';
 
 const PASSCODE = '5150'; // TODO: Move to environment variable or secure storage
 
-// Railway shift type (simplified from database)
-interface RailwayShift {
-  id: string;
+interface RailwayShiftData {
+  label: string;
+  time: string;
+  scribe: string;
+  provider: string | null;
+  providerRole: string | null;
+}
+
+interface RailwayZoneGroups {
+  [zoneGroup: string]: RailwayShiftData[];
+}
+
+interface RailwayDailyData {
+  success: boolean;
   date: string;
-  shift_label: string;
-  shift_time: string;
-  scribe_name: string | null;
-  provider_name: string | null;
-  zone: string;
+  zones: RailwayZoneGroups;
 }
 
 interface ShiftCardProps {
-  shift: RailwayShift;
+  shift: RailwayShiftData;
+  zoneGroup: string;
 }
 
-function ShiftCard({ shift }: ShiftCardProps) {
-  const zoneStyles = getZoneStyles(shift.zone);
+function ShiftCard({ shift, zoneGroup }: ShiftCardProps) {
+  const zoneStyles = getZoneStyles(shift.label);
+  const [startTime, endTime] = shift.time.split('-');
+  const timeStr = formatShiftTime(startTime, endTime);
 
   return (
     <div
@@ -34,52 +44,33 @@ function ShiftCard({ shift }: ShiftCardProps) {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <span className={`text-xs font-semibold ${zoneStyles.badge} px-2 py-0.5 rounded`}>
-            {shift.shift_label}
+            {shift.label}
           </span>
-          <span className="text-xs text-zinc-600 dark:text-zinc-400">{shift.shift_time}</span>
+          <span className="text-xs text-zinc-600 dark:text-zinc-400">{timeStr}</span>
         </div>
       </div>
       <div className="mt-1">
-        {shift.scribe_name && (
-          <div className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
-            {shift.scribe_name}
-            {shift.provider_name && (
-              <span className="text-xs text-zinc-600 dark:text-zinc-400 ml-1">
-                with {shift.provider_name}
-              </span>
-            )}
-          </div>
-        )}
+        <div className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
+          {shift.scribe}
+          {shift.provider && (
+            <span className="text-xs text-zinc-600 dark:text-zinc-400 ml-1">
+              with {shift.provider}
+            </span>
+          )}
+        </div>
       </div>
     </div>
   );
 }
 
-interface DailySchedule {
-  date: string;
-  shifts: {
-    zone1: RailwayShift[];
-    zone2: RailwayShift[];
-    zones34: RailwayShift[];
-    zones56: RailwayShift[];
-    overflowPit: RailwayShift[];
-  };
-  summary: {
-    totalShifts: number;
-    uniqueScribes: number;
-    uniqueProviders: number;
-    zonesCovered: string[];
-  };
-}
-
 interface DailyModalProps {
   date: Date;
-  dailySchedule: DailySchedule | null;
+  dailyData: RailwayDailyData | null;
   onClose: () => void;
 }
 
-function DailyModal({ date, dailySchedule, onClose }: DailyModalProps) {
-  if (!dailySchedule) return null;
+function DailyModal({ date, dailyData, onClose }: DailyModalProps) {
+  if (!dailyData || !dailyData.zones) return null;
 
   const dateStr = date.toLocaleDateString('en-US', {
     weekday: 'long',
@@ -88,22 +79,16 @@ function DailyModal({ date, dailySchedule, onClose }: DailyModalProps) {
     year: 'numeric',
   });
 
-  const shifts = dailySchedule.shifts;
-  const hasShifts =
-    shifts.zone1?.length > 0 ||
-    shifts.zone2?.length > 0 ||
-    shifts.zones34?.length > 0 ||
-    shifts.zones56?.length > 0 ||
-    shifts.overflowPit?.length > 0;
+  const zoneEntries = Object.entries(dailyData.zones);
+  const totalShifts = zoneEntries.reduce((sum, [_, shifts]) => sum + shifts.length, 0);
+  const hasShifts = totalShifts > 0;
 
-  // Define zone groups with proper typing
-  const zoneGroups: { key: ZoneGroup; shifts: RailwayShift[] }[] = [
-    { key: 'zone1', shifts: shifts.zone1 || [] },
-    { key: 'zone2', shifts: shifts.zone2 || [] },
-    { key: 'zones34', shifts: shifts.zones34 || [] },
-    { key: 'zones56', shifts: shifts.zones56 || [] },
-    { key: 'overflowPit', shifts: shifts.overflowPit || [] },
-  ];
+  // Count unique scribes and providers
+  const allShifts = zoneEntries.flatMap(([_, shifts]) => shifts);
+  const uniqueScribes = new Set(allShifts.map(s => s.scribe)).size;
+  const uniqueProviders = new Set(
+    allShifts.map(s => s.provider).filter(Boolean)
+  ).size;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
@@ -115,7 +100,7 @@ function DailyModal({ date, dailySchedule, onClose }: DailyModalProps) {
               {dateStr}
             </h3>
             <p className="text-sm text-zinc-600 dark:text-zinc-400">
-              {dailySchedule.summary.totalShifts} shift{dailySchedule.summary.totalShifts !== 1 ? 's' : ''}
+              {totalShifts} shift{totalShifts !== 1 ? 's' : ''}
             </p>
           </div>
           <button
@@ -134,20 +119,21 @@ function DailyModal({ date, dailySchedule, onClose }: DailyModalProps) {
             </div>
           ) : (
             <div className="space-y-4">
-              {/* Iterate over zone groups with proper typing */}
-              {zoneGroups.map(({ key, shifts: zoneShifts }) => (
-                zoneShifts.length > 0 && (
-                  <div key={key}>
-                    <h4 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 mb-2 px-1">
-                      {getZoneGroupLabel(key)}
-                    </h4>
-                    <div className="space-y-2">
-                      {zoneShifts.map((shift, idx) => (
-                        <ShiftCard key={`${shift.id}-${idx}`} shift={shift} />
-                      ))}
-                    </div>
+              {zoneEntries.map(([zoneGroup, shifts]) => (
+                <div key={zoneGroup}>
+                  <h4 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 mb-2 px-1">
+                    {getZoneGroupLabel(zoneGroup)}
+                  </h4>
+                  <div className="space-y-2">
+                    {shifts.map((shift, idx) => (
+                      <ShiftCard
+                        key={`${shift.label}-${shift.time}-${idx}`}
+                        shift={shift}
+                        zoneGroup={zoneGroup}
+                      />
+                    ))}
                   </div>
-                )
+                </div>
               ))}
 
               {/* Summary */}
@@ -155,19 +141,19 @@ function DailyModal({ date, dailySchedule, onClose }: DailyModalProps) {
                 <div className="grid grid-cols-3 gap-4 text-center">
                   <div>
                     <div className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
-                      {dailySchedule.summary.uniqueScribes}
+                      {uniqueScribes}
                     </div>
                     <div className="text-xs text-zinc-600 dark:text-zinc-400">Scribes</div>
                   </div>
                   <div>
                     <div className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
-                      {dailySchedule.summary.uniqueProviders}
+                      {uniqueProviders}
                     </div>
                     <div className="text-xs text-zinc-600 dark:text-zinc-400">Providers</div>
                   </div>
                   <div>
                     <div className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
-                      {dailySchedule.summary.zonesCovered.length}
+                      {zoneEntries.length}
                     </div>
                     <div className="text-xs text-zinc-600 dark:text-zinc-400">Zones</div>
                   </div>
@@ -181,13 +167,13 @@ function DailyModal({ date, dailySchedule, onClose }: DailyModalProps) {
   );
 }
 
-function RailwayScheduleCalendar() {
+export default function RailwayScheduleCalendar() {
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [passcode, setPasscode] = useState('');
   const [error, setError] = useState(false);
   const [currentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [dailySchedule, setDailySchedule] = useState<DailySchedule | null>(null);
+  const [dailyData, setDailyData] = useState<RailwayDailyData | null>(null);
   const [loading, setLoading] = useState(false);
   const [monthShifts, setMonthShifts] = useState<Map<number, number>>(new Map());
 
@@ -231,12 +217,12 @@ function RailwayScheduleCalendar() {
         }
 
         const data = await response.json();
-        if (data.success && data.data) {
+        if (data.success && data.shifts) {
           const shiftsByDay = new Map<number, number>();
-          data.data.forEach((shift: RailwayShift) => {
-            const shiftDate = new Date(shift.date);
+          Object.entries(data.shifts).forEach(([dateStr, shifts]: [string, any]) => {
+            const shiftDate = new Date(dateStr);
             const day = shiftDate.getDate();
-            shiftsByDay.set(day, (shiftsByDay.get(day) || 0) + 1);
+            shiftsByDay.set(day, shifts.length);
           });
           setMonthShifts(shiftsByDay);
         }
@@ -264,8 +250,8 @@ function RailwayScheduleCalendar() {
         }
 
         const data = await response.json();
-        if (data.success && data.data) {
-          setDailySchedule(data.data);
+        if (data.success) {
+          setDailyData(data);
         }
       } catch (error) {
         console.error('Error fetching daily schedule:', error);
@@ -277,232 +263,201 @@ function RailwayScheduleCalendar() {
     fetchDailySchedule();
   }, [selectedDate]);
 
+  // Generate calendar days
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth();
+  const firstDay = new Date(year, month, 1);
+  const lastDay = new Date(year, month + 1, 0);
+  const daysInMonth = lastDay.getDate();
+  const startDayOfWeek = firstDay.getDay(); // 0 = Sunday
+
+  const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+  const emptyDays = Array.from({ length: startDayOfWeek }, (_, i) => i);
+
+  const monthName = currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
   const handleDayClick = (day: number) => {
-    const year = currentDate.getFullYear();
-    const month = currentDate.getMonth();
     const date = new Date(year, month, day);
     setSelectedDate(date);
   };
 
-  const closeModal = () => {
+  const handleCloseModal = () => {
     setSelectedDate(null);
-    setDailySchedule(null);
+    setDailyData(null);
   };
 
-  // Memoize calendar calculations for performance
-  const calendarData = useMemo(() => {
-    const year = currentDate.getFullYear();
-    const month = currentDate.getMonth();
-    const firstDay = new Date(year, month, 1);
-    const lastDay = new Date(year, month + 1, 0);
-    const daysInMonth = lastDay.getDate();
-    const startingDayOfWeek = firstDay.getDay();
-    const monthName = currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-    const today = new Date().getDate();
-    const currentMonth = new Date().getMonth() === month;
-
-    return { daysInMonth, startingDayOfWeek, monthName, today, currentMonth };
-  }, [currentDate]);
-
-  const { daysInMonth, startingDayOfWeek, monthName, today, currentMonth } = calendarData;
-
+  // Unlock screen
   if (!isUnlocked) {
     return (
-      <div className="relative max-w-2xl mx-auto">
-        {/* Blurred Calendar Preview */}
-        <div className="pointer-events-none select-none">
-          <div className="bg-white dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4 backdrop-blur-3xl">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 bg-blue-500/10 rounded-full flex items-center justify-center">
-                  <Calendar className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-                </div>
-                <div>
-                  <h3 className="text-base font-semibold text-zinc-900 dark:text-zinc-100 blur-sm">
-                    {monthName}
-                  </h3>
-                  <p className="text-xs text-zinc-600 dark:text-zinc-400 blur-sm">Schedule Overview</p>
-                </div>
-              </div>
+      <div className="w-full max-w-4xl mx-auto">
+        <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl shadow-lg overflow-hidden">
+          <div className="p-8 text-center">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-zinc-800 dark:to-zinc-800 rounded-2xl mb-6">
+              <Lock className="w-8 h-8 text-blue-600 dark:text-blue-400" />
             </div>
+            <h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100 mb-2">
+              Schedule Calendar
+            </h2>
+            <p className="text-zinc-600 dark:text-zinc-400 mb-8">
+              Enter 4-digit passcode to view schedules
+            </p>
 
-            {/* Calendar Grid - Blurred */}
-            <div className="blur-md select-none">
-              <div className="grid grid-cols-7 gap-1 mb-1">
-                {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, i) => (
-                  <div key={`${day}-${i}`} className="text-center text-xs font-medium text-zinc-500 dark:text-zinc-400 py-1">
-                    {day}
-                  </div>
-                ))}
-              </div>
-              <div className="grid grid-cols-7 gap-1">
-                {Array.from({ length: startingDayOfWeek }).map((_, i) => (
-                  <div key={`empty-${i}`} className="aspect-square" />
-                ))}
-                {Array.from({ length: daysInMonth }).map((_, i) => {
-                  const day = i + 1;
-                  const isToday = currentMonth && day === today;
-                  return (
-                    <div
-                      key={day}
-                      className={`
-                        aspect-square flex items-center justify-center rounded text-xs font-medium
-                        ${isToday ? 'bg-blue-600 text-white' : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100'}
-                      `}
-                    >
-                      {day}
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Passcode Overlay - Softer blur with gradient edges */}
-        <div className="absolute inset-0 flex items-center justify-center rounded-xl overflow-hidden">
-          <div
-            className="absolute inset-0 bg-gradient-to-b from-white/90 via-white/95 to-white/90 dark:from-zinc-950/90 dark:via-zinc-950/95 dark:to-zinc-950/90 backdrop-blur-xl"
-            style={{
-              maskImage: 'radial-gradient(ellipse at center, black 40%, transparent 100%)',
-              WebkitMaskImage: 'radial-gradient(ellipse at center, black 40%, transparent 100%)'
-            }}
-          />
-          <div className="relative w-full max-w-xs p-4">
-            <div className="text-center mb-4">
-              <div className="inline-flex items-center justify-center w-12 h-12 bg-zinc-100 dark:bg-zinc-800 rounded-full mb-3">
-                <Lock className="w-6 h-6 text-zinc-600 dark:text-zinc-400" />
-              </div>
-              <h3 className="text-base font-semibold text-zinc-900 dark:text-zinc-100">
-                Scribe/Provider Calendar
-              </h3>
-            </div>
-
-            <div className="space-y-3">
-              <div>
-                <input
-                  type="password"
-                  value={passcode}
-                  onChange={(e) => handlePasscodeChange(e.target.value)}
-                  placeholder="••••"
-                  maxLength={4}
+            <div className="flex justify-center gap-3 mb-4">
+              {[0, 1, 2, 3].map((index) => (
+                <div
+                  key={index}
                   className={`
-                    w-32 mx-auto block px-4 py-2 text-center text-xl tracking-widest font-medium
-                    bg-zinc-100 dark:bg-zinc-800 border-2 rounded-lg
-                    text-zinc-900 dark:text-zinc-100
-                    placeholder:text-zinc-400 dark:placeholder:text-zinc-600
-                    focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
-                    transition-all
-                    ${error ? 'border-red-500 animate-shake' : 'border-zinc-200 dark:border-zinc-700'}
+                    w-4 h-4 rounded-full border-2 transition-all duration-200
+                    ${
+                      index < passcode.length
+                        ? 'bg-blue-600 border-blue-600 dark:bg-blue-500 dark:border-blue-500'
+                        : 'border-zinc-300 dark:border-zinc-700'
+                    }
+                    ${error ? 'animate-shake border-red-500' : ''}
                   `}
                 />
-                {error && (
-                  <p className="text-xs text-red-600 dark:text-red-400 mt-2 text-center">
-                    Incorrect passcode
-                  </p>
-                )}
-              </div>
+              ))}
             </div>
+
+            <input
+              type="tel"
+              inputMode="numeric"
+              pattern="[0-9]*"
+              maxLength={4}
+              value={passcode}
+              onChange={(e) => handlePasscodeChange(e.target.value.replace(/\D/g, ''))}
+              className="sr-only"
+              autoFocus
+              aria-label="Enter passcode"
+            />
+
+            <div className="grid grid-cols-3 gap-2 max-w-xs mx-auto">
+              {[1, 2, 3, 4, 5, 6, 7, 8, 9, '', 0, ''].map((num, index) => (
+                <button
+                  key={index}
+                  onClick={() => {
+                    if (num === '') return;
+                    if (passcode.length < 4) {
+                      handlePasscodeChange(passcode + num);
+                    }
+                  }}
+                  disabled={num === ''}
+                  className={`
+                    h-14 rounded-lg text-lg font-semibold transition-all
+                    ${
+                      num === ''
+                        ? 'invisible'
+                        : 'bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 text-zinc-900 dark:text-zinc-100'
+                    }
+                  `}
+                >
+                  {num}
+                </button>
+              ))}
+            </div>
+
+            {error && (
+              <p className="mt-4 text-sm text-red-600 dark:text-red-400">
+                Incorrect passcode. Please try again.
+              </p>
+            )}
           </div>
         </div>
       </div>
     );
   }
 
-  // Unlocked Calendar View
+  // Calendar view
   return (
-    <>
-      <div className="max-w-2xl mx-auto bg-white dark:bg-zinc-900/50 border border-zinc-200 dark:border-zinc-800 rounded-xl p-4">
-        <div className="flex items-center gap-2 mb-4">
-          <div className="w-8 h-8 bg-blue-500/10 rounded-full flex items-center justify-center">
-            <Calendar className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-          </div>
-          <div>
-            <h3 className="text-base font-semibold text-zinc-900 dark:text-zinc-100">
-              {monthName}
-            </h3>
-            <p className="text-xs text-zinc-600 dark:text-zinc-400">Your schedule at a glance</p>
+    <div className="w-full max-w-4xl mx-auto">
+      <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl shadow-lg overflow-hidden">
+        {/* Header */}
+        <div className="p-6 border-b border-zinc-200 dark:border-zinc-800">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="inline-flex items-center justify-center w-10 h-10 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-zinc-800 dark:to-zinc-800 rounded-xl">
+                <Calendar className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+              </div>
+              <div>
+                <h2 className="text-xl font-bold text-zinc-900 dark:text-zinc-100">{monthName}</h2>
+                <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                  Railway Database
+                </p>
+              </div>
+            </div>
           </div>
         </div>
 
         {/* Calendar Grid */}
-        <div className="space-y-1">
-          <div className="grid grid-cols-7 gap-1 mb-1">
-            {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, i) => (
-              <div key={`${day}-${i}`} className="text-center text-xs font-semibold text-zinc-600 dark:text-zinc-400 py-1">
+        <div className="p-6">
+          {/* Day headers */}
+          <div className="grid grid-cols-7 gap-2 mb-3">
+            {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
+              <div
+                key={day}
+                className="text-center text-xs font-semibold text-zinc-600 dark:text-zinc-400 py-2"
+              >
                 {day}
               </div>
             ))}
           </div>
-          <div className="grid grid-cols-7 gap-1">
-            {Array.from({ length: startingDayOfWeek }).map((_, i) => (
+
+          {/* Days grid */}
+          <div className="grid grid-cols-7 gap-2">
+            {/* Empty cells for days before month starts */}
+            {emptyDays.map((i) => (
               <div key={`empty-${i}`} className="aspect-square" />
             ))}
-            {Array.from({ length: daysInMonth }).map((_, i) => {
-              const day = i + 1;
-              const isToday = currentMonth && day === today;
-              const hasSchedule = monthShifts.has(day);
+
+            {/* Actual days */}
+            {days.map((day) => {
+              const hasShifts = monthShifts.has(day);
               const shiftCount = monthShifts.get(day) || 0;
+              const isToday =
+                day === new Date().getDate() &&
+                month === new Date().getMonth() &&
+                year === new Date().getFullYear();
 
               return (
                 <button
                   key={day}
                   onClick={() => handleDayClick(day)}
                   className={`
-                    aspect-square flex flex-col items-center justify-center rounded text-xs font-medium
-                    transition-all hover:scale-105 relative
+                    aspect-square rounded-lg transition-all relative
                     ${
                       isToday
-                        ? 'bg-blue-600 text-white shadow-md'
-                        : hasSchedule
-                          ? 'bg-blue-500/10 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800'
-                          : 'bg-zinc-50 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-700'
+                        ? 'bg-blue-50 dark:bg-blue-950/30 border-2 border-blue-500 dark:border-blue-500'
+                        : 'bg-zinc-50 dark:bg-zinc-800/50 border border-zinc-200 dark:border-zinc-700'
                     }
+                    ${hasShifts ? 'hover:bg-zinc-100 dark:hover:bg-zinc-800' : ''}
+                    ${!hasShifts ? 'opacity-50' : ''}
                   `}
                 >
-                  {day}
-                  {hasSchedule && !isToday && (
-                    <div className="text-[8px] text-blue-600 dark:text-blue-400 font-bold mt-0.5">
-                      {shiftCount}
-                    </div>
-                  )}
+                  <div className="flex flex-col items-center justify-center h-full">
+                    <span
+                      className={`text-sm font-semibold ${
+                        isToday
+                          ? 'text-blue-600 dark:text-blue-400'
+                          : 'text-zinc-900 dark:text-zinc-100'
+                      }`}
+                    >
+                      {day}
+                    </span>
+                    {hasShifts && (
+                      <span className="text-[10px] text-zinc-600 dark:text-zinc-400 mt-0.5">
+                        {shiftCount}
+                      </span>
+                    )}
+                  </div>
                 </button>
               );
             })}
           </div>
         </div>
-
-        {/* Schedule Info */}
-        <div className="mt-3 p-3 bg-blue-50 dark:bg-blue-900/10 border border-blue-200 dark:border-blue-800 rounded-lg">
-          <p className="text-xs text-zinc-600 dark:text-zinc-400">
-            <span className="font-medium text-zinc-900 dark:text-zinc-100">Shift Calendar:</span> Click any date to view details
-          </p>
-        </div>
       </div>
 
-      {/* Daily Modal */}
-      {selectedDate && (
-        <DailyModal
-          date={selectedDate}
-          dailySchedule={dailySchedule}
-          onClose={closeModal}
-        />
-      )}
-
-      {/* Loading overlay */}
-      {loading && (
-        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/20 backdrop-blur-sm">
-          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg p-4">
-            <div className="flex items-center gap-3">
-              <div className="animate-spin rounded-full h-5 w-5 border-2 border-blue-600 border-t-transparent"></div>
-              <span className="text-sm text-zinc-900 dark:text-zinc-100">Loading schedule...</span>
-            </div>
-          </div>
-        </div>
-      )}
-    </>
+      {/* Modal */}
+      {selectedDate && <DailyModal date={selectedDate} dailyData={dailyData} onClose={handleCloseModal} />}
+    </div>
   );
 }
-
-// Export memoized component for performance
-export default memo(RailwayScheduleCalendar);
