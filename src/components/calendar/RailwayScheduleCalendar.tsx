@@ -14,9 +14,9 @@ interface RailwayShiftData {
   providerRole: string | null;
 }
 
-interface RailwayZoneGroups {
+type RailwayZoneGroups = {
   [K in ZoneGroup]?: RailwayShiftData[];
-}
+};
 
 interface RailwayDailyData {
   success: boolean;
