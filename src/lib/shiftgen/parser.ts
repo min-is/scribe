@@ -5,10 +5,12 @@
  */
 
 import * as cheerio from 'cheerio';
+import { getShiftLetterFromTime } from './constants';
 
 export interface RawShiftData {
   date: string;      // YYYY-MM-DD
   label: string;     // Zone identifier (A, B, C, PA, etc.)
+  rawLabel: string;  // Original label from HTML (for debugging)
   time: string;      // HHMM-HHMM
   person: string;    // Name
   role: string;      // Scribe, Physician, or MLP
@@ -224,10 +226,15 @@ export class ScheduleParser {
         const normalizedPerson = ScheduleParser.normalizePerson(person);
 
         // Skip empty shifts
-        if (normalizedPerson !== 'EMPTY') {
+        if (normalizedPerson !== 'EMPTY' && time) {
+          // Normalize shift letter using start time and raw label
+          const [startTime] = time.split('-');
+          const normalizedLabel = getShiftLetterFromTime(startTime, label) || label;
+
           scheduleData.push({
             date: dateStr,
-            label: label.trim(),
+            label: normalizedLabel.trim(),
+            rawLabel: label.trim(),
             time: time.trim(),
             person: normalizedPerson,
             role,

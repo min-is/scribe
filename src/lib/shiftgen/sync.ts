@@ -131,6 +131,9 @@ export class ShiftGenSyncService {
   /**
    * Match scribes with their providers based on date, zone, and time
    * Following the same logic as the Discord bot
+   *
+   * Now uses normalized shift letters (A, B, C, etc.) which are consistent
+   * between scribe and provider schedules thanks to getShiftLetterFromTime()
    */
   private matchScribesWithProviders(shifts: RawShiftData[]): RawShiftData[] {
     const matchedShifts: RawShiftData[] = [];
@@ -151,6 +154,7 @@ export class ShiftGenSyncService {
       for (let j = 0; j < shifts.length; j++) {
         const other = shifts[j];
 
+        // Must be same date
         if (other.date !== shift.date) continue;
 
         if (isPaShift && other.role === 'MLP') {
@@ -161,7 +165,8 @@ export class ShiftGenSyncService {
             break;
           }
         } else if (other.role === 'Physician') {
-          // For regular shifts, match physicians by exact zone+time match
+          // For regular shifts, match physicians by normalized shift letter AND time
+          // Both scribe and physician schedules now have normalized labels (A, B, C, etc.)
           if (other.time === shift.time && other.label === shift.label) {
             matchingProvider = other;
             processedIndices.add(j);
