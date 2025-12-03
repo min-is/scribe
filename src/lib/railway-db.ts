@@ -34,7 +34,7 @@ export async function getRailwayShiftsForDate(date: string): Promise<RailwayShif
   try {
     const result = await client.query(
       `SELECT DISTINCT ON (date, label, time, role)
-         date, label, time, person, role, site
+         id, date, label, time, person, role, site, created_at, updated_at
        FROM shifts
        WHERE date = $1
        ORDER BY date, label, time, role, updated_at DESC`,
@@ -42,8 +42,15 @@ export async function getRailwayShiftsForDate(date: string): Promise<RailwayShif
     );
 
     return result.rows.map(row => ({
-      ...row,
-      date: row.date.toISOString().split('T')[0], // Convert Date to YYYY-MM-DD string
+      id: row.id,
+      date: typeof row.date === 'string' ? row.date : row.date.toISOString().split('T')[0],
+      label: row.label,
+      time: row.time,
+      person: row.person,
+      role: row.role,
+      site: row.site,
+      created_at: row.created_at,
+      updated_at: row.updated_at,
     }));
   } finally {
     client.release();
@@ -59,7 +66,7 @@ export async function getRailwayShiftsForRange(startDate: string, endDate: strin
   try {
     const result = await client.query(
       `SELECT DISTINCT ON (date, label, time, role)
-         date, label, time, person, role, site
+         id, date, label, time, person, role, site, created_at, updated_at
        FROM shifts
        WHERE date BETWEEN $1 AND $2
        ORDER BY date, label, time, role, updated_at DESC`,
@@ -67,8 +74,15 @@ export async function getRailwayShiftsForRange(startDate: string, endDate: strin
     );
 
     return result.rows.map(row => ({
-      ...row,
-      date: row.date.toISOString().split('T')[0],
+      id: row.id,
+      date: typeof row.date === 'string' ? row.date : row.date.toISOString().split('T')[0],
+      label: row.label,
+      time: row.time,
+      person: row.person,
+      role: row.role,
+      site: row.site,
+      created_at: row.created_at,
+      updated_at: row.updated_at,
     }));
   } finally {
     client.release();
@@ -91,15 +105,15 @@ export async function getRailwayDatabaseStats(): Promise<{
     const totalResult = await client.query('SELECT COUNT(*) FROM shifts');
     const totalShifts = parseInt(totalResult.rows[0].count);
 
-    // Get unique scribes
+    // Get unique scribes (case-insensitive)
     const scribesResult = await client.query(
-      "SELECT COUNT(DISTINCT person) FROM shifts WHERE role = 'Scribe'"
+      "SELECT COUNT(DISTINCT person) FROM shifts WHERE LOWER(role) = 'scribe'"
     );
     const totalScribes = parseInt(scribesResult.rows[0].count);
 
-    // Get unique providers (Physician + MLP)
+    // Get unique providers (Physician + MLP, case-insensitive)
     const providersResult = await client.query(
-      "SELECT COUNT(DISTINCT person) FROM shifts WHERE role IN ('Physician', 'MLP')"
+      "SELECT COUNT(DISTINCT person) FROM shifts WHERE LOWER(role) IN ('physician', 'mlp')"
     );
     const totalProviders = parseInt(providersResult.rows[0].count);
 

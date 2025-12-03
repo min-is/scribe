@@ -42,9 +42,11 @@ export async function GET(request: NextRequest) {
       zoneGroups[zone] = [];
     });
 
-    // Separate scribes and providers
-    const scribes = shifts.filter(s => s.role === 'Scribe');
-    const providers = shifts.filter(s => s.role === 'Physician' || s.role === 'MLP');
+    // Separate scribes and providers (case-insensitive)
+    const scribes = shifts.filter(s => s.role.toLowerCase() === 'scribe');
+    const providers = shifts.filter(s =>
+      s.role.toLowerCase() === 'physician' || s.role.toLowerCase() === 'mlp'
+    );
 
     // Match scribes with providers
     for (const scribe of scribes) {
