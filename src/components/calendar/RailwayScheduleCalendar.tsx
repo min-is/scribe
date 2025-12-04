@@ -330,7 +330,7 @@ export default function RailwayScheduleCalendar() {
               </div>
               <div className="grid grid-cols-7 gap-x-1 gap-y-3 justify-items-center">
                 {Array.from({ length: startingDayOfWeek }).map((_, i) => (
-                  <div key={`empty-${i}`} className="w-10 h-10" />
+                  <div key={`empty-${i}`} className="w-12 h-12" />
                 ))}
                 {Array.from({ length: daysInMonth }).map((_, i) => {
                   const day = i + 1;
@@ -339,7 +339,7 @@ export default function RailwayScheduleCalendar() {
                     <div
                       key={day}
                       className={`
-                        w-10 h-10 flex items-center justify-center rounded-full text-sm font-semibold
+                        w-12 h-12 flex items-center justify-center rounded-full text-sm font-semibold
                         ${isToday
                           ? 'bg-transparent text-white border-2 border-blue-500'
                           : 'bg-black/90 dark:bg-black text-white'
@@ -435,7 +435,7 @@ export default function RailwayScheduleCalendar() {
           </div>
           <div className="grid grid-cols-7 gap-x-1 gap-y-3 justify-items-center">
             {emptyDays.map((i) => (
-              <div key={`empty-${i}`} className="w-10 h-10" />
+              <div key={`empty-${i}`} className="w-12 h-12" />
             ))}
             {days.map((day) => {
               const isToday = currentMonth && day === today;
@@ -446,7 +446,7 @@ export default function RailwayScheduleCalendar() {
                   key={day}
                   onClick={() => handleDayClick(day)}
                   className={`
-                    w-10 h-10 flex items-center justify-center rounded-full text-sm font-semibold
+                    w-12 h-12 flex items-center justify-center rounded-full text-sm font-semibold
                     transition-all hover:scale-105
                     ${isToday
                       ? 'bg-transparent text-white border-2 border-blue-500'
