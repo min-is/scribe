@@ -339,8 +339,11 @@ export default function RailwayScheduleCalendar() {
                     <div
                       key={day}
                       className={`
-                        aspect-square flex items-center justify-center rounded-full text-xs font-medium
-                        ${isToday ? 'bg-blue-600 text-white' : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100'}
+                        w-8 h-8 flex items-center justify-center rounded-full text-sm font-semibold
+                        ${isToday
+                          ? 'bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 text-white shadow-lg'
+                          : 'bg-black/90 dark:bg-black text-white'
+                        }
                       `}
                     >
                       {day}
@@ -414,7 +417,7 @@ export default function RailwayScheduleCalendar() {
             <h3 className="text-base font-semibold text-zinc-900 dark:text-zinc-100">
               {monthName}
             </h3>
-            <p className="text-xs text-zinc-600 dark:text-zinc-400">Your schedule at a glance</p>
+            <p className="text-xs text-zinc-600 dark:text-zinc-400">Scribe/Provider schedules at a glance</p>
           </div>
         </div>
 
@@ -434,35 +437,22 @@ export default function RailwayScheduleCalendar() {
             {days.map((day) => {
               const isToday = currentMonth && day === today;
               const hasSchedule = monthShifts.has(day);
-              const shiftCount = monthShifts.get(day) || 0;
-
-              // Determine color based on shift count
-              let colorClasses = '';
-              if (isToday) {
-                colorClasses = 'bg-blue-600 text-white shadow-md';
-              } else if (hasSchedule) {
-                if (shiftCount >= 31) {
-                  colorClasses = 'bg-red-500/10 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-800';
-                } else if (shiftCount >= 21) {
-                  colorClasses = 'bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800';
-                } else if (shiftCount >= 11) {
-                  colorClasses = 'bg-blue-500/10 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800';
-                } else {
-                  colorClasses = 'bg-green-500/10 text-green-700 dark:text-green-300 border border-green-200 dark:border-green-800';
-                }
-              } else {
-                colorClasses = 'bg-zinc-50 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-700';
-              }
 
               return (
                 <button
                   key={day}
                   onClick={() => handleDayClick(day)}
                   className={`
-                    aspect-square flex items-center justify-center rounded-full text-xs font-medium
+                    w-8 h-8 flex items-center justify-center rounded-full text-sm font-semibold
                     transition-all hover:scale-105
-                    ${colorClasses}
+                    ${isToday
+                      ? 'bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 text-white shadow-lg animate-pulse'
+                      : 'bg-black/90 dark:bg-black text-white hover:bg-black dark:hover:bg-zinc-900'
+                    }
                   `}
+                  style={isToday ? {
+                    boxShadow: '0 0 20px rgba(147, 51, 234, 0.5), 0 0 40px rgba(59, 130, 246, 0.3)',
+                  } : undefined}
                 >
                   {day}
                 </button>
