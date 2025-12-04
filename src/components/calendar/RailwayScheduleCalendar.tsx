@@ -330,7 +330,7 @@ export default function RailwayScheduleCalendar() {
               </div>
               <div className="grid grid-cols-7 gap-1">
                 {Array.from({ length: startingDayOfWeek }).map((_, i) => (
-                  <div key={`empty-${i}`} className="aspect-square" />
+                  <div key={`empty-${i}`} className="w-10 h-10" />
                 ))}
                 {Array.from({ length: daysInMonth }).map((_, i) => {
                   const day = i + 1;
@@ -339,7 +339,7 @@ export default function RailwayScheduleCalendar() {
                     <div
                       key={day}
                       className={`
-                        w-8 h-8 flex items-center justify-center rounded-full text-sm font-semibold
+                        w-10 h-10 flex items-center justify-center rounded-full text-sm font-semibold
                         ${isToday
                           ? 'bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 text-white shadow-lg'
                           : 'bg-black/90 dark:bg-black text-white'
@@ -432,7 +432,7 @@ export default function RailwayScheduleCalendar() {
           </div>
           <div className="grid grid-cols-7 gap-1">
             {emptyDays.map((i) => (
-              <div key={`empty-${i}`} className="aspect-square" />
+              <div key={`empty-${i}`} className="w-10 h-10" />
             ))}
             {days.map((day) => {
               const isToday = currentMonth && day === today;
@@ -443,7 +443,7 @@ export default function RailwayScheduleCalendar() {
                   key={day}
                   onClick={() => handleDayClick(day)}
                   className={`
-                    w-8 h-8 flex items-center justify-center rounded-full text-sm font-semibold
+                    w-10 h-10 flex items-center justify-center rounded-full text-sm font-semibold
                     transition-all hover:scale-105
                     ${isToday
                       ? 'bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 text-white shadow-lg animate-pulse'
