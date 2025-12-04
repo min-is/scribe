@@ -34,6 +34,9 @@ export async function GET(request: NextRequest) {
     // Fetch shifts from Railway database
     const shifts = await getRailwayShiftsForDate(date);
 
+    console.log(`[Railway API] Fetched ${shifts.length} shifts for ${date}`);
+    console.log(`[Railway API] Sample shift:`, shifts[0]);
+
     // Group shifts by zone
     const zoneGroups: Record<string, any[]> = {};
 
@@ -42,11 +45,20 @@ export async function GET(request: NextRequest) {
       zoneGroups[zone] = [];
     });
 
-    // Separate scribes and providers
-    const scribes = shifts.filter(s => s.role === 'Scribe');
-    const providers = shifts.filter(s =>
-      s.role === 'Physician' || s.role === 'MLP'
-    );
+    // Separate scribes and providers (case-insensitive)
+    const scribes = shifts.filter(s => s.role.toLowerCase() === 'scribe');
+    const providers = shifts.filter(s => {
+      const roleLower = s.role.toLowerCase();
+      return roleLower === 'physician' || roleLower === 'mlp';
+    });
+
+    console.log(`[Railway API] Filtered ${scribes.length} scribes, ${providers.length} providers`);
+    if (scribes.length > 0) {
+      console.log(`[Railway API] Sample scribe:`, scribes[0]);
+    }
+    if (providers.length > 0) {
+      console.log(`[Railway API] Sample provider:`, providers[0]);
+    }
 
     // Match scribes with providers
     for (const scribe of scribes) {
@@ -76,6 +88,10 @@ export async function GET(request: NextRequest) {
         delete zoneGroups[zone];
       }
     });
+
+    const totalShiftsInGroups = Object.values(zoneGroups).reduce((sum, arr) => sum + arr.length, 0);
+    console.log(`[Railway API] Returning ${totalShiftsInGroups} shifts across ${Object.keys(zoneGroups).length} zones`);
+    console.log(`[Railway API] Zones with shifts:`, Object.keys(zoneGroups));
 
     return NextResponse.json({
       success: true,

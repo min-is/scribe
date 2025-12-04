@@ -105,15 +105,15 @@ export async function getRailwayDatabaseStats(): Promise<{
     const totalResult = await client.query('SELECT COUNT(*) FROM shifts');
     const totalShifts = parseInt(totalResult.rows[0].count);
 
-    // Get unique scribes
+    // Get unique scribes (case-insensitive)
     const scribesResult = await client.query(
-      "SELECT COUNT(DISTINCT person) FROM shifts WHERE role = 'Scribe'"
+      "SELECT COUNT(DISTINCT person) FROM shifts WHERE LOWER(role) = 'scribe'"
     );
     const totalScribes = parseInt(scribesResult.rows[0].count);
 
-    // Get unique providers (Physician + MLP)
+    // Get unique providers (Physician + MLP, case-insensitive)
     const providersResult = await client.query(
-      "SELECT COUNT(DISTINCT person) FROM shifts WHERE role IN ('Physician', 'MLP')"
+      "SELECT COUNT(DISTINCT person) FROM shifts WHERE LOWER(role) IN ('physician', 'mlp')"
     );
     const totalProviders = parseInt(providersResult.rows[0].count);
 
