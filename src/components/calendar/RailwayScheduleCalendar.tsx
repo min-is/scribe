@@ -471,8 +471,8 @@ export default function RailwayScheduleCalendar() {
         </div>
       </div>
 
-      {/* Daily Modal */}
-      {selectedDate && (
+      {/* Daily Modal - Only show when we have data (loading complete) */}
+      {selectedDate && !loading && dailyData && (
         <DailyModal
           date={selectedDate}
           dailyData={dailyData}
@@ -480,10 +480,10 @@ export default function RailwayScheduleCalendar() {
         />
       )}
 
-      {/* Loading overlay */}
-      {loading && (
-        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/20 backdrop-blur-sm">
-          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg p-4">
+      {/* Loading overlay - Show while fetching data */}
+      {selectedDate && loading && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg p-4 shadow-xl">
             <div className="flex items-center gap-3">
               <div className="animate-spin rounded-full h-5 w-5 border-2 border-blue-600 border-t-transparent"></div>
               <span className="text-sm text-zinc-900 dark:text-zinc-100">Loading schedule...</span>
