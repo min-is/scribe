@@ -102,7 +102,7 @@ function DailyModal({ date, dailyData, onClose }: DailyModalProps) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-      <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-hidden">
+      <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl shadow-2xl max-w-4xl w-full max-h-[80vh] overflow-hidden">
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-zinc-200 dark:border-zinc-800">
           <div>
@@ -115,7 +115,8 @@ function DailyModal({ date, dailyData, onClose }: DailyModalProps) {
           </div>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
+            className="p-2 hover:opacity-70 transition-opacity"
+            aria-label="Close"
           >
             <X className="w-5 h-5 text-zinc-600 dark:text-zinc-400" />
           </button>
@@ -134,7 +135,7 @@ function DailyModal({ date, dailyData, onClose }: DailyModalProps) {
                   <h4 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 mb-2 px-1">
                     {getZoneGroupLabel(group)}
                   </h4>
-                  <div className="space-y-2">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                     {shifts.map((shift, idx) => (
                       <ShiftCard
                         key={`${shift.label}-${shift.time}-${idx}`}
@@ -338,7 +339,7 @@ export default function RailwayScheduleCalendar() {
                     <div
                       key={day}
                       className={`
-                        aspect-square flex items-center justify-center rounded text-xs font-medium
+                        aspect-square flex items-center justify-center rounded-full text-xs font-medium
                         ${isToday ? 'bg-blue-600 text-white' : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100'}
                       `}
                     >
@@ -435,28 +436,35 @@ export default function RailwayScheduleCalendar() {
               const hasSchedule = monthShifts.has(day);
               const shiftCount = monthShifts.get(day) || 0;
 
+              // Determine color based on shift count
+              let colorClasses = '';
+              if (isToday) {
+                colorClasses = 'bg-blue-600 text-white shadow-md';
+              } else if (hasSchedule) {
+                if (shiftCount >= 31) {
+                  colorClasses = 'bg-red-500/10 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-800';
+                } else if (shiftCount >= 21) {
+                  colorClasses = 'bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800';
+                } else if (shiftCount >= 11) {
+                  colorClasses = 'bg-blue-500/10 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800';
+                } else {
+                  colorClasses = 'bg-green-500/10 text-green-700 dark:text-green-300 border border-green-200 dark:border-green-800';
+                }
+              } else {
+                colorClasses = 'bg-zinc-50 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-700';
+              }
+
               return (
                 <button
                   key={day}
                   onClick={() => handleDayClick(day)}
                   className={`
-                    aspect-square flex flex-col items-center justify-center rounded text-xs font-medium
-                    transition-all hover:scale-105 relative
-                    ${
-                      isToday
-                        ? 'bg-blue-600 text-white shadow-md'
-                        : hasSchedule
-                          ? 'bg-blue-500/10 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800'
-                          : 'bg-zinc-50 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-700'
-                    }
+                    aspect-square flex items-center justify-center rounded-full text-xs font-medium
+                    transition-all hover:scale-105
+                    ${colorClasses}
                   `}
                 >
                   {day}
-                  {hasSchedule && !isToday && (
-                    <div className="text-[8px] text-blue-600 dark:text-blue-400 font-bold mt-0.5">
-                      {shiftCount}
-                    </div>
-                  )}
                 </button>
               );
             })}
