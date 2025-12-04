@@ -186,7 +186,7 @@ export default function MedicationsClient({
               Medications
             </h1>
           </div>
-          <p className="text-lg text-gray-600 dark:text-gray-400 font-light ml-14">
+          <p className="text-lg text-gray-600 dark:text-gray-400 font-normal ml-14">
             Quick reference for 1100+ medications - search by name, brand, type
           </p>
         </div>
@@ -204,7 +204,7 @@ export default function MedicationsClient({
             />
           </div>
           {debouncedQuery && (
-            <p className="text-gray-500 dark:text-gray-400 text-sm mt-3 ml-1 font-light">
+            <p className="text-gray-500 dark:text-gray-400 text-sm mt-3 ml-1 font-normal">
               Found <span className="font-medium text-gray-700 dark:text-gray-300">{medicationsList.length}</span> result{medicationsList.length !== 1 ? 's' : ''} for &quot;{debouncedQuery}&quot;
             </p>
           )}
@@ -213,7 +213,7 @@ export default function MedicationsClient({
         {/* Results Count */}
         {!debouncedQuery && (
           <div className="mb-6">
-            <p className="text-gray-500 dark:text-gray-400 text-sm font-light ml-1">
+            <p className="text-gray-500 dark:text-gray-400 text-sm font-normal ml-1">
               Showing {displayedMedications.length.toLocaleString()} of {medicationsList.length.toLocaleString()} medication{medicationsList.length !== 1 ? 's' : ''}
             </p>
           </div>
@@ -226,7 +226,7 @@ export default function MedicationsClient({
               <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
                 <FiSearch className="text-gray-400 dark:text-gray-500 text-2xl" />
               </div>
-              <p className="text-gray-600 dark:text-gray-400 text-lg font-light mb-2">
+              <p className="text-gray-600 dark:text-gray-400 text-lg font-normal mb-2">
                 {allMedications.length === 0 ? 'No medications in database' : 'No medications found'}
               </p>
               <p className="text-gray-400 dark:text-gray-500 text-sm">
@@ -265,7 +265,7 @@ export default function MedicationsClient({
 
                       {/* Description */}
                       {med.commonlyUsedFor && (
-                        <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed font-light">
+                        <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed font-normal">
                           {med.commonlyUsedFor}
                         </p>
                       )}

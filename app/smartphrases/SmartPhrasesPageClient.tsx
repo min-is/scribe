@@ -111,7 +111,7 @@ export default function SmartPhrasesPageClient({
           <h1 className="text-5xl font-semibold tracking-tight text-gray-900 dark:text-white mb-3">
             SmartPhrase Library
           </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-400 font-light max-w-2xl mx-auto">
+          <p className="text-lg text-gray-600 dark:text-gray-400 font-normal max-w-2xl mx-auto">
             Browse and search SmartPhrases (.phrases) for more efficient documentation
           </p>
         </div>
@@ -129,7 +129,7 @@ export default function SmartPhrasesPageClient({
             />
           </div>
           {debouncedQuery && (
-            <p className="text-gray-500 dark:text-gray-400 text-sm mt-3 text-center font-light">
+            <p className="text-gray-500 dark:text-gray-400 text-sm mt-3 text-center font-normal">
               Found {filteredPhrases.length} result{filteredPhrases.length !== 1 ? 's' : ''} for &quot;{debouncedQuery}&quot;
             </p>
           )}
@@ -157,7 +157,7 @@ export default function SmartPhrasesPageClient({
 
         {/* Results Count */}
         <div className="mb-6 text-center">
-          <p className="text-gray-500 dark:text-gray-400 text-sm font-light">
+          <p className="text-gray-500 dark:text-gray-400 text-sm font-normal">
             Showing {filteredPhrases.length} of {smartphrases.length} SmartPhrases
           </p>
         </div>
@@ -165,7 +165,7 @@ export default function SmartPhrasesPageClient({
         {/* SmartPhrase List */}
         {filteredPhrases.length === 0 ? (
           <div className="text-center py-24">
-            <p className="text-gray-500 dark:text-gray-400 text-lg font-light mb-2">
+            <p className="text-gray-500 dark:text-gray-400 text-lg font-normal mb-2">
               No SmartPhrases found
             </p>
             <p className="text-gray-400 dark:text-gray-500 text-sm">
@@ -273,7 +273,7 @@ export default function SmartPhrasesPageClient({
                   {selectedPhrase.slug}
                 </h2>
                 {selectedPhrase.description && (
-                  <p className="text-lg text-gray-600 dark:text-gray-400 font-light">
+                  <p className="text-lg text-gray-600 dark:text-gray-400 font-normal">
                     {selectedPhrase.description}
                   </p>
                 )}

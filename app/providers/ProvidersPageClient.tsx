@@ -111,7 +111,7 @@ export default function ProvidersPageClient({
           <h1 className="text-5xl font-semibold tracking-tight text-gray-900 dark:text-white mb-3">
             Providers
           </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-400 font-light max-w-2xl mx-auto">
+          <p className="text-lg text-gray-600 dark:text-gray-400 font-normal max-w-2xl mx-auto">
             Discover provider preferences and documentation expectations
           </p>
         </div>
@@ -119,7 +119,7 @@ export default function ProvidersPageClient({
         {/* Provider Cards Grid */}
         {providers.length === 0 ? (
           <div className="text-center py-24">
-            <p className="text-gray-500 dark:text-gray-400 text-lg font-light">
+            <p className="text-gray-500 dark:text-gray-400 text-lg font-normal">
               No providers available yet.
             </p>
           </div>
