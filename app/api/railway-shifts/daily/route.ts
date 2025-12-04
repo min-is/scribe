@@ -62,14 +62,26 @@ export async function GET(request: NextRequest) {
 
     // Match scribes with providers
     for (const scribe of scribes) {
-      const zoneGroup = getZoneGroupForShift(scribe.label);
+      console.log(`[Railway API] Processing scribe: label="${scribe.label}", time="${scribe.time}", person="${scribe.person}"`);
 
-      if (!zoneGroup) continue;
+      const zoneGroup = getZoneGroupForShift(scribe.label);
+      console.log(`[Railway API] Zone group for "${scribe.label}": ${zoneGroup}`);
+
+      if (!zoneGroup) {
+        console.log(`[Railway API] WARNING: Skipping unrecognized shift label: ${scribe.label}`);
+        continue;
+      }
 
       // Find matching provider by label and time
       const matchingProvider = providers.find(
         p => p.label === scribe.label && p.time === scribe.time
       );
+
+      if (matchingProvider) {
+        console.log(`[Railway API] Found matching provider for ${scribe.label}: ${matchingProvider.person}`);
+      } else {
+        console.log(`[Railway API] No matching provider for ${scribe.label} at ${scribe.time}`);
+      }
 
       const shiftData = {
         label: scribe.label,
@@ -80,6 +92,7 @@ export async function GET(request: NextRequest) {
       };
 
       zoneGroups[zoneGroup].push(shiftData);
+      console.log(`[Railway API] Added shift to ${zoneGroup}:`, shiftData);
     }
 
     // Remove empty zones
