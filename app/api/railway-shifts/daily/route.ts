@@ -38,12 +38,13 @@ export async function GET(request: NextRequest) {
     console.log(`[Railway API] Sample shift:`, shifts[0]);
 
     // Group shifts by zone
-    const zoneGroups: Record<string, any[]> = {};
-
-    // Initialize zone groups
-    Object.keys(ZONE_CONFIGS).forEach(zone => {
-      zoneGroups[zone] = [];
-    });
+    const zoneGroups: Record<string, any[]> = {
+      zone1: [],
+      zone2: [],
+      zones34: [],
+      zones56: [],
+      overflowPit: [],
+    };
 
     // Separate scribes and providers (case-insensitive)
     const scribes = shifts.filter(s => s.role.toLowerCase() === 'scribe');
