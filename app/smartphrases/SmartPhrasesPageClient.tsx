@@ -8,6 +8,7 @@ import {
   FiCopy,
   FiCheck,
   FiX,
+  FiMessageSquare,
 } from 'react-icons/fi';
 import { useDebounce } from 'use-debounce';
 
@@ -109,11 +110,14 @@ export default function SmartPhrasesPageClient({
         {/* Header Section */}
         <div className="mb-10">
           <div className="flex items-center gap-3 mb-3">
+            <div className="p-2.5 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl shadow-lg shadow-green-500/20 flex items-center justify-center">
+              <FiMessageSquare className="text-white text-2xl" />
+            </div>
             <h1 className="text-4xl font-semibold tracking-tight text-gray-900 dark:text-white">
               SmartPhrase Library
             </h1>
           </div>
-          <p className="text-lg text-gray-600 dark:text-gray-400 font-normal">
+          <p className="text-lg text-gray-600 dark:text-gray-400 font-normal ml-14">
             Browse and search SmartPhrases (.phrases) for more efficient documentation
           </p>
         </div>
