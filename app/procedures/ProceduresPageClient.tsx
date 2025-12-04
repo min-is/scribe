@@ -88,13 +88,15 @@ export default function ProceduresPageClient({
 
   return (
     <div className="min-h-screen">
-      <div className="max-w-7xl mx-auto px-6 py-16">
+      <div className="max-w-7xl mx-auto px-6 py-12">
         {/* Header Section */}
-        <div className="mb-12 text-center">
-          <h1 className="text-5xl font-semibold tracking-tight text-gray-900 dark:text-white mb-3">
-            ED Procedures
-          </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-400 font-normal max-w-2xl mx-auto">
+        <div className="mb-10">
+          <div className="flex items-center gap-3 mb-3">
+            <h1 className="text-4xl font-semibold tracking-tight text-gray-900 dark:text-white">
+              ED Procedures
+            </h1>
+          </div>
+          <p className="text-lg text-gray-600 dark:text-gray-400 font-normal">
             Documentation guide for ED procedures
           </p>
         </div>
