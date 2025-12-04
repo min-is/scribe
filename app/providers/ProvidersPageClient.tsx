@@ -3,6 +3,7 @@
 import { Provider } from '@prisma/client';
 import { useRouter } from 'next/navigation';
 import { memo, useCallback } from 'react';
+import { FiUsers } from 'react-icons/fi';
 
 interface ProvidersPageClientProps {
   providers: (Provider & { page: { slug: string } | null })[];
@@ -109,11 +110,14 @@ export default function ProvidersPageClient({
         {/* Header Section */}
         <div className="mb-10">
           <div className="flex items-center gap-3 mb-3">
+            <div className="p-2.5 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-2xl shadow-lg shadow-blue-500/20 flex items-center justify-center">
+              <FiUsers className="text-white text-2xl" />
+            </div>
             <h1 className="text-4xl font-semibold tracking-tight text-gray-900 dark:text-white">
               Providers
             </h1>
           </div>
-          <p className="text-lg text-gray-600 dark:text-gray-400 font-normal">
+          <p className="text-lg text-gray-600 dark:text-gray-400 font-normal ml-14">
             Discover provider preferences and documentation expectations
           </p>
         </div>

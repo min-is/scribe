@@ -11,6 +11,7 @@ import {
   FiList,
   FiAlertTriangle,
   FiX,
+  FiClipboard,
 } from 'react-icons/fi';
 import { useDebounce } from 'use-debounce';
 import { EditorRenderer } from '@/components/editor/EditorRenderer';
@@ -92,11 +93,14 @@ export default function ProceduresPageClient({
         {/* Header Section */}
         <div className="mb-10">
           <div className="flex items-center gap-3 mb-3">
+            <div className="p-2.5 bg-gradient-to-br from-purple-500 to-violet-600 rounded-2xl shadow-lg shadow-purple-500/20 flex items-center justify-center">
+              <FiClipboard className="text-white text-2xl" />
+            </div>
             <h1 className="text-4xl font-semibold tracking-tight text-gray-900 dark:text-white">
               ED Procedures
             </h1>
           </div>
-          <p className="text-lg text-gray-600 dark:text-gray-400 font-normal">
+          <p className="text-lg text-gray-600 dark:text-gray-400 font-normal ml-14">
             Documentation guide for ED procedures
           </p>
         </div>
