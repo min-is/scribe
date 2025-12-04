@@ -119,7 +119,7 @@ export default function TerminologyClient({ terminologies }: TerminologyClientPr
               Medical Terminology
             </h1>
           </div>
-          <p className="text-lg text-gray-600 dark:text-gray-400 font-light ml-14">
+          <p className="text-lg text-gray-600 dark:text-gray-400 font-normal ml-14">
             Common medical abbreviations and terms for ED documentation
           </p>
         </div>
@@ -137,7 +137,7 @@ export default function TerminologyClient({ terminologies }: TerminologyClientPr
             />
           </div>
           {debouncedQuery && (
-            <p className="text-gray-500 dark:text-gray-400 text-sm mt-3 ml-1 font-light">
+            <p className="text-gray-500 dark:text-gray-400 text-sm mt-3 ml-1 font-normal">
               Found <span className="font-medium text-gray-700 dark:text-gray-300">{filteredTerms.length}</span> result{filteredTerms.length !== 1 ? 's' : ''} for &quot;{debouncedQuery}&quot;
             </p>
           )}
@@ -166,7 +166,7 @@ export default function TerminologyClient({ terminologies }: TerminologyClientPr
         {/* Results Count */}
         {!debouncedQuery && (
           <div className="mb-6">
-            <p className="text-gray-500 dark:text-gray-400 text-sm font-light ml-1">
+            <p className="text-gray-500 dark:text-gray-400 text-sm font-normal ml-1">
               Showing {filteredTerms.length} term{filteredTerms.length !== 1 ? 's' : ''}
               {selectedCategory !== 'All' && ` in ${selectedCategory}`}
             </p>
@@ -180,7 +180,7 @@ export default function TerminologyClient({ terminologies }: TerminologyClientPr
               <div className="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mx-auto mb-4">
                 <FiSearch className="text-gray-400 dark:text-gray-500 text-2xl" />
               </div>
-              <p className="text-gray-600 dark:text-gray-400 text-lg font-light mb-2">
+              <p className="text-gray-600 dark:text-gray-400 text-lg font-normal mb-2">
                 No terminology found
               </p>
               <p className="text-gray-400 dark:text-gray-500 text-sm">
@@ -209,7 +209,7 @@ export default function TerminologyClient({ terminologies }: TerminologyClientPr
                       </div>
 
                       {/* Definition */}
-                      <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed font-light">
+                      <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed font-normal">
                         {term.definition}
                       </p>
 
@@ -231,7 +231,7 @@ export default function TerminologyClient({ terminologies }: TerminologyClientPr
 
         {/* Info Note */}
         <div className="mt-8 bg-purple-50/50 dark:bg-purple-900/10 backdrop-blur-xl border border-purple-200/50 dark:border-purple-800/50 rounded-2xl p-5">
-          <p className="text-sm text-gray-600 dark:text-gray-400 font-light">
+          <p className="text-sm text-gray-600 dark:text-gray-400 font-normal">
             <span className="font-medium text-gray-900 dark:text-gray-200">💡 Tip:</span> Use the category filters to narrow down your search, or type keywords to find specific terms.
           </p>
         </div>

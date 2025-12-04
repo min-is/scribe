@@ -89,7 +89,7 @@ export default function ScenariosPageClient({
           <h1 className="text-5xl font-semibold tracking-tight text-gray-900 dark:text-white mb-3">
             ED Scenarios
           </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-400 font-light max-w-2xl mx-auto">
+          <p className="text-lg text-gray-600 dark:text-gray-400 font-normal max-w-2xl mx-auto">
             Browse scenario walkthroughs for various ED events
           </p>
         </div>
@@ -107,7 +107,7 @@ export default function ScenariosPageClient({
             />
           </div>
           {debouncedQuery && (
-            <p className="text-gray-500 dark:text-gray-400 text-sm mt-3 text-center font-light">
+            <p className="text-gray-500 dark:text-gray-400 text-sm mt-3 text-center font-normal">
               Found {filteredScenarios.length} result{filteredScenarios.length !== 1 ? 's' : ''} for &quot;{debouncedQuery}&quot;
             </p>
           )}
@@ -135,7 +135,7 @@ export default function ScenariosPageClient({
 
         {/* Results Count */}
         <div className="mb-6 text-center">
-          <p className="text-gray-500 dark:text-gray-400 text-sm font-light">
+          <p className="text-gray-500 dark:text-gray-400 text-sm font-normal">
             Showing {filteredScenarios.length} of {scenarios.length} scenarios
           </p>
         </div>
@@ -143,7 +143,7 @@ export default function ScenariosPageClient({
         {/* Scenario Cards Grid */}
         {filteredScenarios.length === 0 ? (
           <div className="text-center py-24">
-            <p className="text-gray-500 dark:text-gray-400 text-lg font-light mb-2">
+            <p className="text-gray-500 dark:text-gray-400 text-lg font-normal mb-2">
               No scenarios found
             </p>
             <p className="text-gray-400 dark:text-gray-500 text-sm">
@@ -179,7 +179,7 @@ export default function ScenariosPageClient({
 
                     {/* Description */}
                     {scenario.description && (
-                      <p className="text-sm text-gray-600 dark:text-gray-400 font-light mb-4 line-clamp-2">
+                      <p className="text-sm text-gray-600 dark:text-gray-400 font-normal mb-4 line-clamp-2">
                         {scenario.description}
                       </p>
                     )}
@@ -242,7 +242,7 @@ export default function ScenariosPageClient({
                   {selectedScenario.title}
                 </h2>
                 {selectedScenario.description && (
-                  <p className="text-lg text-gray-600 dark:text-gray-400 font-light">
+                  <p className="text-lg text-gray-600 dark:text-gray-400 font-normal">
                     {selectedScenario.description}
                   </p>
                 )}

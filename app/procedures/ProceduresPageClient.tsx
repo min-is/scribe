@@ -94,7 +94,7 @@ export default function ProceduresPageClient({
           <h1 className="text-5xl font-semibold tracking-tight text-gray-900 dark:text-white mb-3">
             ED Procedures
           </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-400 font-light max-w-2xl mx-auto">
+          <p className="text-lg text-gray-600 dark:text-gray-400 font-normal max-w-2xl mx-auto">
             Documentation guide for ED procedures
           </p>
         </div>
@@ -112,7 +112,7 @@ export default function ProceduresPageClient({
             />
           </div>
           {debouncedQuery && (
-            <p className="text-gray-500 dark:text-gray-400 text-sm mt-3 text-center font-light">
+            <p className="text-gray-500 dark:text-gray-400 text-sm mt-3 text-center font-normal">
               Found {filteredProcedures.length} result{filteredProcedures.length !== 1 ? 's' : ''} for &quot;{debouncedQuery}&quot;
             </p>
           )}
@@ -140,7 +140,7 @@ export default function ProceduresPageClient({
 
         {/* Results Count */}
         <div className="mb-6 text-center">
-          <p className="text-gray-500 dark:text-gray-400 text-sm font-light">
+          <p className="text-gray-500 dark:text-gray-400 text-sm font-normal">
             Showing {filteredProcedures.length} of {procedures.length} procedures
           </p>
         </div>
@@ -148,7 +148,7 @@ export default function ProceduresPageClient({
         {/* Procedure Cards Grid */}
         {filteredProcedures.length === 0 ? (
           <div className="text-center py-24">
-            <p className="text-gray-500 dark:text-gray-400 text-lg font-light mb-2">
+            <p className="text-gray-500 dark:text-gray-400 text-lg font-normal mb-2">
               No procedures found
             </p>
             <p className="text-gray-400 dark:text-gray-500 text-sm">
@@ -184,7 +184,7 @@ export default function ProceduresPageClient({
 
                     {/* Description */}
                     {procedure.description && (
-                      <p className="text-sm text-gray-600 dark:text-gray-400 font-light mb-4 line-clamp-2">
+                      <p className="text-sm text-gray-600 dark:text-gray-400 font-normal mb-4 line-clamp-2">
                         {procedure.description}
                       </p>
                     )}
@@ -247,7 +247,7 @@ export default function ProceduresPageClient({
                   {selectedProcedure.title}
                 </h2>
                 {selectedProcedure.description && (
-                  <p className="text-lg text-gray-600 dark:text-gray-400 font-light">
+                  <p className="text-lg text-gray-600 dark:text-gray-400 font-normal">
                     {selectedProcedure.description}
                   </p>
                 )}
