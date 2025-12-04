@@ -328,7 +328,7 @@ export default function RailwayScheduleCalendar() {
                   </div>
                 ))}
               </div>
-              <div className="grid grid-cols-7 gap-1">
+              <div className="grid grid-cols-7 gap-1 justify-items-center">
                 {Array.from({ length: startingDayOfWeek }).map((_, i) => (
                   <div key={`empty-${i}`} className="w-10 h-10" />
                 ))}
@@ -430,7 +430,7 @@ export default function RailwayScheduleCalendar() {
               </div>
             ))}
           </div>
-          <div className="grid grid-cols-7 gap-1">
+          <div className="grid grid-cols-7 gap-1 justify-items-center">
             {emptyDays.map((i) => (
               <div key={`empty-${i}`} className="w-10 h-10" />
             ))}
