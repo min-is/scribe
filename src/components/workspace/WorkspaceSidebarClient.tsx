@@ -41,7 +41,6 @@ export function WorkspaceSidebar() {
               : 'border-transparent text-dim hover:text-main hover:border-white/30 dark:hover:border-white/30'
           )}
         >
-          <FileText size={18} />
           <span>Home</span>
         </Link>
 
