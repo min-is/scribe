@@ -328,7 +328,7 @@ export default function RailwayScheduleCalendar() {
                   </div>
                 ))}
               </div>
-              <div className="grid grid-cols-7 gap-1 justify-items-center">
+              <div className="grid grid-cols-7 gap-x-1 gap-y-3 justify-items-center">
                 {Array.from({ length: startingDayOfWeek }).map((_, i) => (
                   <div key={`empty-${i}`} className="w-10 h-10" />
                 ))}
@@ -341,10 +341,13 @@ export default function RailwayScheduleCalendar() {
                       className={`
                         w-10 h-10 flex items-center justify-center rounded-full text-sm font-semibold
                         ${isToday
-                          ? 'bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 text-white shadow-lg'
+                          ? 'bg-transparent text-white border-2 border-blue-500'
                           : 'bg-black/90 dark:bg-black text-white'
                         }
                       `}
+                      style={isToday ? {
+                        boxShadow: '0 0 15px rgba(59, 130, 246, 0.6), 0 0 25px rgba(147, 51, 234, 0.4)',
+                      } : undefined}
                     >
                       {day}
                     </div>
@@ -430,7 +433,7 @@ export default function RailwayScheduleCalendar() {
               </div>
             ))}
           </div>
-          <div className="grid grid-cols-7 gap-1 justify-items-center">
+          <div className="grid grid-cols-7 gap-x-1 gap-y-3 justify-items-center">
             {emptyDays.map((i) => (
               <div key={`empty-${i}`} className="w-10 h-10" />
             ))}
@@ -446,12 +449,12 @@ export default function RailwayScheduleCalendar() {
                     w-10 h-10 flex items-center justify-center rounded-full text-sm font-semibold
                     transition-all hover:scale-105
                     ${isToday
-                      ? 'bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 text-white shadow-lg animate-pulse'
+                      ? 'bg-transparent text-white border-2 border-blue-500'
                       : 'bg-black/90 dark:bg-black text-white hover:bg-black dark:hover:bg-zinc-900'
                     }
                   `}
                   style={isToday ? {
-                    boxShadow: '0 0 20px rgba(147, 51, 234, 0.5), 0 0 40px rgba(59, 130, 246, 0.3)',
+                    boxShadow: '0 0 15px rgba(59, 130, 246, 0.6), 0 0 25px rgba(147, 51, 234, 0.4)',
                   } : undefined}
                 >
                   {day}
