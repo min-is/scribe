@@ -8,6 +8,9 @@ export const metadata: Metadata = {
     'Browse clinical scenario walkthroughs for ED events',
 };
 
+// Force dynamic rendering to prevent caching stale data
+export const dynamic = 'force-dynamic';
+
 export default async function ScenariosPage() {
   // Fetch scenarios with their associated pages (if table exists)
   let scenariosRaw;
