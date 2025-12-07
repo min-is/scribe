@@ -13,6 +13,8 @@ import Youtube from '@tiptap/extension-youtube';
 import Highlight from '@tiptap/extension-highlight';
 import { TextStyle } from '@tiptap/extension-text-style';
 import Color from '@tiptap/extension-color';
+import { Callout } from './extensions/Callout';
+import { Collapsible } from './extensions/Collapsible';
 
 interface EditorRendererProps {
   content: JSONContent;
@@ -72,6 +74,8 @@ export function EditorRenderer({ content }: EditorRendererProps) {
       }),
       TextStyle,
       Color,
+      Callout,
+      Collapsible,
     ],
     content,
     editable: false,
