@@ -43,7 +43,7 @@ export default function ScenariosPageClient({
           s.title.toLowerCase().includes(query) ||
           s.category.toLowerCase().includes(query) ||
           s.description?.toLowerCase().includes(query) ||
-          s.content.toLowerCase().includes(query) ||
+          JSON.stringify(s.content).toLowerCase().includes(query) ||
           s.tags.some((tag: string) => tag.toLowerCase().includes(query)),
       );
     }
