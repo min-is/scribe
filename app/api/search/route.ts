@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { logger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 
@@ -20,11 +21,15 @@ export async function GET(request: NextRequest) {
     // Support fuzzy search for physician names and medication names
     const whereClause: any = {
       deletedAt: null,
-      // Exclude orphaned PROVIDER pages (pages with type=PROVIDER but no associated Provider)
+      // Exclude orphaned pages (pages with a type but no associated entity)
       NOT: {
-        AND: [
-          { type: 'PROVIDER' },
-          { providerId: null },
+        OR: [
+          { AND: [{ type: 'PROVIDER' }, { providerId: null }] },
+          { AND: [{ type: 'PROCEDURE' }, { procedureId: null }] },
+          { AND: [{ type: 'SCENARIO' }, { scenarioId: null }] },
+          { AND: [{ type: 'SMARTPHRASE' }, { smartPhraseId: null }] },
+          { AND: [{ type: 'PHYSICIAN_DIRECTORY' }, { physicianDirectoryId: null }] },
+          { AND: [{ type: 'MEDICATION' }, { medicationId: null }] },
         ],
       },
       OR: [
@@ -117,7 +122,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(results);
   } catch (error) {
-    console.error('Error searching pages:', error);
+    logger.error('Error searching pages', error);
     return NextResponse.json(
       { error: 'Failed to search pages' },
       { status: 500 }

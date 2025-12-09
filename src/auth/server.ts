@@ -1,6 +1,7 @@
 import { isPathProtected } from '@/app/paths';
 import NextAuth, { User } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
+import { checkRateLimit } from '@/lib/ratelimit';
 
 export const {
   handlers: { GET, POST },
@@ -21,6 +22,12 @@ export const {
       async authorize(credentials) {
         const email = credentials.email as string;
         const password = credentials.password as string;
+
+        // Check rate limit
+        const rateLimitPassed = await checkRateLimit(email);
+        if (!rateLimitPassed) {
+          throw new Error('Too many login attempts. Please try again later.');
+        }
 
         // Check admin credentials
         if (

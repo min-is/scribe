@@ -223,6 +223,7 @@ export default function SearchModal({
       anchor="top"
       fast
       noPadding
+      ariaLabel="Search dialog"
     >
       <Command shouldFilter={false}>
         {/* Search Input */}

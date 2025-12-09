@@ -75,6 +75,12 @@ export default function RootLayout({
         // Performance optimizations
         'overflow-y-scroll',
       )}>
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-black focus:text-white dark:focus:bg-white dark:focus:text-black focus:rounded"
+        >
+          Skip to main content
+        </a>
         <AppStateProvider>
           <AppTextProvider>
             <ThemeColors />
@@ -85,7 +91,7 @@ export default function RootLayout({
                   'lg:mx-6 lg:mb-6',
                 )}>
                   <Nav navTitleOrDomain={NAV_TITLE_OR_DOMAIN} />
-                  <main>
+                  <main id="main-content">
                     <div className={clsx(
                       'min-h-[16rem] sm:min-h-[30rem]',
                       'mb-12',
