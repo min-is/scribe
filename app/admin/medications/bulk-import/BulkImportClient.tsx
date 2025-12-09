@@ -230,7 +230,7 @@ Metformin,Antidiabetic,Type 2 diabetes management`;
                 </a>
               </li>
               <li>
-                <strong>Hospital Formulary:</strong> Export from your hospital's medication list
+                <strong>Hospital Formulary:</strong> Export from your hospital&apos;s medication list
               </li>
             </ul>
             <p className="mt-3">

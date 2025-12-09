@@ -284,7 +284,7 @@ WHERE table_schema = 'public'
   AND table_name IN ('SmartPhrase', 'Scenario', 'Procedure', 'HomePageContent');`}
           </pre>
           <p className="text-medium text-sm">
-            You should see all four tables listed. If so, you're ready to go! 🎉
+            You should see all four tables listed. If so, you&apos;re ready to go! 🎉
           </p>
         </div>
 
@@ -303,8 +303,8 @@ WHERE table_schema = 'public'
               <p>Make sure your database user has CREATE TABLE permissions.</p>
             </div>
             <div>
-              <strong className="text-main">Still seeing "table does not exist"?</strong>
-              <p>Make sure you're connected to the same database as your DATABASE_URL environment variable.</p>
+              <strong className="text-main">Still seeing &quot;table does not exist&quot;?</strong>
+              <p>Make sure you&apos;re connected to the same database as your DATABASE_URL environment variable.</p>
             </div>
           </div>
         </div>

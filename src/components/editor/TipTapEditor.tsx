@@ -63,6 +63,39 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
   const [isYoutubeDialogOpen, setIsYoutubeDialogOpen] = useState(false);
   const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
 
+  const addLink = useCallback(() => {
+    if (linkUrl && editor) {
+      editor
+        .chain()
+        .focus()
+        .extendMarkRange('link')
+        .setLink({ href: linkUrl })
+        .run();
+      setLinkUrl('');
+      setIsLinkDialogOpen(false);
+    }
+  }, [editor, linkUrl]);
+
+  const addImage = useCallback(() => {
+    if (imageUrl && editor) {
+      editor.chain().focus().setImage({ src: imageUrl }).run();
+      setImageUrl('');
+      setIsImageDialogOpen(false);
+    }
+  }, [editor, imageUrl]);
+
+  const addYoutube = useCallback(() => {
+    if (youtubeUrl && editor) {
+      editor.commands.setYoutubeVideo({
+        src: youtubeUrl,
+        width: 640,
+        height: 480,
+      });
+      setYoutubeUrl('');
+      setIsYoutubeDialogOpen(false);
+    }
+  }, [editor, youtubeUrl]);
+
   if (!editor) {
     return null;
   }
@@ -89,39 +122,6 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
     { name: 'Black', value: '#000000' },
     { name: 'White', value: '#ffffff' },
   ];
-
-  const addLink = useCallback(() => {
-    if (linkUrl) {
-      editor
-        .chain()
-        .focus()
-        .extendMarkRange('link')
-        .setLink({ href: linkUrl })
-        .run();
-      setLinkUrl('');
-      setIsLinkDialogOpen(false);
-    }
-  }, [editor, linkUrl]);
-
-  const addImage = useCallback(() => {
-    if (imageUrl) {
-      editor.chain().focus().setImage({ src: imageUrl }).run();
-      setImageUrl('');
-      setIsImageDialogOpen(false);
-    }
-  }, [editor, imageUrl]);
-
-  const addYoutube = useCallback(() => {
-    if (youtubeUrl) {
-      editor.commands.setYoutubeVideo({
-        src: youtubeUrl,
-        width: 640,
-        height: 480,
-      });
-      setYoutubeUrl('');
-      setIsYoutubeDialogOpen(false);
-    }
-  }, [editor, youtubeUrl]);
 
   const ToolbarButton = ({
     onClick,

@@ -334,7 +334,7 @@ export default function AdminShiftsPage() {
             </button>
 
             <p className="text-xs text-zinc-600 dark:text-zinc-400">
-              Note: You'll be prompted for the API key. Set <code className="px-1 py-0.5 bg-zinc-100 dark:bg-zinc-800 rounded">SHIFTGEN_API_KEY</code> in Vercel environment variables.
+              Note: You&apos;ll be prompted for the API key. Set <code className="px-1 py-0.5 bg-zinc-100 dark:bg-zinc-800 rounded">SHIFTGEN_API_KEY</code> in Vercel environment variables.
             </p>
           </div>
         </div>

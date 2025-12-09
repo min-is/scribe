@@ -255,7 +255,7 @@ export default function AnimatedMessagesClient({
       <div className="mb-8 bg-zinc-900 border border-zinc-800 rounded-xl p-6">
         <h2 className="text-xl font-semibold text-zinc-100 mb-3">Getting Started Content</h2>
         <p className="text-sm text-zinc-400 mb-4">
-          This content appears in the "Getting Started" box on the home page. You can use line breaks and bullet points.
+          This content appears in the &quot;Getting Started&quot; box on the home page. You can use line breaks and bullet points.
         </p>
         <textarea
           value={gettingStartedText}
