@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { logger } from '@/lib/logger';
 import { searchQuerySchema } from '@/lib/validation/schemas';
+import { Prisma } from '@prisma/client';
 
 export const dynamic = 'force-dynamic';
 
@@ -34,23 +35,18 @@ export async function GET(request: NextRequest) {
       return NextResponse.json([]);
     }
 
-    // Build base filters
-    const baseFilters = {
+    // Build base filters with explicit Prisma types
+    const baseFilters: Prisma.PageWhereInput = {
       deletedAt: null,
       // Exclude orphaned pages
       NOT: {
         OR: [
-          { AND: [{ type: 'PROVIDER' }, { providerId: null }] },
-          { AND: [{ type: 'PROCEDURE' }, { procedureId: null }] },
-          { AND: [{ type: 'SCENARIO' }, { scenarioId: null }] },
-          { AND: [{ type: 'SMARTPHRASE' }, { smartPhraseId: null }] },
-          {
-            AND: [
-              { type: 'PHYSICIAN_DIRECTORY' },
-              { physicianDirectoryId: null },
-            ],
-          },
-          { AND: [{ type: 'MEDICATION' }, { medicationId: null }] },
+          { type: 'PROVIDER', providerId: null },
+          { type: 'PROCEDURE', procedureId: null },
+          { type: 'SCENARIO', scenarioId: null },
+          { type: 'SMARTPHRASE', smartPhraseId: null },
+          { type: 'PHYSICIAN_DIRECTORY', physicianDirectoryId: null },
+          { type: 'MEDICATION', medicationId: null },
         ],
       },
     };
