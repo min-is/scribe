@@ -24,7 +24,7 @@ const getPage = cache(async (slug: string) => {
       id: true,
       slug: true,
       title: true,
-      type: true, // Need type to validate PROVIDER pages
+      type: true, // Need type to validate orphaned pages
       content: true,
       icon: true,
       viewCount: true,
@@ -34,6 +34,31 @@ const getPage = cache(async (slug: string) => {
           name: true,
           credentials: true,
           icon: true,
+        },
+      },
+      procedure: {
+        select: {
+          id: true,
+        },
+      },
+      scenario: {
+        select: {
+          id: true,
+        },
+      },
+      smartPhrase: {
+        select: {
+          id: true,
+        },
+      },
+      physicianDirectory: {
+        select: {
+          id: true,
+        },
+      },
+      medication: {
+        select: {
+          id: true,
         },
       },
       parent: {
@@ -74,9 +99,24 @@ export default async function PageView({ params }: PageViewProps) {
     notFound();
   }
 
-  // PROVIDER pages MUST have an associated provider
-  // If providerId is null, this is an orphaned page that should not be accessible
+  // Validate that typed pages have their associated entities
+  // Orphaned pages should not be accessible
   if (pageRaw.type === 'PROVIDER' && !pageRaw.provider) {
+    notFound();
+  }
+  if (pageRaw.type === 'PROCEDURE' && !pageRaw.procedure) {
+    notFound();
+  }
+  if (pageRaw.type === 'SCENARIO' && !pageRaw.scenario) {
+    notFound();
+  }
+  if (pageRaw.type === 'SMARTPHRASE' && !pageRaw.smartPhrase) {
+    notFound();
+  }
+  if (pageRaw.type === 'PHYSICIAN_DIRECTORY' && !pageRaw.physicianDirectory) {
+    notFound();
+  }
+  if (pageRaw.type === 'MEDICATION' && !pageRaw.medication) {
     notFound();
   }
 

@@ -20,6 +20,8 @@ export default function Modal({
   children,
   noPadding,
   fast,
+  ariaLabel = 'Modal dialog',
+  ariaDescribedBy,
 }: {
   onClosePath?: string
   onClose?: () => void
@@ -29,6 +31,8 @@ export default function Modal({
   children: ReactNode
   noPadding?: boolean
   fast?: boolean
+  ariaLabel?: string
+  ariaDescribedBy?: string
 }) {
   const router = useRouter();
 
@@ -84,6 +88,10 @@ export default function Modal({
         ? 'rgba(0, 0, 0, 0.80)'
         : 'rgba(255, 255, 255, 0.80)' }}
       transition={{ duration: 0.3, ease: 'easeOut' }}
+      role="dialog"
+      aria-modal="true"
+      aria-label={ariaLabel}
+      aria-describedby={ariaDescribedBy}
     >
       <AnimateItems
         duration={fast ? 0.1 : 0.3}

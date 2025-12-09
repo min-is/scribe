@@ -1,5 +1,6 @@
 import { put } from '@vercel/blob';
 import { NextResponse } from 'next/server';
+import { logger } from '@/lib/logger';
 
 export const runtime = 'edge';
 
@@ -72,7 +73,7 @@ export async function POST(request: Request): Promise<Response> {
       uploadedAt: new Date().toISOString(),
     });
   } catch (error) {
-    console.error('Upload error:', error);
+    logger.error('Upload error', error);
     return NextResponse.json(
       { error: 'Upload failed. Please try again.' },
       { status: 500 },
