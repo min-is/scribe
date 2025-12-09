@@ -50,15 +50,15 @@ function ShiftCard({ shift, zoneGroup }: ShiftCardProps) {
           <span className="text-xs text-zinc-600 dark:text-zinc-400">{timeStr}</span>
         </div>
       </div>
-      <div className="mt-1">
+      <div className="mt-1 space-y-0.5">
         <div className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
           {shift.scribe}
-          {shift.provider && (
-            <span className="text-xs text-zinc-600 dark:text-zinc-400 ml-1">
-              with {shift.provider}
-            </span>
-          )}
         </div>
+        {shift.provider && (
+          <div className="text-xs text-zinc-600 dark:text-zinc-400">
+            with {shift.provider} {shift.providerRole && `(${shift.providerRole})`}
+          </div>
+        )}
       </div>
     </div>
   );
@@ -116,7 +116,7 @@ function DailyModal({ date, dailyData, onClose }: DailyModalProps) {
           </div>
           <button
             onClick={onClose}
-            className="p-2 hover:opacity-70 transition-opacity"
+            className="p-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
             aria-label="Close"
           >
             <X className="w-5 h-5 text-zinc-600 dark:text-zinc-400" />
