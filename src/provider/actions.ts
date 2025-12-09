@@ -272,7 +272,7 @@ export async function updateProvider(
         const wikiContentObj = data.wikiContent as any;
 
         // Extract and combine all visible section content
-        let combinedContent: any = {
+        const combinedContent: any = {
           type: 'doc',
           content: [],
         };

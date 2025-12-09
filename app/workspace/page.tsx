@@ -76,7 +76,7 @@ export default async function WorkspaceHomePage() {
         <h3 className="text-xl font-semibold text-main mb-4">Getting Started</h3>
         <div className="space-y-3 text-dim">
           <p>
-            <strong className="text-main">New to the workspace?</strong> Here's how to get started:
+            <strong className="text-main">New to the workspace?</strong> Here&apos;s how to get started:
           </p>
           <ul className="list-disc list-inside space-y-2 ml-4">
             <li>Create pages for provider preferences, procedures, and protocols</li>
