@@ -11,6 +11,40 @@ import { ZONE_CONFIGS, getZoneGroupForShift } from '@/lib/shiftgen/constants';
 
 export const dynamic = 'force-dynamic';
 
+/**
+ * Check if two shift times overlap or start within tolerance of each other.
+ * For PA matching: scribe 1000-1830 should match MLP 1000-2000
+ */
+function timesOverlapOrClose(time1: string, time2: string, toleranceMinutes: number = 60): boolean {
+  try {
+    // Parse times (format: HHMM-HHMM)
+    const [start1, end1] = time1.split('-');
+    const [start2, end2] = time2.split('-');
+
+    // Convert to minutes for comparison
+    const toMinutes = (timeStr: string): number => {
+      // Handle both 3 and 4 digit times
+      if (timeStr.length === 3) {
+        const h = parseInt(timeStr[0]);
+        const m = parseInt(timeStr.slice(1));
+        return h * 60 + m;
+      } else {
+        const h = parseInt(timeStr.slice(0, 2));
+        const m = parseInt(timeStr.slice(2));
+        return h * 60 + m;
+      }
+    };
+
+    const s1 = toMinutes(start1);
+    const s2 = toMinutes(start2);
+
+    // Check if start times are within tolerance
+    return Math.abs(s1 - s2) <= toleranceMinutes;
+  } catch {
+    return false;
+  }
+}
+
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
@@ -73,13 +107,27 @@ export async function GET(request: NextRequest) {
         continue;
       }
 
-      // Find matching provider by label and time
-      const matchingProvider = providers.find(
-        p => p.label === scribe.label && p.time === scribe.time
-      );
+      // Find matching provider
+      // For PA shifts, use time overlap matching (MLP times may differ)
+      // For other shifts, require exact label and time match
+      const isPAShift = scribe.label === 'PA';
+      let matchingProvider;
+
+      if (isPAShift) {
+        // PA shifts: match MLPs by time overlap only
+        matchingProvider = providers.find(
+          p => p.role.toLowerCase() === 'mlp' && timesOverlapOrClose(scribe.time, p.time)
+        );
+        console.log(`[Railway API] PA shift - looking for MLP with overlapping time`);
+      } else {
+        // Regular shifts: match by exact label and time
+        matchingProvider = providers.find(
+          p => p.label === scribe.label && p.time === scribe.time
+        );
+      }
 
       if (matchingProvider) {
-        console.log(`[Railway API] Found matching provider for ${scribe.label}: ${matchingProvider.person}`);
+        console.log(`[Railway API] Found matching provider for ${scribe.label}: ${matchingProvider.person} (${matchingProvider.role})`);
       } else {
         console.log(`[Railway API] No matching provider for ${scribe.label} at ${scribe.time}`);
       }

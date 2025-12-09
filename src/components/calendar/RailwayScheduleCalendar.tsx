@@ -116,7 +116,7 @@ function DailyModal({ date, dailyData, onClose }: DailyModalProps) {
           </div>
           <button
             onClick={onClose}
-            className="p-2 hover:opacity-70 transition-opacity"
+            className="p-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
             aria-label="Close"
           >
             <X className="w-5 h-5 text-zinc-600 dark:text-zinc-400" />
