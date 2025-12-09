@@ -4,7 +4,8 @@ import { useState, useEffect } from 'react';
 import { Calendar, Lock, X } from 'lucide-react';
 import { getZoneStyles, formatShiftTime, getZoneGroupLabel, type ZoneGroup } from '@/lib/shiftgen';
 
-const PASSCODE = '5150'; // TODO: Move to environment variable or secure storage
+// Use environment variable for passcode, fallback to default for development
+const PASSCODE = process.env.NEXT_PUBLIC_SCHEDULE_PASSCODE || '5150';
 
 interface RailwayShiftData {
   label: string;
