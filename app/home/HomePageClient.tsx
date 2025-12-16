@@ -79,7 +79,7 @@ export default function HomePageClient({ initialContent }: HomePageClientProps) 
               />
               <ActionButton
                 title="Smart Phrases"
-                description="Efficient .phrases"
+                description="Useful and efficient smartphrases"
                 onClick={() => handleSectionClick(PageType.SMARTPHRASE)}
               />
               <ActionButton

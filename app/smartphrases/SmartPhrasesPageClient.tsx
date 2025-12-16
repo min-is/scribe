@@ -110,7 +110,7 @@ export default function SmartPhrasesPageClient({
         {/* Header Section */}
         <div className="mb-10">
           <div className="flex items-center gap-3 mb-3">
-            <div className="p-2.5 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl shadow-lg shadow-green-500/20 flex items-center justify-center">
+            <div className="p-2.5 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl shadow-lg shadow-purple-500/20 flex items-center justify-center">
               <FiMessageSquare className="text-white text-2xl" />
             </div>
             <h1 className="text-4xl font-semibold tracking-tight text-gray-900 dark:text-white">

@@ -15,7 +15,7 @@ const getDifficultyLabel = (difficulty: number | null) => {
   if (difficulty <= 3) return 'Beginner Friendly';
   if (difficulty <= 6) return 'Moderate';
   if (difficulty <= 8) return 'Advanced';
-  return 'Expert Level';
+  return 'Very Advanced';
 };
 
 const getDifficultyColor = (difficulty: number | null) => {
@@ -110,7 +110,7 @@ export default function ProvidersPageClient({
         {/* Header Section */}
         <div className="mb-10">
           <div className="flex items-center gap-3 mb-3">
-            <div className="p-2.5 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-2xl shadow-lg shadow-blue-500/20 flex items-center justify-center">
+            <div className="p-2.5 bg-gradient-to-br from-pink-500 via-purple-500 to-indigo-500 rounded-2xl shadow-lg shadow-purple-500/30 flex items-center justify-center">
               <FiUsers className="text-white text-2xl" />
             </div>
             <h1 className="text-4xl font-semibold tracking-tight text-gray-900 dark:text-white">
