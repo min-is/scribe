@@ -4,7 +4,6 @@ import { useState, useMemo } from 'react';
 import { Procedure, incrementProcedureViewCount } from '@/procedure/actions';
 import {
   FiSearch,
-  FiEye,
   FiAlertCircle,
   FiCheckCircle,
   FiTool,
@@ -194,12 +193,6 @@ export default function ProceduresPageClient({
                         {procedure.description}
                       </p>
                     )}
-
-                    {/* View Count */}
-                    <div className="flex items-center gap-1.5 text-gray-500 dark:text-gray-400 text-xs">
-                      <FiEye className="text-sm" />
-                      <span className="font-medium">{procedure.viewCount} views</span>
-                    </div>
 
                     {/* Tags Preview */}
                     {procedure.tags.length > 0 && (

@@ -4,7 +4,6 @@ import { useState, useMemo } from 'react';
 import { Scenario, incrementScenarioViewCount } from '@/scenario/actions';
 import {
   FiSearch,
-  FiEye,
   FiX,
   FiFileText,
 } from 'react-icons/fi';
@@ -88,7 +87,7 @@ export default function ScenariosPageClient({
         {/* Header Section */}
         <div className="mb-10">
           <div className="flex items-center gap-3 mb-3">
-            <div className="p-2.5 bg-gradient-to-br from-orange-500 to-amber-600 rounded-2xl shadow-lg shadow-orange-500/20 flex items-center justify-center">
+            <div className="p-2.5 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl shadow-lg shadow-green-500/20 flex items-center justify-center">
               <FiFileText className="text-white text-2xl" />
             </div>
             <h1 className="text-4xl font-semibold tracking-tight text-gray-900 dark:text-white">
@@ -190,12 +189,6 @@ export default function ScenariosPageClient({
                       </p>
                     )}
 
-                    {/* View Count */}
-                    <div className="flex items-center gap-1.5 text-gray-500 dark:text-gray-400 text-xs mb-3">
-                      <FiEye className="text-sm" />
-                      <span className="font-medium">{scenario.viewCount} views</span>
-                    </div>
-
                     {/* Tags Preview */}
                     {scenario.tags.length > 0 && (
                       <div className="flex flex-wrap gap-1.5">
@@ -283,14 +276,6 @@ export default function ScenariosPageClient({
                     </div>
                   </div>
                 )}
-
-                {/* View Count Statistics */}
-                <div className="bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-2xl p-4">
-                  <p className="text-gray-600 dark:text-gray-400 text-sm flex items-center gap-2">
-                    <FiEye className="text-lg" />
-                    Viewed <span className="font-semibold text-gray-900 dark:text-white">{selectedScenario.viewCount}</span> times
-                  </p>
-                </div>
               </div>
             </div>
           </div>
