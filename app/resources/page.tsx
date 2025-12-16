@@ -1,5 +1,6 @@
 import { Metadata } from 'next/types';
 import ResourcesPageClient from './ResourcesPageClient';
+import { getResourceTree } from '@/resource/actions';
 
 export const metadata: Metadata = {
   title: 'Resources',
@@ -7,5 +8,7 @@ export const metadata: Metadata = {
 };
 
 export default async function ResourcesPage() {
-  return <ResourcesPageClient />;
+  const sections = await getResourceTree();
+
+  return <ResourcesPageClient sections={sections} />;
 }
