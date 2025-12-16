@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Calendar, Lock, X } from 'lucide-react';
 import { getZoneStyles, formatShiftTime, getZoneGroupLabel, type ZoneGroup } from '@/lib/shiftgen';
+import EDMap from './EDMap';
 
 // Use environment variable for passcode, fallback to default for development
 const PASSCODE = process.env.NEXT_PUBLIC_SCHEDULE_PASSCODE || '5150';
@@ -131,6 +132,12 @@ function DailyModal({ date, dailyData, onClose }: DailyModalProps) {
             </div>
           ) : (
             <div className="space-y-4">
+              {/* ED Map with active shifts */}
+              <div className="mb-6">
+                <EDMap shifts={allShifts} />
+              </div>
+
+              {/* Zone shifts detail */}
               {zonesWithShifts.map(({ group, shifts }) => (
                 <div key={group}>
                   <h4 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 mb-2 px-1">
