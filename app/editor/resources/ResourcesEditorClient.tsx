@@ -5,9 +5,8 @@ import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { FiEdit, FiTrash2, FiPlus, FiFolder, FiFile, FiX } from 'react-icons/fi';
 import dynamic from 'next/dynamic';
+import { ResourceSection, ResourceArticle } from '@/resource/types';
 import {
-  ResourceSection,
-  ResourceArticle,
   createResourceArticle,
   updateResourceArticle,
   deleteResourceArticle,
