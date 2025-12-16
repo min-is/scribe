@@ -35,7 +35,7 @@ export default function HomePageClient({ initialContent }: HomePageClientProps) 
       <div className="max-w-6xl mx-auto p-8">
         {/* Welcome Header */}
         <div className="mb-10">
-          <h1 className="text-5xl font-bold text-main mb-3">
+          <h1 className="text-4xl font-normal text-main mb-3">
             {greeting}
           </h1>
           <div className="text-lg text-medium">

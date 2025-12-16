@@ -45,6 +45,18 @@ export function WorkspaceSidebar() {
         </Link>
 
         <Link
+          href="/resources"
+          className={clsx(
+            'flex items-center gap-3 px-3 py-2 text-sm transition-all border-b-2 pl-6',
+            isActive('/resources')
+              ? 'border-white dark:border-white text-main font-semibold'
+              : 'border-transparent text-dim hover:text-main hover:border-white/30 dark:hover:border-white/30'
+          )}
+        >
+          <span>Resources</span>
+        </Link>
+
+        <Link
           href="/providers"
           className={clsx(
             'flex items-center gap-3 px-3 py-2 text-sm transition-all border-b-2',
@@ -114,6 +126,18 @@ export function WorkspaceSidebar() {
           )}
         >
           <span>Terminology</span>
+        </Link>
+
+        <Link
+          href="/directory"
+          className={clsx(
+            'flex items-center gap-3 px-3 py-2 text-sm transition-all border-b-2 pl-6',
+            isActive('/directory')
+              ? 'border-white dark:border-white text-main font-semibold'
+              : 'border-transparent text-dim hover:text-main hover:border-white/30 dark:hover:border-white/30'
+          )}
+        >
+          <span>Directory</span>
         </Link>
 
         <Link
