@@ -141,12 +141,27 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
       disabled={disabled}
       title={title}
       className={clsx(
-        'p-2.5 rounded-lg transition-all duration-200',
-        active && 'bg-blue-500/10 text-blue-600 dark:text-blue-400',
+        'relative p-2.5 rounded-lg transition-all duration-200 border-0 outline-none',
+        'before:absolute before:inset-0 before:rounded-lg before:opacity-0 before:transition-opacity before:duration-200',
+        active && [
+          'bg-gradient-to-br from-blue-500/10 via-purple-500/10 to-pink-500/10',
+          'text-blue-600 dark:text-blue-400',
+          'before:bg-gradient-to-br before:from-blue-500/20 before:via-purple-500/20 before:to-pink-500/20 before:opacity-100'
+        ],
         disabled && 'opacity-30 cursor-not-allowed',
-        !active && !disabled && 'text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-zinc-100'
+        !active && !disabled && [
+          'text-zinc-600 dark:text-zinc-400',
+          'hover:bg-gradient-to-br hover:from-zinc-100 hover:via-zinc-50 hover:to-zinc-100',
+          'dark:hover:bg-gradient-to-br dark:hover:from-zinc-800 dark:hover:via-zinc-700 dark:hover:to-zinc-800',
+          'hover:text-zinc-900 dark:hover:text-zinc-100',
+          'hover:before:opacity-100'
+        ]
       )}
       type="button"
+      style={{
+        boxShadow: 'none',
+        border: 'none'
+      }}
     >
       {children}
     </button>

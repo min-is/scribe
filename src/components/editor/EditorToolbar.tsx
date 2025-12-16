@@ -84,17 +84,17 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
       disabled={disabled}
       title={title}
       className={`
-        p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors
-        ${active ? 'bg-gray-300 dark:bg-gray-600' : ''}
+        relative p-2 rounded-lg transition-all duration-200 border-0 outline-none
+        before:absolute before:inset-0 before:rounded-lg before:opacity-0 before:transition-opacity before:duration-200
+        ${active ? 'bg-gradient-to-br from-blue-500/10 via-purple-500/10 to-pink-500/10 text-blue-600 dark:text-blue-400 before:bg-gradient-to-br before:from-blue-500/20 before:via-purple-500/20 before:to-pink-500/20 before:opacity-100' : ''}
+        ${!active && !disabled ? 'text-gray-600 dark:text-gray-400 hover:bg-gradient-to-br hover:from-gray-100 hover:via-gray-50 hover:to-gray-100 dark:hover:bg-gradient-to-br dark:hover:from-gray-800 dark:hover:via-gray-700 dark:hover:to-gray-800 hover:text-gray-900 dark:hover:text-gray-100 hover:before:opacity-100' : ''}
         ${disabled ? 'opacity-50 cursor-not-allowed' : ''}
       `}
       style={{
         border: 'none',
         outline: 'none',
         boxShadow: 'none',
-        background: active ? undefined : 'transparent',
         minHeight: 'auto',
-        padding: '0.5rem',
       }}
     >
       {children}

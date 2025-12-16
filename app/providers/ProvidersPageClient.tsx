@@ -118,7 +118,7 @@ export default function ProvidersPageClient({
             </h1>
           </div>
           <p className="text-lg text-gray-600 dark:text-gray-400 font-normal ml-14">
-            Discover provider preferences and documentation expectations
+            Review ED provider-specific documentation preferences and workflow expectations. Difficulty ratings reflect a general consensus on the relative learning curve for new scribes.
           </p>
         </div>
 
