@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Calendar, Lock, X } from 'lucide-react';
 import { getZoneStyles, formatShiftTime, getZoneGroupLabel, type ZoneGroup } from '@/lib/shiftgen';
+import EDMap from './EDMap';
 
 // Use environment variable for passcode, fallback to default for development
 const PASSCODE = process.env.NEXT_PUBLIC_SCHEDULE_PASSCODE || '5150';
@@ -71,6 +72,8 @@ interface DailyModalProps {
 }
 
 function DailyModal({ date, dailyData, onClose }: DailyModalProps) {
+  const [activeTab, setActiveTab] = useState<'shifts' | 'map'>('shifts');
+
   const dateStr = date.toLocaleDateString('en-US', {
     weekday: 'long',
     month: 'long',
@@ -105,73 +108,103 @@ function DailyModal({ date, dailyData, onClose }: DailyModalProps) {
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
       <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl shadow-2xl max-w-4xl w-full max-h-[80vh] overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-zinc-200 dark:border-zinc-800">
-          <div>
-            <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-              {dateStr}
-            </h3>
-            <p className="text-sm text-zinc-600 dark:text-zinc-400">
-              {totalShifts} shift{totalShifts !== 1 ? 's' : ''}
-            </p>
+        <div className="border-b border-zinc-200 dark:border-zinc-800">
+          <div className="flex items-center justify-between p-4">
+            <div>
+              <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
+                {dateStr}
+              </h3>
+              <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                {totalShifts} shift{totalShifts !== 1 ? 's' : ''}
+              </p>
+            </div>
+            <button
+              onClick={onClose}
+              className="p-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
+              aria-label="Close"
+            >
+              <X className="w-5 h-5 text-zinc-600 dark:text-zinc-400" />
+            </button>
           </div>
-          <button
-            onClick={onClose}
-            className="p-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
-            aria-label="Close"
-          >
-            <X className="w-5 h-5 text-zinc-600 dark:text-zinc-400" />
-          </button>
+
+          {/* Tabs */}
+          <div className="flex gap-2 px-4 pb-2">
+            <button
+              onClick={() => setActiveTab('shifts')}
+              className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+                activeTab === 'shifts'
+                  ? 'bg-blue-500 text-white'
+                  : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-700'
+              }`}
+            >
+              Shifts
+            </button>
+            <button
+              onClick={() => setActiveTab('map')}
+              className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+                activeTab === 'map'
+                  ? 'bg-blue-500 text-white'
+                  : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-200 dark:hover:bg-zinc-700'
+              }`}
+            >
+              ED Map
+            </button>
+          </div>
         </div>
 
         {/* Content */}
-        <div className="p-4 overflow-y-auto max-h-[calc(80vh-80px)]">
-          {!hasShifts ? (
-            <div className="text-center py-12">
-              <p className="text-zinc-600 dark:text-zinc-400">No shifts scheduled for this day</p>
-            </div>
-          ) : (
-            <div className="space-y-4">
-              {zonesWithShifts.map(({ group, shifts }) => (
-                <div key={group}>
-                  <h4 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 mb-2 px-1">
-                    {getZoneGroupLabel(group)}
-                  </h4>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                    {shifts.map((shift, idx) => (
-                      <ShiftCard
-                        key={`${shift.label}-${shift.time}-${idx}`}
-                        shift={shift}
-                        zoneGroup={group}
-                      />
-                    ))}
+        <div className="p-4 overflow-y-auto max-h-[calc(80vh-160px)]">
+          {activeTab === 'shifts' ? (
+            !hasShifts ? (
+              <div className="text-center py-12">
+                <p className="text-zinc-600 dark:text-zinc-400">No shifts scheduled for this day</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {zonesWithShifts.map(({ group, shifts }) => (
+                  <div key={group}>
+                    <h4 className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 mb-2 px-1">
+                      {getZoneGroupLabel(group)}
+                    </h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                      {shifts.map((shift, idx) => (
+                        <ShiftCard
+                          key={`${shift.label}-${shift.time}-${idx}`}
+                          shift={shift}
+                          zoneGroup={group}
+                        />
+                      ))}
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
 
-              {/* Summary */}
-              <div className="pt-4 border-t border-zinc-200 dark:border-zinc-800">
-                <div className="grid grid-cols-3 gap-4 text-center">
-                  <div>
-                    <div className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
-                      {uniqueScribes}
+                {/* Summary */}
+                <div className="pt-4 border-t border-zinc-200 dark:border-zinc-800">
+                  <div className="grid grid-cols-3 gap-4 text-center">
+                    <div>
+                      <div className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
+                        {uniqueScribes}
+                      </div>
+                      <div className="text-xs text-zinc-600 dark:text-zinc-400">Scribes</div>
                     </div>
-                    <div className="text-xs text-zinc-600 dark:text-zinc-400">Scribes</div>
-                  </div>
-                  <div>
-                    <div className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
-                      {uniqueProviders}
+                    <div>
+                      <div className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
+                        {uniqueProviders}
+                      </div>
+                      <div className="text-xs text-zinc-600 dark:text-zinc-400">Providers</div>
                     </div>
-                    <div className="text-xs text-zinc-600 dark:text-zinc-400">Providers</div>
-                  </div>
-                  <div>
-                    <div className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
-                      {zonesWithShifts.length}
+                    <div>
+                      <div className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
+                        {zonesWithShifts.length}
+                      </div>
+                      <div className="text-xs text-zinc-600 dark:text-zinc-400">Zones</div>
                     </div>
-                    <div className="text-xs text-zinc-600 dark:text-zinc-400">Zones</div>
                   </div>
                 </div>
               </div>
-            </div>
+            )
+          ) : (
+            <EDMap dailyData={dailyData} />
           )}
         </div>
       </div>
