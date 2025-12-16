@@ -90,9 +90,10 @@ function DailyModal({ date, dailySchedule, onClose }: DailyModalProps) {
           </div>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
+            className="p-2 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
+            title="Close"
           >
-            <X className="w-5 h-5 text-zinc-600 dark:text-zinc-400" />
+            <X className="w-5 h-5" />
           </button>
         </div>
 

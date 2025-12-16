@@ -18,6 +18,7 @@ import { RichTextEditor } from '@/components/editor/RichTextEditor';
 import { SectionManager } from '@/components/wiki/SectionManager';
 import { UploadDropzone } from '@/components/upload/UploadDropzone';
 import { MediaLibrary } from '@/components/upload/MediaLibrary';
+import { FiEdit, FiTrash2 } from 'react-icons/fi';
 
 type ProvidersClientProps = {
   providers: Provider[];
@@ -541,17 +542,19 @@ export default function ProvidersClient({
                       <button
                         type="button"
                         onClick={() => handleEdit(provider)}
-                        className="px-4 py-2 rounded-lg text-sm font-medium text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
+                        className="p-2 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-md transition-colors"
+                        title="Edit"
                       >
-                        Edit
+                        <FiEdit className="w-4 h-4" />
                       </button>
                       {showDelete && (
                         <button
                           type="button"
                           onClick={() => handleDelete(provider.id, provider.name)}
-                          className="px-4 py-2 rounded-lg text-sm font-medium text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                          className="p-2 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-md transition-colors"
+                          title="Delete"
                         >
-                          Delete
+                          <FiTrash2 className="w-4 h-4" />
                         </button>
                       )}
                     </div>

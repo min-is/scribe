@@ -10,6 +10,7 @@ import {
 } from '@/terminology/actions';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
+import { FiEdit, FiTrash2 } from 'react-icons/fi';
 
 type TerminologyClientProps = {
   terminologies: Terminology[];
@@ -283,24 +284,26 @@ export default function TerminologyClient({
                         {terminology.category}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <button
-                          type="button"
-                          onClick={() => handleEdit(terminology)}
-                          className="p-2 text-blue-400 hover:bg-blue-600/10 rounded-md transition-colors duration-150"
-                          title="Edit"
-                        >
-                          Edit
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() =>
-                            handleDelete(terminology.id, terminology.term)
-                          }
-                          className="p-2 text-red-400 hover:bg-red-600/10 rounded-md transition-colors duration-150"
-                          title="Delete"
-                        >
-                          Delete
-                        </button>
+                        <div className="flex gap-2 justify-end">
+                          <button
+                            type="button"
+                            onClick={() => handleEdit(terminology)}
+                            className="p-2 text-blue-400 hover:bg-blue-600/10 rounded-md transition-colors duration-150"
+                            title="Edit"
+                          >
+                            <FiEdit className="w-4 h-4" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              handleDelete(terminology.id, terminology.term)
+                            }
+                            className="p-2 text-red-400 hover:bg-red-600/10 rounded-md transition-colors duration-150"
+                            title="Delete"
+                          >
+                            <FiTrash2 className="w-4 h-4" />
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   ))}
