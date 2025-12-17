@@ -42,7 +42,6 @@ export default function ResourcesAdminClient({
   // Article editor state
   const [articleTitle, setArticleTitle] = useState('');
   const [articleSlug, setArticleSlug] = useState('');
-  const [articleIcon, setArticleIcon] = useState('📄');
   const [articleContent, setArticleContent] = useState<any>({
     type: 'doc',
     content: [{ type: 'paragraph' }],
@@ -50,17 +49,14 @@ export default function ResourcesAdminClient({
 
   // Section editor state
   const [sectionTitle, setSectionTitle] = useState('');
-  const [sectionIcon, setSectionIcon] = useState('📁');
 
   const handleCreateSection = () => {
     setSectionTitle('');
-    setSectionIcon('📁');
     setEditMode({ type: 'section' });
   };
 
   const handleEditSection = (section: ResourceSection) => {
     setSectionTitle(section.title);
-    setSectionIcon(section.icon || '📁');
     setEditMode({ type: 'section', section });
   };
 
@@ -90,7 +86,6 @@ export default function ResourcesAdminClient({
     try {
       const data = {
         title: sectionTitle,
-        icon: sectionIcon,
       };
 
       const result =
@@ -120,7 +115,6 @@ export default function ResourcesAdminClient({
   const handleCreateArticle = (sectionId: string) => {
     setArticleTitle('');
     setArticleSlug('');
-    setArticleIcon('📄');
     setArticleContent({
       type: 'doc',
       content: [{ type: 'paragraph' }],
@@ -131,7 +125,6 @@ export default function ResourcesAdminClient({
   const handleEditArticle = (sectionId: string, article: ResourceArticle) => {
     setArticleTitle(article.title);
     setArticleSlug(article.slug);
-    setArticleIcon(article.icon || '📄');
     setArticleContent(article.content);
     setEditMode({ type: 'article', sectionId, article });
   };
@@ -160,7 +153,6 @@ export default function ResourcesAdminClient({
         title: articleTitle,
         slug: articleSlug,
         content: articleContent,
-        icon: articleIcon,
         sectionId: editMode.sectionId,
       };
 
@@ -230,41 +222,22 @@ export default function ResourcesAdminClient({
               {editMode.section ? 'Edit Section' : 'Add New Section'}
             </h2>
             <form onSubmit={handleSubmitSection} className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div className="md:col-span-1">
-                  <label
-                    htmlFor="sectionIcon"
-                    className="block text-sm font-medium text-main mb-1"
-                  >
-                    Icon
-                  </label>
-                  <input
-                    type="text"
-                    id="sectionIcon"
-                    value={sectionIcon}
-                    onChange={(e) => setSectionIcon(e.target.value)}
-                    className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-center text-2xl"
-                    placeholder="📁"
-                    maxLength={2}
-                  />
-                </div>
-                <div className="md:col-span-3">
-                  <label
-                    htmlFor="sectionTitle"
-                    className="block text-sm font-medium text-main mb-1"
-                  >
-                    Section Title *
-                  </label>
-                  <input
-                    type="text"
-                    id="sectionTitle"
-                    value={sectionTitle}
-                    onChange={(e) => setSectionTitle(e.target.value)}
-                    required
-                    className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Epic Training"
-                  />
-                </div>
+              <div>
+                <label
+                  htmlFor="sectionTitle"
+                  className="block text-sm font-medium text-main mb-1"
+                >
+                  Section Title *
+                </label>
+                <input
+                  type="text"
+                  id="sectionTitle"
+                  value={sectionTitle}
+                  onChange={(e) => setSectionTitle(e.target.value)}
+                  required
+                  className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Epic Training"
+                />
               </div>
 
               <div className="flex gap-2 justify-end">
@@ -303,25 +276,8 @@ export default function ResourcesAdminClient({
               </button>
             </div>
             <form onSubmit={handleSubmitArticle} className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
-                <div className="md:col-span-1">
-                  <label
-                    htmlFor="articleIcon"
-                    className="block text-sm font-medium text-main mb-1"
-                  >
-                    Icon
-                  </label>
-                  <input
-                    type="text"
-                    id="articleIcon"
-                    value={articleIcon}
-                    onChange={(e) => setArticleIcon(e.target.value)}
-                    className="w-full px-3 py-2 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-center text-2xl"
-                    placeholder="📄"
-                    maxLength={2}
-                  />
-                </div>
-                <div className="md:col-span-3">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
                   <label
                     htmlFor="articleTitle"
                     className="block text-sm font-medium text-main mb-1"
@@ -338,7 +294,7 @@ export default function ResourcesAdminClient({
                     placeholder="Navigating Epic"
                   />
                 </div>
-                <div className="md:col-span-2">
+                <div>
                   <label
                     htmlFor="articleSlug"
                     className="block text-sm font-medium text-main mb-1"
@@ -410,7 +366,7 @@ export default function ResourcesAdminClient({
                   {/* Section Header */}
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-3">
-                      <span className="text-2xl">{section.icon || '📁'}</span>
+                      <FiFolder className="text-2xl text-gray-400" />
                       <div>
                         <h3 className="text-xl font-semibold text-main">
                           {section.title}
@@ -458,7 +414,6 @@ export default function ResourcesAdminClient({
                         >
                           <div className="flex items-center gap-3">
                             <FiFile className="text-gray-400" />
-                            <span className="text-lg">{article.icon || '📄'}</span>
                             <div>
                               <h4 className="text-sm font-medium text-main">
                                 {article.title}
