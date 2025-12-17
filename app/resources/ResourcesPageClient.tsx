@@ -21,7 +21,6 @@ export default function ResourcesPageClient({ sections }: ResourcesPageClientPro
   const [selectedArticle, setSelectedArticle] = useState<{
     title: string;
     content: any;
-    icon?: string | null;
   } | null>(null);
 
   return (
@@ -59,7 +58,6 @@ export default function ResourcesPageClient({ sections }: ResourcesPageClientPro
                 <div key={section.id}>
                   {/* Section Header */}
                   <div className="flex items-center gap-2 mb-4 pb-2 border-b border-gray-200 dark:border-gray-700">
-                    <span className="text-2xl">{section.icon || '📁'}</span>
                     <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
                       {section.title}
                     </h2>
@@ -75,25 +73,19 @@ export default function ResourcesPageClient({ sections }: ResourcesPageClientPro
                           setSelectedArticle({
                             title: article.title,
                             content: article.content,
-                            icon: article.icon,
                           })
                         }
                       >
                         {/* Frosted Glass Card */}
                         <div className="relative overflow-hidden rounded-2xl bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 shadow-sm hover:shadow-lg transition-all duration-300 ease-out hover:border-gray-300/80 dark:hover:border-gray-600/80">
                           {/* Gradient Background Overlay */}
-                          <div className="absolute inset-0 bg-gradient-to-br from-green-500/20 to-teal-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                          <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-gray-100/40 dark:from-white/10 dark:to-gray-300/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
                           {/* Content */}
                           <div className="relative p-5">
-                            <div className="flex items-center gap-2 mb-2">
-                              {article.icon && (
-                                <span className="text-xl">{article.icon}</span>
-                              )}
-                              <h3 className="text-xl font-semibold text-gray-900 dark:text-white tracking-tight">
-                                {article.title}
-                              </h3>
-                            </div>
+                            <h3 className="text-xl font-semibold text-gray-900 dark:text-white tracking-tight mb-2">
+                              {article.title}
+                            </h3>
                             {article.textContent && (
                               <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed line-clamp-2">
                                 {article.textContent.substring(0, 120)}
@@ -126,14 +118,9 @@ export default function ResourcesPageClient({ sections }: ResourcesPageClientPro
             >
               {/* Modal Header */}
               <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
-                <div className="flex items-center gap-2">
-                  {selectedArticle.icon && (
-                    <span className="text-2xl">{selectedArticle.icon}</span>
-                  )}
-                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-                    {selectedArticle.title}
-                  </h2>
-                </div>
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+                  {selectedArticle.title}
+                </h2>
                 <button
                   onClick={() => setSelectedArticle(null)}
                   className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
