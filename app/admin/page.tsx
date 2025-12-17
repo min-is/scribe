@@ -103,6 +103,18 @@ export default function AdminPage() {
           </a>
 
           <a
+            href="/admin/resources"
+            className="group bg-zinc-900 border border-zinc-800 rounded-xl p-6 hover:bg-zinc-800/50 hover:border-zinc-700 transition-all duration-150 block"
+          >
+            <h2 className="text-lg font-semibold text-zinc-100 mb-2 group-hover:text-white transition-colors">
+              Resources
+            </h2>
+            <p className="text-sm text-zinc-400 leading-relaxed">
+              Manage resource sections and articles
+            </p>
+          </a>
+
+          <a
             href="/admin/shifts"
             className="group bg-blue-950/30 border border-blue-900/30 rounded-xl p-6 hover:bg-blue-950/50 hover:border-blue-800/40 transition-all duration-150 block"
           >
