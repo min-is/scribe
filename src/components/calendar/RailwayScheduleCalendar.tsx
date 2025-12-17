@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Calendar, Lock, X } from 'lucide-react';
+import { Calendar, Lock } from 'lucide-react';
+import CloseButton from '@/components/primitives/CloseButton';
 import { getZoneStyles, formatShiftTime, getZoneGroupLabel, type ZoneGroup } from '@/lib/shiftgen';
 
 // Use environment variable for passcode, fallback to default for development
@@ -114,13 +115,7 @@ function DailyModal({ date, dailyData, onClose }: DailyModalProps) {
               {totalShifts} shift{totalShifts !== 1 ? 's' : ''}
             </p>
           </div>
-          <button
-            onClick={onClose}
-            className="p-2 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
-            aria-label="Close"
-          >
-            <X className="w-5 h-5 text-zinc-600 dark:text-zinc-400" />
-          </button>
+          <CloseButton onClick={onClose} />
         </div>
 
         {/* Content */}

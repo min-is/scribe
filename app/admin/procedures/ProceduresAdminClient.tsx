@@ -10,7 +10,8 @@ import {
 } from '@/procedure/actions';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
-import { FiEdit, FiTrash2, FiPlus, FiX, FiEye } from 'react-icons/fi';
+import { FiEdit, FiTrash2, FiPlus, FiEye } from 'react-icons/fi';
+import CloseButton from '@/components/primitives/CloseButton';
 import TipTapEditor from '@/components/editor/TipTapEditor';
 
 type ProceduresAdminClientProps = {
@@ -144,12 +145,7 @@ export default function ProceduresAdminClient({
               <h2 className="text-2xl font-semibold text-main">
                 {editingProcedure ? 'Edit Procedure' : 'New Procedure'}
               </h2>
-              <button
-                onClick={resetForm}
-                className="text-dim hover:text-main transition-colors"
-              >
-                <FiX className="text-2xl" />
-              </button>
+              <CloseButton size="lg" onClick={resetForm} />
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">

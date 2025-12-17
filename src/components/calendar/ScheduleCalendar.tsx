@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useMemo, memo, useEffect } from 'react';
-import { Calendar, Lock, X } from 'lucide-react';
+import { Calendar, Lock } from 'lucide-react';
+import CloseButton from '@/components/primitives/CloseButton';
 import { getZoneStyles, formatShiftTime, getZoneGroupLabel, type ZoneGroupedShifts } from '@/lib/shiftgen';
 import type { DailySchedule, ShiftWithRelations } from '@/lib/shiftgen';
 
@@ -88,13 +89,7 @@ function DailyModal({ date, dailySchedule, onClose }: DailyModalProps) {
               {dailySchedule.summary.totalShifts} shift{dailySchedule.summary.totalShifts !== 1 ? 's' : ''}
             </p>
           </div>
-          <button
-            onClick={onClose}
-            className="p-2 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors"
-            title="Close"
-          >
-            <X className="w-5 h-5" />
-          </button>
+          <CloseButton onClick={onClose} />
         </div>
 
         {/* Content */}

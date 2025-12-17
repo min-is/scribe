@@ -3,7 +3,8 @@
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
-import { FiEdit, FiTrash2, FiPlus, FiFolder, FiFile, FiX } from 'react-icons/fi';
+import { FiEdit, FiTrash2, FiPlus, FiFolder, FiFile } from 'react-icons/fi';
+import CloseButton from '@/components/primitives/CloseButton';
 import dynamic from 'next/dynamic';
 import { ResourceSection, ResourceArticle } from '@/resource/types';
 import {
@@ -147,13 +148,7 @@ export default function ResourcesEditorClient({
               <h2 className="text-xl font-semibold text-main">
                 {editMode.article ? 'Edit Article' : 'Add New Article'}
               </h2>
-              <button
-                type="button"
-                onClick={() => setEditMode({ type: 'none' })}
-                className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
-              >
-                <FiX size={20} />
-              </button>
+              <CloseButton onClick={() => setEditMode({ type: 'none' })} />
             </div>
             <form onSubmit={handleSubmitArticle} className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-6 gap-4">

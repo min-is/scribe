@@ -1,9 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { FiBookOpen, FiX } from 'react-icons/fi';
+import { FiBookOpen } from 'react-icons/fi';
 import { ResourceSection } from '@/resource/types';
 import dynamic from 'next/dynamic';
+import CloseButton from '@/components/primitives/CloseButton';
 
 // Dynamically import TipTapEditor for read-only view
 const TipTapEditor = dynamic(() => import('@/components/editor/TipTapEditor'), {
@@ -121,12 +122,10 @@ export default function ResourcesPageClient({ sections }: ResourcesPageClientPro
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
                   {selectedArticle.title}
                 </h2>
-                <button
+                <CloseButton
+                  size="lg"
                   onClick={() => setSelectedArticle(null)}
-                  className="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
-                >
-                  <FiX size={24} />
-                </button>
+                />
               </div>
 
               {/* Modal Content */}

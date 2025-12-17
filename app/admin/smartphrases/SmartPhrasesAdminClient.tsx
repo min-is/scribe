@@ -10,7 +10,8 @@ import {
 } from '@/smartphrase/actions';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
-import { FiEdit, FiTrash2, FiPlus, FiX } from 'react-icons/fi';
+import { FiEdit, FiTrash2, FiPlus } from 'react-icons/fi';
+import CloseButton from '@/components/primitives/CloseButton';
 
 type SmartPhrasesAdminClientProps = {
   smartphrases: SmartPhrase[];
@@ -146,12 +147,7 @@ export default function SmartPhrasesAdminClient({
               <h2 className="text-2xl font-semibold text-main">
                 {editingPhrase ? 'Edit SmartPhrase' : 'New SmartPhrase'}
               </h2>
-              <button
-                onClick={resetForm}
-                className="text-dim hover:text-main transition-colors"
-              >
-                <FiX className="text-2xl" />
-              </button>
+              <CloseButton size="lg" onClick={resetForm} />
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-4">
