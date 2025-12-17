@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { FiBookOpen, FiX } from 'react-icons/fi';
-import { ResourceSection } from '@/resource/actions';
+import { ResourceSection } from '@/resource/types';
 import dynamic from 'next/dynamic';
 
 // Dynamically import TipTapEditor for read-only view
