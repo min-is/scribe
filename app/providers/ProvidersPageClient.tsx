@@ -45,42 +45,37 @@ const ProviderCard = memo(function ProviderCard({
         <div className={`absolute inset-0 bg-gradient-to-br ${getDifficultyColor(provider.generalDifficulty)} opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
 
         {/* Content */}
-        <div className="relative p-5">
+        <div className="relative p-4">
           {/* Provider Name & Credentials */}
-          <div className="mb-4">
-            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-0.5 tracking-tight">
+          <div className={provider.generalDifficulty ? 'mb-2' : ''}>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white tracking-tight">
               {provider.name}
             </h3>
             {provider.credentials && (
-              <p className="text-sm font-medium text-gray-500 dark:text-gray-400">
+              <p className="text-xs font-medium text-gray-500 dark:text-gray-400">
                 {provider.credentials}
               </p>
             )}
           </div>
 
-          {/* Difficulty Rating - Apple-inspired dot indicators */}
+          {/* Difficulty Rating - Compact inline layout */}
           {provider.generalDifficulty && (
-            <div className="space-y-2">
-              <div className="flex items-center gap-1.5">
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-1">
                 {Array.from({ length: 10 }).map((_, index) => (
                   <div
                     key={index}
-                    className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
+                    className={`w-1 h-1 rounded-full ${
                       index < provider.generalDifficulty!
-                        ? 'bg-gray-800 dark:bg-gray-200'
+                        ? 'bg-gray-700 dark:bg-gray-300'
                         : 'bg-gray-300 dark:bg-gray-600'
                     }`}
                   />
                 ))}
               </div>
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-medium text-gray-600 dark:text-gray-400">
-                  {getDifficultyLabel(provider.generalDifficulty)}
-                </span>
-                <span className="text-xs font-mono text-gray-500 dark:text-gray-500 tabular-nums">
-                  {provider.generalDifficulty}/10
-                </span>
-              </div>
+              <span className="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">
+                {getDifficultyLabel(provider.generalDifficulty)}
+              </span>
             </div>
           )}
         </div>
@@ -130,7 +125,7 @@ export default function ProvidersPageClient({
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {providers.map((provider) => (
               <ProviderCard
                 key={provider.id}
