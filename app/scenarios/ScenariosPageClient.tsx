@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { ScenarioListItem, incrementScenarioViewCount, getScenarioContent } from '@/scenario/actions';
+import { SerializedScenarioListItem, incrementScenarioViewCount, getScenarioContent } from '@/scenario/actions';
 import {
   FiSearch,
   FiFileText,
@@ -11,11 +11,11 @@ import { EditorRenderer } from '@/components/editor/EditorRenderer';
 import CloseButton from '@/components/primitives/CloseButton';
 
 interface ScenariosPageClientProps {
-  scenarios: ScenarioListItem[];
+  scenarios: SerializedScenarioListItem[];
   categories: string[];
 }
 
-interface SelectedScenario extends ScenarioListItem {
+interface SelectedScenario extends SerializedScenarioListItem {
   content?: any;
 }
 
@@ -54,7 +54,7 @@ export default function ScenariosPageClient({
     return filtered;
   }, [scenarios, selectedCategory, debouncedQuery]);
 
-  const handleScenarioClick = async (scenario: ScenarioListItem) => {
+  const handleScenarioClick = async (scenario: SerializedScenarioListItem) => {
     // Set scenario immediately for responsive UI
     setSelectedScenario({ ...scenario, content: null });
     setIsLoadingContent(true);

@@ -22,6 +22,12 @@ export type Scenario = {
 // Lightweight type for list views (excludes content for performance)
 export type ScenarioListItem = Omit<Scenario, 'content'>;
 
+// Serialized version for client components (dates as strings)
+export type SerializedScenarioListItem = Omit<ScenarioListItem, 'createdAt' | 'updatedAt'> & {
+  createdAt: string;
+  updatedAt: string;
+};
+
 export type ScenarioFormData = {
   slug: string;
   title: string;
