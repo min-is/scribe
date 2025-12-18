@@ -2,11 +2,11 @@
 
 import { useState } from 'react';
 import { Provider } from '@prisma/client';
-import { WikiContent, createEmptyWikiContent, validateWikiContent, MediaItem } from '@/provider/wiki-schema';
-import { SectionManager } from '@/components/wiki/SectionManager';
+import { WikiContent, createEmptyWikiContent, validateWikiContent, MediaItem, getWikiDisplayContent } from '@/provider/wiki-schema';
+import { RichTextEditor } from '@/components/editor/RichTextEditor';
+import { EditorRenderer } from '@/components/editor/EditorRenderer';
 import { UploadDropzone } from '@/components/upload/UploadDropzone';
 import { MediaLibrary } from '@/components/upload/MediaLibrary';
-import { WikiContentRenderer } from '@/components/wiki/WikiContentRenderer';
 import { updateProvider } from '@/provider/actions';
 import { useRouter } from 'next/navigation';
 
@@ -24,7 +24,17 @@ export function WikiEditorClient({ provider }: WikiEditorClientProps) {
   // Initialize wiki content
   const [wikiContent, setWikiContent] = useState<WikiContent>(() => {
     if (provider.wikiContent && validateWikiContent(provider.wikiContent)) {
-      return provider.wikiContent as WikiContent;
+      const existingWiki = provider.wikiContent as WikiContent;
+      // If loading v1 (sections-based), convert to v2 (single content)
+      if (!existingWiki.content && existingWiki.sections?.length > 0) {
+        const mergedContent = getWikiDisplayContent(existingWiki);
+        return {
+          ...existingWiki,
+          version: 2,
+          content: mergedContent,
+        };
+      }
+      return existingWiki;
     }
     return createEmptyWikiContent();
   });
@@ -126,7 +136,7 @@ export function WikiEditorClient({ provider }: WikiEditorClientProps) {
                   : 'border-transparent text-dim hover:text-main'
               }`}
             >
-              ✏️ Edit Sections
+              Edit Content
             </button>
             <button
               onClick={() => setActiveTab('preview')}
@@ -136,7 +146,7 @@ export function WikiEditorClient({ provider }: WikiEditorClientProps) {
                   : 'border-transparent text-dim hover:text-main'
               }`}
             >
-              👁️ Preview
+              Preview
             </button>
             <button
               onClick={() => setActiveTab('media')}
@@ -146,7 +156,7 @@ export function WikiEditorClient({ provider }: WikiEditorClientProps) {
                   : 'border-transparent text-dim hover:text-main'
               }`}
             >
-              🖼️ Media ({wikiContent.media.length})
+              Media ({wikiContent.media.length})
             </button>
           </div>
         </div>
@@ -156,20 +166,23 @@ export function WikiEditorClient({ provider }: WikiEditorClientProps) {
           {activeTab === 'edit' && (
             <div className="space-y-4">
               <div className="text-sm text-dim mb-4">
-                Create sections to organize provider information. Drag to reorder, click to edit.
+                Add clinical information, preferences, and documentation for this provider.
               </div>
-              <SectionManager
-                sections={wikiContent.sections}
-                onChange={(sections) =>
-                  setWikiContent({ ...wikiContent, sections })
-                }
-              />
+              <div className="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+                <RichTextEditor
+                  content={wikiContent.content || { type: 'doc', content: [{ type: 'paragraph' }] }}
+                  onChange={(content) =>
+                    setWikiContent({ ...wikiContent, content })
+                  }
+                  placeholder="Add provider documentation, preferences, tips, and clinical information..."
+                />
+              </div>
             </div>
           )}
 
           {activeTab === 'preview' && (
-            <div>
-              <WikiContentRenderer wikiContent={wikiContent} showTOC={true} />
+            <div className="prose dark:prose-invert max-w-none">
+              <EditorRenderer content={wikiContent.content || { type: 'doc', content: [{ type: 'paragraph' }] }} />
             </div>
           )}
 
@@ -202,13 +215,7 @@ export function WikiEditorClient({ provider }: WikiEditorClientProps) {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-3 gap-4">
-          <div className="bg-medium border border-main rounded-lg p-4">
-            <div className="text-2xl font-bold text-main">
-              {wikiContent.sections.length}
-            </div>
-            <div className="text-sm text-dim">Sections</div>
-          </div>
+        <div className="grid grid-cols-2 gap-4">
           <div className="bg-medium border border-main rounded-lg p-4">
             <div className="text-2xl font-bold text-main">
               {wikiContent.media.length}

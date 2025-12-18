@@ -92,10 +92,24 @@ export async function getPageTreeByType(type?: PageType, parentId: string | null
 }
 
 /**
- * Convert WikiContent sections to TipTap JSON
+ * Convert WikiContent to TipTap JSON
+ * Handles both v2 (single content) and v1 (sections-based) structures
  */
 export function wikiContentToTipTap(wikiContent: any): any {
-  if (!wikiContent || !wikiContent.sections) {
+  if (!wikiContent) {
+    return {
+      type: 'doc',
+      content: [],
+    };
+  }
+
+  // If we have direct content (v2), use it
+  if (wikiContent.content && wikiContent.content.type === 'doc') {
+    return wikiContent.content;
+  }
+
+  // Otherwise, merge sections into single content (v1 backward compatibility)
+  if (!wikiContent.sections) {
     return {
       type: 'doc',
       content: [],
@@ -115,18 +129,23 @@ export function wikiContentToTipTap(wikiContent: any): any {
       });
     }
 
-    // Add section content (parse HTML or plain text)
+    // Add section content
     if (section.content) {
-      // Simple paragraph conversion (can be enhanced with HTML parsing)
-      const paragraphs = section.content.split('\n\n');
-      paragraphs.forEach((para: string) => {
-        if (para.trim()) {
-          content.push({
-            type: 'paragraph',
-            content: [{ type: 'text', text: para.trim() }],
-          });
-        }
-      });
+      // If content is already TipTap JSON format
+      if (section.content.type === 'doc' && section.content.content) {
+        content.push(...section.content.content);
+      } else if (typeof section.content === 'string') {
+        // Handle legacy string content (parse HTML or plain text)
+        const paragraphs = section.content.split('\n\n');
+        paragraphs.forEach((para: string) => {
+          if (para.trim()) {
+            content.push({
+              type: 'paragraph',
+              content: [{ type: 'text', text: para.trim() }],
+            });
+          }
+        });
+      }
     }
   });
 

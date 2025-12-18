@@ -9,13 +9,12 @@ import {
   deleteProvider,
   ProviderFormData,
 } from '@/provider/actions';
-import { WikiContent, createEmptyWikiContent, validateWikiContent, MediaItem } from '@/provider/wiki-schema';
+import { WikiContent, createEmptyWikiContent, validateWikiContent, MediaItem, getWikiDisplayContent } from '@/provider/wiki-schema';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { DifficultyDialInput } from '@/components/DifficultyDialInput';
 import { ProviderDifficultyPreview } from '@/components/ProviderDifficultyPreview';
 import { RichTextEditor } from '@/components/editor/RichTextEditor';
-import { SectionManager } from '@/components/wiki/SectionManager';
 import { UploadDropzone } from '@/components/upload/UploadDropzone';
 import { MediaLibrary } from '@/components/upload/MediaLibrary';
 import { FiEdit, FiTrash2 } from 'react-icons/fi';
@@ -48,7 +47,7 @@ export default function ProvidersClient({
 
   // Form state for wiki content
   const [wikiContent, setWikiContent] = useState<WikiContent>(createEmptyWikiContent());
-  const [activeWikiTab, setActiveWikiTab] = useState<'sections' | 'media'>('sections');
+  const [activeWikiTab, setActiveWikiTab] = useState<'content' | 'media'>('content');
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -151,7 +150,18 @@ export default function ProvidersClient({
 
     // Load wiki content
     if (provider.wikiContent && validateWikiContent(provider.wikiContent)) {
-      setWikiContent(provider.wikiContent as WikiContent);
+      const existingWiki = provider.wikiContent as WikiContent;
+      // If loading v1 (sections-based), convert to v2 (single content)
+      if (!existingWiki.content && existingWiki.sections?.length > 0) {
+        const mergedContent = getWikiDisplayContent(existingWiki);
+        setWikiContent({
+          ...existingWiki,
+          version: 2,
+          content: mergedContent,
+        });
+      } else {
+        setWikiContent(existingWiki);
+      }
     } else {
       setWikiContent(createEmptyWikiContent());
     }
@@ -185,7 +195,7 @@ export default function ProvidersClient({
   const resetRichTextFields = () => {
     setNoteSmartPhrase({ type: 'doc', content: [{ type: 'paragraph' }] });
     setWikiContent(createEmptyWikiContent());
-    setActiveWikiTab('sections');
+    setActiveWikiTab('content');
   };
 
   const handleUploadComplete = (media: MediaItem) => {
@@ -393,7 +403,7 @@ export default function ProvidersClient({
                 </p>
               </div>
 
-              {/* Provider Documentation - Wiki System */}
+              {/* Provider Documentation */}
               <div>
                 <h3 className="text-sm font-semibold text-main mb-3">
                   Provider Documentation
@@ -403,14 +413,14 @@ export default function ProvidersClient({
                 <div className="bg-zinc-100 dark:bg-zinc-800/50 rounded-xl p-1 mb-4 inline-flex gap-1">
                   <button
                     type="button"
-                    onClick={() => setActiveWikiTab('sections')}
+                    onClick={() => setActiveWikiTab('content')}
                     className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                      activeWikiTab === 'sections'
+                      activeWikiTab === 'content'
                         ? 'bg-white dark:bg-zinc-900 text-main shadow-sm'
                         : 'text-zinc-600 dark:text-zinc-400 hover:text-main'
                     }`}
                   >
-                    Sections ({wikiContent.sections.length})
+                    Content
                   </button>
                   <button
                     type="button"
@@ -426,17 +436,20 @@ export default function ProvidersClient({
                 </div>
 
                 {/* Tab Content */}
-                {activeWikiTab === 'sections' && (
+                {activeWikiTab === 'content' && (
                   <div>
                     <div className="text-sm text-dim mb-4">
-                      Create sections to organize clinical information, preferences, and documentation. Drag to reorder.
+                      Add clinical information, preferences, and documentation for this provider.
                     </div>
-                    <SectionManager
-                      sections={wikiContent.sections}
-                      onChange={(sections) =>
-                        setWikiContent({ ...wikiContent, sections })
-                      }
-                    />
+                    <div className="border border-zinc-300 dark:border-zinc-700 rounded-xl overflow-hidden">
+                      <RichTextEditor
+                        content={wikiContent.content || { type: 'doc', content: [{ type: 'paragraph' }] }}
+                        onChange={(content) =>
+                          setWikiContent({ ...wikiContent, content })
+                        }
+                        placeholder="Add provider documentation, preferences, tips, and clinical information..."
+                      />
+                    </div>
                   </div>
                 )}
 
