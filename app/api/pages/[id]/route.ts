@@ -126,10 +126,51 @@ export async function PATCH(
         : generateJitteredKeyBetween(null, null);
     }
 
+    // Update the page and get its type and provider relation
     const page = await prisma.page.update({
       where: { id },
       data: updateData,
+      include: {
+        provider: true,
+      },
     });
+
+    // If this is a PROVIDER page and content was updated, sync back to Provider.wikiContent
+    if (page.type === 'PROVIDER' && page.provider && content !== undefined) {
+      // Update the provider's wikiContent with the new content
+      const updatedWikiContent = {
+        version: 2,
+        content: content,
+        sections: [], // Keep empty sections for backward compatibility
+        media: [],
+        metadata: {
+          lastEditedAt: new Date().toISOString(),
+          totalEdits: 0, // We don't track this perfectly in reverse sync
+        },
+      };
+
+      // Try to preserve existing media and metadata from provider's wikiContent
+      if (page.provider.wikiContent && typeof page.provider.wikiContent === 'object') {
+        const existingWiki = page.provider.wikiContent as any;
+        if (existingWiki.media) {
+          updatedWikiContent.media = existingWiki.media;
+        }
+        if (existingWiki.metadata) {
+          updatedWikiContent.metadata = {
+            ...existingWiki.metadata,
+            lastEditedAt: new Date().toISOString(),
+            totalEdits: (existingWiki.metadata.totalEdits || 0) + 1,
+          };
+        }
+      }
+
+      await prisma.provider.update({
+        where: { id: page.provider.id },
+        data: {
+          wikiContent: updatedWikiContent,
+        },
+      });
+    }
 
     return NextResponse.json(page);
   } catch (error) {
