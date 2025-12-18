@@ -12,9 +12,15 @@ import { WikiContent } from '@/provider/wiki-schema';
 
 /**
  * Converts WikiContent to TipTap JSON format
- * Extracts all visible sections and merges their content
+ * Handles both v2 (single content) and v1 (sections-based) structures
  */
 export function wikiContentToTipTap(wikiContent: WikiContent): JSONContent {
+  // If we have direct content (v2), use it
+  if (wikiContent.content && wikiContent.content.type === 'doc') {
+    return wikiContent.content;
+  }
+
+  // Otherwise, merge sections into single content (v1 backward compatibility)
   const visibleSections = wikiContent.sections.filter((section) => section.visible);
 
   if (visibleSections.length === 0) {

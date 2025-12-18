@@ -69,7 +69,8 @@ export interface TOCEntry {
  */
 export interface WikiContent {
   version: number;        // Schema version for migrations
-  sections: WikiSection[];
+  content?: JSONContent;  // Single rich text content (v2 - simplified structure)
+  sections: WikiSection[]; // Legacy: array of sections (v1 - kept for backward compatibility)
   media: MediaItem[];
   metadata: {
     lastEditedBy?: string;
@@ -83,8 +84,12 @@ export interface WikiContent {
  * Default empty wiki content
  */
 export const createEmptyWikiContent = (): WikiContent => ({
-  version: 1,
-  sections: [],
+  version: 2,
+  content: {
+    type: 'doc',
+    content: [{ type: 'paragraph', content: [] }],
+  },
+  sections: [], // Legacy field kept for backward compatibility
   media: [],
   metadata: {
     lastEditedAt: new Date().toISOString(),
@@ -160,14 +165,70 @@ export const validateWikiContent = (content: unknown): content is WikiContent =>
 
   const wiki = content as WikiContent;
 
-  return (
+  // Basic structure validation
+  const hasBasicStructure =
     typeof wiki.version === 'number' &&
-    Array.isArray(wiki.sections) &&
     Array.isArray(wiki.media) &&
     typeof wiki.metadata === 'object' &&
     typeof wiki.metadata.lastEditedAt === 'string' &&
-    typeof wiki.metadata.totalEdits === 'number'
-  );
+    typeof wiki.metadata.totalEdits === 'number';
+
+  if (!hasBasicStructure) return false;
+
+  // For v2+, we need either content or sections
+  // For backward compatibility, sections array can be empty if content exists
+  const hasContent = wiki.content && typeof wiki.content === 'object';
+  const hasSections = Array.isArray(wiki.sections);
+
+  return hasContent || hasSections;
+};
+
+/**
+ * Check if wiki content uses the new simplified structure (v2)
+ */
+export const isSimplifiedWikiContent = (content: WikiContent): boolean => {
+  return content.version >= 2 && content.content !== undefined;
+};
+
+/**
+ * Get the content to display from WikiContent (handles both v1 sections and v2 content)
+ */
+export const getWikiDisplayContent = (wikiContent: WikiContent): JSONContent => {
+  // If we have direct content (v2), use it
+  if (wikiContent.content && wikiContent.content.type === 'doc') {
+    return wikiContent.content;
+  }
+
+  // Otherwise, merge sections into single content (v1 backward compatibility)
+  const visibleSections = wikiContent.sections.filter((s) => s.visible);
+
+  if (visibleSections.length === 0) {
+    return {
+      type: 'doc',
+      content: [{ type: 'paragraph', content: [] }],
+    };
+  }
+
+  const mergedContent: JSONContent[] = [];
+
+  for (const section of visibleSections) {
+    // Add section title as heading
+    mergedContent.push({
+      type: 'heading',
+      attrs: { level: 2 },
+      content: [{ type: 'text', text: section.title }],
+    });
+
+    // Add section content
+    if (section.content?.content) {
+      mergedContent.push(...(section.content.content as JSONContent[]));
+    }
+  }
+
+  return {
+    type: 'doc',
+    content: mergedContent.length > 0 ? mergedContent : [{ type: 'paragraph', content: [] }],
+  };
 };
 
 /**
