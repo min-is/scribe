@@ -8,7 +8,24 @@ import {
 } from '@/provider/actions';
 import { ProviderDifficultyFull } from './ProviderDifficultyFull';
 import { WikiContentRenderer } from './wiki/WikiContentRenderer';
+import { EditorRenderer } from './editor/EditorRenderer';
 import { validateWikiContent } from '@/provider/wiki-schema';
+import { JSONContent } from '@tiptap/core';
+
+/**
+ * Try to parse noteSmartPhrase as TipTap JSON content
+ */
+function parseNoteSmartPhrase(noteSmartPhrase: string): JSONContent | null {
+  try {
+    const parsed = JSON.parse(noteSmartPhrase);
+    if (parsed && parsed.type === 'doc') {
+      return parsed;
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
 
 export default function ProviderProfileView() {
   const [provider, setProvider] = useState<Provider | null>(null);
@@ -181,18 +198,27 @@ export default function ProviderProfileView() {
                     </div>
                   )}
 
-                  {provider.noteSmartPhrase && (
-                    <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
-                      <h4 className="text-lg font-medium text-main mb-2">
-                        Note SmartPhrase
-                      </h4>
-                      <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
-                        <pre className="text-sm text-main whitespace-pre-wrap font-mono">
-                          {provider.noteSmartPhrase}
-                        </pre>
+                  {provider.noteSmartPhrase && (() => {
+                    const parsedContent = parseNoteSmartPhrase(provider.noteSmartPhrase);
+                    return (
+                      <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
+                        <h4 className="text-lg font-medium text-main mb-2">
+                          Note SmartPhrase
+                        </h4>
+                        <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
+                          {parsedContent ? (
+                            <div className="prose dark:prose-invert max-w-none prose-sm">
+                              <EditorRenderer content={parsedContent} />
+                            </div>
+                          ) : (
+                            <pre className="text-sm text-main whitespace-pre-wrap font-mono">
+                              {provider.noteSmartPhrase}
+                            </pre>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    );
+                  })()}
 
                   {!provider.noteTemplate && !provider.noteSmartPhrase && (
                     <div className="border-t border-gray-200 dark:border-gray-700 pt-6">

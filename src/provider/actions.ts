@@ -172,7 +172,12 @@ export async function createProvider(
 
       if (data.wikiContent && typeof data.wikiContent === 'object') {
         const wikiContentObj = data.wikiContent as any;
-        if (wikiContentObj.sections && Array.isArray(wikiContentObj.sections) && wikiContentObj.sections.length > 0) {
+        // Check for v2 structure first (direct content field)
+        if (wikiContentObj.content && wikiContentObj.content.type === 'doc') {
+          pageContent = wikiContentObj.content;
+        }
+        // Fall back to v1 structure (sections-based)
+        else if (wikiContentObj.sections && Array.isArray(wikiContentObj.sections) && wikiContentObj.sections.length > 0) {
           const firstSection = wikiContentObj.sections[0];
           if (firstSection.content && firstSection.content.type === 'doc') {
             pageContent = firstSection.content;
@@ -271,13 +276,18 @@ export async function updateProvider(
       if (data.wikiContent !== undefined && updatedProvider.page) {
         const wikiContentObj = data.wikiContent as any;
 
-        // Extract and combine all visible section content
-        const combinedContent: any = {
+        // Extract content for syncing to Page
+        let combinedContent: any = {
           type: 'doc',
           content: [],
         };
 
-        if (wikiContentObj?.sections && Array.isArray(wikiContentObj.sections)) {
+        // Check for v2 structure first (direct content field)
+        if (wikiContentObj?.content && wikiContentObj.content.type === 'doc') {
+          combinedContent = wikiContentObj.content;
+        }
+        // Fall back to v1 structure (sections-based)
+        else if (wikiContentObj?.sections && Array.isArray(wikiContentObj.sections)) {
           const visibleSections = wikiContentObj.sections.filter((s: any) => s.visible);
 
           for (const section of visibleSections) {
