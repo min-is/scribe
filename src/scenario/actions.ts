@@ -19,6 +19,9 @@ export type Scenario = {
   updatedAt: Date;
 };
 
+// Lightweight type for list views (excludes content for performance)
+export type ScenarioListItem = Omit<Scenario, 'content'>;
+
 export type ScenarioFormData = {
   slug: string;
   title: string;
@@ -41,7 +44,7 @@ async function ensureTableExists(): Promise<{ exists: boolean; error?: string }>
 }
 
 /**
- * Get all scenarios
+ * Get all scenarios (full data including content)
  */
 export async function getScenarios(): Promise<Scenario[]> {
   try {
@@ -57,6 +60,46 @@ export async function getScenarios(): Promise<Scenario[]> {
   } catch (error) {
     console.error('Error fetching scenarios:', error);
     return [];
+  }
+}
+
+/**
+ * Get scenarios for list view (excludes content for performance)
+ */
+export async function getScenariosForList(): Promise<ScenarioListItem[]> {
+  try {
+    const check = await ensureTableExists();
+    if (!check.exists) {
+      console.error(check.error);
+      return [];
+    }
+
+    return await query<ScenarioListItem>(
+      `SELECT id, slug, title, category, description, tags, "viewCount", "createdAt", "updatedAt"
+       FROM "Scenario" ORDER BY category ASC, title ASC`
+    );
+  } catch (error) {
+    console.error('Error fetching scenarios for list:', error);
+    return [];
+  }
+}
+
+/**
+ * Get scenario content by ID (for modal/detail view)
+ */
+export async function getScenarioContent(id: string): Promise<{ content: any } | null> {
+  try {
+    const check = await ensureTableExists();
+    if (!check.exists) return null;
+
+    const result = await queryOne<{ content: any }>(
+      `SELECT content FROM "Scenario" WHERE id = $1`,
+      [id]
+    );
+    return result;
+  } catch (error) {
+    console.error('Error fetching scenario content:', error);
+    return null;
   }
 }
 
