@@ -7,6 +7,12 @@ import {
   use,
 } from 'react';
 import { AdminData } from '@/admin/actions';
+import { Provider } from '@prisma/client';
+
+// Provider type with page content for reference sidebar
+export type ReferenceProvider = Provider & {
+  page: { content: any } | null;
+};
 
 export type AppStateContextType = {
   // CORE
@@ -34,6 +40,9 @@ export type AppStateContextType = {
   isLoadingAdminData?: boolean
   refreshAdminData?: () => void
   updateAdminData?: (updatedData: Partial<AdminData>) => void
+  // PROVIDER REFERENCE
+  referenceProvider?: ReferenceProvider | null
+  setReferenceProvider?: (provider: ReferenceProvider | null) => void
 } & Partial<AdminData>
 
 export const AppStateContext = createContext<AppStateContextType>({});

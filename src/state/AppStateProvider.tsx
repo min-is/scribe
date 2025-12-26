@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, ReactNode, useCallback } from 'react';
-import { AppStateContext } from './AppState';
+import { AppStateContext, ReferenceProvider } from './AppState';
 import usePathnames from '@/utility/usePathnames';
 import { getAuthAction } from '@/auth/actions';
 import useSWR from 'swr';
@@ -41,6 +41,9 @@ export default function AppStateProvider({
 
   // ADMIN
   const [adminUpdateTimes, setAdminUpdateTimes] = useState<Date[]>([]);
+
+  // PROVIDER REFERENCE
+  const [referenceProvider, setReferenceProvider] = useState<ReferenceProvider | null>(null);
 
   useEffect(() => {
     setHasLoaded?.(true);
@@ -139,6 +142,9 @@ export default function AppStateProvider({
         isLoadingAdminData,
         refreshAdminData,
         updateAdminData,
+        // PROVIDER REFERENCE
+        referenceProvider,
+        setReferenceProvider,
       }}
     >
       {children}

@@ -18,6 +18,7 @@ import SwrConfigClient from '@/state/SwrConfigClient';
 import ThemeColors from '@/app/ThemeColors';
 import AppTextProvider from '@/i18n/state/AppTextProvider';
 import CommandK from '@/components/CommandK';
+import ProviderReferenceSidebar from '@/components/providers/ProviderReferenceSidebar';
 
 import '../tailwind.css';
 
@@ -107,6 +108,7 @@ export default function RootLayout({
               <SpeedInsights debug={false}  />
               <ToasterWithThemes />
               <CommandK />
+              <ProviderReferenceSidebar />
             </ThemeProvider>
           </AppTextProvider>
         </AppStateProvider>

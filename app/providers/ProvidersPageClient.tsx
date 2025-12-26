@@ -1,12 +1,12 @@
 'use client';
 
 import { Provider } from '@prisma/client';
-import { useState, memo, useCallback } from 'react';
-import { FiUsers, FiX, FiFileText } from 'react-icons/fi';
-import { EditorRenderer } from '@/components/editor/EditorRenderer';
+import { memo, useCallback } from 'react';
+import { FiUsers } from 'react-icons/fi';
+import { useAppState, ReferenceProvider } from '@/state/AppState';
 import { incrementProviderViewCount } from '@/provider/actions';
 
-// Extended provider type with page content for modal display
+// Extended provider type with page content for sidebar display
 type ProviderWithContent = Provider & {
   page: { content: any } | null;
 };
@@ -96,54 +96,15 @@ const ProviderCard = memo(function ProviderCard({
 export default function ProvidersPageClient({
   providers,
 }: ProvidersPageClientProps) {
-  const [selectedProvider, setSelectedProvider] = useState<ProviderWithContent | null>(null);
+  const { setReferenceProvider } = useAppState();
 
-  // Handle provider card click - show modal instead of navigating
+  // Handle provider card click - open reference sidebar
   const handleProviderClick = useCallback(async (provider: ProviderWithContent) => {
-    setSelectedProvider(provider);
+    // Open the reference sidebar with provider data
+    setReferenceProvider?.(provider as ReferenceProvider);
     // Track view when opening
     await incrementProviderViewCount(provider.slug);
-  }, []);
-
-  const handleClose = () => {
-    setSelectedProvider(null);
-  };
-
-  // Get display content for the modal
-  const getDisplayContent = (provider: ProviderWithContent) => {
-    if (provider.page?.content) {
-      return provider.page.content;
-    }
-    // Fallback empty content
-    return {
-      type: 'doc',
-      content: [{ type: 'paragraph', content: [] }],
-    };
-  };
-
-  // Extract text from noteSmartPhrase (handles both plain text and TipTap JSON)
-  const getSmartPhraseText = (noteSmartPhrase: string | null): string | null => {
-    if (!noteSmartPhrase) return null;
-
-    // Try to parse as JSON (TipTap format)
-    try {
-      const parsed = JSON.parse(noteSmartPhrase);
-      if (parsed?.type === 'doc' && parsed?.content) {
-        // Extract text from TipTap JSON
-        const extractText = (nodes: any[]): string => {
-          return nodes.map(node => {
-            if (node.type === 'text') return node.text || '';
-            if (node.content) return extractText(node.content);
-            return '';
-          }).join('');
-        };
-        return extractText(parsed.content);
-      }
-    } catch {
-      // Not JSON, return as plain text
-    }
-    return noteSmartPhrase;
-  };
+  }, [setReferenceProvider]);
 
   return (
     <div className="min-h-screen">
@@ -182,64 +143,6 @@ export default function ProvidersPageClient({
           </div>
         )}
       </div>
-
-      {/* Detail Modal */}
-      {selectedProvider && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-          <div className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-white dark:bg-gray-900 rounded-3xl shadow-2xl animate-in zoom-in-95 duration-200">
-            {/* Close Button */}
-            <button
-              onClick={handleClose}
-              className="sticky top-4 float-right mr-4 mt-4 p-2 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors z-10"
-              aria-label="Close"
-            >
-              <FiX className="text-xl text-gray-700 dark:text-gray-300" />
-            </button>
-
-            <div className="p-8 pt-6">
-              {/* Header */}
-              <div className="mb-6">
-                {selectedProvider.icon && (
-                  <div className="text-6xl mb-4">{selectedProvider.icon}</div>
-                )}
-                <h2 className="text-4xl font-semibold text-gray-900 dark:text-white tracking-tight">
-                  {selectedProvider.name}
-                  {selectedProvider.credentials && (
-                    <span className="text-gray-500 dark:text-gray-400">, {selectedProvider.credentials}</span>
-                  )}
-                </h2>
-              </div>
-
-              <div className="space-y-4">
-                {/* Note Smart Phrase - at top, compact */}
-                {getSmartPhraseText(selectedProvider.noteSmartPhrase) && (
-                  <div className="bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
-                        Smart Phrase
-                      </span>
-                    </div>
-                    <code className="text-sm text-gray-800 dark:text-gray-200 font-mono">
-                      {getSmartPhraseText(selectedProvider.noteSmartPhrase)}
-                    </code>
-                  </div>
-                )}
-
-                {/* Content */}
-                <div className="bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-2xl p-6">
-                  <h4 className="text-gray-900 dark:text-white font-semibold text-base mb-3 flex items-center gap-2">
-                    <FiFileText className="text-gray-600 dark:text-gray-400" />
-                    Provider Preferences
-                  </h4>
-                  <div className="prose dark:prose-invert max-w-none">
-                    <EditorRenderer content={getDisplayContent(selectedProvider)} />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
