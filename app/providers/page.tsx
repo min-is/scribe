@@ -12,6 +12,7 @@ export default async function ProvidersPage() {
   // Fetch providers with only the fields needed for the list view
   // Exclude large JSON fields (wikiContent, preferences, noteTemplate, noteSmartPhrase)
   // to reduce database load and improve performance
+  // Note: We don't need to join Page table since provider.slug === page.slug
   const providersRaw = await prisma.provider.findMany({
     select: {
       id: true,
@@ -23,11 +24,6 @@ export default async function ProvidersPage() {
       viewCount: true,
       createdAt: true,
       updatedAt: true,
-      page: {
-        select: {
-          slug: true,
-        },
-      },
     },
     orderBy: { name: 'asc' },
     take: 200, // Limit to 200 providers for now (can add pagination later)

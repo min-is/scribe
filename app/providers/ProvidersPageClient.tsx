@@ -6,7 +6,7 @@ import { memo, useCallback } from 'react';
 import { FiUsers } from 'react-icons/fi';
 
 interface ProvidersPageClientProps {
-  providers: (Provider & { page: { slug: string } | null })[];
+  providers: Provider[];
 }
 
 // Helper functions for difficulty labels (pure functions, don't need memoization)
@@ -31,12 +31,12 @@ const ProviderCard = memo(function ProviderCard({
   provider,
   onClick,
 }: {
-  provider: Provider & { page: { slug: string } | null };
-  onClick: (slug: string | null) => void;
+  provider: Provider;
+  onClick: (slug: string) => void;
 }) {
   return (
     <div
-      onClick={() => onClick(provider.page?.slug || null)}
+      onClick={() => onClick(provider.slug)}
       className="group relative cursor-pointer"
     >
       {/* Frosted Glass Card */}
@@ -93,10 +93,8 @@ export default function ProvidersPageClient({
   const router = useRouter();
 
   // Memoize the click handler to prevent function recreation on every render
-  const handleProviderClick = useCallback((pageSlug: string | null) => {
-    if (pageSlug) {
-      router.push(`/home/pages/${pageSlug}`);
-    }
+  const handleProviderClick = useCallback((slug: string) => {
+    router.push(`/home/pages/${slug}`);
   }, [router]);
 
   return (
