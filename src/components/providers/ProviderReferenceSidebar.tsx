@@ -1,7 +1,8 @@
 'use client';
 
+import { useState } from 'react';
 import { useAppState, ReferenceProvider } from '@/state/AppState';
-import { FiX } from 'react-icons/fi';
+import { FiX, FiChevronRight, FiChevronLeft } from 'react-icons/fi';
 import { EditorRenderer } from '@/components/editor/EditorRenderer';
 
 // Extract text from noteSmartPhrase (handles both plain text and TipTap JSON)
@@ -42,9 +43,19 @@ const getDisplayContent = (provider: ReferenceProvider) => {
 
 export default function ProviderReferenceSidebar() {
   const { referenceProvider, setReferenceProvider } = useAppState();
+  const [isMinimized, setIsMinimized] = useState(false);
 
   const handleClose = () => {
     setReferenceProvider?.(null);
+    setIsMinimized(false);
+  };
+
+  const handleMinimize = () => {
+    setIsMinimized(true);
+  };
+
+  const handleExpand = () => {
+    setIsMinimized(false);
   };
 
   if (!referenceProvider) {
@@ -52,6 +63,19 @@ export default function ProviderReferenceSidebar() {
   }
 
   const smartPhraseText = getSmartPhraseText(referenceProvider.noteSmartPhrase);
+
+  // Minimized state - show subtle expand tab
+  if (isMinimized) {
+    return (
+      <button
+        onClick={handleExpand}
+        className="fixed right-0 top-1/2 -translate-y-1/2 z-40 p-2 pr-1 rounded-l-lg bg-white/60 dark:bg-gray-800/40 backdrop-blur-xl border border-r-0 border-white/30 dark:border-white/10 shadow-lg hover:bg-white/80 dark:hover:bg-gray-800/60 transition-all group"
+        aria-label="Expand provider sidebar"
+      >
+        <FiChevronLeft className="text-gray-400 dark:text-gray-500 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors" />
+      </button>
+    );
+  }
 
   return (
     <>
@@ -66,7 +90,7 @@ export default function ProviderReferenceSidebar() {
         {/* Glass container */}
         <div className="flex-1 flex flex-col overflow-hidden rounded-2xl bg-white/60 dark:bg-gray-800/40 backdrop-blur-2xl border border-white/30 dark:border-white/10 shadow-2xl shadow-black/10 dark:shadow-black/40">
           {/* Header */}
-          <div className="flex items-start justify-between p-4 border-b border-gray-200/50 dark:border-gray-700/50">
+          <div className="flex items-start justify-between p-4 border-b border-gray-200/30 dark:border-gray-700/30">
             <div className="flex-1 min-w-0 pr-2">
               <div className="flex items-center gap-2">
                 {referenceProvider.icon && (
@@ -84,13 +108,27 @@ export default function ProviderReferenceSidebar() {
                 </div>
               </div>
             </div>
-            <button
-              onClick={handleClose}
-              className="p-1.5 rounded-lg hover:bg-gray-200/50 dark:hover:bg-gray-700/50 transition-colors flex-shrink-0"
-              aria-label="Close"
-            >
-              <FiX className="text-lg text-gray-500 dark:text-gray-400" />
-            </button>
+
+            {/* Action buttons */}
+            <div className="flex items-center gap-1 flex-shrink-0">
+              {/* Minimize button */}
+              <button
+                onClick={handleMinimize}
+                className="p-1 opacity-40 hover:opacity-100 transition-opacity"
+                aria-label="Minimize sidebar"
+              >
+                <FiChevronRight className="text-base text-gray-600 dark:text-gray-300" />
+              </button>
+
+              {/* Close button */}
+              <button
+                onClick={handleClose}
+                className="p-1 opacity-40 hover:opacity-100 transition-opacity"
+                aria-label="Close sidebar"
+              >
+                <FiX className="text-base text-gray-600 dark:text-gray-300" />
+              </button>
+            </div>
           </div>
 
           {/* Content - scrollable */}
