@@ -9,10 +9,8 @@ export const metadata: Metadata = {
 };
 
 export default async function ProvidersPage() {
-  // Fetch providers with only the fields needed for the list view
-  // Exclude large JSON fields (wikiContent, preferences, noteTemplate, noteSmartPhrase)
-  // to reduce database load and improve performance
-  // Note: We don't need to join Page table since provider.slug === page.slug
+  // Fetch providers with fields needed for both list view and modal
+  // Include page.content for instant modal display (like procedures pattern)
   const providersRaw = await prisma.provider.findMany({
     select: {
       id: true,
@@ -24,16 +22,26 @@ export default async function ProvidersPage() {
       viewCount: true,
       createdAt: true,
       updatedAt: true,
+      noteSmartPhrase: true,
+      page: {
+        select: {
+          content: true,
+        },
+      },
     },
     orderBy: { name: 'asc' },
     take: 200, // Limit to 200 providers for now (can add pagination later)
   });
 
-  // Serialize data for client component (convert Dates to strings)
+  // Serialize data for client component (convert Dates to strings and Json to plain objects)
   const providers = providersRaw.map(provider => ({
     ...provider,
     createdAt: provider.createdAt.toISOString(),
     updatedAt: provider.updatedAt.toISOString(),
+    // Serialize Json content to plain object to avoid React error #310
+    page: provider.page ? {
+      content: provider.page.content ? JSON.parse(JSON.stringify(provider.page.content)) : null,
+    } : null,
   }));
 
   return <ProvidersPageClient providers={providers as any} />;
