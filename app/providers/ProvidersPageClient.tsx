@@ -121,6 +121,30 @@ export default function ProvidersPageClient({
     };
   };
 
+  // Extract text from noteSmartPhrase (handles both plain text and TipTap JSON)
+  const getSmartPhraseText = (noteSmartPhrase: string | null): string | null => {
+    if (!noteSmartPhrase) return null;
+
+    // Try to parse as JSON (TipTap format)
+    try {
+      const parsed = JSON.parse(noteSmartPhrase);
+      if (parsed?.type === 'doc' && parsed?.content) {
+        // Extract text from TipTap JSON
+        const extractText = (nodes: any[]): string => {
+          return nodes.map(node => {
+            if (node.type === 'text') return node.text || '';
+            if (node.content) return extractText(node.content);
+            return '';
+          }).join('');
+        };
+        return extractText(parsed.content);
+      }
+    } catch {
+      // Not JSON, return as plain text
+    }
+    return noteSmartPhrase;
+  };
+
   return (
     <div className="min-h-screen">
       <div className="max-w-7xl mx-auto px-6 py-12">
@@ -174,61 +198,43 @@ export default function ProvidersPageClient({
 
             <div className="p-8 pt-6">
               {/* Header */}
-              <div className="mb-8">
+              <div className="mb-6">
                 {selectedProvider.icon && (
                   <div className="text-6xl mb-4">{selectedProvider.icon}</div>
                 )}
-                <h2 className="text-4xl font-semibold text-gray-900 dark:text-white mb-2 tracking-tight">
+                <h2 className="text-4xl font-semibold text-gray-900 dark:text-white tracking-tight">
                   {selectedProvider.name}
                   {selectedProvider.credentials && (
                     <span className="text-gray-500 dark:text-gray-400">, {selectedProvider.credentials}</span>
                   )}
                 </h2>
-                {selectedProvider.generalDifficulty && (
-                  <div className="flex items-center gap-3 mt-3">
-                    <div className="flex items-center gap-1">
-                      {Array.from({ length: 10 }).map((_, index) => (
-                        <div
-                          key={index}
-                          className={`w-2 h-2 rounded-full ${
-                            index < selectedProvider.generalDifficulty!
-                              ? 'bg-gray-700 dark:bg-gray-300'
-                              : 'bg-gray-300 dark:bg-gray-600'
-                          }`}
-                        />
-                      ))}
-                    </div>
-                    <span className="text-sm text-gray-500 dark:text-gray-400">
-                      {getDifficultyLabel(selectedProvider.generalDifficulty)}
-                    </span>
-                  </div>
-                )}
               </div>
 
-              <div className="space-y-6">
+              <div className="space-y-4">
+                {/* Note Smart Phrase - at top, compact */}
+                {getSmartPhraseText(selectedProvider.noteSmartPhrase) && (
+                  <div className="bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-3">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+                        Smart Phrase
+                      </span>
+                    </div>
+                    <code className="text-sm text-gray-800 dark:text-gray-200 font-mono">
+                      {getSmartPhraseText(selectedProvider.noteSmartPhrase)}
+                    </code>
+                  </div>
+                )}
+
                 {/* Content */}
-                <div className="bg-purple-50 dark:bg-purple-900/10 border border-purple-200 dark:border-purple-800 rounded-2xl p-6">
+                <div className="bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-2xl p-6">
                   <h4 className="text-gray-900 dark:text-white font-semibold text-base mb-3 flex items-center gap-2">
-                    <FiFileText className="text-purple-600 dark:text-purple-400" />
+                    <FiFileText className="text-gray-600 dark:text-gray-400" />
                     Provider Preferences
                   </h4>
                   <div className="prose dark:prose-invert max-w-none">
                     <EditorRenderer content={getDisplayContent(selectedProvider)} />
                   </div>
                 </div>
-
-                {/* Note Smart Phrase */}
-                {selectedProvider.noteSmartPhrase && (
-                  <div className="bg-blue-50 dark:bg-blue-900/10 border border-blue-200 dark:border-blue-800 rounded-2xl p-6">
-                    <h4 className="text-gray-900 dark:text-white font-semibold text-base mb-3 flex items-center gap-2">
-                      <FiFileText className="text-blue-600 dark:text-blue-400" />
-                      Note Smart Phrase
-                    </h4>
-                    <pre className="text-gray-700 dark:text-gray-300 text-sm whitespace-pre-wrap font-mono leading-relaxed bg-white/50 dark:bg-gray-800/50 p-4 rounded-lg">
-                      {selectedProvider.noteSmartPhrase}
-                    </pre>
-                  </div>
-                )}
               </div>
             </div>
           </div>
