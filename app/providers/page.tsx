@@ -8,9 +8,6 @@ export const metadata: Metadata = {
     'Browse provider documentation preferences and expectations',
 };
 
-// Enable Incremental Static Regeneration - revalidate every 1 hour
-export const revalidate = 3600;
-
 export default async function ProvidersPage() {
   // Fetch providers with only the fields needed for the list view
   // Exclude large JSON fields (wikiContent, preferences, noteTemplate, noteSmartPhrase)
