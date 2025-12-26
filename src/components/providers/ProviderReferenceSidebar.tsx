@@ -64,7 +64,7 @@ export default function ProviderReferenceSidebar() {
       {/* Floating Glass Panel */}
       <div className="fixed right-4 top-4 bottom-4 z-40 w-80 flex flex-col">
         {/* Glass container */}
-        <div className="flex-1 flex flex-col overflow-hidden rounded-2xl bg-white/70 dark:bg-gray-900/70 backdrop-blur-xl border border-white/20 dark:border-gray-700/50 shadow-2xl shadow-black/10 dark:shadow-black/30">
+        <div className="flex-1 flex flex-col overflow-hidden rounded-2xl bg-white/60 dark:bg-gray-800/40 backdrop-blur-2xl border border-white/30 dark:border-white/10 shadow-2xl shadow-black/10 dark:shadow-black/40">
           {/* Header */}
           <div className="flex items-start justify-between p-4 border-b border-gray-200/50 dark:border-gray-700/50">
             <div className="flex-1 min-w-0 pr-2">
