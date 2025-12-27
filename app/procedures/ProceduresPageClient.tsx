@@ -166,15 +166,15 @@ export default function ProceduresPageClient({
               <div
                 key={procedure.id}
                 onClick={() => handleProcedureClick(procedure)}
-                className="group relative cursor-pointer"
+                className="group relative cursor-pointer h-full"
               >
                 {/* Frosted Glass Card */}
-                <div className="relative overflow-hidden rounded-2xl bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 shadow-sm hover:shadow-lg transition-all duration-300 ease-out hover:border-gray-300/80 dark:hover:border-gray-600/80">
+                <div className="relative overflow-hidden rounded-2xl bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 shadow-sm hover:shadow-lg transition-all duration-300 ease-out hover:border-gray-300/80 dark:hover:border-gray-600/80 h-full flex flex-col">
                   {/* Gradient Background Overlay */}
                   <div className={`absolute inset-0 bg-gradient-to-br ${getCategoryColor(procedure.category)} opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
 
                   {/* Content */}
-                  <div className="relative p-5">
+                  <div className="relative p-5 flex flex-col flex-1">
                     {/* Category Badge */}
                     <div className="mb-3">
                       <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20">
@@ -183,35 +183,14 @@ export default function ProceduresPageClient({
                     </div>
 
                     {/* Procedure Title */}
-                    <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2 tracking-tight">
+                    <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2 tracking-tight line-clamp-2">
                       {procedure.title}
                     </h3>
 
                     {/* Description */}
-                    {procedure.description && (
-                      <p className="text-sm text-gray-600 dark:text-gray-400 font-normal mb-4 line-clamp-2">
-                        {procedure.description}
-                      </p>
-                    )}
-
-                    {/* Tags Preview */}
-                    {procedure.tags.length > 0 && (
-                      <div className="mt-3 flex flex-wrap gap-1.5">
-                        {procedure.tags.slice(0, 3).map((tag: string) => (
-                          <span
-                            key={tag}
-                            className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-gray-500/10 text-gray-600 dark:text-gray-400 border border-gray-500/20"
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                        {procedure.tags.length > 3 && (
-                          <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium text-gray-500 dark:text-gray-400">
-                            +{procedure.tags.length - 3}
-                          </span>
-                        )}
-                      </div>
-                    )}
+                    <p className="text-sm text-gray-600 dark:text-gray-400 font-normal line-clamp-2 flex-1">
+                      {procedure.description || 'No description available'}
+                    </p>
                   </div>
 
                   {/* Hover Shine Effect */}
