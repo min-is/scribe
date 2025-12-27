@@ -451,6 +451,34 @@
     @apply
       text-black bg-neutral-200/95 rounded-lg
   }
+
+  /* TipTap Callout Styles */
+  .callout {
+    @apply border-l-4 p-4 my-4 rounded-r-lg;
+  }
+  .callout-info {
+    @apply bg-blue-50 dark:bg-blue-900/20 border-blue-500;
+  }
+  .callout-warning {
+    @apply bg-yellow-50 dark:bg-yellow-900/20 border-yellow-500;
+  }
+  .callout-success {
+    @apply bg-green-50 dark:bg-green-900/20 border-green-500;
+  }
+  .callout-error {
+    @apply bg-red-50 dark:bg-red-900/20 border-red-500;
+  }
+
+  /* TipTap Highlight Colors */
+  mark[data-color="#fef08a"] { background-color: #fef08a; }
+  mark[data-color="#fde047"] { background-color: #fde047; }
+  mark[data-color="#bef264"] { background-color: #bef264; }
+  mark[data-color="#86efac"] { background-color: #86efac; }
+  mark[data-color="#67e8f9"] { background-color: #67e8f9; }
+  mark[data-color="#a5b4fc"] { background-color: #a5b4fc; }
+  mark[data-color="#f0abfc"] { background-color: #f0abfc; }
+  mark[data-color="#fda4af"] { background-color: #fda4af; }
+  mark[data-color="#fdba74"] { background-color: #fdba74; }
 }
 
 /* Performance Optimizations for Scrolling */

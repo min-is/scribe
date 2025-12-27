@@ -59,13 +59,6 @@ export const Callout = Node.create<CalloutOptions>({
   renderHTML({ HTMLAttributes }) {
     const type = HTMLAttributes['data-type'] || 'info';
 
-    const typeStyles = {
-      info: 'bg-blue-50 dark:bg-blue-900/20 border-blue-500',
-      warning: 'bg-yellow-50 dark:bg-yellow-900/20 border-yellow-500',
-      success: 'bg-green-50 dark:bg-green-900/20 border-green-500',
-      error: 'bg-red-50 dark:bg-red-900/20 border-red-500',
-    };
-
     const typeIcons = {
       info: 'ℹ️',
       warning: '⚠️',
@@ -77,7 +70,7 @@ export const Callout = Node.create<CalloutOptions>({
       'div',
       mergeAttributes(this.options.HTMLAttributes, HTMLAttributes, {
         'data-callout': '',
-        class: `callout callout-${type} ${typeStyles[type as keyof typeof typeStyles]} border-l-4 p-4 my-4 rounded-r-lg`,
+        class: `callout callout-${type}`,
       }),
       [
         'div',

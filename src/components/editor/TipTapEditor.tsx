@@ -62,6 +62,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
   const [youtubeUrl, setYoutubeUrl] = useState('');
   const [isYoutubeDialogOpen, setIsYoutubeDialogOpen] = useState(false);
   const [isColorPickerOpen, setIsColorPickerOpen] = useState(false);
+  const [isHighlightPickerOpen, setIsHighlightPickerOpen] = useState(false);
 
   const addLink = useCallback(() => {
     if (linkUrl && editor) {
@@ -121,6 +122,18 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
     { name: 'Gray', value: '#6b7280' },
     { name: 'Black', value: '#000000' },
     { name: 'White', value: '#ffffff' },
+  ];
+
+  const highlightColors = [
+    { name: 'Yellow', value: '#fef08a' },
+    { name: 'Yellow Dark', value: '#fde047' },
+    { name: 'Lime', value: '#bef264' },
+    { name: 'Green', value: '#86efac' },
+    { name: 'Cyan', value: '#67e8f9' },
+    { name: 'Blue', value: '#a5b4fc' },
+    { name: 'Purple', value: '#f0abfc' },
+    { name: 'Pink', value: '#fda4af' },
+    { name: 'Orange', value: '#fdba74' },
   ];
 
   const ToolbarButton = ({
@@ -219,6 +232,13 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
             title="Text Color"
           >
             <Palette size={18} />
+          </ToolbarButton>
+          <ToolbarButton
+            onClick={() => setIsHighlightPickerOpen(!isHighlightPickerOpen)}
+            active={isHighlightPickerOpen || editor.isActive('highlight')}
+            title="Highlight"
+          >
+            <Highlighter size={18} />
           </ToolbarButton>
         </ToolbarGroup>
 
@@ -502,6 +522,44 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
             </button>
             <button
               onClick={() => setIsColorPickerOpen(false)}
+              className="px-4 py-2 border border-zinc-300 dark:border-zinc-700 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors text-sm text-zinc-700 dark:text-zinc-300"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Highlight Color Picker */}
+      {isHighlightPickerOpen && (
+        <div className="p-4 border-t border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/30">
+          <div className="mb-3 text-sm font-medium text-zinc-900 dark:text-zinc-100">Highlight Color</div>
+          <div className="flex flex-wrap gap-2">
+            {highlightColors.map((color) => (
+              <button
+                key={color.value}
+                onClick={() => {
+                  editor.chain().focus().setHighlight({ color: color.value }).run();
+                  setIsHighlightPickerOpen(false);
+                }}
+                className="w-10 h-10 rounded-lg border-2 border-zinc-300 dark:border-zinc-600 hover:border-zinc-400 dark:hover:border-zinc-500 transition-all hover:scale-110 shadow-sm"
+                style={{ backgroundColor: color.value }}
+                title={color.name}
+              />
+            ))}
+          </div>
+          <div className="mt-3 flex gap-2">
+            <button
+              onClick={() => {
+                editor.chain().focus().unsetHighlight().run();
+                setIsHighlightPickerOpen(false);
+              }}
+              className="px-4 py-2 border border-zinc-300 dark:border-zinc-700 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors text-sm text-zinc-700 dark:text-zinc-300"
+            >
+              Remove Highlight
+            </button>
+            <button
+              onClick={() => setIsHighlightPickerOpen(false)}
               className="px-4 py-2 border border-zinc-300 dark:border-zinc-700 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors text-sm text-zinc-700 dark:text-zinc-300"
             >
               Close
