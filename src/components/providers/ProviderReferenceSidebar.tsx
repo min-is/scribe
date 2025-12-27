@@ -86,17 +86,17 @@ export default function ProviderReferenceSidebar() {
       />
 
       {/* Floating Glass Panel */}
-      <div className="fixed right-4 top-16 z-40 w-96 max-h-[70vh] flex flex-col">
+      <div className="fixed right-4 top-16 z-40 w-96 max-h-[80vh] flex flex-col">
         {/* Glass container */}
         <div className="flex-1 flex flex-col overflow-hidden rounded-2xl bg-white/60 dark:bg-gray-800/40 backdrop-blur-2xl border border-white/30 dark:border-white/10 shadow-2xl shadow-black/10 dark:shadow-black/40">
           {/* Header */}
           <div className="flex items-center justify-between p-4">
             <div className="flex-1 min-w-0 pr-2">
-              <h2 className="text-base font-semibold text-gray-900 dark:text-white truncate">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white truncate">
                 {referenceProvider.name}
               </h2>
               {referenceProvider.credentials && (
-                <p className="text-xs text-gray-500 dark:text-gray-400">
+                <p className="text-sm text-gray-500 dark:text-gray-400">
                   {referenceProvider.credentials}
                 </p>
               )}

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { SerializedScenarioListItem, incrementScenarioViewCount, getScenarioContent } from '@/scenario/actions';
+import { Scenario, incrementScenarioViewCount } from '@/scenario/actions';
 import {
   FiSearch,
   FiFileText,
@@ -10,13 +10,15 @@ import { useDebounce } from 'use-debounce';
 import { EditorRenderer } from '@/components/editor/EditorRenderer';
 import CloseButton from '@/components/primitives/CloseButton';
 
-interface ScenariosPageClientProps {
-  scenarios: SerializedScenarioListItem[];
-  categories: string[];
-}
+// Serialized scenario type (dates as strings)
+type SerializedScenario = Omit<Scenario, 'createdAt' | 'updatedAt'> & {
+  createdAt: string;
+  updatedAt: string;
+};
 
-interface SelectedScenario extends SerializedScenarioListItem {
-  content?: any;
+interface ScenariosPageClientProps {
+  scenarios: SerializedScenario[];
+  categories: string[];
 }
 
 export default function ScenariosPageClient({
@@ -26,8 +28,7 @@ export default function ScenariosPageClient({
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedQuery] = useDebounce(searchQuery, 300);
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
-  const [selectedScenario, setSelectedScenario] = useState<SelectedScenario | null>(null);
-  const [isLoadingContent, setIsLoadingContent] = useState(false);
+  const [selectedScenario, setSelectedScenario] = useState<SerializedScenario | null>(null);
 
   // Filter scenarios based on search and category
   const filteredScenarios = useMemo(() => {
@@ -54,21 +55,11 @@ export default function ScenariosPageClient({
     return filtered;
   }, [scenarios, selectedCategory, debouncedQuery]);
 
-  const handleScenarioClick = async (scenario: SerializedScenarioListItem) => {
-    // Set scenario immediately for responsive UI
-    setSelectedScenario({ ...scenario, content: null });
-    setIsLoadingContent(true);
-
-    // Fetch content and track view in parallel
-    const [contentResult] = await Promise.all([
-      getScenarioContent(scenario.id),
-      incrementScenarioViewCount(scenario.id),
-    ]);
-
-    if (contentResult) {
-      setSelectedScenario({ ...scenario, content: contentResult.content });
-    }
-    setIsLoadingContent(false);
+  const handleScenarioClick = async (scenario: SerializedScenario) => {
+    // Set scenario immediately - content is already pre-fetched
+    setSelectedScenario(scenario);
+    // Track view in background
+    await incrementScenarioViewCount(scenario.id);
   };
 
   const handleClose = () => {
@@ -198,32 +189,9 @@ export default function ScenariosPageClient({
                     </h3>
 
                     {/* Description */}
-                    <p className="text-sm text-gray-600 dark:text-gray-400 font-normal mb-4 line-clamp-2 flex-1">
+                    <p className="text-sm text-gray-600 dark:text-gray-400 font-normal line-clamp-2 flex-1">
                       {scenario.description || 'No description available'}
                     </p>
-
-                    {/* Tags Preview */}
-                    <div className="flex flex-wrap gap-1.5 mt-auto min-h-[28px]">
-                      {scenario.tags.length > 0 ? (
-                        <>
-                          {scenario.tags.slice(0, 3).map((tag: string) => (
-                            <span
-                              key={tag}
-                              className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-gray-500/10 text-gray-600 dark:text-gray-400 border border-gray-500/20"
-                            >
-                              {tag}
-                            </span>
-                          ))}
-                          {scenario.tags.length > 3 && (
-                            <span className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium text-gray-500 dark:text-gray-400">
-                              +{scenario.tags.length - 3}
-                            </span>
-                          )}
-                        </>
-                      ) : (
-                        <span className="text-xs text-gray-400 dark:text-gray-500">No tags</span>
-                      )}
-                    </div>
                   </div>
 
                   {/* Hover Shine Effect */}
@@ -267,11 +235,7 @@ export default function ScenariosPageClient({
                     Scenario Walkthrough
                   </h4>
                   <div className="prose dark:prose-invert max-w-none">
-                    {isLoadingContent ? (
-                      <div className="flex items-center justify-center py-12">
-                        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
-                      </div>
-                    ) : selectedScenario.content ? (
+                    {selectedScenario.content ? (
                       <EditorRenderer content={selectedScenario.content} />
                     ) : (
                       <p className="text-gray-500 dark:text-gray-400 italic">No content available</p>
