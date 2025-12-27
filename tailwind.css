@@ -469,16 +469,44 @@
     @apply bg-red-50 dark:bg-red-900/20 border-red-500;
   }
 
-  /* TipTap Highlight Colors */
-  mark[data-color="#fef08a"] { background-color: #fef08a; }
-  mark[data-color="#fde047"] { background-color: #fde047; }
-  mark[data-color="#bef264"] { background-color: #bef264; }
-  mark[data-color="#86efac"] { background-color: #86efac; }
-  mark[data-color="#67e8f9"] { background-color: #67e8f9; }
-  mark[data-color="#a5b4fc"] { background-color: #a5b4fc; }
-  mark[data-color="#f0abfc"] { background-color: #f0abfc; }
-  mark[data-color="#fda4af"] { background-color: #fda4af; }
-  mark[data-color="#fdba74"] { background-color: #fdba74; }
+  /* TipTap Highlight - apply colors from data-color attribute */
+  .wiki-content mark[data-color],
+  .prose mark[data-color] {
+    background-color: var(--highlight-color) !important;
+  }
+  .wiki-content mark[data-color="#fef08a"] { --highlight-color: #fef08a; }
+  .wiki-content mark[data-color="#fde047"] { --highlight-color: #fde047; }
+  .wiki-content mark[data-color="#bef264"] { --highlight-color: #bef264; }
+  .wiki-content mark[data-color="#86efac"] { --highlight-color: #86efac; }
+  .wiki-content mark[data-color="#67e8f9"] { --highlight-color: #67e8f9; }
+  .wiki-content mark[data-color="#a5b4fc"] { --highlight-color: #a5b4fc; }
+  .wiki-content mark[data-color="#f0abfc"] { --highlight-color: #f0abfc; }
+  .wiki-content mark[data-color="#fda4af"] { --highlight-color: #fda4af; }
+  .wiki-content mark[data-color="#fdba74"] { --highlight-color: #fdba74; }
+
+  /* TipTap Headings - minimalistic styling */
+  .wiki-content h1,
+  .wiki-content h2,
+  .wiki-content h3,
+  .wiki-content h4,
+  .wiki-content h5,
+  .wiki-content h6 {
+    @apply font-medium tracking-tight;
+  }
+  .wiki-content h1 {
+    @apply text-2xl mt-6 mb-3;
+  }
+  .wiki-content h2 {
+    @apply text-xl mt-5 mb-2;
+  }
+  .wiki-content h3 {
+    @apply text-lg mt-4 mb-2;
+  }
+  .wiki-content h4,
+  .wiki-content h5,
+  .wiki-content h6 {
+    @apply text-base mt-3 mb-1;
+  }
 }
 
 /* Performance Optimizations for Scrolling */
