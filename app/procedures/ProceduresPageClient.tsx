@@ -4,9 +4,6 @@ import { useState, useMemo } from 'react';
 import { Procedure, incrementProcedureViewCount } from '@/procedure/actions';
 import {
   FiSearch,
-  FiAlertCircle,
-  FiCheckCircle,
-  FiTool,
   FiList,
   FiAlertTriangle,
   FiX,
@@ -74,18 +71,6 @@ export default function ProceduresPageClient({
     return counts;
   }, [procedures]);
 
-  const getCategoryColor = (category: string) => {
-    const colors: Record<string, string> = {
-      'All': 'from-gray-500/20 to-gray-600/20',
-      'Cardiovascular': 'from-red-500/20 to-rose-600/20',
-      'Respiratory': 'from-blue-500/20 to-cyan-600/20',
-      'Neurological': 'from-purple-500/20 to-violet-600/20',
-      'Musculoskeletal': 'from-orange-500/20 to-amber-600/20',
-      'Gastrointestinal': 'from-green-500/20 to-emerald-600/20',
-    };
-    return colors[category] || 'from-gray-500/20 to-gray-600/20';
-  };
-
   return (
     <div className="min-h-screen">
       <div className="max-w-7xl mx-auto px-6 py-12">
@@ -150,7 +135,7 @@ export default function ProceduresPageClient({
           </p>
         </div>
 
-        {/* Procedure Cards Grid */}
+        {/* Procedure List */}
         {filteredProcedures.length === 0 ? (
           <div className="text-center py-24">
             <p className="text-gray-500 dark:text-gray-400 text-lg font-normal mb-2">
@@ -161,43 +146,39 @@ export default function ProceduresPageClient({
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {filteredProcedures.map((procedure) => (
-              <div
-                key={procedure.id}
-                onClick={() => handleProcedureClick(procedure)}
-                className="group relative cursor-pointer h-full"
-              >
-                {/* Frosted Glass Card */}
-                <div className="relative overflow-hidden rounded-2xl bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 shadow-sm hover:shadow-lg transition-all duration-300 ease-out hover:border-gray-300/80 dark:hover:border-gray-600/80 h-full flex flex-col">
-                  {/* Gradient Background Overlay */}
-                  <div className={`absolute inset-0 bg-gradient-to-br ${getCategoryColor(procedure.category)} opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
-
-                  {/* Content */}
-                  <div className="relative p-5 flex flex-col flex-1">
-                    {/* Category Badge */}
-                    <div className="mb-3">
-                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20">
-                        {procedure.category}
-                      </span>
+          <div className="max-w-4xl mx-auto">
+            <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-xl border border-gray-200/50 dark:border-gray-700/50 rounded-2xl overflow-hidden divide-y divide-gray-200/50 dark:divide-gray-700/50">
+              {filteredProcedures.map((procedure) => (
+                <div
+                  key={procedure.id}
+                  onClick={() => handleProcedureClick(procedure)}
+                  className="group cursor-pointer px-5 py-4 hover:bg-gray-50/80 dark:hover:bg-gray-700/50 transition-colors duration-150"
+                >
+                  <div className="flex items-center justify-between gap-4">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-3 mb-1">
+                        <h3 className="text-base font-medium text-gray-900 dark:text-white truncate">
+                          {procedure.title}
+                        </h3>
+                        <span className="flex-shrink-0 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20">
+                          {procedure.category}
+                        </span>
+                      </div>
+                      {procedure.description && (
+                        <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
+                          {procedure.description}
+                        </p>
+                      )}
                     </div>
-
-                    {/* Procedure Title */}
-                    <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2 tracking-tight line-clamp-2">
-                      {procedure.title}
-                    </h3>
-
-                    {/* Description */}
-                    <p className="text-sm text-gray-600 dark:text-gray-400 font-normal line-clamp-2 flex-1">
-                      {procedure.description || 'No description available'}
-                    </p>
+                    <div className="flex-shrink-0 text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300 transition-colors">
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </div>
                   </div>
-
-                  {/* Hover Shine Effect */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-700" />
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         )}
       </div>
