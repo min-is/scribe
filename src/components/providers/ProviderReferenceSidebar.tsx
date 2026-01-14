@@ -109,7 +109,7 @@ export default function ProviderReferenceSidebar() {
                   role="button"
                   tabIndex={0}
                   onKeyDown={(e) => e.key === 'Enter' && handleClose()}
-                  className="block w-[9px] h-[9px] rounded-full bg-[#FF5F57] hover:brightness-90 transition-all cursor-pointer"
+                  className="block w-[11px] h-[11px] rounded-full bg-[#FF5F57] hover:brightness-90 transition-all cursor-pointer"
                   aria-label="Close sidebar"
                 />
                 <span
@@ -117,7 +117,7 @@ export default function ProviderReferenceSidebar() {
                   role="button"
                   tabIndex={0}
                   onKeyDown={(e) => e.key === 'Enter' && handleMinimize()}
-                  className="block w-[9px] h-[9px] rounded-full bg-[#FEBC2E] hover:brightness-90 transition-all cursor-pointer"
+                  className="block w-[11px] h-[11px] rounded-full bg-[#FEBC2E] hover:brightness-90 transition-all cursor-pointer"
                   aria-label="Minimize sidebar"
                 />
               </div>
