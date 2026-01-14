@@ -2,6 +2,8 @@ import { Metadata } from 'next/types';
 import { prisma } from '@/lib/prisma';
 import ProvidersPageClient from './ProvidersPageClient';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'Provider Preferences',
   description:

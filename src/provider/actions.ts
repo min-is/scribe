@@ -283,8 +283,9 @@ export async function updateProvider(
         };
 
         // Check for v2 structure first (direct content field)
+        // Deep clone to avoid reference sharing between providers
         if (wikiContentObj?.content && wikiContentObj.content.type === 'doc') {
-          combinedContent = wikiContentObj.content;
+          combinedContent = JSON.parse(JSON.stringify(wikiContentObj.content));
         }
         // Fall back to v1 structure (sections-based)
         else if (wikiContentObj?.sections && Array.isArray(wikiContentObj.sections)) {

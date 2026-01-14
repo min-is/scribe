@@ -137,10 +137,13 @@ export async function PATCH(
 
     // If this is a PROVIDER page and content was updated, sync back to Provider.wikiContent
     if (page.type === 'PROVIDER' && page.provider && content !== undefined) {
+      // Deep clone content to avoid reference sharing between providers
+      const clonedContent = JSON.parse(JSON.stringify(content));
+
       // Update the provider's wikiContent with the new content
       const updatedWikiContent = {
         version: 2,
-        content: content,
+        content: clonedContent,
         sections: [], // Keep empty sections for backward compatibility
         media: [],
         metadata: {
@@ -153,7 +156,8 @@ export async function PATCH(
       if (page.provider.wikiContent && typeof page.provider.wikiContent === 'object') {
         const existingWiki = page.provider.wikiContent as any;
         if (existingWiki.media) {
-          updatedWikiContent.media = existingWiki.media;
+          // Deep clone media array to avoid reference sharing
+          updatedWikiContent.media = JSON.parse(JSON.stringify(existingWiki.media));
         }
         if (existingWiki.metadata) {
           updatedWikiContent.metadata = {
