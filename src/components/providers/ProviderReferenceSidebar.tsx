@@ -104,24 +104,22 @@ export default function ProviderReferenceSidebar() {
             <div className="drag-handle flex items-center justify-between p-4 cursor-grab active:cursor-grabbing">
               {/* Apple-style window controls */}
               <div className="flex items-center gap-1.5 flex-shrink-0">
-                <button
+                <span
                   onClick={handleClose}
-                  className="group size-[7px] aspect-square rounded-full bg-[#FF5F57] hover:brightness-90 transition-all flex items-center justify-center"
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => e.key === 'Enter' && handleClose()}
+                  className="block w-[7px] h-[7px] rounded-full bg-[#FF5F57] hover:brightness-90 transition-all cursor-pointer"
                   aria-label="Close sidebar"
-                >
-                  <svg className="size-[5px] opacity-0 group-hover:opacity-100 transition-opacity" viewBox="0 0 6 6" fill="none">
-                    <path d="M1 1L5 5M5 1L1 5" stroke="#4D0000" strokeWidth="1.5" strokeLinecap="round"/>
-                  </svg>
-                </button>
-                <button
+                />
+                <span
                   onClick={handleMinimize}
-                  className="group size-[7px] aspect-square rounded-full bg-[#FEBC2E] hover:brightness-90 transition-all flex items-center justify-center"
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => e.key === 'Enter' && handleMinimize()}
+                  className="block w-[7px] h-[7px] rounded-full bg-[#FEBC2E] hover:brightness-90 transition-all cursor-pointer"
                   aria-label="Minimize sidebar"
-                >
-                  <svg className="size-[5px] opacity-0 group-hover:opacity-100 transition-opacity" viewBox="0 0 6 6" fill="none">
-                    <path d="M1 3H5" stroke="#995700" strokeWidth="1.5" strokeLinecap="round"/>
-                  </svg>
-                </button>
+                />
               </div>
 
               {/* Provider name */}
