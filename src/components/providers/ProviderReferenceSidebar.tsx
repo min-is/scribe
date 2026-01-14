@@ -99,17 +99,17 @@ export default function ProviderReferenceSidebar() {
           className="fixed right-4 top-16 z-40 w-96 max-h-[80vh] flex flex-col"
         >
           {/* Glass container */}
-          <div className="flex-1 flex flex-col overflow-hidden rounded-2xl bg-white/60 dark:bg-gray-800/40 backdrop-blur-2xl border border-white/30 dark:border-white/10 shadow-2xl shadow-black/10 dark:shadow-black/40">
+          <div className="flex-1 min-h-0 flex flex-col overflow-hidden rounded-2xl bg-white/60 dark:bg-gray-800/40 backdrop-blur-2xl border border-white/30 dark:border-white/10 shadow-2xl shadow-black/10 dark:shadow-black/40">
             {/* Header - Drag Handle */}
             <div className="drag-handle flex items-center justify-between p-4 cursor-grab active:cursor-grabbing">
               {/* Apple-style window controls */}
-              <div className="flex items-center gap-1.5 flex-shrink-0">
+              <div className="flex items-center gap-2 flex-shrink-0">
                 <span
                   onClick={handleClose}
                   role="button"
                   tabIndex={0}
                   onKeyDown={(e) => e.key === 'Enter' && handleClose()}
-                  className="block w-[7px] h-[7px] rounded-full bg-[#FF5F57] hover:brightness-90 transition-all cursor-pointer"
+                  className="block w-[9px] h-[9px] rounded-full bg-[#FF5F57] hover:brightness-90 transition-all cursor-pointer"
                   aria-label="Close sidebar"
                 />
                 <span
@@ -117,7 +117,7 @@ export default function ProviderReferenceSidebar() {
                   role="button"
                   tabIndex={0}
                   onKeyDown={(e) => e.key === 'Enter' && handleMinimize()}
-                  className="block w-[7px] h-[7px] rounded-full bg-[#FEBC2E] hover:brightness-90 transition-all cursor-pointer"
+                  className="block w-[9px] h-[9px] rounded-full bg-[#FEBC2E] hover:brightness-90 transition-all cursor-pointer"
                   aria-label="Minimize sidebar"
                 />
               </div>
@@ -139,7 +139,7 @@ export default function ProviderReferenceSidebar() {
             </div>
 
             {/* Content - scrollable */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-3">
+            <div className="flex-1 min-h-0 overflow-y-auto p-4 space-y-3">
               {/* Smart Phrase - compact inline */}
               {smartPhraseText && (
                 <div className="px-3 py-2 rounded-lg bg-gray-100/50 dark:bg-gray-800/50">
