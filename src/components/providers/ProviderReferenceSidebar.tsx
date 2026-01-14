@@ -103,23 +103,23 @@ export default function ProviderReferenceSidebar() {
             {/* Header - Drag Handle */}
             <div className="drag-handle flex items-center justify-between p-4 cursor-grab active:cursor-grabbing">
               {/* Apple-style window controls */}
-              <div className="flex items-center gap-2 flex-shrink-0">
+              <div className="flex items-center gap-1.5 flex-shrink-0">
                 <button
                   onClick={handleClose}
-                  className="group w-3 h-3 rounded-full bg-[#FF5F57] border border-[#E0443E] hover:brightness-90 transition-all flex items-center justify-center"
+                  className="group size-[7px] aspect-square rounded-full bg-[#FF5F57] hover:brightness-90 transition-all flex items-center justify-center"
                   aria-label="Close sidebar"
                 >
-                  <svg className="w-1.5 h-1.5 opacity-0 group-hover:opacity-100 transition-opacity" viewBox="0 0 6 6" fill="none">
-                    <path d="M1 1L5 5M5 1L1 5" stroke="#4D0000" strokeWidth="1.2" strokeLinecap="round"/>
+                  <svg className="size-[5px] opacity-0 group-hover:opacity-100 transition-opacity" viewBox="0 0 6 6" fill="none">
+                    <path d="M1 1L5 5M5 1L1 5" stroke="#4D0000" strokeWidth="1.5" strokeLinecap="round"/>
                   </svg>
                 </button>
                 <button
                   onClick={handleMinimize}
-                  className="group w-3 h-3 rounded-full bg-[#FEBC2E] border border-[#DEA123] hover:brightness-90 transition-all flex items-center justify-center"
+                  className="group size-[7px] aspect-square rounded-full bg-[#FEBC2E] hover:brightness-90 transition-all flex items-center justify-center"
                   aria-label="Minimize sidebar"
                 >
-                  <svg className="w-1.5 h-1.5 opacity-0 group-hover:opacity-100 transition-opacity" viewBox="0 0 6 6" fill="none">
-                    <path d="M1 3H5" stroke="#995700" strokeWidth="1.2" strokeLinecap="round"/>
+                  <svg className="size-[5px] opacity-0 group-hover:opacity-100 transition-opacity" viewBox="0 0 6 6" fill="none">
+                    <path d="M1 3H5" stroke="#995700" strokeWidth="1.5" strokeLinecap="round"/>
                   </svg>
                 </button>
               </div>
@@ -137,7 +137,7 @@ export default function ProviderReferenceSidebar() {
               </div>
 
               {/* Spacer for symmetry */}
-              <div className="w-[52px] flex-shrink-0" />
+              <div className="w-[20px] flex-shrink-0" />
             </div>
 
             {/* Content - scrollable */}
