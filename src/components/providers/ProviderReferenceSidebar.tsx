@@ -88,7 +88,9 @@ export default function ProviderReferenceSidebar() {
       />
 
       {/* Draggable Floating Glass Panel */}
+      {/* Key forces remount when provider changes, ensuring fresh state and content */}
       <Draggable
+        key={referenceProvider.id}
         nodeRef={nodeRef}
         handle=".drag-handle"
         bounds="parent"
