@@ -1,25 +1,85 @@
 /**
  * ShiftGen Schedule Parser
  *
- * Parses HTML calendar data into structured shift records
+ * Parses the ShiftGen calendar UI into structured shift records.
+ *
+ * ShiftGen migrated from the legacy table-based markup (inline styles,
+ * `<td style="vertical-align:text-top">`, `<span>Label TIME: Person</span>`) to a
+ * Rails/Hotwire + Tailwind app. The old markup no longer exists anywhere on the
+ * site, so this parser targets the current DOM exclusively.
+ *
+ * Every shift is now a single element carrying its data in attributes:
+ *
+ *   <div id="2026_08_01_16271"
+ *        data-controller="shift-cell-component"
+ *        data-shift-cell-component-shift-key-value="2026_08_01_16271"
+ *        data-shift-cell-component-name-value="B 0530-1400"
+ *        data-shift-cell-component-assignee-value="Isaac"
+ *        data-shift-cell-component-assignee-id-value="14187">
+ *
+ * That means no regex against rendered text: the date, shift id, label, time and
+ * assignee all come straight off the element.
  */
 
 import * as cheerio from 'cheerio';
 import { getShiftLetterFromTime } from './constants';
 
+/** Labels used by the St Joseph scribe schedule. */
+const SJH_LABELS = new Set([
+  'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'X', 'PIT',
+]);
+
+/** Labels used by the CHOC schedule (directional zones). */
+const CHOC_LABELS = new Set([
+  'NORTH', 'SOUTH', 'EAST', 'WEST', 'RED',
+]);
+
+/** Labels that appear on both schedules and so cannot identify a site. */
+const AMBIGUOUS_LABELS = new Set(['PA', 'MLP']);
+
 export interface RawShiftData {
   date: string;      // YYYY-MM-DD
-  label: string;     // Zone identifier (A, B, C, PA, etc.)
-  rawLabel: string;  // Original label from HTML (for debugging)
+  label: string;     // Normalized zone identifier (A, B, C, PA, North, ...)
+  rawLabel: string;  // Label exactly as ShiftGen wrote it (for debugging)
   time: string;      // HHMM-HHMM
-  person: string;    // Name
+  person: string;    // Assignee name, or 'EMPTY' for an unfilled shift
   role: string;      // Scribe, Physician, or MLP
   site: string;      // Site name
-  providerName?: string;  // Provider name (populated during matching)
-  providerRole?: string;  // Provider role (populated during matching)
+  shiftId?: string;      // ShiftGen's stable shift id
+  scheduleId?: string;   // ShiftGen's schedule id (one per site per month)
+  workerId?: string;     // ShiftGen's worker id for the assignee
+  assigned: boolean;     // false when the shift is open/unfilled
+  providerName?: string; // Populated during matching
+  providerRole?: string; // Populated during matching
+}
+
+/** A shift whose name ShiftGen stored in a format we cannot turn into a time. */
+export interface MalformedShift {
+  date: string;
+  name: string;
+  person: string;
+  reason: string;
+}
+
+interface CellData {
+  date: string;
+  rawName: string;
+  person: string;
+  assigned: boolean;
+  shiftId?: string;
+  scheduleId?: string;
+  workerId?: string;
+  siteTag?: string;
 }
 
 export class ScheduleParser {
+  /**
+   * Shifts dropped by the most recent parseCalendar() call because ShiftGen
+   * stored a name we cannot derive a start/end time from. Surfaced rather than
+   * swallowed so a sync can report them instead of silently losing coverage.
+   */
+  public malformedShifts: MalformedShift[] = [];
+
   /**
    * Determine role from site name
    */
@@ -37,88 +97,55 @@ export class ScheduleParser {
   }
 
   /**
-   * Parse shift text into components
+   * Split a shift name into its label and time.
+   *
+   * ShiftGen writes the label before or after the time, and sometimes wraps it
+   * in parentheses:
+   *   "A 0530-1400"     -> { label: 'A',   time: '0530-1400' }
+   *   "1000-1830 PA"    -> { label: 'PA',  time: '1000-1830' }
+   *   "1800-0200 (RED)" -> { label: 'RED', time: '1800-0200' }
+   *
+   * Returns null for names with no full HHMM-HHMM time. Those are split-shift
+   * entries typed by hand into ShiftGen's name field ("South 05-09",
+   * "2000 PA 12-430", "D 1100 - 11-3") whose real hours are ambiguous, so we
+   * refuse to guess.
    */
-  static parseShiftText(
-    shiftText: string,
-    role: string = ''
-  ): { label: string; time: string; person: string } {
-    if (!shiftText) {
-      return { label: '', time: '', person: '' };
+  static parseShiftName(shiftName: string): { label: string; time: string } | null {
+    if (!shiftName) {
+      return null;
     }
 
-    // Normalize whitespace
-    let s = shiftText.trim();
-    s = s.replace(/\u00A0/g, ' ').replace(/\u200b/g, '');
-    s = s.replace(/\r/g, ' ').replace(/\n/g, ' ').replace(/\t/g, ' ');
-    s = s.replace(/\s+/g, ' ').trim();
-    s = s.replace(/\s*:\s*/g, ': ');
+    // Normalize whitespace and stray unicode.
+    const s = shiftName
+      .replace(/ /g, ' ')
+      .replace(/​/g, '')
+      .replace(/\s+/g, ' ')
+      .trim();
 
-    // SJH physician prefix (e.g., "SJH A 0530-1400: MERJANIAN")
-    let m = s.match(/^(?:SJH)\s+([A-Za-z0-9\- ]+?)\s+(\d{3,4}-\d{3,4}):\s*(.+)$/i);
-    if (m) {
-      return { label: m[1].trim(), time: m[2], person: m[3].trim() };
+    // Require a complete HHMM-HHMM (or HMM-HMM) time with no internal spaces.
+    const m = s.match(/^(.*?)\s*(\d{3,4})-(\d{3,4})\s*(.*)$/);
+    if (!m) {
+      return null;
     }
 
-    // CHOC physician directions (e.g., "North 0530-1400: SHIEH")
-    m = s.match(/^(North|South|East|West|RED)\s+(\d{3,4}-\d{3,4}):\s*(.+)$/i);
-    if (m) {
-      return { label: m[1].trim(), time: m[2], person: m[3].trim() };
-    }
+    const [, before, start, end, after] = m;
+    const label = (before || after || '')
+      .replace(/[()]/g, '')
+      .trim();
 
-    // CHOC MLP entries -> normalize to "PA"
-    m = s.match(/^CHOC\s+(?:MLP|PA|[A-Za-z0-9\- ]+?)\s+(\d{3,4}-\d{3,4}):\s*(.+)$/i);
-    if (m) {
-      return { label: 'PA', time: m[1], person: m[2].trim() };
-    }
-
-    // General "Label TIME: Person"
-    m = s.match(/^([A-Za-z0-9\- ]{1,30}?)\s+(\d{3,4}-\d{3,4}):\s*(.+)$/);
-    if (m) {
-      return { label: m[1].trim(), time: m[2], person: m[3].trim() };
-    }
-
-    // Time + Role pattern (e.g., "1000-1830 PA: Molly")
-    m = s.match(/^(\d{3,4}-\d{3,4})\s*(PA|MD|NP|RN):\s*(.+)$/i);
-    if (m) {
-      return { label: m[2].toUpperCase(), time: m[1], person: m[3].trim() };
-    }
-
-    // Time (Location) : Person (e.g., "1000-1800 (RED): Ahilin")
-    m = s.match(/^(\d{3,4}-\d{3,4})\s*\(([^)]+)\):\s*(.+)$/);
-    if (m) {
-      return { label: m[2].trim(), time: m[1], person: m[3].trim() };
-    }
-
-    // Simple "TIME: Person"
-    m = s.match(/^(\d{3,4}-\d{3,4}):\s*(.+)$/);
-    if (m) {
-      return { label: '', time: m[1], person: m[2].trim() };
-    }
-
-    // Fallback with colon
-    if (s.includes(':')) {
-      const [left, right] = s.split(':', 2);
-      const leftTrimmed = left.trim();
-      const person = right.trim();
-      const timeMatch = leftTrimmed.match(/(\d{3,4}-\d{3,4})/);
-      if (timeMatch) {
-        const time = timeMatch[1];
-        const labelPart = leftTrimmed.substring(0, leftTrimmed.indexOf(time)).trim();
-        const label = labelPart.replace(/\b(SJH|CHOC)\b/gi, '').trim();
-        return { label, time, person };
-      }
-    }
-
-    return { label: '', time: '', person: s };
+    return {
+      label,
+      time: `${start.padStart(4, '0')}-${end.padStart(4, '0')}`,
+    };
   }
 
   /**
    * Normalize person name
    */
   static normalizePerson(person: string): string {
-    const personTrimmed = person.trim();
+    const personTrimmed = (person || '').trim();
     if (
+      !personTrimmed ||
       personTrimmed.toUpperCase().includes('**EMPTY**') ||
       personTrimmed.toUpperCase() === 'EMPTY'
     ) {
@@ -128,121 +155,180 @@ export class ScheduleParser {
   }
 
   /**
-   * Parse calendar HTML into structured data
+   * Infer which site a group of shifts belongs to from its label vocabulary.
+   *
+   * ShiftGen's schedule ids change every month, so they can group cells but
+   * cannot name a site on their own. The label vocabulary is stable: the SJH
+   * scribe schedule uses letters, CHOC uses compass directions plus RED.
    */
-  parseCalendar(htmlContent: string, siteName: string = ''): RawShiftData[] {
-    const $ = cheerio.load(htmlContent);
+  static inferSiteFromLabels(labels: string[]): string | null {
+    let sjh = 0;
+    let choc = 0;
 
-    // Extract month/year from header
-    const header = $('div').filter((_, el) => {
-      const style = $(el).attr('style') || '';
-      return style.includes('font-weight:bold') && style.includes('font-size:16px');
+    for (const label of labels) {
+      const upper = label.toUpperCase();
+      if (AMBIGUOUS_LABELS.has(upper)) continue;
+      if (SJH_LABELS.has(upper)) sjh++;
+      else if (CHOC_LABELS.has(upper)) choc++;
+    }
+
+    if (sjh === 0 && choc === 0) return null;
+    return sjh >= choc ? 'St Joseph Scribe' : 'CHOC Scribe';
+  }
+
+  /**
+   * Extract every shift cell from the page, without interpreting it yet.
+   */
+  private extractCells(html: string): CellData[] {
+    const $ = cheerio.load(html);
+    const cells: CellData[] = [];
+
+    $('div[data-controller~="shift-cell-component"]').each((_, el) => {
+      const $cell = $(el);
+      const prefix = 'data-shift-cell-component-';
+
+      const shiftKey =
+        $cell.attr(`${prefix}shift-key-value`) || $cell.attr('id') || '';
+
+      // shift key is YYYY_MM_DD_<shiftId>
+      const keyMatch = shiftKey.match(/^(\d{4})_(\d{2})_(\d{2})_(\d+)$/);
+      if (!keyMatch) {
+        return;
+      }
+      const date = `${keyMatch[1]}-${keyMatch[2]}-${keyMatch[3]}`;
+      const shiftId = keyMatch[4];
+
+      const assigneeId = $cell.attr(`${prefix}assignee-id-value`) || '';
+      const person = ScheduleParser.normalizePerson(
+        $cell.attr(`${prefix}assignee-value`) || ''
+      );
+      const assigned = person !== 'EMPTY' && assigneeId !== 'noworker';
+
+      // The schedule id is only exposed through the shift-action links, e.g.
+      // /changes/remote_request_take/2026_08_01_12895/15963/17651/12895
+      let scheduleId: string | undefined;
+      let workerId: string | undefined;
+      $cell.find('[data-view-all-sites-url-param]').each((__, link) => {
+        if (scheduleId) return;
+        const url = $(link).attr('data-view-all-sites-url-param') || '';
+        const m = url.match(
+          /\/changes\/remote_request_\w+\/\d{4}_\d{2}_\d{2}_\d+\/(\d+)\/(\d+)\//
+        );
+        if (m) {
+          scheduleId = m[1];
+          workerId = m[2];
+        }
+      });
+
+      // Single-site views render the site as a chip inside the cell.
+      const siteTag = $cell
+        .find('span[class*="text-tag"]')
+        .first()
+        .text()
+        .trim();
+
+      cells.push({
+        date,
+        rawName: $cell.attr(`${prefix}name-value`) || '',
+        person,
+        assigned,
+        shiftId,
+        scheduleId,
+        workerId,
+        siteTag: siteTag || undefined,
+      });
     });
 
-    if (!header.length) {
+    return cells;
+  }
+
+  /**
+   * Parse a ShiftGen calendar page into structured shift data.
+   *
+   * @param htmlContent  Raw HTML of a schedule page.
+   * @param siteName     Optional site name. Supply it when scraping a
+   *                     single-site page; on the multi-site view the site is
+   *                     resolved per schedule instead.
+   */
+  parseCalendar(htmlContent: string, siteName: string = ''): RawShiftData[] {
+    this.malformedShifts = [];
+
+    const cells = this.extractCells(htmlContent);
+    if (cells.length === 0) {
       return [];
     }
 
-    const headerText = header.text().trim();
-    let monthYear: string | null = null;
-
-    // Try to extract month and year using regex
-    let match = headerText.match(/([A-Za-z]+\s+\d{4})/);
-    if (match) {
-      monthYear = match[1];
+    // Resolve a site per schedule group, so the multi-site view attributes each
+    // shift correctly and ambiguous labels (PA) inherit their schedule's site.
+    const labelsBySchedule = new Map<string, string[]>();
+    for (const cell of cells) {
+      const parsed = ScheduleParser.parseShiftName(cell.rawName);
+      if (!parsed) continue;
+      const key = cell.scheduleId || '';
+      if (!labelsBySchedule.has(key)) labelsBySchedule.set(key, []);
+      labelsBySchedule.get(key)!.push(parsed.label);
     }
 
-    if (!monthYear) {
-      // Fallback: try to extract from the date range in parentheses
-      match = headerText.match(/\((\d{2}\/\d{2}\/\d{4})/);
-      if (match) {
-        const dateStr = match[1];
-        try {
-          const [month, day, year] = dateStr.split('/');
-          const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
-          monthYear = date.toLocaleString('en-US', { month: 'long', year: 'numeric' });
-        } catch {
-          return [];
-        }
-      } else {
-        return [];
-      }
+    const siteBySchedule = new Map<string, string>();
+    for (const [key, labels] of labelsBySchedule) {
+      const inferred = ScheduleParser.inferSiteFromLabels(labels);
+      siteBySchedule.set(key, inferred || siteName || 'Unknown');
     }
 
-    const role = ScheduleParser.determineRoleFromSite(siteName);
     const scheduleData: RawShiftData[] = [];
 
-    // Find all day cells
-    $('td').each((_, td) => {
-      const $td = $(td);
-      const style = $td.attr('style') || '';
+    for (const cell of cells) {
+      const parsed = ScheduleParser.parseShiftName(cell.rawName);
 
-      if (!style.includes('vertical-align:text-top')) {
-        return;
+      if (!parsed) {
+        this.malformedShifts.push({
+          date: cell.date,
+          name: cell.rawName,
+          person: cell.person,
+          reason: 'No parseable HHMM-HHMM time in shift name',
+        });
+        continue;
       }
 
-      // Find day number
-      const dayDiv = $td.find('div').filter((_, el) => {
-        const divStyle = $(el).attr('style') || '';
-        return divStyle.includes('font-size:12px');
+      // Skip unfilled shifts, matching the previous parser's behaviour.
+      if (!cell.assigned) {
+        continue;
+      }
+
+      // A site chip on the cell is authoritative; otherwise fall back to the
+      // schedule's inferred site, then to the caller-supplied name.
+      const site =
+        cell.siteTag ||
+        siteBySchedule.get(cell.scheduleId || '') ||
+        siteName ||
+        'Unknown';
+
+      // getShiftLetterFromTime() only knows the SJH letter scheme, so applying
+      // it to CHOC would rewrite "North 0530-1400" as "A" and collide with the
+      // real SJH A shift. Only normalize where the scheme applies.
+      const isSjh = SJH_LABELS.has(parsed.label.toUpperCase());
+      const isAmbiguous = AMBIGUOUS_LABELS.has(parsed.label.toUpperCase());
+      const [startTime] = parsed.time.split('-');
+
+      const label =
+        isSjh || isAmbiguous
+          ? getShiftLetterFromTime(startTime, parsed.label) || parsed.label
+          : parsed.label;
+
+      scheduleData.push({
+        date: cell.date,
+        label: label.trim(),
+        rawLabel: parsed.label.trim(),
+        time: parsed.time,
+        person: cell.person,
+        role: ScheduleParser.determineRoleFromSite(site),
+        site,
+        shiftId: cell.shiftId,
+        scheduleId: cell.scheduleId,
+        workerId: cell.workerId,
+        assigned: cell.assigned,
       });
-
-      if (!dayDiv.length) {
-        return;
-      }
-
-      const dayNum = dayDiv.text().trim();
-      if (!/^\d+$/.test(dayNum)) {
-        return;
-      }
-
-      // Construct date
-      let dateStr: string;
-      try {
-        const dateParts = `${dayNum} ${monthYear}`.split(' ');
-        const day = parseInt(dateParts[0]);
-        const monthName = dateParts[1];
-        const year = parseInt(dateParts[2]);
-
-        const monthIndex = new Date(Date.parse(monthName + ' 1, 2000')).getMonth();
-        const date = new Date(year, monthIndex, day);
-
-        const yyyy = date.getFullYear();
-        const mm = String(date.getMonth() + 1).padStart(2, '0');
-        const dd = String(date.getDate()).padStart(2, '0');
-        dateStr = `${yyyy}-${mm}-${dd}`;
-      } catch {
-        return;
-      }
-
-      // Extract shifts (ignore notes in <pre>)
-      $td.find('span').each((_, span) => {
-        const shiftText = $(span).text().trim();
-        if (!shiftText) {
-          return;
-        }
-
-        const { label, time, person } = ScheduleParser.parseShiftText(shiftText, role);
-        const normalizedPerson = ScheduleParser.normalizePerson(person);
-
-        // Skip empty shifts
-        if (normalizedPerson !== 'EMPTY' && time) {
-          // Normalize shift letter using start time and raw label
-          const [startTime] = time.split('-');
-          const normalizedLabel = getShiftLetterFromTime(startTime, label) || label;
-
-          scheduleData.push({
-            date: dateStr,
-            label: normalizedLabel.trim(),
-            rawLabel: label.trim(),
-            time: time.trim(),
-            person: normalizedPerson,
-            role,
-            site: siteName,
-          });
-        }
-      });
-    });
+    }
 
     return scheduleData;
   }

@@ -7,7 +7,6 @@
 import { ShiftGenScraper } from './scraper';
 import { ScheduleParser, RawShiftData } from './parser';
 import { NameMapper } from './name-mapper';
-import { SITES_TO_FETCH, SITE_CHANGE_DELAY, PAGE_LOAD_DELAY } from './config';
 import { findOrCreateScribe, findOrCreateProvider, upsertShift } from './db';
 
 export interface SyncResult {
@@ -15,6 +14,8 @@ export interface SyncResult {
   shiftsScraped: number;
   shiftsCreated: number;
   shiftsUpdated: number;
+  /** Shifts ShiftGen stored with an unparseable name, reported rather than dropped silently. */
+  shiftsMalformed: string[];
   errors: string[];
   timestamp: string;
 }
@@ -39,6 +40,7 @@ export class ShiftGenSyncService {
       shiftsScraped: 0,
       shiftsCreated: 0,
       shiftsUpdated: 0,
+      shiftsMalformed: [],
       errors: [],
       timestamp: new Date().toISOString(),
     };
@@ -56,57 +58,54 @@ export class ShiftGenSyncService {
       }
       console.log('✓ Logged in successfully');
 
-      // Process each site
-      for (const site of SITES_TO_FETCH) {
-        console.log(`\nProcessing site: ${site.name} (ID: ${site.id})`);
+      // One page contains every schedule the account can see. Each shift names
+      // its own site, so there is no longer a per-site fetch loop.
+      console.log('Fetching multi-site schedule...');
+      const html = await this.scraper.getMultiSiteSchedule();
+      if (!html) {
+        result.errors.push('Failed to fetch multi-site schedule');
+        return result;
+      }
 
-        // Change to site
-        const changed = await this.scraper.changeSite(site.id, site.name);
-        if (!changed) {
-          result.errors.push(`Failed to change to site: ${site.name}`);
-          continue;
-        }
+      const shifts = this.parser.parseCalendar(html);
+      console.log(`Parsed ${shifts.length} shift(s)`);
+      result.shiftsScraped = shifts.length;
 
-        await this.delay(SITE_CHANGE_DELAY);
+      for (const malformed of this.parser.malformedShifts) {
+        const msg = `${malformed.date} "${malformed.name}" (${malformed.person}): ${malformed.reason}`;
+        result.shiftsMalformed.push(msg);
+        console.warn(`  ! Skipped unparseable shift: ${msg}`);
+      }
 
-        // Fetch schedules
-        const schedules = await this.scraper.fetchSchedules();
-        console.log(`Found ${schedules.length} schedule(s)`);
+      if (shifts.length === 0) {
+        result.errors.push(
+          'No shifts parsed. The ShiftGen markup may have changed again, or the account may have no visible schedules.'
+        );
+        return result;
+      }
 
-        for (const schedule of schedules) {
-          console.log(`  Fetching: ${schedule.title}`);
+      const bySite = shifts.reduce<Record<string, number>>((acc, s) => {
+        acc[s.site] = (acc[s.site] || 0) + 1;
+        return acc;
+      }, {});
+      console.log('  Shifts by site:', bySite);
 
-          const html = await this.scraper.getPrintableSchedule(schedule.id);
-          if (!html) {
-            result.errors.push(`Failed to fetch schedule: ${schedule.title}`);
-            continue;
+      // Match scribes with providers and save to database
+      const matchedShifts = this.matchScribesWithProviders(shifts);
+      console.log(`Matched into ${matchedShifts.length} shift(s) with providers`);
+
+      for (const shift of matchedShifts) {
+        try {
+          const syncShiftResult = await this.syncShiftToDatabase(shift);
+          if (syncShiftResult.created) {
+            result.shiftsCreated++;
+          } else if (syncShiftResult.updated) {
+            result.shiftsUpdated++;
           }
-
-          await this.delay(PAGE_LOAD_DELAY);
-
-          // Parse shifts
-          const shifts = this.parser.parseCalendar(html, site.name);
-          console.log(`    Parsed ${shifts.length} shift(s)`);
-          result.shiftsScraped += shifts.length;
-
-          // Match scribes with providers and save to database
-          const matchedShifts = this.matchScribesWithProviders(shifts);
-          console.log(`    Matched into ${matchedShifts.length} shift(s) with providers`);
-
-          for (const shift of matchedShifts) {
-            try {
-              const syncShiftResult = await this.syncShiftToDatabase(shift);
-              if (syncShiftResult.created) {
-                result.shiftsCreated++;
-              } else if (syncShiftResult.updated) {
-                result.shiftsUpdated++;
-              }
-            } catch (error) {
-              const errorMsg = `Failed to sync shift: ${JSON.stringify(shift)} - ${error}`;
-              result.errors.push(errorMsg);
-              console.error(`      ✗ ${errorMsg}`);
-            }
-          }
+        } catch (error) {
+          const errorMsg = `Failed to sync shift: ${JSON.stringify(shift)} - ${error}`;
+          result.errors.push(errorMsg);
+          console.error(`  ✗ ${errorMsg}`);
         }
       }
 
@@ -118,6 +117,7 @@ export class ShiftGenSyncService {
       console.log(`  Shifts scraped: ${result.shiftsScraped}`);
       console.log(`  Shifts created: ${result.shiftsCreated}`);
       console.log(`  Shifts updated: ${result.shiftsUpdated}`);
+      console.log(`  Shifts skipped (unparseable): ${result.shiftsMalformed.length}`);
       console.log(`  Errors: ${result.errors.length}`);
 
       return result;
@@ -266,12 +266,5 @@ export class ShiftGenSyncService {
       created: result.created,
       updated: result.updated,
     };
-  }
-
-  /**
-   * Delay helper
-   */
-  private delay(ms: number): Promise<void> {
-    return new Promise((resolve) => setTimeout(resolve, ms));
   }
 }
