@@ -5,6 +5,7 @@
  * @jest-environment node
  */
 import { ScheduleParser } from '@/lib/shiftgen/parser';
+import { isIgnoredSite } from '@/lib/shiftgen/config';
 
 describe('ScheduleParser.parseShiftName', () => {
   it('parses a label written before the time', () => {
@@ -159,5 +160,23 @@ describe('ScheduleParser.parseCalendar', () => {
   it('returns an empty array for markup with no shift cells', () => {
     expect(new ScheduleParser().parseCalendar('<html><body></body></html>'))
       .toEqual([]);
+  });
+});
+
+describe('isIgnoredSite', () => {
+  it('ignores CHOC, which this app does not cover', () => {
+    expect(isIgnoredSite('CHOC Scribe')).toBe(true);
+    expect(isIgnoredSite('  choc scribe  ')).toBe(true);
+  });
+
+  it('keeps St Joseph', () => {
+    expect(isIgnoredSite('St Joseph Scribe')).toBe(false);
+  });
+
+  // The provider schedules carry "CHOC" in their names but cover both
+  // hospitals, and scribe/provider matching depends on them.
+  it('keeps the shared provider schedules despite CHOC in the name', () => {
+    expect(isIgnoredSite('St Joseph/CHOC Physician')).toBe(false);
+    expect(isIgnoredSite('St Joseph/CHOC MLP')).toBe(false);
   });
 });

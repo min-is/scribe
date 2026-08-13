@@ -7,6 +7,7 @@
 import { ShiftGenScraper } from './scraper';
 import { ScheduleParser, RawShiftData } from './parser';
 import { NameMapper } from './name-mapper';
+import { isIgnoredSite } from './config';
 import { findOrCreateScribe, findOrCreateProvider, upsertShift } from './db';
 
 export interface SyncResult {
@@ -14,6 +15,8 @@ export interface SyncResult {
   shiftsScraped: number;
   shiftsCreated: number;
   shiftsUpdated: number;
+  /** Shifts skipped because their site is not covered by this app (see IGNORED_SITES). */
+  shiftsIgnored: number;
   /** Shifts ShiftGen stored with an unparseable name, reported rather than dropped silently. */
   shiftsMalformed: string[];
   errors: string[];
@@ -40,6 +43,7 @@ export class ShiftGenSyncService {
       shiftsScraped: 0,
       shiftsCreated: 0,
       shiftsUpdated: 0,
+      shiftsIgnored: 0,
       shiftsMalformed: [],
       errors: [],
       timestamp: new Date().toISOString(),
@@ -67,9 +71,9 @@ export class ShiftGenSyncService {
         return result;
       }
 
-      const shifts = this.parser.parseCalendar(html);
-      console.log(`Parsed ${shifts.length} shift(s)`);
-      result.shiftsScraped = shifts.length;
+      const parsedShifts = this.parser.parseCalendar(html);
+      console.log(`Parsed ${parsedShifts.length} shift(s)`);
+      result.shiftsScraped = parsedShifts.length;
 
       for (const malformed of this.parser.malformedShifts) {
         const msg = `${malformed.date} "${malformed.name}" (${malformed.person}): ${malformed.reason}`;
@@ -77,18 +81,36 @@ export class ShiftGenSyncService {
         console.warn(`  ! Skipped unparseable shift: ${msg}`);
       }
 
-      if (shifts.length === 0) {
+      if (parsedShifts.length === 0) {
         result.errors.push(
           'No shifts parsed. The ShiftGen markup may have changed again, or the account may have no visible schedules.'
         );
         return result;
       }
 
-      const bySite = shifts.reduce<Record<string, number>>((acc, s) => {
+      const bySite = parsedShifts.reduce<Record<string, number>>((acc, s) => {
         acc[s.site] = (acc[s.site] || 0) + 1;
         return acc;
       }, {});
       console.log('  Shifts by site:', bySite);
+
+      // This app covers St Joseph only. CHOC shares zone names and times with
+      // St Joseph (both run a PA shift at 2000), so syncing it would overwrite
+      // St Joseph shifts under Shift's (date, zone, startTime) unique constraint.
+      const shifts = parsedShifts.filter((shift) => !isIgnoredSite(shift.site));
+      result.shiftsIgnored = parsedShifts.length - shifts.length;
+      if (result.shiftsIgnored > 0) {
+        console.log(
+          `  Ignoring ${result.shiftsIgnored} shift(s) from sites this app does not cover`
+        );
+      }
+
+      if (shifts.length === 0) {
+        result.errors.push(
+          'No shifts remained after filtering ignored sites. Check IGNORED_SITES in config.'
+        );
+        return result;
+      }
 
       // Match scribes with providers and save to database
       const matchedShifts = this.matchScribesWithProviders(shifts);
@@ -117,6 +139,7 @@ export class ShiftGenSyncService {
       console.log(`  Shifts scraped: ${result.shiftsScraped}`);
       console.log(`  Shifts created: ${result.shiftsCreated}`);
       console.log(`  Shifts updated: ${result.shiftsUpdated}`);
+      console.log(`  Shifts ignored (other sites): ${result.shiftsIgnored}`);
       console.log(`  Shifts skipped (unparseable): ${result.shiftsMalformed.length}`);
       console.log(`  Errors: ${result.errors.length}`);
 
